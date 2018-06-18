@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the match_following content type feature.
+ */
+
+include_once 'match_following_content_type.features.inc';

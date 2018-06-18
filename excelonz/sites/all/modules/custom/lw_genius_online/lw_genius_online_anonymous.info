@@ -1,0 +1,5 @@
+name = "lw_genius_online_anonymous"
+description = "Created for Excelonx Genius Online functionality on Pricing page for anonymous User."
+package = Custom
+core = 7.x
+version = 7.x

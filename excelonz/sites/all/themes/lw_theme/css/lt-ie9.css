@@ -1,0 +1,109 @@
+/*
+ * Target IE 6, 7 and 8 (less than IE9)
+ */
+/*
+ * Assuming a mobile first approach with respond.js OFF, we must reset the font
+ * size for lt IE9
+ */
+
+#header{
+	border-bottom: solid 1px #ddd;
+}
+
+#messages,
+#columns #content-column .content-inner{
+	border: solid 1px #ddd;
+	border-top: 0;
+	border-bottom: 0;
+}
+
+#footer .region-footer{
+	border: solid 1px #ddd;
+	border-top: 0;
+}
+
+.page-dashboard-student .region-two-66-33-second .pane-lw-report-golive-req-block #golive_count{
+	margin-right: 6px;
+}
+
+.subject_name{
+	display: none;
+}
+
+#assessments-form .right_exl_block, 
+#golive-form .right_exl_block{
+	background: url("../images/right-bg.jpg") no-repeat scroll left top transparent
+}
+
+.label-bg{
+	background: url("../images/label-bg-2.png") no-repeat scroll left 25px;
+}
+
+.page-badges2 #columns #content-column .content-inner, 
+.page-badges3 #columns #content-column .content-inner{
+	background: url("../images/reward-ga-bg.png") no-repeat scroll center top;
+}
+
+.page-badges2 .view-user-excellons .views-field-nothing, 
+.page-badges3 .view-user-excellons .views-field-nothing{
+	background: url("../images/ga-ex-bg.png") no-repeat scroll center bottom transparent;
+}
+
+.page-badges2 .view-user-excellons .views-row-1, 
+.page-badges3 .view-user-excellons .views-row-1{
+	background: url("../images/ga-ex-bot-bg.png") no-repeat scroll center bottom transparent
+}
+
+.page-badges2 .view-user-excellons, 
+.page-badges3 .view-user-excellons{
+	background: url("../images/gallery-ex-star-bg.png") no-repeat scroll center center transparent;
+}
+
+body.letspractice, 
+body.page-assessments, 
+body.page-assessments-report, 
+body.page-golive-dash, 
+body.page-revision{
+	background:url("images/body-rep-bg.jpg") repeat scroll 0 0 transparent
+}
+
+ body.letspractice #page, 
+ body.page-assessments #page, 
+ body.page-assessments-report #page, 
+ body.page-golive-dash #page, 
+ body.page-revision #page{
+	background: url("images/bg.png") no-repeat scroll left top; 
+}
+
+.golive_static{
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+}
+
+.page-user.role-student #block-views-child-detail-block .view-child-detail .field-content{
+  margin-top: 5px;
+  line-height: 23px;
+  margin-bottom: 5px;
+}
+
+.notify_acc_rej input#edit-accept, 
+#golive-acc-rej-pg .input_wrapper1 input#edit-accept{
+	background: url("../images/accept-icon.png") no-repeat scroll right center transparent;
+    border: 0 none;
+    height: 22px;
+    text-indent: -999px;
+    width: 24px;
+}
+
+.download_pdf{
+	background: none repeat scroll 0 0 #F0CE59;
+    border: 1px solid #DADADA;
+    color: #565244;
+    font-family: DINMd;
+    font-size: 0.857em;
+    padding: 4px 10px;
+    float: right;
+}
+
+.experiments .view-experiments .view-header{
+	background: url("../images/yes-icon.png") no-repeat scroll left center;
+}

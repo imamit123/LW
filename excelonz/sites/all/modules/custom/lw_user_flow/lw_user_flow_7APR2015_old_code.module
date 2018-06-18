@@ -1,0 +1,151 @@
+<?php
+
+
+function lw_user_flow_menu() {
+$items['user_subject_update'] = array(
+    'title' => 'User Subject update',
+    'page callback' => 'user_subject_and_class_update1',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+$items['user_delete_oldclass_data'] = array(
+    'title' => 'Student Update Class Form',
+     'page callback' => 'user_delete_oldclass_data',
+   // 'page arguments' => array('user_delete_oldclass_data'),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+
+}
+
+function user_subject_and_class_update1(){
+
+  return t('aa');
+}
+function user_subject_and_class_update(){
+//MWS - -nid - 230911
+$school_name = 'MWS';
+$school_ID = 230908;
+
+//die();
+$class = '2';
+$time_final1 = 1431648000;
+  $school_query = db_select('field_data_field_student_school_identifier', 'si');
+  $school_query->join('profile','p','p.pid = si.entity_id');
+  $school_query->join('field_revision_field_class_user','cu','cu.entity_id = p.pid');
+  $school_query->join('taxonomy_term_data','ttd','ttd.tid = cu.field_class_user_tid');
+  $school_query->fields('si',array('entity_id'));
+  $school_query->fields('p',array('uid'));
+  $school_query->fields('cu',array('field_class_user_tid'));
+  $school_query->fields('ttd',array('tid','name'));
+  $school_query->condition('si.field_student_school_identifier_nid',$school_ID);
+  $school_query->condition('cu.delta',0);
+  $school_query->condition('ttd.name',$class);
+  $school_result = $school_query->execute()->fetchall(); 
+  foreach ($school_result as $key => $value) {
+       $profile_uid[] = $value->uid;
+  }
+//Remove Subject..
+foreach ($profile_uid as $key => $value) {
+     $prof_load = profile2_load_by_user($value);
+     $subjects = $prof_load['student']->field_subjects;
+     $subjects = $prof_load['student']->field_subjects;
+  foreach($subjects['und'] as $key => $val) {
+        unset($subjects['und'][$key]);
+    }
+    if(array_key_exists('student', $prof_load)) {
+      $prof_load['student']->field_subjects = $subjects;
+      profile2_save($prof_load['student']);
+    }  
+}
+  $Class = 'Class 3';
+  $class_query =  db_query("SELECT td.tid,name from `taxonomy_term_data` td 
+                              where td.tid in (select th.tid from taxonomy_term_hierarchy th JOIN taxonomy_term_data td1 ON td1.tid= th.parent AND td1.name = '".$Class."')");
+
+foreach($class_query as $class_row) {
+     $select_subject[] = $class_row->tid;
+     
+}
+
+foreach ($profile_uid as $key => $value) {
+ $profile_id =  profile2_load_by_user($value, 'student');
+foreach ($select_subject as $key => $subjectvalue) {
+    $profile_id->field_subjects['und'][]['tid'] = $subjectvalue;
+    $entity = entity_create("expiry",    //adds the entity
+          array(
+            'uid' => 12,
+            'type' => 'user',
+            'child_id' => $value,
+            'expiry_date' => $time_final1,
+            'subject_tid' => $subjectvalue,
+            'status'=> 1,
+            'purchase_type' => 'paid',
+          )
+        );
+        $en = entity_save('expiry', $entity);
+}
+
+
+ profile2_save($profile_id);
+
+}
+if($en){
+       drupal_set_message('Successfully Created ');
+      }
+
+}
+
+
+function user_delete_oldclass_data(){
+//MWS - -nid - 230911
+$school_name = 'MWS';//230911
+$school_ID = 230908;
+$class = '6';
+
+
+//die();
+$not_delete_student = array('21742','21729','21706','21724','21570','22033','22029','21987');
+  $school_query = db_select('field_data_field_student_school_identifier', 'si');
+  $school_query->join('profile','p','p.pid = si.entity_id');
+  $school_query->join('field_revision_field_class_user','cu','cu.entity_id = p.pid');
+  $school_query->join('taxonomy_term_data','ttd','ttd.tid = cu.field_class_user_tid');
+  $school_query->fields('si',array('entity_id'));
+  $school_query->fields('p',array('uid'));
+  $school_query->fields('cu',array('field_class_user_tid'));
+  $school_query->fields('ttd',array('tid','name'));
+  $school_query->condition('si.field_student_school_identifier_nid',$school_ID);
+  $school_query->condition('cu.delta',0);
+  $school_query->condition('ttd.name',$class);
+  $school_query->condition('p.uid',$not_delete_student,'NOT IN');
+  $school_result = $school_query->execute()->fetchall(); 
+  foreach ($school_result as $key => $value) {
+       $profile_uid[] = $value->uid;
+  }
+foreach ($profile_uid as $key => $user_id) {
+$num_deleted = db_delete('eck_badges2')
+  ->condition('uid', $user_id)
+  ->execute();
+$eck_golive = db_delete('eck_golive')
+  ->condition('uid', $user_id)
+  ->execute();
+$eck_notifications = db_delete('eck_notifications')
+  ->condition('uid', $user_id)
+  ->execute();
+$eck_skillmap  = db_delete('eck_skillmap')
+  ->condition('uid', $user_id)
+  ->execute();
+$eck_user_assessment = db_delete('eck_user_assessment')
+  ->condition('uid', $user_id)
+  ->execute();  
+$eck_user_assessment = db_delete('eck_user_info')
+  ->condition('uid', $user_id)
+  ->execute();  
+$eck_user_assessment = db_delete('eck_user_level')
+  ->condition('uid', $user_id)
+  ->execute();  
+
+}
+  
+}

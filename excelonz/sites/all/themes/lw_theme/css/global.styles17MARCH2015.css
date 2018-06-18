@@ -1,0 +1,4783 @@
+/*
+ * @file
+ * global.styles
+ *
+ * Styles you add here will load for all device sizes, they are "global", as
+ * opposed to "responsive" styles, which only load for a given breakpoint (media
+ * query) that you set in theme settings. See the README for more details.
+ *
+ *
+ * How to use this file:
+ * --------------------
+ *
+ * There are many empty selectors and some basic styles to act as a guide.
+ * Nothing is set in stone and you can change anything - even delete all of it
+ * and start with your own clean slate.
+ *
+ * See global.base also which includes normalize.css and some additional
+ * helper classes and base styles.
+ */
+
+/* =============================================================================
+ *   Base
+ * ========================================================================== */
+
+/*
+ * To preserve theme settings never apply font properties to the HTML element.
+ * This is critically important if you are using the Responsive JavaScript
+ * feature as this relies on being able to set a pseudo font family on the HTML
+ * element. If you need to set default font properties of any kind use the BODY
+ * element as these can be overridden using font theme settings.
+ */
+
+html {
+  background: #fff;
+}
+
+
+body {
+  font-family: "Trebuchet MS", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  font-size: 87.5%;
+}
+
+
+/* =============================================================================
+ *   HTML Elements
+ * ========================================================================== */
+
+h1 {}
+
+h2 {}
+
+h3 {}
+
+h4 {}
+
+h5 {}
+
+h6 {}
+
+p {}
+
+b,
+strong {}
+
+i,
+em {}
+
+dfn {}
+
+sup {}
+
+sub {}
+
+del {}
+
+ins {}
+
+blockquote {}
+
+cite {}
+
+q {}
+
+address {}
+
+ul {}
+
+ol {}
+
+li {}
+
+dl {}
+
+dd {}
+
+dt {}
+
+abbr {}
+
+acronym {}
+
+pre,
+code,
+tt,
+samp,
+kbd,
+var {
+  font-family: Consolas, Monaco, 'Courier New', Courier, monospace, sans-serif;
+}
+
+
+/* =============================================================================
+ *   Wrappers
+ * ========================================================================== */
+
+/*
+ * Page wrapper, includes the .container class which sets the overall page or section width
+ * Main wrapper in page.tpl.php, the .container class sets the width of the page, do not add width to it!
+ */
+#page {}
+#page .container {}
+
+/*
+ * Wraps all header elements - branding and .region-header
+ */
+#header {}
+
+/*
+ * Wraps the sidebars the content column
+ */
+#columns {}
+
+/*
+ * Main content column wrapper
+ */
+#content-column {}
+
+/*
+ * Wraps the main-content-header, the content region and feed-icons. Use this wrapper to style the entire main content column
+ */
+#main-content {}
+
+/*
+ * Wraps the content region, avoid applying styles to this wrapper, its used mainly for position and invisible gutters and can be problematic to style
+ */
+#content {}
+
+/*
+ * Footer wrapper
+ */
+#footer {}
+
+/*
+ * Panels may need additional margin wrangling when in the $content region
+ */
+#content .panel-display {}
+
+/*
+ * Full Width Wrappers
+ * These are used in the optional page--full-width-wrappers.tpl.php template.
+ * All have internal .container classes. In the full width wrapper template the
+ * .container classes set the width or max-width of the contained element - you
+ * can style this but never add any width/margin/padding/borders etc to .container
+ */
+/*
+ * Wraps #page
+ */
+#page-wrapper {}
+#page-wrapper .container {}
+
+/*
+ * Wraps the leaderboard
+ */
+#leaderboard-wrapper {}
+#leaderboard-wrapper .container {}
+
+/*
+ * Wraps the header
+ */
+#header-wrapper {
+  /* Debug styles, is this working */
+  background: rgba(255, 192, 203, 0.5);
+}
+#header-wrapper .container {}
+
+/*
+ * Wraps the nav elements
+ */
+#nav-wrapper {}
+#nav-wrapper .container {}
+
+/*
+ * Wraps breadcrumb
+ */
+#breadcrumb-wrapper {}
+#breadcrumb-wrapper .container {}
+
+/*
+ * Wraps messages and help
+ */
+#messages-help-wrapper {}
+#messages-help-wrapper .container {}
+
+/*
+ * Wraps the secondary content/preface region
+ */
+#secondary-content-wrapper {}
+#secondary-content-wrapper .container {}
+
+/*
+ * Wraps the main content column
+ */
+#content-wrapper {}
+#content-wrapper .container {}
+
+/*
+ * Wraps the tertiary content/postfix region
+ */
+#tertiary-content-wrapper {}
+#tertiary-content-wrapper .container {}
+
+/*
+ * Footer wrapper
+ */
+#footer-wrapper {
+  /* Debug styles, is this working? */
+  background: rgba(255, 192, 203, 0.5);
+}
+#footer-wrapper .container {}
+
+
+/* =============================================================================
+ *   Branding
+ * ========================================================================== */
+
+/*
+ * Wraps all the branding elements, logo, name and slogan
+ */
+#branding {}
+
+/*
+ * Logo
+ */
+#logo {
+  padding: 10px 0;
+}
+
+#logo img {
+  vertical-align: bottom;
+}
+
+/*
+ * Wrapper for the site name and slogan (hgroup)
+ */
+#name-and-slogan {}
+
+/*
+ * Site name (h1)
+ */
+#site-name {
+  margin: 0;
+}
+
+#site-name a {}
+
+#site-name a:link,
+#site-name a:visited {
+  text-decoration: none;
+}
+
+#site-name a:hover,
+#site-name a:focus {
+  text-decoration: underline;
+}
+
+/*
+ * Site slogan (h2)
+ */
+#site-slogan {
+  margin: 0;
+}
+
+
+/* =============================================================================
+ *   Page content header
+ * ========================================================================== */
+
+/*
+ * Main content header wraps the page title, tabs and actions links
+ */
+#main-content-header {}
+
+/*
+ * The main page title (h1)
+ */
+#page-title {
+  margin: 0;
+}
+
+
+/* =============================================================================
+ *   Misc Global Styles
+ * ========================================================================== */
+
+/*
+ * Feed icons
+ */
+.feed-icon {}
+
+/*
+ * Aggregator feed source
+ */
+#aggregator .feed-source .feed-icon {
+  display: inline;
+  float: none;
+  margin-right: 10px;
+}
+
+.feed-details dt,
+.feed-details dd {
+  display: inline;
+  margin: 0;
+}
+
+/*
+ * Generic styles for the more link
+ */
+.more-link {}
+
+/*
+ * Generic styles for links. See the ul.links declaration in node and comment stylesheets
+ */
+ul.links {
+  margin: 0;
+  padding: 0;
+}
+
+ul.links.inline {
+  display: block;
+}
+
+ul.links li {
+  display: inline;
+  list-style: none;
+  padding: 0 10px 0 0;
+}
+
+/*
+ * Search results are an ordered list so reset the margin
+ */
+.search-results {
+  margin: 0;
+}
+
+
+/* =============================================================================
+ *   Regions
+ * ========================================================================== */
+
+/*
+ * Standard region wrapper, don't add width to any regions, you will bork the layout - no margin, padding or borders etc
+ */
+.region {}
+
+/*
+ * Regions have an inner div - perfect for adding margin, padding or borders
+ */
+.region-inner {}
+
+/*
+ * Regions can be nested, such as when using Panels
+ */
+.region-inner .region-inner {}
+
+/*
+ * Header region, embedded in the #header
+ */
+.region-header {}
+
+/*
+ * Generally used to output Drupals help block, if the help module is enabled
+ */
+.region-help {}
+
+/*
+ * Secondary content
+ */
+.region-secondary-content {}
+
+/*
+ * Sits above the main content header, like a content-top region
+ */
+.region-highlighted {}
+
+/*
+ * Sits below the main content, like a content-bottom region
+ */
+.region-content-aside {}
+
+/*
+ * Sidebars - targets both
+ */
+.sidebar {}
+
+/*
+ * First sidebar
+ */
+.region-sidebar-first {}
+
+/*
+ * Second sidebar
+ */
+.region-sidebar-second {}
+
+/*
+ * Tertiary content
+ */
+.region-tertiary-content {}
+
+/*
+ * Footer region
+ */
+.region-footer {}
+
+
+/* =============================================================================
+ *   Links
+ * ========================================================================== */
+
+a {
+  text-decoration: none;
+}
+
+a:link,
+a:visited {}
+
+a:active,
+a.active {}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+
+/* =============================================================================
+ *   Primary, Secondary and Menu Bar region menus
+ * ========================================================================== */
+
+/*
+ * Use one of the following id's for granular control:
+ *  - #menu-bar (menu bar region)
+ *  - #primary-menu (main menu)
+ *  - #secondary-menu (secondary/user menu)
+ * You can target all of these with .nav or div[id$="menu-bar"]
+ */
+.nav {
+  clear: both;
+  margin: 10px 0;
+}
+
+.nav ul,
+.nav ul.menu {
+  margin: 0;
+  padding: 0;
+}
+
+.nav li,
+.nav ul.menu li {
+  display: inline;
+  float: left;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav li a,
+.nav ul.menu li a {
+  display: block;
+  white-space: nowrap;
+  padding: 0 10px;
+}
+
+.nav li a:visited,
+.nav ul.menu li a:visited {}
+
+.nav li a:hover,
+.nav li a:focus,
+.nav ul.menu li a:hover,
+.nav ul.menu li a:focus {}
+
+.nav .block {
+  margin-bottom: 0;
+}
+
+
+/* =============================================================================
+ *   Superfish
+ * ========================================================================== */
+
+ul.sf-menu {
+  margin-bottom: 0;
+}
+
+ul.sf-menu a {
+  border-left: 0;
+  border-top: 0;
+  padding: 0 10px;
+  text-decoration: none;
+  height: 2.5em;
+  line-height: 2.5em;
+}
+
+ul.sf-menu a:link,
+ul.sf-menu a:visited {}
+
+ul.sf-menu li {}
+
+ul.sf-menu li:hover,
+ul.sf-menu li.sfHover {
+  outline: 0;
+}
+
+ul.sf-menu a {}
+
+ul.sf-menu a:focus,
+ul.sf-menu a:hover,
+ul.sf-menu a:active {
+  outline: 0;
+}
+
+/*
+ * Superfish blocks
+ */
+.block-superfish {}
+
+.block-superfish .block-inner .content {}
+
+.block-superfish ul {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.block-superfish ul ul {}
+
+.block-superfish ul ul ul {}
+
+.block-superfish ul ul ul ul {}
+
+.block-superfish li {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/*
+ * Vertical style
+ */
+.sf-vertical {
+  width: 100%;
+}
+
+.sf-vertical li {
+  width: 100%;
+}
+
+.sf-vertical li.last {}
+
+.sf-vertical li:hover ul,
+.sf-vertical li.sfHover ul {
+  left: 100%;
+  top: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.sf-vertical li a {
+  padding: 0 10px;
+}
+
+/*
+ * Navbar style
+ */
+.sf-navbar {
+  padding-bottom: 0 !important;
+}
+
+/*
+ * Sensible padding for the default style
+ */
+.sf-menu.sf-style-default a {
+  padding: 0 10px;
+}
+
+
+/* =============================================================================
+ *   Menus, usually blocks
+ * ========================================================================== */
+
+ul.menu {
+  padding-left: 15px;
+}
+
+ul.menu ul {
+  padding-left: 15px;
+}
+
+ul.menu ul ul {}
+
+ul.menu ul ul ul {}
+
+ul.menu li {
+  margin: 0;
+}
+
+ul.menu li.collapsed,
+ul.menu li.expanded,
+ul.menu li.leaf {}
+
+ul.menu li a {}
+
+ul.menu li a:link,
+ul.menu li a:visited {}
+
+ul.menu li a:active,
+ul.menu li a.active {}
+
+ul.menu li a:hover,
+ul.menu li a:focus {}
+
+ul.menu li.active a,
+ul.menu li.active-trail a {}
+
+ul.menu li.first,
+ul.menu li.last {}
+
+/* If li.content exists it's a problem, so reset the padding */
+.block .menu li.content {
+  padding: 0;
+}
+
+
+/* =============================================================================
+ *   Book navigation menu
+ * ========================================================================== */
+
+.book-navigation {}
+
+.book-navigation .page-links {}
+
+.book-navigation .page-previous {}
+
+.book-navigation .page-next {}
+
+.book-navigation .page-up {
+  /* Prevent text wrapping to a new line, assumes English "up" is used (two characters) */
+  min-width: 2em;
+  white-space: nowrap;
+}
+
+.book-navigation .menu {
+  margin-left: 0;
+}
+
+
+/* =============================================================================
+ *   Breadcrumbs
+ * ========================================================================== */
+
+#breadcrumb {
+  margin: 10px 0;
+}
+
+/* If the label is set to show in theme settings the label class is added */
+#breadcrumb .breadcrumb-label {
+  font-size: 1em;
+  display: inline;
+  padding-right: 10px;
+}
+
+#breadcrumb .breadcrumb-label:after {
+  content: ":";
+}
+
+#breadcrumb ol {
+  margin: 0;
+  padding: 0;
+}
+
+#breadcrumb .with-breadcrumb-label ol {
+  display: inline;
+}
+
+#breadcrumb li {
+  list-style: none;
+  display: inline;
+}
+
+#breadcrumb li.crumb-first {}
+
+#breadcrumb li.crumb-last {}
+
+#breadcrumb a {}
+
+#breadcrumb a:link,
+#breadcrumb a:visited {}
+
+#breadcrumb a:active,
+#breadcrumb a.active {}
+
+#breadcrumb a:hover,
+#breadcrumb a:focus {}
+
+
+/* =============================================================================
+ *   Pagers
+ * ========================================================================== */
+
+ul.pager {
+  clear: both;
+  margin: 0;
+  text-align: center;
+}
+
+.item-list ul.pager li {
+  margin: 0;
+}
+
+ul.pager li {
+  background-image: none;
+  display: inline;
+  list-style-type: none;
+  padding: .5em;
+}
+
+ul.pager li.pager-current {
+  font-weight: 700;
+}
+
+.block ul.pager li {
+  margin: 0;
+}
+
+/*
+ * Theme the various states of pager links
+ */
+ul.pager li {}
+
+ul.pager li a {}
+
+ul.pager li a:link,
+ul.pager li a:visited {}
+
+ul.pager li a:active,
+ul.pager li a.active {}
+
+ul.pager li a:hover,
+ul.pager li a:focus {}
+
+ul.pager li.pager-item {}
+ul.pager li.first {}
+ul.pager li.last {}
+ul.pager li.pager-current {}
+ul.pager li.pager-first {}
+ul.pager li.pager-previous {}
+ul.pager li.pager-next {}
+ul.pager li.pager-last {}
+
+
+/* =============================================================================
+ *   Skip Navigation
+ * ========================================================================== */
+
+#skip-link {
+  left: 50%;
+  margin-left: -6.5em;
+  margin-top: 0;
+  padding: 0 0.5em;
+  position: absolute;
+  width: 12em;
+  z-index: 50;
+}
+
+#skip-link a {
+  background: #444;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  display: block;
+  line-height: 2;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+}
+
+#skip-link a:link,
+#skip-link a:visited {
+  background: #444;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  display: block;
+  line-height: 2;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+}
+
+#skip-link a:hover,
+#skip-link a:focus,
+#skip-link a:active {
+  outline: 0;
+}
+
+
+/* =============================================================================
+ *   Tabs (local tasks)
+ * ========================================================================== */
+
+#tasks {
+  margin-bottom: 15px;
+}
+
+ul.primary {
+  border-bottom-color: #ccc;
+  margin: 20px 0;
+  padding: 0 0 0 5px;
+}
+
+ul.primary li {
+  display: block;
+  float: left;
+  margin: 0 1px -1px;
+}
+
+ul.primary li a {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+  margin-right: 1px;
+  padding: 0 10px;
+  display: block;
+  float: left;
+  height: 1.5em;
+  line-height: 1.5em;
+}
+
+ul.primary li a:hover,
+ul.primary li a:focus {
+  background-color: #eee;
+  border-color: #ccc;
+}
+
+ul.primary li.active a,
+ul.primary li.active a:hover,
+ul.primary li.active a:focus {
+  background-color: #fff;
+  border-bottom-color: #fff;
+}
+
+ul.secondary {
+  border-bottom: 1px solid #ccc;
+  margin: 1em 0 0;
+  padding: 0 .3em 1em;
+}
+
+ul.secondary li {
+  border-right: 0;
+  list-style: none;
+  padding: 0 10px 0 0;
+}
+
+ul.secondary li a {}
+
+ul.secondary li a:hover,
+ul.secondary li a.active {
+  border-bottom: none;
+  text-decoration: underline;
+}
+
+
+/* =============================================================================
+ *   Action links
+ * ========================================================================== */
+
+ul.action-links {
+  margin: 20px 0 0;
+  list-style: none;
+}
+
+ul.action-links li {}
+
+
+/* =============================================================================
+ *  Field Styling
+ * ========================================================================== */
+
+/*
+ * Wrapper for any field
+ */
+.field {}
+
+/*
+ * Above and inline classes are on the field wrapper
+ */
+.field-label-above {}
+
+/*
+ * When labels are set to inline in field display settings the clearfix class is automatically added
+ */
+.field-label-inline {}
+
+/*
+ * Labels are h2 in Adaptivetheme. Use a strong selector to mitigate unwanted ineritance issues
+ */
+.field-label {
+  font-size: 1em;
+  font-weight: 700;
+  font-family: inherit;
+  line-height: inherit;
+  margin-bottom: 0;
+}
+
+
+/*
+ * Field types (Core)
+ */
+
+/*
+ * Image fields use the <figure> and <figcaption> elements from HTML5
+ */
+.field-type-image {}
+
+.field-type-image .caption {}
+
+.field-type-image .full-caption {}
+
+.field-type-image .teaser-caption {}
+
+/*
+ * Taxonomy
+ */
+.field-type-taxonomy-term-reference {
+  /* The same bottom margin as p, blockquote, ul, ol and dl */
+  margin-bottom: 1.5em;
+}
+
+
+.field-type-taxonomy-term-reference.field-label-inline .field-items {
+  margin: 0;
+  padding: 0;
+}
+
+.field-type-taxonomy-term-reference.field-label-inline .field-item {
+  display: inline;
+  list-style: none;
+  padding: 0 10px 0 0;
+}
+
+/*
+ * Text
+ */
+.field-type-text {}
+
+/*
+ * Long text
+ */
+.field-type-text-long {}
+
+/*
+ * Text with summary
+ */
+.field-type-text-with-summary {}
+
+/*
+ * File
+ */
+.field-type-file {}
+
+/*
+ * Number/Integer
+ */
+.field-type-number-integer {}
+
+/*
+ * Decimal
+ */
+.field-type-number-decimal {}
+
+/*
+ * Number float
+ */
+.field-type-number-float {}
+
+/*
+ * List
+ */
+.field-type-list-text {}
+
+/*
+ * List boolean
+ */
+.field-type-list-boolean {}
+
+/*
+ * List integer
+ */
+.field-type-list-integer {}
+
+/*
+ * List float
+ */
+.field-type-list-float {}
+
+/*
+ * Field types (Contrib)
+ */
+.field-type-datetime {}
+
+.field-type-node-reference {}
+
+.field-type-user-reference {}
+
+/*
+ * Named fields
+ */
+.field-name-body {}
+
+.field-name-field-image {}
+
+.field-name-field-tags {}
+
+/*
+ * Underscores in field name are replaced with dashes
+ */
+.field-name-field-FIELDNAME {}
+
+/*
+ * Image Alignment Theme Settings - included here so you can easily override
+ */
+/*
+ * Float none setting
+ */
+.ia-n .field-type-image,
+.iat-n .field-type-image {}
+
+/*
+ * Float left setting
+ */
+.ia-l .field-type-image figure,
+.iat-l .field-type-image figure {
+  margin: 5px 20px 15px 0;
+}
+
+/*
+ * Centered setting
+ */
+.ia-c .field-type-image figure,
+.iat-c .field-type-image figure {
+  margin: 5px auto 15px;
+}
+
+/*
+ * Float right setting
+ */
+.ia-r .field-type-image figure,
+.iat-r .field-type-image figure {
+  margin: 5px 0 15px 20px;
+}
+
+
+/* =============================================================================
+ *   Block Styling
+ * ========================================================================== */
+
+/*
+ * Main wrapper for most blocks, block_system_main does not have it
+ */
+.block {
+  margin-bottom: 20px;
+}
+
+/*
+ * Inner wrapper for most blocks, good for margin, padding and borders, block_system_main does not have it
+ */
+.block-inner {}
+
+/*
+ * The first block in the region
+ */
+.block.first {}
+
+/*
+ * The last block in the region
+ */
+.block.last {}
+
+/*
+ * Zebra striping for each block in the region
+ */
+.block.odd {}
+
+/*
+ * Zebra striping for each block in the region
+ */
+.block.even {}
+
+/*
+ * Block title
+ */
+.block-title {
+  margin: 0;
+}
+
+/*
+ * Block content wrapper
+ */
+.block-content {}
+
+/*
+ * Match item list and block menu margin and padding
+ */
+.block-content {}
+
+.block-content ul,
+.block-content ol {
+  padding: 0 0 0 15px;
+}
+
+.block-content li {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Block for the latest news items in the first category
+ */
+#block-aggregator-category-1 {}
+
+/*
+ * Block for the latest news items in the first feed
+ */
+#block-aggregator-feed-1 {}
+
+/*
+ * First block created with "Add block" link
+ */
+#block-block-1 {}
+
+/*
+ * "Recent blog posts" block
+ */
+#block-blog-recent {}
+
+/*
+ * "Book navigation" block for the current book's table of contents
+ */
+#block-book-navigation {}
+
+/*
+ * "Recent comments" block
+ */
+#block-comment-recent {}
+
+/*
+ * "Active forum topics" block
+ */
+#block-forum-active {}
+
+/*
+ * "New forum topics" block
+ */
+#block-forum-new {}
+
+/*
+ * Language switcher block
+ */
+#block-locale-language {}
+
+/*
+ * Custom menu block
+ */
+#block-menu-menu-NAME {}
+
+/*
+ * "Recent content" block
+ */
+#block-node-recent {}
+
+/*
+ * "Syndicate" block for primary RSS feed; see also page.css's .feed-icon
+ */
+#block-node-syndicate {}
+
+/*
+ * "Most recent poll" block
+ */
+#block-poll-recent {}
+
+/*
+ * "Author information" block for the profile of the page's author
+ */
+#block-profile-author-information {}
+
+/*
+ * "Search form" block
+ */
+#block-search-form {}
+
+/*
+ * "Shortcuts" block
+ */
+#block-shortcut-shortcuts {}
+
+/*
+ * "Popular content" block
+ */
+#block-statistics-popular {}
+
+/*
+ * "Main menu" block
+ */
+#block-system-main-menu {}
+
+/*
+ * "Management" block for Drupal management menu
+ */
+#block-system-management {}
+
+/*
+ * "Navigation" block for Drupal navigation menu
+ */
+#block-system-navigation {}
+
+/*
+ * "User menu" block for Drupal user menu
+ */
+#block-system-user-menu {}
+
+/*
+ * "System help" block
+ */
+#block-system-help {}
+
+/*
+ * "Main page content" block
+ */
+#block-system-main {}
+
+/*
+ * "Powered by Drupal" block
+ */
+#block-system-powered-by {}
+
+/*
+ * "User login form" block
+ */
+#block-user-login {}
+
+/*
+ * "Who's new" block for a list of the newest users
+ */
+#block-user-new {}
+
+/*
+ * "Who's online" block for a list of the online users
+ */
+#block-user-online {}
+
+
+/* =============================================================================
+ *   Node Styling
+ * ========================================================================== */
+
+.node {
+  margin-bottom: 20px;
+}
+
+.node.node-promoted {}
+
+.node.node-sticky {}
+
+.node.node-by-viewer {}
+
+.node.node-teaser {}
+
+.node.node-full {}
+
+.node.odd {}
+
+.node.even {}
+
+.node .node-title {
+  margin: 0;
+}
+
+.node .user-picture {}
+
+.node .submitted {}
+
+.node .submitted .username {}
+
+.node .submitted time {}
+
+.node .node-content {}
+
+.node ul.links {}
+
+.node ul.links li {}
+
+.node ul.links li a {}
+
+.node ul.links li.node-read-more a {}
+
+.node ul.links li.comment-add a {}
+
+.node ul.links li.comment-comments a {}
+
+.node ul.links li.comment-new-comments a {}
+
+.node ul.links li.blog-sernames-blog a {}
+
+.node ul.links li.print-html a {}
+
+.node ul.links li.print-email a {}
+
+.node ul.links li.print-pdf a {}
+
+.preview .node {}
+
+/*
+ * All nodes are given a node-FOO class that describes the type of content that
+ * it is. If you create a new content type called "my-custom-type", it will
+ * receive a "node-my-custom-type" class.
+ */
+.node-page {}
+
+.node-article {}
+
+.node-book {}
+
+.node-forum {}
+
+.node-poll {}
+
+
+/* =============================================================================
+ *   Comment Styling - Comments, comment wrapper, comment form
+ * ========================================================================== */
+
+/*
+ * Wrapper for the list of comments and its titles
+ */
+#comments {
+  margin: 1.5em 0;
+}
+
+#comments h2 {}
+
+#comments h2.comment-title {
+  margin: 0;
+}
+
+#comments h2.comment-form {
+  margin: 0;
+}
+
+/*
+ * Wrapper for a single comment
+ */
+.comment {
+  margin-bottom: 20px;
+}
+
+.comment.first {}
+
+.comment.last {}
+
+.comment.odd {}
+
+.comment.even {}
+
+.comment .user-picture {}
+
+.comment .submitted {}
+
+.comment .submitted p {}
+
+.comment .submitted .username {}
+
+.comment .submitted time {}
+
+.comment .user-signature {}
+
+.comment ul.links {}
+
+/*
+ * Comment title
+ */
+.comment-title {
+  margin: 0;
+}
+
+/*
+ * Comment states
+ */
+.comment-new {}
+
+.comment-by-anonymous {}
+
+.comment-by-node-author {}
+
+.comment-by-viewer {}
+
+.comment-title-hidden {}
+
+.comment-with-picture {}
+
+.comment-with-signature {}
+
+/*
+ * Preview of the comment before submitting new or updated comment
+ */
+.comment-preview {}
+
+/*
+ * "New" marker for comments that are new for the current user
+ */
+.new {
+  color: #c00;
+}
+
+/*
+ * Nested comments are indented
+ */
+.indented {
+  margin-left: 40px;
+}
+
+
+/* =============================================================================
+ *   Forms
+ * ========================================================================== */
+
+/*
+ * Wrapper for a form element (or group of form elements) and its label
+ */
+.form-item {}
+
+.form-item input.error,
+.form-item textarea.error,
+.form-item select.error {
+  border: 1px solid #c00;
+}
+
+.form-item label {
+  font-weight: 700;
+}
+
+.form-item label.option {}
+
+/*
+ * Highlight marks and form required mark
+ */
+.marker,
+.form-required {
+  color: #c00;
+}
+
+.form-item .description {
+  font-size: 0.85em;
+}
+
+.form-checkboxes .form-item,
+.form-radios .form-item {}
+
+/*
+ * The submit button
+ */
+.form-submit {}
+
+.container-inline div,
+.container-inline label {
+  display: inline;
+}
+
+/*
+ * Define consistent borders
+ */
+fieldset {
+  border: 1px solid #ccc;
+}
+
+/*
+ * Tips for Drupal's input formats
+ */
+.tips {}
+
+/*
+ * Buttons used by contrib modules like Media
+ */
+a.button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+
+/*
+ * Password confirmation
+ */
+.password-parent,
+.confirm-parent {
+  margin: 0;
+}
+
+
+/* =============================================================================
+ *   Tables
+ * ========================================================================== */
+
+table {
+  margin: 10px 0;
+  padding: 0;
+  width: 100%;
+}
+
+table.sticky-header {
+  z-index: 10;
+}
+
+table,
+thead,
+tbody,
+tr,
+th,
+td {
+  border-color: #f2f2f2;
+}
+
+table,
+td,
+th {
+  vertical-align: middle;
+}
+
+caption,
+th,
+td {
+  text-align: left;
+}
+
+thead tr {
+  font-weight: 700;
+  background-color: #f2f2f2;
+
+}
+
+td,
+th {
+  border-bottom: 0;
+  margin: 0;
+  padding: 5px 7px;
+}
+
+tbody {}
+
+tbody tr {
+  border-top: 1px solid #dedede;
+}
+
+tr.odd {
+  background: #fff;
+}
+
+tr.info,
+tr.even,
+tr:nth-child(2n+2) {
+  border-bottom: 0;
+  background-color: #f2f2f2;
+}
+
+tr.drag {}
+
+tr.drag-previous {}
+
+tr.odd td.active {
+  background-color: #eee;
+}
+
+tr.even td.active {
+  background-color: #ebebeb;
+}
+
+.lt-ie8 tr {}
+
+.lt-ie8 tr.even,
+.lt-ie8 tr.odd {}
+
+.lt-ie8 tr.even th,
+.lt-ie8 tr.even td,
+.lt-ie8 tr.odd th,
+.lt-ie8 tr.odd td {
+}
+
+/*
+ * Forum tables
+ * Core sets white-space to nowrap, which makes no sense
+ */
+#forum td {}
+
+#forum td .created,
+#forum td .posts,
+#forum td .topics,
+#forum td .last-reply,
+#forum td .replies,
+#forum td .pager {
+  white-space: normal;
+}
+
+
+/* =============================================================================
+ *   Messages
+ * ========================================================================== */
+
+/* Left and right margin are set by the global gutter width */
+div.messages {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+div.messages ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+div.status {}
+
+div.warning {}
+
+tr.warning {}
+
+div.error,
+tr.error {}
+
+.error {}
+
+.warning {}
+
+/*
+ * Unpublished nodes
+ */
+.node-unpublished,
+.comment-unpublished {}
+
+.node-unpublished,
+.comment-unpublished {}
+
+.node-unpublished p.unpublished,
+.comment-unpublished p.unpublished {
+  color: pink;
+  color: rgba(239, 170, 170, 0.4);
+  font-family: Impact,"Arial Narrow",Helvetica,sans-serif;
+  font-size: 75px;
+  font-weight: bold;
+  height: 0;
+  line-height: 1.2;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  text-align: center;
+  text-transform: uppercase;
+  word-wrap: break-word;
+}
+
+/*
+ * Otherwise these elements will appear below the "Unpublished" text
+ */
+.lt-ie8 {}
+
+.lt-ie8 .node-unpublished > *,
+.lt-ie8 .comment-unpublished > * {
+  position: relative;
+}
+
+
+/* =============================================================================
+ *    Maintenance pages
+ * ========================================================================== */
+
+.maintenance-page {}
+.maintenance-page .container {
+  padding: 40px 0;
+}
+
+.maintenance-page #site-name,
+.maintenance-page #page-title {
+  margin: 0;
+}
+
+.db-offline {}
+
+.db-offline .container {
+  margin: 0 auto;
+  padding: 40px 0;
+  width: 100%;
+  max-width: 960px;
+}
+
+.db-offline div.messages {
+  margin: 20px 0 0;
+}
+
+.db-offline #content {
+  padding: 20px 0;
+}
+
+
+/* =============================================================================
+ *   Misc overrides for contrib modules
+ * ========================================================================== */
+
+/*
+ * Admin menu overrides
+ */
+#admin-menu {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Devel Module
+ */
+.dev-query {
+  background: #eee;
+  padding: 30px;
+}
+
+/*
+ * Styleguide module tweaks
+ */
+#styleguide-header {
+  padding: 0 10px;
+}
+
+#styleguide-header .item-list {
+  font-family: inherit;
+  margin: 0 20px 20px 0;
+  min-height: 260px;
+  width: auto;
+}
+
+
+/** css for parent dsahboard**/
+/****************************/
+.pane-lw-report-parent-dashboard-chart {
+  border: 2px solid #F0CE59;
+  border-top: 4px solid #F0CE59;
+  border-right: 4px solid #F0CE59;
+  margin-left: 0.5%;
+  width: 93%;
+}
+
+.pane-lw-report-parent-dashboard-chart .block-inner, .pane-lw-report-parent-dashboard-child.block,
+.pane-lw-report-parent-dashboard-child .block-inner {
+  margin: 0;
+}
+
+
+.page-dashboard-parent ul.childList li a.active,
+.revision-tabs span a.active {
+  background: #F0CE59;
+  -moz-box-shadow:8px 0 5px -4px #777777;;
+  -webkit-box-shadow:8px 0 5px -4px #777777;;
+  box-shadow:8px 0 5px -4px #777777;
+  padding: 10px;
+  border-radius: 4px 4px 0px 0px;
+  margin-right: 2px;
+}
+
+.page-dashboard-parent ul.childList li a,
+.revision-tabs span a {
+  background: #f8e9b6;
+  padding: 10px;
+  border-radius: 4px 4px 0px 0px;
+}
+
+.page-dashboard-parent ul.childList li {
+  background: none;
+  clear: none;
+  display: inline-block;
+  float: none;
+  padding: 0;
+  width: auto;
+}
+
+.page-dashboard-parent ul.childList li:first-child {
+  margin-left: 5px;
+}
+
+.childList #dash_prof {
+  background: #ffffff; /* for non-css3 browsers */
+  background: -moz-linear-gradient(top, #ffffff,  #f3eedf); /* for firefox 3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f3eedf)); /* Safari 4+, Chrome */
+  background: -webkit-linear-gradient(left top, left bottom, #ffffff, #f3eedf); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+  background: -o-linear-gradient(top, #ffffff,#f3eedf); /* Opera 11.10+ */
+  background: -ms-filter:"progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#ffffff, EndColorStr=#f3eedf, GradientType=0)";
+  background: linear-gradient(to bottom, #ffffff,#f3eedf); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f3eedf', GradientType='0'); /* for IE */
+  display: inline-block;
+  float: none;
+  position: absolute;
+  padding-top: 1px;
+  padding-bottom: 13px;
+  left: 7px;
+  text-align: right;
+  top: 46px;
+  width: 92.8%;
+  z-index: 0;
+}
+
+.page-dashboard-parent .highchart_area:first-child {
+  height: 290px !important;
+}
+
+#dash_prof a{
+  background: #212060;
+  color: white;
+  font-size: 0.788em;
+  margin-right: 2.2%;
+  padding: 6px;
+  text-transform: capitalize;
+  -moz-box-shadow: 2px 2px 3px #212060;/*FF 3.5+*/
+  -webkit-box-shadow: 2px 2px 3px #212060;/*Saf3-4, Chrome, iOS 4.0.2-4.2, Android 2.3+*/
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color=#212060)";/*IE 8*/
+  box-shadow: 2px 2px 3px #212060;
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color=#212060);/*IE 5.5-7*/
+}
+
+.page-dashboard-parent .highchart_area:first-child .highcharts-container {
+  top: 40px !important;
+}
+
+
+.page-dashboard-parent .highchart_area:first-child .subject-name {
+  margin-top: 72px;
+}
+
+.page-dashboard-parent ul.childList li.addChild {
+  padding: 3px 6px 3px 6px !important;;
+  border-radius: 2px;
+  -moz-box-shadow: 1px 1px 3px #23b8b8;/*FF 3.5+*/
+  -webkit-box-shadow: 1px 1px 3px #23b8b8;/*Saf3-4, Chrome, iOS 4.0.2-4.2, Android 2.3+*/
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color=#23b8b8)";/*IE 8*/
+  box-shadow: 1px 1px 3px #23b8b8;
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color=#23b8b8);/*IE 5.5-7*/
+}
+
+.child-menu {
+  position: relative;
+  width: 98%;
+}
+
+.child-menu ul.childList {
+  margin-bottom: 7px;
+}
+
+.page-dashboard-parent ul.childList li.addChild a{
+  background: none;
+  color: #fff;
+  font-size: .9em;
+  font-family: DINBd;
+  padding: 0px;
+}
+
+.page-dashboard-parent ul.childList li.addChild {
+  background: #23b8b8;
+  margin-top: 0px !important;
+  margin-right: 4.2% !important;
+  float: right;
+}
+
+.page-dashboard-parent .highchart_area.even {
+  background: #ffffff; /* Old browsers */
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmM2VlZGYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#f3eedf)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #ffffff 0%,#f3eedf 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #ffffff 0%,#f3eedf 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #ffffff 0%,#f3eedf 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #ffffff 0%,#f3eedf 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f3eedf',GradientType=0 ); /* IE6-8 */
+}
+
+.page-dashboard-parent .subject-name {
+  margin-top: 28px;
+  font-family: DINMd;
+  font-size: 1.25em;
+  color: black;
+}
+
+.page-dashboard-parent .highchart_area {
+  float: left;
+  height: 250px;
+  width: 100%;
+}
+
+.page-dashboard-parent .highcharts-chart {
+  margin: 0 !important;
+  float: left;
+  height: 250px !important;
+}
+
+.page-dashboard-parent .spent-time {
+  float: left;
+  display: inline-block;
+}
+
+.page-dashboard-parent .highchart-content {
+  color: #9A8775;
+  font-family: DINRg;
+  display: inline-block;
+  float: left;
+  font-size: .85em;
+  width: 70%;
+}
+
+.page-dashboard-parent .highchart_area .highcharts-container {
+  height: 250px !important;
+}
+
+.page-dashboard-parent .highchart-content-left {
+  float: left;
+  margin-top: 14px;
+  width: 80%;
+}
+.page-dashboard-parent .date-start {
+  float: right;
+}
+
+.page-dashboard-parent .accurate {
+  float: left;
+  padding-top: 20px;
+}
+
+.page-dashboard-parent .percentage {
+  float: left;
+  width: 20%;
+  font-size: 1.3em;
+  font-family: DINMd;
+  color: #858587;
+}
+
+.page-dashboard-parent .percentage .per-text {
+  display: block;
+  padding: 10px;
+  width: 3.5em;
+  color: #212060;
+  text-align: center;
+  font-size: 2.8em;
+  height: 51px;
+  background: #f4f4f4; /* Old browsers */
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj4KICAgIDxzdG9wIG9mZnNldD0iMiUiIHN0b3AtY29sb3I9IiNmNGY0ZjQiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOTI5MjkxIiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyZWN0IHg9Ii01MCIgeT0iLTUwIiB3aWR0aD0iMTAxIiBoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-radial-gradient(center, ellipse cover,  #f4f4f4 2%, #929291 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(2%,#f4f4f4), color-stop(100%,#929291)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover,  #f4f4f4 2%,#929291 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover,  #f4f4f4 2%,#929291 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover,  #f4f4f4 2%,#929291 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center,  #f4f4f4 2%,#929291 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#929291',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
+}
+.page-dashboard-parent .percentage .per-text span {
+  border: 3px solid #212060;
+  display: block;
+  height: auto;
+  line-height: 45px;
+}
+.page-dashboard-parent .performance {
+  float: right;
+  padding-top: 20px;
+  margin-right: 2em;
+}
+
+.page-dashboard-parent .performance a {
+  background: #23b8b8;
+  color: white;
+  border-radius: 4px;
+  padding: 5px;
+  font-family: DINMd;
+}
+
+.page-dashboard-parent .no-assesment {
+  float: left;
+  width: 357px;
+  text-align: center;
+  margin-top: 10px;
+  position: relative;
+  font-family: DINRg;
+  color: #666;
+}
+
+.page-dashboard-parent .highchart_area:first-child .no-assesment{
+  margin-top: 60px;
+}
+
+.page-dashboard-parent .inner-no-assesment {
+  float: right;
+  padding-right: 67px;
+}
+
+.page-dashboard-parent .time {
+  border-bottom: 1px solid #b8b8b8;
+  float: left;
+  padding-bottom: 15px;
+  width: 96%;
+}
+
+.pane-lw-report-parent-dashboard-child ul.childList li a {
+  color: #303030;
+  font-family: DINRg;
+  font-size: 1.14em;
+  font-weight: normal;
+  text-transform: capitalize;
+}
+
+.started_top {
+  float: left;
+  padding-top: 20px;
+  width: 35%;
+}
+
+/** css for accordian **/
+.subject_report span.lft {
+  background: #CCC;
+  cursor: pointer;
+  display: block;
+  margin: 2px;
+  padding: 10px;
+}
+
+.subject_report .row {
+  padding-left: 10px;
+}
+
+.user_menu {
+  z-index: 9;
+}
+.pane-block-10 {
+  margin-bottom: 0;
+}
+
+.pane-lw-report-parent-dashboard-child h2 {
+  font-family: DINRg;
+  font-size: 2.142em;
+  font-weight: normal;
+  margin-top: 0.2em;
+}
+
+
+/**css for go live won block **/
+.right-golive-won {
+  background: #c5c5c5;
+  display: inline-block;
+  width: 90%;
+}
+
+
+.right-golive-won .exc-box {
+  background: url("../images/exc-bg.png") no-repeat scroll center 21px;
+  color: #E5C71E;
+  font-family: DINMd;
+  font-size: 4em;
+  font-weight: bold;
+  height: 192px;
+  line-height: 185px;
+  text-align: center;
+  width: auto;
+}
+
+.right-golive-won .exc-box span {
+  display: block;
+  font-size: 0.22em;
+  line-height: 0;
+  margin-top: -50px;
+}
+
+.pane-golive-lw-go-live-won h2.block-title {
+  color: #303030;
+  font-family: DINMd;
+  font-size: 1.143em;
+}
+
+/** css for golive upcomig section **/
+.pane-clone-of-golive-dashboard-upcoming h2.block-title {
+  color: #fff;
+  cursor: pointer;
+  font-family: DINRg;
+  font-size: .929em;
+  padding: 8px;
+
+}
+
+.pane-clone-of-golive-dashboard-upcoming h2.block-title{
+  background: url("../images/golive-upcoming-right.png") no-repeat scroll right top #1F1A4E;
+  height: 23px;
+  margin-left: 13px;
+  margin-top: 0;
+  padding: 4px 8px 0;
+}
+
+.pane-clone-of-golive-dashboard-upcoming .block-inner {
+  background: url("../images/golive-upcoming-left.png") no-repeat scroll 1px 1px transparent;
+  padding-top: 5px;
+}
+.pane-clone-of-golive-dashboard-upcoming .block-content {
+  margin-left: 1em;
+}
+.pane-clone-of-golive-dashboard-upcoming h2.block-title.active {
+  background: url("../images/golive-upcoming-right-parent.png") no-repeat scroll right top #18B9B8;
+  height: 23px;
+  margin-left: 13px;
+  margin-top: 0;
+  padding: 4px 8px 0;
+}
+
+.pane-clone-of-golive-dashboard-upcoming .parent {
+  background: url("../images/golive-upcoming-leff-parent.png") no-repeat scroll 1px 1px transparent;
+  padding-top: 5px;
+}
+
+.pane-clone-of-golive-dashboard-upcoming .view-content {
+  margin-top: 5px;
+  margin-bottom: 3px
+;}
+
+.view-clone-of-golive-dashboard-upcoming .views-field-title span{
+  color: #2c3945;
+  font-family: DINMd;
+  font-size: 1em;
+  text-transform: capitalize;
+}
+
+.view-clone-of-golive-dashboard-upcoming .views-field-field-time .field-content {
+  color: #767676;
+  font-size: .786em;
+  font-family: DINMd;
+}
+
+.pane-clone-of-golive-dashboard-upcoming {
+  margin-bottom: 1px;
+}
+
+
+/** css for revision page **/
+.revision-head .title a {
+  background: #fda22d; /* for non-css3 browsers */
+  background: -moz-linear-gradient(top, #fda22d,  #f75817); /* for firefox 3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, from(#fda22d), to(#f75817)); /* Safari 4+, Chrome */
+  background: -webkit-linear-gradient(left top, left bottom, #fda22d, #f75817); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+  background: -o-linear-gradient(top, #fda22d,#f75817); /* Opera 11.10+ */
+  background: -ms-filter:"progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#fda22d, EndColorStr=#f75817, GradientType=0)";
+  background: linear-gradient(to bottom, #fda22d,#f75817); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fda22d', endColorstr='#f75817', GradientType='0'); /* for IE */
+  -webkit-box-shadow: inset 1px 1px 5px rgba(247, 88, 33, .3);
+  box-shadow: inset 1px 1px 5px rgba(247, 88, 33, .3);
+  -moz-box-shadow: inset 1px 1px 5px rgba(247, 88, 33, .3);
+  border: 1px solid #F75817;
+  border-radius: 0.2em 0.2em 0.2em 0.2em;
+  box-shadow: 1px 1px 5px rgba(247, 88, 33, 0.3) inset;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.857em;
+  font-family: DINMd;
+  margin: 2.1em 0 0 0;
+  padding: 9px 5px;
+}
+
+
+.revision-head .title:first-child a{
+  padding: 9px 11px;
+  margin-left: 5.4em;
+}
+
+.revision-head .title.second{
+  margin-left: 15.3em;
+}
+
+.revision-tabs span a {
+  color: #4b4942;
+  font-size: 1.143em;
+  font-family: DINMd;
+  padding-left: 27px;
+  padding-right: 27px;
+}
+
+.revision-tabs span {
+  margin-right: 2px;
+}
+
+.revision-tabs span a.active {
+  padding-left: 27px;
+  padding-right: 27px;
+}
+
+.revision-tabs .tab1 a,
+.revision-tabs .tab2 a,{
+  color: #4b4942;
+  font-family: DINMd;
+  font-size: 1.143em;
+}
+
+.revision-tabs .tab1,
+.revision-tabs .tab2,
+.revision-tabs .tab1.active,
+.revision-tabs .tab2.active,
+ {
+  padding: 10px 31.5px;
+}
+
+.revision-tabs .tab2,
+ {
+  margin-left: 1px;
+}
+#main_class,
+.subject-main {
+  background:  #f7f7f7 url('../images/plus.png') 13px center no-repeat; /* for non-css3 browsers */
+  background-image:  url('../images/plus.png') 13px center no-repeat;
+  background-image: url('../images/plus.png') 13px center no-repeat, -moz-linear-gradient(top, #f7f7f7,  #e5e5e5); /* for firefox 3.6+ */
+  background: url('../images/plus.png') 13px center no-repeat, -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#e5e5e5)); /* Safari 4+, Chrome */
+  background: url('../images/plus.png') 13px center no-repeat, -webkit-linear-gradient(left top, left bottom, #f7f7f7, #e5e5e5); /* Chrome 10+, Safari 5.1+, iOS 5+ */
+  background: url('../images/plus.png') 13px center no-repeat, -o-linear-gradient(top, #f7f7f7,#e5e5e5); /* Opera 11.10+ */
+  background: url('../images/plus.png') 13px center no-repeat, -ms-filter:"progid:DXImageTransform.Microsoft.Gradient(StartColorStr=#f7f7f7, EndColorStr=#e5e5e5, GradientType=0)";
+  background: url('../images/plus.png') 13px center no-repeat, linear-gradient(to bottom, #f7f7f7,#e5e5e5); /* W3C */
+  border-bottom: 1px solid #D9D9D9;
+  border-top: 1px solid #D9D9D9;
+  border-left: 0;
+  border-right: 0;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  box-shadow: 0 0 2px 0 #E5E5E5 inset;
+  cursor: pointer;
+  margin-bottom: 0px;
+  padding: 0.5em 2em;
+}
+
+#main_class.active, .subject-main.active {
+  border: 1px solid #239c9c;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background: #23b8b8 url('../images/minus.png') no-repeat 13px center;
+  cursor: pointer;
+  padding: 0.3em 2em;
+}
+
+#main_class:first-child {
+  box-shadow: 0 -1px 2px #D9D9D9;
+}
+
+#main_class.active span,
+.subject-main.active span {
+  color: #fff;
+  font-family: DINRg;
+  font-size: 1.14285714286em;
+  font-weight: bold;
+}
+
+#main_class span,
+.subject-main span {
+  color: #4b4942;
+  font-family: DINRg;
+  font-size: 1.14285714286em;
+  font-weight: bold;
+}
+
+.sub_class1,
+.sub_topic1,
+.subject-title {
+  display: inline-block;
+  margin-left: 0.4em;
+  width: 25.3%;
+}
+
+.subject-name {
+  width: 25%;
+}
+.sub_class2,
+.sub_topic2,
+.subject-complete,
+.subject-date {
+  display: inline-block;
+  width: 21.5%;
+}
+
+.sub_topic3 {
+  display: inline-block;
+  width: 16.3%;
+}
+
+.sub_main,
+.subject-topic {
+  background: #f2f2f2;
+  border-bottom: 1px solid #D9D9D9;
+  height: 27px;
+  padding: 0.4em 2em;
+  padding-right: 0;
+}
+
+.sub_main span,
+.subject-topic span {
+  color: #383737;
+  font-family: arial;
+  font-size: 0.857em;
+  width: 32%;
+}
+
+.sub_main form,
+.subject-topic .form-submit{
+  /**border: 1px solid #DADADA;**/
+  display: inline-block;
+  margin-left: .5em;
+  padding: 0;
+}
+
+.sub_main form select {
+  margin-right: 0;
+}
+
+.subject .subject-topic .form-submit {
+  border: 1px solid #DADADA;
+}
+
+.sub_main input[id^="edit-click-button"] {
+  margin-right: 1em;
+  margin-left: 5em;
+}
+
+.subject-topic form input[id^="edit-submit-button"] {
+  margin-left: 20em;
+}
+
+.subject form {
+  display: inline-block;
+  width: 68%;
+}
+
+.subject .form-item-duration .description {
+  padding-left: 0;
+}
+
+.subject .form-item-duration {
+  display: inline-block;
+  margin: 0;
+}
+
+.subject .form-item-duration .form-text {
+  display: inline-block;
+  margin: 0 0 0 5px;
+}
+
+.subject .description {
+  display: inline-block;
+}
+
+.subject .form-submit {
+  display: inline-block;
+}
+
+.sub_main:last-child,
+.subject-topic:last-child {
+  margin-bottom: 8px;
+}
+
+.sub_main .form-submit,
+.subject-topic .form-submit {
+  background: #F0CE59;
+  border: 0;
+  color: #565244;
+  font-size: .857em;
+  padding: 0.4em 1.5em;
+  text-transform: capitalize;
+}
+
+.revision-drop {
+  background: none repeat scroll 0 0 #FFFFFF;
+  height: 35px;
+  width: 100%;
+}
+.revision-drop1 {
+  background: url("../images/revision-drop.png") no-repeat scroll 80px -4px transparent;
+  display: block;
+  float: left;
+  height: 7px;
+  width: 42%;
+}
+
+.revision-drop2 {
+  background: url("../images/revision-drop.png") no-repeat scroll 116px -4px transparent;
+  display: block;
+  float: left;
+  height: 7px;
+  width: 50%;
+}
+
+.block-content .revision-head {
+  background: #fff;
+  margin: 0;
+}
+
+.sub_main .form-item-duration{
+  display: inline-block;
+  margin: 0;
+}
+
+.revision-close-form {
+  margin-left: 4px;
+}
+.sub_class3 {
+  width: 25.3%;
+  display: inline-block;
+}
+
+.sub_main .sub_topic2 {
+  width: 20%;
+}
+
+.sub_main form input {
+  margin-right: 5px;
+}
+/**.pane-lw-revision-revision-start,
+.pane-lw-revision-revision-page,
+.pane-lw-revision-revision-pending {
+  width: 98%;
+}**/
+
+.page-revision-home #columns #content-column .content-inner {
+  background: #d3d3d3;
+}
+
+/**.page-revision-home .block-content {
+  background: #fff;
+}**/
+
+.revision-tabs {
+  background: none repeat scroll 0 0 #D3D3D3;
+  float: left;
+  padding-bottom: 8px;
+  padding-left: 1.7em;
+}
+
+.page-revision-home-start .revision-drop2,
+.page-revision-home-pending .revision-drop2 {
+  background: url("../images/revision-drop.png") no-repeat scroll 116px -4px;
+  /**height: 67px;**/
+}
+
+
+.page-revision-home-student .revision-drop1 {
+  background: url("../images/revision-drop.png") no-repeat scroll 84px -4px;
+  /**height: 67px;**/
+}
+
+.avail-revise {
+  float: left;
+  width: 36%;
+  margin-left: 3%;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-family: DINRg;
+  font-size: 1.2em;
+}
+
+.avail-revise-schedule {
+  float: right;
+  width: 35%;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  background: #a5acb0;
+  margin-right: 2%;
+  border-radius: 5px;
+  padding: 4px;
+  font-size: .857em;
+  font-family: DINRg;
+  padding-left: 15px;
+  color: #000;
+  padding-right: 9px;
+  border: 1px solid #a5a5a5;
+}
+
+.active-revision {
+  width: 30%;
+  margin-left: 3%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 1.42857142857em;
+  font-family: DINRg;
+}
+
+.page-revision-home-student .revision-drop {
+  background: url("../images/revision-arrow.png") no-repeat scroll 245px 7px #FFF !important;
+}
+
+.page-revision-home-start .revision-drop,
+.page-revision-home-pending .revision-drop {
+  background: url("../images/revision-arrow.png") no-repeat scroll 705px 7px #FFF !important;
+}
+
+.sub_topic3 > a {
+  background: url("../images/start-revision.png") no-repeat scroll 32px 0 transparent;
+  display: block;
+  height: 26px;
+  text-indent: -999em;
+}
+
+.page-revision-home-student .pane-block .block-inner .block-content {
+  background: #D3D3D3;
+}
+
+.page-revision-home-student .block-content .revision-head {
+  background: #fff;
+}
+
+.page-revision-home-student .revision-drop {
+  background: none repeat scroll 0 0 #FFFFFF;
+  height: 35px;
+  /**margin-bottom: 30px;**/
+}
+
+.subject-start {
+  background: #fff;
+}
+
+
+
+
+.subject-topic .container-inline-date {
+  float: left;
+}
+
+.subject-topic .container-inline-date .date-padding {
+  margin: 0;
+  padding: 3px 0 0 0;
+}
+
+.page-revision-home #main-content #content {
+  padding-left: 0;
+  width: 100%;
+}
+
+.subject-start {
+  background: none repeat scroll 0 0 #FFFFFF;
+  clear: both;
+  margin-left: 1.7em;
+  width: 96%;
+}
+
+.subject-name {
+  float: left;
+  margin-top: 5px
+}
+/** css for rewards gallery **/
+.region-two-66-33-second .pane-badges2 h2 {
+  background: url(../images/reward-gallery.png);
+/*Firefox*/
+  -moz-border-top-left-radius: 4px;
+  -moz-border-top-right-radius: 4px;
+  -moz-border-bottom-right-radius: 0px;
+  -moz-border-bottom-left-radius: 0px;
+/*Safari, Chrome*/
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  color: #fff;
+  font-family: DINRg;
+  font-size: 1.29928571429em;
+  height: 34px;
+  line-height: 32px;
+  padding-left: 10px;
+}
+
+.region-two-66-33-second .pane-badges2 .block-content {
+  background: #e8e8e8;
+}
+
+.view-badges2 .field-content {
+
+}
+
+.view-badges2 .views-row-1 .views-field {
+  padding-top: 9px;
+}
+
+.view-badges2 .views-field {
+  padding-bottom: 24px;
+}
+
+.view-badges2 .more-link a {
+  background: url("../images/view-more.png") no-repeat scroll right 5px transparent;
+  color: #7F7F7F;
+  font-family: DINRg;
+  font-size: 0.85em;
+  padding-right: 7%;
+}
+
+.view-badges2 .more-link {
+  text-align: center;
+  float: none;
+  padding-left: 10%;
+}
+
+.pane-user-excellons.block {
+  margin-bottom: 0;
+}
+
+/** css for user profile **/
+#block-lw-custom-user-detail #child_table.even {
+  margin-right: 13.5%;
+}
+#block-lw-custom-user-detail #child_table {
+  float: left;
+  width: 39%;
+  margin-bottom: 20px;
+}
+
+.page-user.role-parent #main-content-header,
+.page-user.role-student #main-content-header{
+  background: none repeat scroll 0 0 #EEEEEE;
+  padding-bottom: 0;
+}
+
+.page-user.role-parent #main-content #content {
+  padding: 7px 0 0 0px;
+}
+
+.page-user.role-parent #block-views-parent-profile-detail-block {
+  overflow: hidden;
+  padding-left: 3%;
+}
+
+.page-user.role-parent #block-lw-custom-user-detail {
+  overflow: hidden;
+  background: #fff;
+  padding-left: 3%;
+  padding-top: 25px;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.child_name {
+  background: none repeat scroll 0 0 #23B8B8;
+  border: 1px solid #AEAEAE;
+  border-radius: 5px 5px 2px 2px;
+  color: #FFFFFF;
+  font-family: Myriad pro;
+  font-size: 1.125em;
+  padding: 1.9%;
+  text-transform: capitalize;
+}
+
+.child-info {
+  border: 1px solid #aeaeae;
+  background: #f2f2f2;
+  border-radius: 4px 4px 4px 4px;
+}
+.child-info label {
+    display: inline-block;
+    font-weight: normal;
+    width: 40%;
+}
+
+.child_dob, .child_school, .child_branch, .child_class {
+  border-bottom: 1px solid #DCDDDD;
+  color: #464646;
+  font-family: Arial;
+  font-size: 1em;
+  line-height: 29px;
+  padding: 5px 5px 5px 8px;
+  text-transform: capitalize;
+}
+
+.child-info > a {
+  display: inline-block;
+  padding: 10px;
+}
+
+.child-info a span {
+    background: none repeat scroll 0 0 #F1CE5A;
+    border: 1px solid #DADADA;
+    color: #575143;
+    padding: 5px 10px;
+   text-transform: capitalize;
+}
+
+#subscription-static-get-form h2,
+#block-views-parent-profile-detail-block h2,
+#block-views-child-detail-block h2,
+#block-lw-custom-user-details-password h2,
+.page-profile-second-parent #block-block-31 h2,
+h2.edit_page,
+.page-subscription-form #block-commerce-cart-cart h2.block-title{
+  background: none repeat scroll 0 0 #23B8B8;
+  border: 1px solid #239C9C;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  color: #FFFFFF;
+  font-family: DINRg;
+  font-size: 1.125em;
+  padding: 0.3em 0.3em 0.3em 0.8em;
+  width: 97.6%;
+}
+
+h2.edit_page{
+  margin: 0;
+  width: 920px;
+}
+
+.page-user-edit.role-parent #edit-field-where-did-you-hear-about-u label:first-child{
+  background: none repeat scroll 0 0 #23B8B8;
+  border: 1px solid #239C9C;
+  color: #FFFFFF;
+  font-family: DINRg;
+  font-size: 1.125em;
+  padding: 0.3em 0.3em 0.3em 0.8em;
+  width: 98%;
+}
+
+.page-profile-second-parent #block-lw-custom-parent-menu{
+  margin-left:0;
+}
+
+.page-profile-second-parent #block-lw-custom-parent-menu ul.tabs{
+  padding-left:0;
+}
+
+.parent-name .name {
+  width: 14.5%;
+}
+
+.page-user.role-parent #block-views-child-detail-block,
+.page-user.role-parent #block-lw-custom-user-details-password,
+.page-user.role-parent #block-lw-custom-subs-expiration{
+  margin-left: 29px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+#block-views-parent-profile-detail-block .item2 .parent-name span.salutation,
+#block-views-parent-profile-detail-block .item2 .parent-name span:last-child,
+#block-views-parent-profile-detail-block .item3 .field-content,
+#block-views-parent-profile-detail-block .item4 .field-content,
+#block-views-parent-profile-detail-block .item5 .field-content,
+#block-views-parent-profile-detail-block .item6 .field-content,
+#block-views-parent-profile-detail-block .item7 .field-content,
+#block-views-parent-profile-detail-block .item8 .field-content,
+#block-views-child-detail-block .item1 .field-content,
+#block-views-child-detail-block .item2 .field-content,
+#block-views-child-detail-block .item3 .field-content,
+#block-views-child-detail-block .item4 .field-content,
+#block-views-child-detail-block .item5 .field-content,
+#block-views-child-detail-block .item6 .field-content,
+#block-views-child-detail-block .item8 .field-content span.field-contents,
+#block-views-child-detail-block .item7 .field-content span.field-content,
+#profile2-edit-parent-2-form input[type=text],
+.entity-profile2.profile2-parent-2 .field-items,
+#block-lw-custom-user-details-password .user-uid span,
+.page-profile-second-parent .form-text,
+.page-profile-second-parent .profile2-second-parent section .field-items .field-item{
+    background: url("../images/input-bg.png") repeat-x scroll left center transparent;
+    border: 1px solid #BFBFBF;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+    color: #747474;
+    font-size: 14px;
+    height: 23px;
+    line-height: 20px;
+    padding: 0 10px;
+    float: left;
+    width: 50%;
+    margin-top: 6px;
+    font-family: Myp,Verdana,Arial,sans-serif;
+}
+
+.page-user.role-teacher #block-views-parent-profile-detail-block .views-field-field-schools .field-content,
+.page-user.role-student #block-views-child-detail-block .views-field-field-schools .field-content{
+  font-size: 12px;
+  line-height: 24px;
+}
+
+#profile2-edit-parent-2-form .form-item{
+  margin: 0;
+}
+
+#profile2-edit-parent-2-form label,
+.entity-profile2.profile2-parent-2 h2.field-label{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  float: left;
+  width: 40%;
+}
+
+.entity-profile2.profile2-parent-2 h2.field-label{
+  margin: 0;
+}
+
+#profile2-edit-parent-2-form > div{
+  float: left;
+  width: 100%;
+}
+
+#profile2-edit-parent-2-form .field-name-field-first-name-p2,
+#profile2-edit-parent-2-form .field-name-field-last-name-p2,
+#profile2-edit-parent-2-form #edit-profile-parent-2-field-address,
+#profile2-edit-parent-2-form #edit-actions,
+.entity-profile2.profile2-parent-2 .field-name-field-first-name-p2,
+.entity-profile2.profile2-parent-2 .field-name-field-last-name-p2,
+.entity-profile2.profile2-parent-2 .field-name-field-address{
+  background: none repeat scroll 0 0 #F2F2F2;
+}
+
+#profile2-edit-parent-2-form #edit-actions{
+  margin: 0;
+  overflow: hidden;
+  padding: 3px 0;
+}
+
+#profile2-edit-parent-2-form #edit-actions input[type=submit]{
+    background: none repeat scroll 0 0 #F1CE5A;
+    border: 1px solid #DADADA;
+    color: #575143;
+    margin-right:24px;
+    padding: 5px 10px;
+    float: right;
+}
+
+#profile2-edit-parent-2-form .field-name-field-first-name-p2,
+#profile2-edit-parent-2-form .field-name-field-last-name-p2,
+#profile2-edit-parent-2-form .field-name-field-email-p2,
+#profile2-edit-parent-2-form .field-name-field-mobile-no-p2,
+#profile2-edit-parent-2-form #edit-profile-parent-2-field-address,
+#profile2-edit-parent-2-form #edit-actions,
+.entity-profile2.profile2-parent-2 .field-name-field-first-name-p2,
+.entity-profile2.profile2-parent-2 .field-name-field-last-name-p2,
+.entity-profile2.profile2-parent-2 .field-name-field-email-p2,
+.entity-profile2.profile2-parent-2 .field-name-field-mobile-no-p2,
+.entity-profile2.profile2-parent-2 .field-name-field-address{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  padding-left: 1.8%;
+  float: left;
+  width: 48.2%;
+}
+
+.entity-profile2.profile2-parent-2 .field-name-field-email-p2 a{
+  color: #737373;
+}
+
+.entity-profile2.profile2-parent-2 .field-name-field-address{
+  width: 100%;
+}
+
+.entity-profile2.profile2-parent-2 .field-name-field-address h2.field-label{
+  width: 19%;
+}
+
+.entity-profile2.profile2-parent-2 .field-name-field-address .field-items{
+  width: 24%;
+}
+
+
+#block-views-parent-profile-detail-block .item2 .parent-name span.salutation{
+  width: 8%;
+  margin-right: 2px;
+}
+
+#block-views-parent-profile-detail-block .item2 .parent-name span:last-child{
+  width: 37%;
+}
+
+#block-views-child-detail-block .item7 .field-content span.field-content{
+  width: 24.5%;
+}
+
+#block-views-child-detail-block .field-content span.date-display-single{
+  float: none;
+  width: auto;
+}
+
+#block-views-parent-profile-detail-block .item2,
+#block-views-parent-profile-detail-block .item3,
+#block-views-parent-profile-detail-block .item4,
+#block-views-parent-profile-detail-block .item5,
+#block-views-parent-profile-detail-block .item6,
+#block-views-parent-profile-detail-block .item7,
+#block-views-parent-profile-detail-block .item8,
+#block-views-parent-profile-detail-block .item9,
+#block-views-parent-profile-detail-block .item10,
+#block-views-parent-profile-detail-block .item11,
+#block-views-parent-profile-detail-block .item12,
+#block-views-child-detail-block .item1,
+#block-views-child-detail-block .item2,
+#block-views-child-detail-block .item3,
+#block-views-child-detail-block .item4,
+#block-views-child-detail-block .item5,
+#block-views-child-detail-block .item6,
+#block-views-child-detail-block .item7,
+#block-views-child-detail-block .item8,
+#block-views-child-detail-block .item9,
+#block-views-child-detail-block .item10,
+#block-views-child-detail-block .item12,
+#block-views-child-detail-block .item13,
+.page-user-edit.role-parent.child_edit #edit-field-mobile-no,
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil,
+.page-user-edit.role-parent #edit-field-first-name,
+.page-user-edit.role-parent #edit-field-middle-name,
+.page-user-edit.role-parent #edit-field-last-name,
+.page-user-edit.role-parent #edit-field-mobile-no{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  background: none repeat scroll 0 0 #F2F2F2;
+  line-height: 36px;
+  padding-left: 1.8%;
+  float: left;
+  width: 47.9%;
+}
+
+#block-views-child-detail-block .item11,
+#block-views-parent-profile-detail-block .item1{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  padding-left: 1.8%;
+}
+
+#block-views-parent-profile-detail-block .item1{
+  background: none repeat scroll 0 0 #F2F2F2;
+  float: left;
+  width: 97.6%;
+}
+
+
+.page-user-edit.role-parent #edit-field-relationship-with-the-chil{
+  clear: both;
+  width: auto;
+  padding-left: 1.8%;
+}
+
+.page-user-edit.role-parent #edit-field-first-name,
+.page-user-edit.role-parent #edit-field-middle-name,
+.page-user-edit.role-parent #edit-field-last-name,
+.page-user-edit.role-parent #edit-field-mobile-no{
+  width: 48.2%;
+}
+
+.page-user-edit.role-parent #edit-field-country,
+.page-user-edit.role-parent #edit-field-state,
+.page-user-edit.role-parent #edit-field-city{
+  margin-bottom: 0;
+}
+
+.page-user-edit.role-parent #edit-field-country,
+.page-user-edit.role-parent #edit-field-city{
+  padding:6px 0 6px 1.8%;
+  float: left;
+  width: 48.2%;
+}
+
+.page-user-edit.role-parent #edit-field-city,
+.page-user-edit.role-parent #edit-field-mobile-no,
+.page-user-edit.role-parent #edit-actions--2{
+  background: #f2f2f2;
+}
+
+.page-user-edit.role-parent #edit-field-country label,
+.page-user-edit.role-parent #edit-field-city label,
+.page-user-edit.role-parent #edit-field-mobile-no label{
+  width: 40%;
+}
+
+.page-user-edit.role-parent #edit-field-state label,
+.page-user-edit.role-parent.child_edit #edit-field-mobile-no label{
+  width: 23%;
+}
+
+.page-user-edit.role-parent #edit-field-country .autocomplete-deluxe-container,
+.page-user-edit.role-parent #edit-field-city .autocomplete-deluxe-container{
+  background:none;
+  width: 57%;
+  border: none;
+}
+
+.page-user-edit.role-parent #edit-field-city .autocomplete-deluxe-container input.autocomplete-deluxe-form,
+.page-user-edit.role-parent #edit-field-country .autocomplete-deluxe-container input.autocomplete-deluxe-form{
+  width: 87%;
+}
+
+.page-user-edit.role-parent #edit-field-country input,
+.page-user-edit.role-parent #edit-field-city input{
+  width: 84%;
+}
+
+.page-user-edit.role-parent #edit-field-state .autocomplete-deluxe-container{
+  background:none;
+  width: 64%;
+  border: none;
+}
+
+.page-user-edit.role-parent #edit-field-last-name{
+  background: none;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil{
+  width: 49%;
+  background: #fff;
+  padding-left: 10px;
+  clear: none;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-mobile-no label,
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil label,
+.page-user-edit.role-parent .form-wrapper label{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  float: left;
+  width: 40%;
+}
+
+.page-user-edit.role-parent .form-wrapper .form-item-picture-delete label.option{
+  float: none;
+}
+
+.page-user-edit.role-parent #edit-field-where-did-you-hear-about-u label{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  padding-left: 1.8%;
+  float: left;
+}
+
+.page-user-edit.role-parent .form-wrapper .form-item-picture-delete .description{
+  margin-left: 2em;
+}
+
+.page-user-edit.role-parent #edit-field-where-did-you-hear-about-u #edit-field-where-did-you-hear-about-u-und{
+  clear: both;
+  padding-left: 1.8%;
+  padding-top: 1%;
+}
+
+.page-user-edit.role-parent #edit-field-where-did-you-hear-about-u .form-type-radio.form-item-field-where-did-you-hear-about-u-und{
+  float: left;
+  width: 25%;
+}
+
+.page-user-edit.role-parent #edit-field-where-did-you-hear-about-u input.form-radio{
+  float: left;
+  margin-top: 4px;
+}
+
+.page-user-edit.role-parent #edit-field-where-did-you-hear-about-u label.option{
+  float: left;
+  width: 90%;
+}
+
+.page-user-edit.role-parent #edit-field-relationship-with-the-chil label{
+  width: 44%;
+}
+
+.page-user-edit.role-parent.child_edit input#edit-field-mobile-no-und-0-value[type="text"]{
+  width: 51%;
+}
+
+.page-user-edit.role-parent.child_edit input#edit-mail{
+  width: 25%;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil label{
+  width: 44%;
+}
+
+.edit #edit-field-relationship-with-the-chil .form-type-radio.form-item-field-relationship-with-the-chil-und:first-child{
+  display: none;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil .form-type-radio.form-item-field-relationship-with-the-chil-und input{
+  float: left;
+  margin-top: 11px;
+}
+
+.page-user-edit.role-parent #edit-field-relationship-with-the-chil .form-type-radio.form-item-field-relationship-with-the-chil-und input{
+  float: left;
+  margin-top: 4px;
+  margin-right: 8px;
+}
+
+.edit #edit-field-relationship-with-the-chil .form-type-radio.form-item-field-relationship-with-the-chil-und{
+  float: left;
+  width: 18.6%;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil label.option{
+  width: 84%;
+}
+
+.page-user-edit.role-parent #edit-field-relationship-with-the-chil label.option{
+  width: 84%;
+}
+
+.page-user-edit.role-student #block-system-main input#edit-field-mobile-no-und-0-value[type="text"]{
+  width: 49%;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-mobile-no {
+  background: none repeat scroll 0 0 #F2F2F2;
+}
+
+#block-views-parent-profile-detail-block .item10{
+  overflow: hidden;
+      clear: both;
+    overflow: hidden;
+    padding: 8px 20px;
+    width: 95.2%;
+}
+
+#block-views-parent-profile-detail-block .item10 span{
+  float: right;
+}
+
+#block-views-parent-profile-detail-block .item9 .field-content{
+  background: url(../images/redio-icon.png) no-repeat left 11px;
+  padding-left: 25px;
+  float: left;
+}
+
+#block-views-parent-profile-detail-block .item2,
+#block-views-parent-profile-detail-block .item3,
+#block-views-parent-profile-detail-block .item6,
+#block-views-parent-profile-detail-block .item7,
+#block-views-parent-profile-detail-block .item11,
+#block-views-parent-profile-detail-block .item12,
+#block-views-parent-profile-detail-block .item10,
+#block-views-child-detail-block .item3,
+#block-views-child-detail-block .item4,
+#block-views-child-detail-block .item7,
+#block-views-child-detail-block .item8,
+#block-views-child-detail-block .item12,
+#block-views-child-detail-block .item13 {
+  background: #fff;
+}
+
+#block-views-parent-profile-detail-block .item8,
+#block-views-parent-profile-detail-block .item9{
+  background: #f2f2f2;
+}
+
+
+#block-views-parent-profile-detail-block .item2 span,
+#block-views-parent-profile-detail-block .item3 span,
+#block-views-parent-profile-detail-block .item4 span,
+#block-views-parent-profile-detail-block .item5 span,
+#block-views-parent-profile-detail-block .item6 span,
+#block-views-parent-profile-detail-block .item7 span,
+#block-views-parent-profile-detail-block .item8 span,
+#block-views-parent-profile-detail-block .item9 span,
+#block-views-parent-profile-detail-block .item11 span,
+#block-views-parent-profile-detail-block .item12 span,
+#block-views-child-detail-block .item1 span,
+#block-views-child-detail-block .item2 span,
+#block-views-child-detail-block .item3 span,
+#block-views-child-detail-block .item4 span,
+#block-views-child-detail-block .item5 span,
+#block-views-child-detail-block .item6 span,
+#block-views-child-detail-block .item7 span,
+#block-views-child-detail-block .item8 span,
+#block-views-child-detail-block .item9 span,
+#block-views-child-detail-block .item12 span,
+#block-views-child-detail-block .item13 span
+{
+  display: inline-block;
+  width: 40%;
+  float: left;
+}
+
+#block-views-parent-profile-detail-block .item1 span{
+  display: inline-block;
+  width: 20%;
+  float: left;
+}
+
+#block-views-parent-profile-detail-block .item1 .user-picture{
+  padding-top: 5px;
+}
+
+#block-views-child-detail-block .item10{
+  background: #fff;
+  padding-top: 1px;
+  height: 36px;
+  line-height: 36px;
+}
+
+.extra_title{
+  margin:0;
+}
+
+#block-views-parent-profile-detail-block,
+#block-views-child-detail-block,
+#block-lw-custom-user-details-password {
+  width: 98%;
+  text-transform: capitalize;
+}
+
+#block-views-child-detail-block .views-field-nothing,
+#block-views-child-detail-block .views-field-nothing .field-content,
+#block-views-child-detail-block .views-field-nothing-1 .field-content {
+  width: 100%;
+}
+
+#block-views-child-detail-block .views-field-php{
+  background: #fff;
+  padding-right: 20px;
+  width: 45.8%
+}
+
+.page-user.role-parent  #block-views-child-detail-block .views-field-php {
+  background: none repeat scroll 0 0 #F2F2F2;
+  padding-right: 20px;
+  width: 45.6%;
+}
+
+#block-views-child-detail-block .views-field-php .field-content {
+  float: right;
+  width: 31%;
+}
+
+
+#block-views-child-detail-block .user-span span,
+#block-views-child-detail-block .user-class span {
+  float: left;
+  width: 19.5%;
+}
+
+#block-views-child-detail-block .user-span span.field-content,
+#block-views-child-detail-block .user-class span.field-content {
+  float: left;
+  width: 31%;
+}
+#block-views-child-detail-block .views-field-nothing-1 {
+  background: #F2F2F2;
+}
+
+#block-views-child-detail-block .views-field-field-first-name,
+#block-views-child-detail-block .views-field-field-middle-name,
+#block-views-child-detail-block .views-field-field-branch,
+#block-views-child-detail-block .views-field-field-schools,
+#block-views-child-detail-block .views-field-nothing-1,
+#block-views-child-detail-block  .views-field-field-gender,
+#block-views-child-detail-block .item9,
+#block-lw-custom-user-details-password .user-username .form-item-password {
+-moz-box-shadow: inset 0px 0px 0px #e5e5e5;/*FF 3.5+*/
+-webkit-box-shadow: inset 0px 0px 0px #e5e5e5;/*Saf3-4, Chrome, iOS 4.0.2-4.2, Android 2.3+*/
+box-shadow: inset 0px 0px 0px #e5e5e5;
+border-bottom: 1px solid #e5e5e5;
+border-top: 1px solid #e5e5e5;
+}
+
+#block-views-child-detail-block .views-field-field-first-name,
+#block-views-child-detail-block .views-field-field-schools,
+#block-views-child-detail-block .views-field-nothing-1,
+#block-lw-custom-user-details-password .user-username .form-item-password,
+#block-views-child-detail-block .views-field-field-last-name,
+#block-views-child-detail-block .views-field-nothing{
+  border-left: 1px solid #e5e5e5;
+}
+
+#block-views-child-detail-block .views-field-field-middle-name,
+#block-views-child-detail-block .views-field-field-branch,
+#block-views-child-detail-block .views-field-field-gender,
+#block-lw-custom-user-details-password .user-username .form-item-password,
+#block-views-child-detail-block .views-field-field-date-of-birth,
+#block-views-child-detail-block .views-field-nothing,
+#block-views-child-detail-block .views-field-php,
+#block-views-child-detail-block .item9{
+  border-right: 1px solid #e5e5e5;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-field-first-name,
+.page-user.role-parent #block-views-child-detail-block .views-field-field-last-name,
+.page-user.role-parent #block-views-child-detail-block .views-field-field-schools,
+.page-user.role-parent #block-views-child-detail-block .views-field-field-date-of-birth,
+.page-user.role-parent #block-views-child-detail-block .views-field-field-branch,
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing{
+  border: 0;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing{
+  background: none repeat scroll 0 0 #FFFFFF;
+  width:280px;
+  height: 36px;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1{
+  background: none repeat scroll 0 0 #FFFFFF;
+  width:155px;
+  padding-top: 6px;
+  padding-bottom: 5px;
+  border: 0;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field.views-field-nothing.item8 .field-content{
+  background:none;
+  border: 0;
+  width: auto;
+  padding-bottom: 9px !important;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing.item4 span.field-content,
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1.item5 span.field-content{
+  width: 432px;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1.item5 span.field-content .field-contents{
+  width: 227px;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-field-childs-email .field-content{
+  width: 225px !important;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing span.field-content,
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1 span.field-content {
+  background: none repeat scroll 0 0 transparent  !important;
+  border: 0 none !important;
+  margin-top: 0 !important;
+  padding: 0 0 2px 0 !important;
+  width: 100% !important;
+  border-radius: 0 !important;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1 span.field-content .user-section span.field-contents{
+    background: url("../images/input-bg.png") repeat-x scroll left center transparent;
+    border: 1px solid #BFBFBF;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+    color: #747474;
+    font-size: 14px;
+    height: 23px;
+    line-height: 20px;
+    padding: 0 10px;
+    float: left;
+    width: 24.5%;
+    font-family: Myp,Verdana,Arial,sans-serif;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing span.field-content .user-class span.field-content{
+    background: url("../images/input-bg.png") repeat-x scroll left center transparent !important;
+    border: 1px solid #BFBFBF !important;
+  -moz-border-radius: 4px !important;
+  -webkit-border-radius: 4px !important;
+  border-radius: 4px !important;
+    color: #747474 !important;
+    font-size: 14px !important;
+    height: 23px !important;
+    line-height: 20px !important;
+    padding: 0 10px !important;
+    float: left !important;
+    width: 20% !important;
+    margin: 6px 0 0 10px !important;
+    font-family: Myp,Verdana,Arial,sans-serif !important;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1 span.field-content .user-section span{
+  width: 45%;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing-1 span.field-content .user-section span.field-contents{
+  width: 40px !important;
+}
+
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing span.field-content .user-span span,
+.page-user.role-parent #block-views-child-detail-block .views-field-nothing span.field-content .user-class span{
+  padding-top: 7px;
+}
+
+
+/** css for user login profile **/
+#block-lw-custom-user-details-password {
+  clear: both;
+  margin:0;
+}
+
+#block-lw-custom-user-details-password .user-picture {
+  color: #737373;
+  float: left;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  margin-top: 3px;
+  padding-left: 1.8%;
+  width: 161px;
+}
+
+.user-picture.userpic {
+  width: 450px !important;
+}
+
+#block-views-child-detail-block .view-child-detail .views-field.views-field-php.item10{
+  height: 34px;
+  padding-right: 19px;
+  padding-top: 1px;
+  }
+
+.user-picture label {
+  color: #737373;
+  float: left;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  margin-top: 80px;
+  width: 175px;
+}
+
+#block-lw-custom-user-details-password .user-right {
+  float: left;
+  width: 69.6%;
+}
+
+#block-lw-custom-user-details-password .user-uid label,
+#block-lw-custom-user-details-password .user-username label,
+#block-lw-custom-user-details-password .user-password label{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  display: inline-block;
+  width: 31%;
+  margin-left: 4%;
+}
+#block-lw-custom-user-details-password .user-uid {
+  width: 99.8%;
+  display: none;
+}
+#block-lw-custom-user-details-password .user-helptext {
+  display: none;
+
+}
+.user-username .form-item,
+.user-password .form-item {
+  margin:0;
+}
+
+#block-lw-custom-user-details-password #edit-name,
+#block-lw-custom-user-details-password #edit-submit-button,
+#block-lw-custom-user-details-password #edit-password,
+#block-lw-custom-user-details-password #re_password {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+#block-lw-custom-user-details-password #edit-name,
+#block-lw-custom-user-details-password #edit-password,
+#block-lw-custom-user-details-password #edit-re-password {
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  width: 37%;
+  background: url(../images/input-bg.png) repeat-x left center;
+  border: 1px solid #bfbfbf;
+  height: 22px;
+  color: #747474;
+}
+
+#block-lw-custom-user-details-password .user-password .form-item-password{
+  background: #f2f2f2;
+  width: 100.1%;
+}
+
+#block-lw-custom-user-details-password #edit-submit-button-pass {
+  margin-left: 0;
+  margin-top: 5px;
+  position: absolute;
+  right: 4.7%;
+  top: 0;
+}
+.user-username #edit-submit-button,
+.user-password #edit-submit-button-pass,
+#block-views-child-detail-block .views-field-php a{
+    background: none repeat scroll 0 0 #F1CE5A;
+    border: 1px solid #DADADA;
+    color: #575143;
+    padding: 5px 10px;
+   text-transform: capitalize;
+}
+
+#block-lw-custom-user-details-password .user-username,
+#block-lw-custom-user-details-password .user-password {
+  position: relative;
+}
+
+#block-lw-custom-user-details-password .user-username #edit-submit-button {
+  position: absolute;
+  top: 0;
+  right: 33px;
+}
+
+#block-views-child-detail-block h2 {
+  margin-bottom: 0;
+}
+
+.views-field-nothing .user-span span.field-content {
+  width: 50%;
+}
+
+#block-views-child-detail-block .views-field-nothing {
+  width: 97.6%;
+}
+
+
+.page-user #columns #content-column .content-inner,
+.page-profile-parent-2 #columns #content-column .content-inner,
+.page-profile-second-parent  #columns #content-column .content-inner{
+  background: #d3d3d3;
+}
+
+.page-profile-parent-2 #block-system-main{
+  background: #fff;
+  margin-right: 25px;
+  overflow: hidden;
+  -moz-border-top-left-radius: 4px;
+-moz-border-top-right-radius: 4px;
+-webkit-border-top-left-radius: 4px;
+-webkit-border-top-right-radius: 4px;
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+}
+
+.page-profile-parent-2 ul.primary{
+  padding: 0;
+}
+
+.page-profile-parent-2 #block-lw-custom-parent-menu{
+  margin:0;
+}
+
+#block-lw-custom-user-details-password,
+#block-lw-custom-subs-expiration{
+  overflow: hidden;
+  background: #fff;
+  width: 97.4%;
+}
+#block-lw-custom-user-details-password h2{
+  width: 98%;
+}
+
+#block-lw-custom-user-details-password .user-right {
+  margin-top: 35px;
+  width: 50%;
+}
+
+#block-lw-custom-user-details-password .user-helptext{
+  color: #737373;
+  clear: both;
+  font-style: italic;
+  padding: 8px 0 0 20px;
+}
+
+.child_edit #block-lw-custom-user-details-password .user-picture{
+  display: none;
+}
+
+.child_edit #block-lw-custom-user-details-password .user-right{
+  margin: 0;
+  width: 49.2%;
+}
+
+.child_edit #block-lw-custom-user-details-password{
+  background:#f2f2f2;
+}
+
+#block-lw-custom-user-details-password .user-uid label{
+  float: left;
+  width: 39%;
+}
+
+#block-lw-custom-user-details-password .user-uid span{
+  width: 48%;
+  text-transform: none !important;
+}
+
+#block-views-child-detail-block .views-field-nothing .user-span .field-content{
+  width: 32%;
+}
+
+#block-views-child-detail-block .views-field-nothing .user-class span {
+  padding-left: 0;
+  width: 170px;
+}
+
+#block-views-child-detail-block .views-field-nothing .user-class .field-content {
+  width: 50px !important;
+}
+
+.page-user #content {
+  padding-top: 0;
+}
+
+.page-user #block-system-main,
+.page-user #block-system-main article.profile {
+  margin: 0;
+}
+
+#block-views-child-detail-block h2 {
+  margin-top: 0;
+}
+
+#block-lw-custom-user-details-password #edit-password,
+#block-lw-custom-user-details-password #edit-re-password {
+  width: 37%;
+}
+
+
+#block-lw-custom-user-details-password .user-password .form-item-password {
+  border-bottom: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
+}
+
+.subject .subject-topic:nth-child(2n+1),
+.test .sub_main:nth-child(2n+1) {
+  background: #fff;
+}
+
+.subject-start .subject,
+.subject-start .test{
+  margin-bottom: 7px;
+}
+
+
+
+
+.form-item-uid {
+  display: none;
+}
+
+
+
+
+
+/*
+revision css added
+ */
+
+#main_class .sub_class3 {
+  width: 30%;
+}
+#main_class .sub_class4 {
+  width:20%;
+}
+.sub_main .form-submit {
+  padding:0.4em 1em;
+}
+.sub_main .sub_topic2 {
+  width: 17%;
+}
+#main_class .sub_class2 {
+  width:18.5%
+}
+
+/*-- edit page css--*/
+
+.page-user-edit.role-parent #block-system-main{
+  margin-left: 29px;
+}
+
+.page-user-edit.role-student #block-system-main,
+.page-user-edit.role-parent #block-system-main{
+  width: 97.4%;
+  background: #fff;
+  overflow: hidden;
+}
+
+.page-user-edit.role-student #block-system-main .form-item,
+.page-user-edit.role-parent #block-system-main .form-item{
+  margin:0;
+  padding: 5px 0;
+}
+
+.page-user-edit.role-student #block-system-main input[type="text"],
+.page-user-edit.role-student #block-system-main input[type="password"],
+.page-user-edit.role-student #block-system-main input[type="file"],
+.page-user-edit.role-parent #block-system-main input[type="text"],
+.page-user-edit.role-parent #block-system-main input[type="password"],
+.page-user-edit.role-parent #block-system-main input[type="file"]{
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: url(../images/input-bg.png) repeat-x left center;
+  border: 1px solid #bfbfbf;
+  height: 22px;
+  color: #747474;
+  padding: 0 5px;
+}
+
+.page-user-edit.role-student #block-system-main input[type="text"]{
+  width: 54%;
+}
+
+
+.page-user-edit.role-parent #block-system-main input[type="text"]{
+  width: 49%;
+}
+
+.page-user-edit.role-student #block-system-main input#edit-mail{
+  width: 26%;
+}
+
+.page-user-edit.role-student #block-system-main,
+.page-user-edit.role-parent #block-system-main{
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.page-user-edit.role-student #edit-field-first-name,
+.page-user-edit.role-student #edit-field-middle-name,
+.page-user-edit.role-student .form-item-mail,
+.page-user-edit.role-student #edit-field-gender,
+.page-user-edit.role-student #edit-profile-student-field-alias,
+.page-user-edit.role-student #edit-profile-student-field-roll-numbers,
+.page-user-edit.role-student #edit-profile-student-field-branch,
+.page-user-edit.role-student #edit-profile-student-field-sports,
+.page-user-edit.role-student #edit-profile-student-field-arts-crafts,
+.page-user-edit.role-parent #edit-field-date-of-birth,
+.page-user-edit.role-parent .form-item-name,
+.page-user-edit.role-parent .form-item-pass,
+.page-user-edit.role-parent #edit-picture{
+  background: none repeat scroll 0 0 #F2F2F2;
+}
+
+.page-user-edit.role-parent #edit-picture{
+  background: #fff;
+}
+
+
+.page-user-edit.role-student #edit-profile-student-field-schools,
+.page-user-edit.role-student #edit-profile-student-field-branch{
+  margin-bottom: 7px;
+}
+
+.page-user-edit.role-student #edit-field-first-name,
+.page-user-edit.role-student #edit-field-middle-name,
+.page-user-edit.role-student #edit-field-last-name,
+.page-user-edit.role-student #edit-field-date-of-birth,
+.page-user-edit.role-student #edit-profile-student-field-alias,
+.page-user-edit.role-student #edit-profile-student-field-roll-numbers,
+.page-user-edit.role-student #edit-profile-student-field-schools,
+.page-user-edit.role-student #edit-profile-student-field-branch,
+.page-user-edit.role-parent #edit-field-date-of-birth,
+.page-user-edit.role-parent .form-item-name,
+.page-user-edit.role-student #edit-profile-student-field-class-user,
+.page-user-edit.role-student #edit-profile-student-field-childs-email{
+  line-height: 36px;
+  padding-left:15px;
+  float: left;
+  width: 48.4%;
+}
+
+.page-user-edit.role-parent #edit-field-date-of-birth,
+.page-user-edit.role-parent .form-item-name{
+  width: 49.2%;
+}
+
+.page-user-edit.role-student #edit-field-first-name label,
+.page-user-edit.role-student #edit-field-middle-name label,
+.page-user-edit.role-student #edit-field-last-name label,
+.page-user-edit.role-student .form-item-mail label,
+.page-user-edit.role-student .password-parent label,
+.page-user-edit.role-student .confirm-parent label,
+.page-user-edit.role-student #edit-profile-student-field-alias label,
+.page-user-edit.role-student #edit-profile-student-field-roll-numbers label,
+.page-user-edit.role-student #edit-profile-student-field-schools label,
+.page-user-edit.role-student #edit-profile-student-field-branch label,
+.page-user-edit.role-student #edit-profile-student-field-childs-email label,
+.page-user-edit.role-parent .form-item-name label,
+.page-user-edit.role-parent .password-parent label,
+.page-user-edit.role-parent .confirm-parent label,
+.page-user-edit.role-student #edit-profile-student-field-class-user label,
+.page-user-edit.role-student #edit-profile-student-field-childs-email label{
+  padding-right:5px;
+  float: left;
+  width: 40%;
+  font-weight: normal;
+}
+
+.page-user-edit.role-student .form-item-mail label{
+  padding-left: 15px;
+  width: 19.5%;
+}
+
+.page-user-edit.role-student .password-parent label,
+.page-user-edit.role-student .confirm-parent label,
+.page-user-edit.role-parent .password-parent label,
+.page-user-edit.role-parent .confirm-parent label{
+  padding-left: 15px;
+}
+
+.page-user-edit.role-student .password-parent label,
+.page-user-edit.role-parent .password-parent label{
+  width: 37%;
+}
+
+
+.page-user-edit.role-student #edit-field-date-of-birth fieldset,
+.page-user-edit.role-parent #edit-field-date-of-birth fieldset{
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.page-user-edit.role-student #edit-field-date-of-birth legend,
+.page-user-edit.role-parent #edit-field-date-of-birth legend{
+    float: left;
+    padding: 6px 0px 0;
+    width: 37%;
+}
+
+.page-user-edit.role-student #edit-field-date-of-birth .fieldset-wrapper,
+.page-user-edit.role-parent #edit-field-date-of-birth .fieldset-wrapper{
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+.page-user-edit.role-student #edit-field-date-of-birth label,
+.page-user-edit.role-parent #edit-field-date-of-birth label{
+  display: none;
+}
+
+.page-user-edit.role-student #edit-field-date-of-birth .description,
+.page-user-edit.role-student .form-item-mail .description,
+.page-user-edit.role-parent #edit-field-date-of-birth .description,
+.page-user-edit.role-parent .description{
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.page-user-edit.role-parent #edit-field-salution{
+  padding:7px 0 6.5px 1.8%;
+  width: 48.2%;
+  background: #f2f2f2;
+  float: left;
+}
+
+.page-user-edit.role-parent #edit-field-salution label{
+  width: 40%;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil{
+  width: auto;
+  float: none;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil label{
+  width: 25%;
+}
+
+.page-user-edit.role-parent.child_edit #edit-field-relationship-with-the-chil .form-item.form-type-radios.form-item-field-relationship-with-the-chil-und{
+  padding: 0;
+}
+
+.page-user-edit.role-parent .form-item-name .description{
+  padding-left: 41%;
+  line-height: 14px;
+}
+
+.page-user-edit.role-student .form-item-mail .description{
+  padding: 0 2% 0 22%;
+}
+
+.page-user-edit.role-student #edit-field-date-of-birth .container-inline-date .date-padding{
+  padding: 4px 0 0px 5px;
+  margin: 0;
+}
+
+.page-user-edit.role-parent #edit-field-date-of-birth .container-inline-date .date-padding{
+  margin-bottom: 8px;
+}
+
+.page-user-edit.role-student #edit-field-date-of-birth .form-item.form-type-date-popup,
+.page-user-edit.role-parent #edit-field-date-of-birth .form-item.form-type-date-popup{
+  margin: 0;
+}
+
+.page-user-edit.role-student .form-item-mail{
+  clear: both;
+}
+
+.page-user-edit.role-student .form-item-pass .form-item,
+.page-user-edit.role-parent .form-item-pass .form-item{
+  padding: 0;
+}
+
+.page-user-edit.role-student .form-item-pass .password-strength,
+.page-user-edit.role-parent .form-item-pass .password-strength{
+  float: none;
+}
+
+.page-user-edit.role-student .password-parent,
+.page-user-edit.role-student .confirm-parent,
+.page-user-edit.role-parent .password-parent,
+.page-user-edit.role-parent .confirm-parent{
+  position: relative;
+  float: left;
+  clear: none;
+  width:50%;
+}
+
+.page-user-edit.role-student .password-strength,
+.page-user-edit.role-student .password-confirm:first-child,
+.page-user-edit.role-parent .password-strength,
+.page-user-edit.role-parent .password-confirm:first-child{
+  position: absolute;
+  font-size: 10px;
+}
+
+.page-user-edit.role-student .password-strength,
+.page-user-edit.role-parent .password-strength{
+    bottom: -20px;
+    left: 42%;
+    width: 54%;
+}
+
+.page-user-edit.role-student .form-item-pass .description,
+.page-user-edit.role-parent .form-item-pass .description{
+  clear: both;
+    font-size: 10px;
+    padding-left: 21%;
+    padding-top: 20px;
+}
+
+.page-user-edit.role-student .password-confirm:first-child,
+.page-user-edit.role-parent .password-confirm:first-child{
+    bottom: -20px;
+    left: 45%;
+    width: 54%;
+}
+
+.page-user-edit.role-student #edit-pass-pass1,
+.page-user-edit.role-parent #edit-pass-pass1{
+  width: 52%;
+}
+
+.page-user-edit.role-student #edit-pass-pass2,
+.page-user-edit.role-parent #edit-pass-pass2{
+  width: 51%;
+}
+
+.page-user-edit.role-student .password-suggestions.description,
+.page-user-edit.role-parent .password-suggestions.description{
+  display: none !important;
+}
+
+.page-user-edit.role-parent .form-item-mail input#edit-mail{
+  width: 25%;
+  margin-top: 5px;
+}
+
+.page-user-edit.role-parent .form-item-mail .description{
+  padding-left: 21%;
+  padding-right: 1%;
+}
+
+.page-user-edit.role-student #edit-field-gender label,
+.page-user-edit.role-parent .form-item-mail label,
+.page-user-edit.role-parent #edit-field-gender label{
+  float: left;
+  padding-left: 15px;
+  width: 19.5%;
+  font-weight: normal;
+  padding-top: 5px;
+}
+
+.page-user-edit.role-student #edit-field-gender,
+.page-user-edit.role-parent #edit-field-gender{
+  overflow: hidden;
+}
+
+.page-user-edit.role-student #edit-field-gender label.option,
+.page-user-edit.role-parent #edit-field-gender label.option{
+  float: none;
+}
+
+.page-user-edit.role-student #edit-field-gender .form-type-radio,
+.page-user-edit.role-parent #edit-field-gender .form-type-radio{
+  float: left;
+  padding-right: 100px;
+  padding-bottom: 12px;
+}
+
+.page-user-edit.role-student #edit-picture,
+.page-user-edit.role-parent #edit-picture{
+  border:0;
+  padding: 0;
+  margin: 0;
+}
+
+.page-user-edit.role-student #edit-picture legend,
+.page-user-edit.role-parent #edit-picture legend{
+  display: none;
+}
+
+.page-user-edit.role-student #edit-picture .user-picture,
+.page-user-edit.role-parent #edit-picture .user-picture{
+  float: left;
+  margin: 5px 15px;
+}
+
+.page-user-edit.role-student #edit-picture .form-item-picture-delete,
+.page-user-edit.role-parent #edit-picture .form-item-picture-delete{
+  float: left;
+  width: 20%;
+}
+
+.page-user-edit.role-student #edit-picture .form-item-picture-delete .description,
+.page-user-edit.role-student #edit-picture .form-item-files-picture-upload .description,
+.page-user-edit.role-parent #edit-picture .form-item-picture-delete .description,
+.page-user-edit.role-parent #edit-picture .form-item-files-picture-upload .description{
+  font-size: 10px;
+}
+
+.page-user-edit.role-student #edit-picture .form-item-files-picture-upload,
+.page-user-edit.role-parent #edit-picture .form-item-files-picture-upload{
+  float: left;
+  padding-left: 15px;
+  width: 46%;
+}
+
+.page-user-edit.role-student #edit-actions--2{
+  clear: both;
+  background: none repeat scroll 0 0 #F2F2F2;
+  margin: 0;
+  padding: 8px 15px;
+  overflow: hidden;
+}
+
+.page-user-edit.role-student #edit-actions,
+.page-user-edit.role-parent #edit-actions--2{
+  clear: both;
+  margin: 0;
+  padding: 8px 15px;
+  overflow: hidden;
+}
+
+.role-id-6 #edit-cancel,
+.page-user-edit-student #edit-cancel,
+.page-user-edit.role-student #edit-actions--2 input#edit-submit,
+.page-user-edit.role-student #edit-actions input#edit-submit,
+.page-user-edit.role-parent #edit-actions--2 input#edit-submit,
+.page-user-edit.role-parent #edit-actions--2 input#edit-cancel,
+.role-parent.page-user-edit-student.child_edit #edit-submit{
+  background: none repeat scroll 0 0 #F1CE5A;
+  border: 1px solid #DADADA;
+  color: #575143;
+  float: right;
+  padding: 5px 10px;
+  text-transform: capitalize;
+}
+
+
+.page-user-edit.role-student input#edit-profile-student-field-class-user-und-hierarchical-select-dropbox-add[type="submit"],
+.role-parent.page-user-edit-student.child_edit #edit-profile-student-field-class-user-und-hierarchical-select-dropbox-add{
+  background: none repeat scroll 0 0 #F1CE5A;
+  border: 1px solid #DADADA;
+  color: #575143;
+  margin-right: 5px;
+  padding: 5px 10px;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-sports,
+.page-user-edit.role-student #edit-profile-student-field-music,
+.page-user-edit.role-student #edit-profile-student-field-arts-crafts{
+  line-height: 36px;
+  padding-left:15px;
+  overflow: hidden;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-sports label,
+.page-user-edit.role-student #edit-profile-student-field-music label,
+.page-user-edit.role-student #edit-profile-student-field-arts-crafts label{
+  font-weight: normal;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-sports .form-type-radio,
+.page-user-edit.role-student #edit-profile-student-field-music .form-type-radio,
+.page-user-edit.role-student #edit-profile-student-field-arts-crafts .form-type-radio{
+  float: left;
+  width: 33%;
+  padding: 0;
+}
+
+.page-user-edit.role-student #main-content #content{
+  padding-top: 0 !important;
+}
+
+#block-lw-custom-parent-menu{
+  margin: 0 0 1px 24px;
+}
+
+#block-lw-custom-parent-menu ul,
+.page-user-edit.role-student #edit-profile-student-field-class-user{
+  margin: 0;
+}
+
+/*--add child detail page--*/
+
+.addchilddetailsforsubscription #main-content #content{
+  width: 100%;
+  padding: 0;
+  background: #D3D3D3;
+}
+
+.addchilddetailsforsubscription #block-system-main{
+  margin: 0 28px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.addchilddetailsforsubscription .form-item label,
+.page-user-edit.role-student #edit-profile-student-field-class-user label,
+.page-user-edit.role-student #edit-profile-student-field-child-gender label{
+  font-weight: normal;
+  color: #737373;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-child-gender{
+  clear: both;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-child-gender label{
+  float: left;
+  padding-left:15px;
+  width: 20%;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und{
+  float: left;
+  width: 20%;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und:first-child{
+  display: none;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und input.form-radio{
+  float: left;
+  margin-top: 4px;
+}
+
+.addchilddetailsforsubscription #edit-field-first-name,
+.addchilddetailsforsubscription #edit-field-last-name,
+.addchilddetailsforsubscription #edit-profile-student-field-schools,
+.addchilddetailsforsubscription #edit-profile-student-field-branch,
+.addchilddetailsforsubscription #edit-profile-student-field-childs-email,
+.addchilddetailsforsubscription #edit-field-date-of-birth,
+.addchilddetailsforsubscription .password-parent,
+.addchilddetailsforsubscription .confirm-parent,
+.addchilddetailsforsubscription #edit-profile-student-field-child-gender,
+.addchilddetailsforsubscription #edit-profile-student-field-class-user{
+  float: left;
+  width: 50%;
+  margin:0;
+  position: relative;
+}
+
+.addchilddetailsforsubscription #edit-field-first-name label,
+.addchilddetailsforsubscription #edit-field-last-name label,
+.addchilddetailsforsubscription #edit-profile-student-field-schools label,
+.addchilddetailsforsubscription #edit-profile-student-field-branch label,
+.addchilddetailsforsubscription #edit-profile-student-field-childs-email label,
+.addchilddetailsforsubscription #edit-profile-student-field-child-gender label,
+.addchilddetailsforsubscription .password-parent label,
+.addchilddetailsforsubscription .confirm-parent label{
+  float: left;
+  padding: 0 10px;
+  width: 35%;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user-und-hierarchical-select-selects-0,
+.page-user-edit.role-student #edit-profile-student-field-class-user-und-hierarchical-select-selects-0{
+  font-family: Myp,Verdana,Arial,sans-serif;
+}
+
+#edit-profile-student-field-child-gender .form-item.form-type-radios.form-item-profile-student-field-child-gender-und{
+  float: left;
+  width: 100%;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und:first-child{
+  display: none;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und{
+  float: left;
+  width: 30%;
+  padding: 0;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und input.form-radio{
+  float: left;
+  margin-top: 6px;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-child-gender .form-type-radio.form-item-profile-student-field-child-gender-und label.option{
+  width: 70%;
+}
+
+.addchilddetailsforsubscription input#edit-field-first-name-und-0-value,
+.addchilddetailsforsubscription input#edit-field-last-name-und-0-value,
+.addchilddetailsforsubscription input#edit-profile-student-field-schools-und,
+.addchilddetailsforsubscription input#edit-profile-student-field-branch-und,
+.addchilddetailsforsubscription input#edit-profile-student-field-childs-email-und-0-email,
+.addchilddetailsforsubscription input#edit-pass-pass1,
+.addchilddetailsforsubscription input#edit-pass-pass2{
+  width: 50%;
+}
+
+.page-admin-people .form-item,
+.page-admin-people .fieldset-legend{
+  font-family:Myp, Verdana, Arial, sans-serif;
+  font-size: 12px;
+  margin:0;
+  padding: 19px 0;
+  font-size: 14px;
+  text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+  color: #737373;
+}
+
+.page-admin-people-p2rp-create-student #edit-profile-student-field-class-user-und-hierarchical-select-selects-0{
+  width: 124px;
+}
+
+.addchilddetailsforsubscription .form-type-hierarchical-select.form-item-profile-student-field-class-user-und{
+  padding:20px 0 0 0;
+}
+
+.addchilddetailsforsubscription #edit-field-first-name,
+.addchilddetailsforsubscription #edit-field-last-name,
+.addchilddetailsforsubscription #edit-profile-student-field-branch,
+.addchilddetailsforsubscription .password-parent,
+.addchilddetailsforsubscription .confirm-parent,
+.page-user-edit.role-student #edit-profile-student-field-childs-email{
+  background: #f2f2f2;
+}
+
+
+.page-user-edit.role-student #edit-profile-student-field-branch{
+  padding-bottom: 25px;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-childs-email,
+.page-user-edit.role-student #edit-profile-student-field-childs-email{
+  padding-bottom: 3px;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-childs-email{
+  bottom: -74px;
+  left: -50%;
+  }
+
+.addchilddetailsforsubscription #edit-profile-student-field-childs-email .description{
+  float: right;
+  width: 56%;
+  padding-right: 20px;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-childs-email .description{
+  float: right;
+  width: 54%;
+  padding-right: 20px;
+  line-height: 14px;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user label{
+  float: left;
+  padding: 0 10px;
+  width: 35%;
+}
+
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox{
+  margin: 1% 0 0 41%;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox{
+  margin: 1% 0 0 39%;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox .dropbox-title,
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox .dropbox-title{
+  display: none;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox .dropbox-entry.first.last.dropbox-is-empty,
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox .dropbox-entry.first.last.dropbox-is-empty{
+  display: none;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox table,
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox table{
+  border: none;
+  width: 100%;
+}
+
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox-title,
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox-title{
+  float: left;
+  width: 40%;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox table tbody,
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox table tbody{
+  float: left;
+  border: solid 1px #ddd;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-class-user .dropbox table tbody tr,
+.page-user-edit.role-student #edit-profile-student-field-class-user .dropbox table tbody tr{
+  border: none;
+}
+
+.addchilddetailsforsubscription #edit-profile-student-field-schools label,
+.addchilddetailsforsubscription #edit-profile-student-field-branch label,
+.addchilddetailsforsubscription #edit-profile-student-field-childs-email label,
+.addchilddetailsforsubscription .password-parent label,
+.addchilddetailsforsubscription .confirm-parent label{
+  width: 35%;
+}
+
+.addchilddetailsforsubscription .confirm-parent label{
+  padding-right: 10px;
+  width: 35%;
+}
+
+.addchilddetailsforsubscription #edit-field-date-of-birth label{
+  display: none;
+}
+
+.addchilddetailsforsubscription #edit-field-date-of-birth legend{
+  float: left;
+  width: 35%;
+  padding: 10px 10px 0 10px;
+}
+
+.role-parent.addchilddetailsforsubscription #edit-field-date-of-birth legend{
+  width: 163px;
+}
+
+.addchilddetailsforsubscription #edit-field-date-of-birth fieldset{
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.addchilddetailsforsubscription .form-type-date-popup{
+  padding: 0;
+}
+
+.addchilddetailsforsubscription .fieldset-wrapper{
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.addchilddetailsforsubscription .date-padding{
+  padding: 0;
+  margin: 0;
+}
+
+.addchilddetailsforsubscription .form-item .description,
+.page-user-edit.role-student #edit-profile-student-field-childs-email .description{
+    color: #999999;
+    font-size: 10px;
+}
+
+.addchilddetailsforsubscription #edit-account{
+  clear: both;
+    position: relative;
+    top: -69px;
+}
+
+.addchilddetailsforsubscription .password-strength,
+.addchilddetailsforsubscription .password-confirm{
+  margin-top: 0;
+  margin-right: 0;
+  font-size: 10px;
+  position: absolute;
+}
+
+.addchilddetailsforsubscription .password-strength,
+.addchilddetailsforsubscription .password-confirm{
+  bottom: 5px;
+  left: 38%;
+  width: 54%;
+}
+
+.addchilddetailsforsubscription input#edit-pass-pass2{
+  top: 8px;
+}
+
+.addchilddetailsforsubscription .confirm-parent,
+.addchilddetailsforsubscription .password-parent{
+  clear: none;
+  padding-bottom: 10px;
+}
+
+.addchilddetailsforsubscription .confirm-parent{
+  padding-bottom: 33px;
+}
+
+.addchilddetailsforsubscription .form-type-password-confirm .description,
+.addchilddetailsforsubscription .form-type-password-confirm .password-suggestions{
+  display: none !important;
+}
+
+.page-admin-people .form-item input[type="text"],
+.page-admin-people .form-item input#edit-pass-pass1[type="password"],
+.page-admin-people .form-item input#edit-pass-pass2[type="password"]{
+    background: url("../images/input-bg.png") repeat-x scroll left center transparent;
+    border: 1px solid #BFBFBF;
+    border-radius: 4px 4px 4px 4px;
+    color: #747474;
+    height: 22px;
+    line-height: 22px;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+.page-admin-people input.form-submit[type=submit]{
+    background: none repeat scroll 0 0 #F1CE5A;
+    border: 1px solid #DADADA;
+    color: #575143;
+    padding: 1px 10px;
+    margin-right: 5px;
+}
+
+.addchilddetailsforsubscription #edit-actions,
+.addchilddetailsforsubscription #edit-lw-account{
+  float: right;
+}
+
+.addchilddetailsforsubscription #edit-actions{
+  margin-right: 10px;
+}
+
+#block-lw-custom-user-detail #child_table{
+  margin-left:28px;
+  margin-top: 20px;
+}
+
+.view-id-parent_profile_detail .addChild{
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none;
+  border-radius: 0;
+  width: auto;
+  float: left;
+}
+
+.view-id-parent_profile_detail .addChild a{
+    background: none repeat scroll 0 0 #F1CE5A;
+    border: 1px solid #DADADA;
+    color: #575143;
+    margin-right: 5px;
+    padding: 5px 10px;
+}
+
+.page-user #main-content-header{
+  padding-bottom: 0;
+}
+
+.page-user .tabs,
+.page-user #tasks,
+.page-profile-parent-2 .tabs,
+.page-profile-parent-2 #tasks,
+.page-profile-second-parent .tabs,
+.page-profile-second-parent #tasks {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.page-user .tabs li,
+.page-profile-second-parent .tabs li{
+  background: none;
+}
+
+
+.page-user .tabs li a,
+.page-profile-second-parent .tabs li a,
+.page-user.page-user-orders.role-parent .parent_detail .tabs li.one a{
+    background: none repeat scroll 0 0 #F8E9B6;
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+    color: #303030;
+    font-family: DINRg;
+    font-size: 1.14em;
+    font-weight: normal;
+    border: 0;
+    outline: none;
+    text-transform: capitalize;
+}
+
+.page-user .tabs li a.active,
+.page-user .tabs li a:hover,
+.page-user.page-user-profile-second-parent .parent_detail .tabs li.two a,
+.page-user.role-parent .parent_detail .tabs li.one a,
+.page-profile-second-parent .tabs li a.active,
+.page-profile-second-parent .tabs li a:hover,
+.page-profile-second-parent .parent_detail .tabs li.two a,
+.page-user-orders .parent_detail .tabs li.order_tab a{
+    background: none repeat scroll 0 0 #F0CE59;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 8px 0 5px -4px #777777;
+    margin-right: 1px;
+    padding: 10px;
+    border: 0;
+}
+.page-user ul.tabs.primary li.active a,
+.page-user ul.tabs.primary li.active a:hover,
+.page-user ul.tabs.primary li.active a:focus,
+#block-lw-custom-parent-child-profile-tab li a:hover,
+.page-user.page-user-orders.role-parent .parent_detail .tabs li.one a:hover{
+      background-color: #F0CE59;
+    border-bottom-color: #F0CE59;
+}
+
+
+.page-user.role-parent .messages.status,
+#block-block-31 p{
+  display: none;
+}
+
+.page-profile-second-parent .field-label{
+  float:left;
+  width:40%;
+}
+
+.page-profile-second-parent .field-name-field-first-name-p2,
+.page-profile-second-parent .field-name-field-last-name-p2,
+.page-profile-second-parent .field-name-field-second-parent-email,
+.page-profile-second-parent .field-name-field-second-parent-email,
+.page-profile-second-parent .profile2-second-parent section {
+  float: left;
+  width:50%;
+}
+
+.page-profile-second-parent #block-block-31,
+.page-profile-second-parent #block-system-main{
+  width:946px;
+}
+
+.page-profile-second-parent .form-item label,
+.page-profile-second-parent .profile2-second-parent section .field-label{
+  float: left;
+  width:120px;
+  color: #737373;
+  font-family: Myp,Verdana,Arial,sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 36px;
+  margin-top: 0;
+}
+
+.page-profile-second-parent .form-text,
+.page-profile-second-parent .profile2-second-parent section .field-items{
+  width:200px;
+  float: left;
+}
+
+.page-profile-second-parent .profile2-second-parent section .field-items div{
+  width:200px !important;
+}
+
+.page-profile-second-parent #profile2-edit-second-parent-form #edit-actions input {
+  background: none repeat scroll 0 0 #F1CE5A;
+  border: 1px solid #DADADA;
+  clear: both;
+  color: #575143;
+  float: right;
+  margin-right: 15px;
+  padding: 5px 10px;
+  text-align: right;
+}
+
+#profile2-edit-second-parent-form .form-item {
+  margin: 0;
+}
+
+span.fib_word{
+  padding-right:15px;
+}
+
+span.fib_word:last-child{
+  padding-right:0px;
+}
+
+#block-block-31{
+  margin: 0;
+}
+
+.page-profile-second-parent #block-system-main,
+.page-user.page-user-orders.role-parent #block-system-main {
+  background: none repeat scroll 0 0 #F2F2F2;
+  float: left;
+  margin: 0 0 20px;
+  padding: 15px 0 15px 15px;
+  width: 927px;
+}
+
+.update_second_parent a {
+  background: none repeat scroll 0 0 #F1CE5A;
+  border: 1px solid #DADADA;
+  color: #575143;
+  margin-right: 5px;
+  padding: 5px 10px;
+}
+
+.update_second_parent  {
+  float: right;
+  margin-bottom: 30px;
+  margin-right: 28px;
+  margin-top: 10px;
+}
+
+.page-profile-second-parent-edit .update_second_parent{
+  display: none;
+}
+
+/*----teacher profile-----*/
+#block-views-parent-profile-detail-block h2.teacher_title{
+  width: 98%;
+}
+
+#block-views-parent-profile-detail-block .teacher_item1{
+  width: 48.2%;
+  background: #fff;
+}
+
+#block-views-parent-profile-detail-block .teacher_item{
+  background: #f2f2f2;
+  width: 48.2%;
+}
+
+#block-views-parent-profile-detail-block .teacher_item span.teacher_class{
+  min-height: 100px;
+}
+
+/*  --nit-- */
+.page-user-edit #edit-field-where-did-you-hear-about-u-und .form-item-field-where-did-you-hear-about-u-und:nth-child(1) {
+  display: none;
+}
+
+.page-user-edit-student #edit-profile-student-field-sports #edit-profile-student-field-sports-und:nth-child(1),
+.page-user-edit-student #edit-profile-student-field-music #edit-profile-student-field-music-und:nth-child(1),
+.page-user-edit-student #edit-profile-student-field-field-arts-crafts #edit-profile-student-field-field-arts-crafts-und:nth-child(1)
+{
+  display: none;
+}
+
+#block-views-child-detail-block .views-field.views-field-nothing-3.item11{
+  float: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  clear: both;
+  line-height: 26px;
+}
+
+#block-views-child-detail-block .views-field.views-field-nothing-3.item11 span.field-content{
+  float: none !important;
+  padding: 0 !important;
+  background: none !important;
+  width: 100% !important;
+  border-radius:0 !important;
+  border: 0 !important;
+}
+
+#block-views-child-detail-block .views-field-field-music .field-content,
+#block-views-child-detail-block .views-field-field-sports .field-content{
+  margin-top: 6px;
+}
+
+.child_edit #user-profile-form .form-item-mail,
+.role-student #user-profile-form .form-item-mail {
+  display: none !important;
+}
+
+
+.class_div .one-lft {
+  border-left: 1px solid #dedede;
+}
+.class_div td {
+  width: 50%;
+}
+.class_div table {
+  margin: 0 0;
+}
+#block-views-parent-profile-detail-block .views-field.views-field-mail.item8 .field-content{
+      background-position: center top;
+    background-repeat: repeat;
+    font-size: 12px;
+    height: auto;
+    line-height: 23px;
+}
+
+.no-subscribe{
+  font-size: 22px;
+  text-align: center;
+   padding: 100px 0;
+}
+
+.no-subscribe a{
+  background: #F0CE59;
+  color: #303030;
+  padding: 5px 10px;
+}
+
+.page-user-orders .view-commerce-user-orders.view-id-commerce_user_orders{
+  padding-right: 15px;
+}
+
+
+.page-checkout #block-block-19 .tc {
+background-color: #F2F2F2;
+}
+.page-checkout #block-block-19 .tc > p {
+padding: 0 0 1em 1.7em;
+}
+.page-checkout #block-block-19 .tc > h4 {
+margin: 0;
+padding: 1em 0 0 1em;
+}
+
+
+.page-checkout #block-system-main.block.block-system.no-title {
+  float: left;
+  width: 100%;
+}
+
+#views-exposed-form-student-report-page .form-item-uid {
+display: block !important;
+}
+
+
+.page-checkout #commerce-checkout-form-checkout .view.view-commerce-cart-summary.view-id-commerce_cart_summary.view-display-id-default tbody .views-field.views-field-php {
+padding-left: 16px;
+}
+
+#block-block-33 {
+  width: 98%;
+}
+#block-block-33 a,
+#block-block-22 a {
+  border-bottom: 1px solid;
+}
+
+.addchilddetailsforsubscription .user-info-from-cookie .confirm-parent input {
+margin-top: 10px;
+}

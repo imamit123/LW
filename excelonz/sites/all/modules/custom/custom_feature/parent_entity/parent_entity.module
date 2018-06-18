@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the parent entity feature.
+ */
+
+include_once 'parent_entity.features.inc';

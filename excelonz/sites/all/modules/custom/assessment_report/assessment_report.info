@@ -1,0 +1,3 @@
+name = assessment_report
+description = "Contain all the logic and code related to Assessments."
+core = 7.x

@@ -1,0 +1,11 @@
+<?php
+/**
+ * @file
+ * Installation file for message bar.
+ */
+
+/**
+ * Implements of hook_uninstall().
+ *
+ * remove all the variables saved in the database
+ */

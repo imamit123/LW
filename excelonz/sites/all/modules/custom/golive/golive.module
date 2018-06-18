@@ -1,0 +1,959 @@
+<?php
+/**
+ * @file
+ *
+ */
+
+/**
+ * @todo: prateek comment
+ * @global type $user
+ * @param type $node
+ */
+
+function golive_node_presave($node) {
+  global $user;
+
+  // Save list of question as node reference
+  if ($node->type == 'go_live') {
+    $uid = $user->uid;
+
+    //fetch user's class
+    //fetch users profile ID.
+    $pid_query = db_select('profile', 'p')
+      ->fields('p',array('pid'))
+      ->condition('uid',$uid)
+      ->condition('type','student')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+    $pid = $pid_query[0]->pid;
+
+
+    //fetch user class name.
+    $query = db_select('field_data_field_class_user', 'c');
+    $query->join("taxonomy_term_data", "uc", "c.field_class_user_tid=uc.tid");
+    $query->fields('uc')
+      ->condition('c.entity_id', $pid)
+      ->condition('c.delta', 0);
+    $result = $query->execute()
+      ->fetchAssoc();
+
+
+
+    $class_tid = $result['tid'];
+
+
+    $topic_tid = $node->field_go_live_subject['und'][0]['tid'];
+
+    //@todo : fetch question multiple to duration.
+    //@todo : fetch question only of type mcq or fib or t/f.
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', array('mcq', 'fib', 'true_and_false'))
+      ->propertyCondition('status', 1)
+      ->fieldCondition('field_class', 'tid', $class_tid, '=')
+      ->fieldCondition('field_subjects', 'tid', $topic_tid, '=')
+      ->addTag('random')
+      ->addTag('distinct')
+      ->range(0, 50);
+    $result = $query->execute();
+
+    //store nid as node reference in go live contenty type.
+    $node->field_question['und'] = array();
+    foreach ($result['node'] as $val) {
+      $node->field_question['und'][] = array('nid' => $val->nid);
+    }
+  }
+  //golive presave over
+}
+
+
+function golive_node_insert($node) {
+   global $user;
+     drupal_add_js(drupal_get_path('module', 'golive') . '/nodejs.golive.js');
+
+   //add author to the group
+  module_load_include('inc', 'entity', 'includes/entity.controller');
+
+
+//hook_node_presave was not giving nid and hook_node_update works on edit
+
+   if ($node->type == 'go_live') {
+
+
+      $uid = get_name($user->uid, "first");
+      //dS  F Y           g i A
+      //@todo : make the title. username has invited you for "$title"
+      $tit = $node->title;
+      $title = $uid . " has challenged you for the " . $tit . "<span>date:" . date("dS F Y") . "</span>" .
+      "<span>time:" . date("g:iA") . "</span>";
+
+      foreach ($node->field_user_status['und'] as $fc) {
+        $result_usr = db_query('SELECT field_users_uid FROM
+        {field_data_field_users} WHERE entity_id = :eid',
+        array(':eid' => $fc['value']))->fetchAll();
+
+       if($result_usr[0]->field_users_uid != '') {
+         $result_req = db_query('SELECT field_request_status_value FROM
+         {field_revision_field_request_status} WHERE entity_id = :eid',
+         array(':eid' => $fc['value']))->fetchAll();
+          $entity = entity_create("notifications",
+            array('title' => $title,
+              'type' => 'user',
+              'uid' => $result_usr[0]->field_users_uid,
+              'entity_type' => $node->type,
+              'nid_interger' => $node->nid,
+              'request_status' => $result_req[0]->field_request_status_value,
+              'notify' => 'F' // for getting the numbers in notification
+  //          'field_coll' => ''
+            ));
+          $en = entity_save('notification', $entity);
+
+  //golive notification nodejs
+          $notify_uid = $result_usr[0]->field_users_uid;
+           $message = (object) array(
+            'data' => (object) array(
+              'nid' => $node->nid,
+              'title' => $node->title,
+              'user_name' => $uid,
+            ),
+            'channel' => 'nodejs_user_' . $notify_uid,
+            'broadcast' => false,
+            'callback' => 'golive_notify',
+           );
+           Nodejs::enqueueMessage($message);
+       }
+     }
+   }
+}
+
+
+/**
+ * hook_menu
+ * @return array
+ */
+function golive_menu() {
+
+  //@todo remove golive page.
+  $items['ggolive-dash'] = array(
+    'title' => 'Play Off',
+    'page callback' => 'golive_get_page',
+    'access callback' => TRUE,
+    'file' => 'golive.inc',
+    //'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+   $items['golive-dash/default'] = array(
+    'title' => "Today's Sessions" ,
+    //'page callback' => 'golive_get_page',
+    //'access callback' => TRUE,
+    //'file' => 'golive.inc',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+     'weight' => 1,
+  );
+  $items['golive-dash/notifications_list'] = array(
+    'title' => 'My Pending Invitations',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'golive_notification_list',
+    'access callback' => TRUE,
+    'weight' => 2,
+  );
+  $items['golive/result/%'] = array(
+    'title' => 'Play Off Result',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'golive_result_page',
+    'access callback' => TRUE,
+    'weight' => 2,
+  );
+
+  $items['golive/take/%'] = array(
+    'title' => 'Play Off',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('golive_form'),
+    'access callback' => TRUE,
+    'file' => 'golive.inc',
+  );
+  $items['notification_save'] = array(
+    'title' => 'notification',
+    'page callback' => 'golive_notification',
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ *  Page to show result of go live.
+ */
+function golive_result_page () {
+
+  //check result exist in golive result.
+  //if not
+  //  # fetch all user from the node.
+  //  # fetch session value from sessions table
+  //  # store user excellonz
+  //  # store in golive result
+  //  update DB for golive node
+  //else
+  //  #fetch golive result
+  //endif
+  //loop for stored value in array.
+  //
+  //show result of golive
+
+  //@todo : check user has permission to view this result.
+  //
+  global $base_url, $user;
+
+  $gnid = arg(2);
+
+  //check result exist in golive result
+  $query1 = new EntityFieldQuery();
+  $query1->entityCondition('entity_type', 'golive')
+    ->propertyCondition('golive_nid', $gnid)
+    ->propertyOrderBy('correcta', 'DESC');
+  $result1 = $query1->execute();
+
+  $users_list = array();
+  $user_list_sort = array();
+  if (!isset($result1['golive'])) {
+    //store all values
+    //fetch all user from the node
+    $user_fetch_query = db_select('field_data_field_users', 'fu');
+    $user_fetch_query->leftjoin('sessions', 's',
+      'fu.field_users_uid = s.uid');
+    $user_fetch_query->join('field_data_field_user_status', 'fc',
+      'fu.entity_id = fc.field_user_status_value AND fc.entity_id =' . $gnid);
+    $user_fetch_query->fields('s',array('sid', 'session'));
+    $user_fetch_query->fields('fu',array('field_users_uid'));
+    $user_fetch_result = $user_fetch_query->execute()->fetchAll();
+
+
+    $author_query = db_select("node", "n")
+      ->fields("n", array('uid'))
+      ->condition('nid', $gnid)
+      ->execute()
+      ->fetchAll();
+    foreach ($author_query as $value) {
+      $author_uid =$value->uid;
+       $final_output .=  $value->nid . "+";
+    }
+    foreach ($user_fetch_result as $user_row) {
+      if($user->uid == $user_row->field_users_uid) {
+        $user_golive = $_SESSION;
+
+      }
+      else  {
+        $user_golive =unserializesession($user_row->session);
+      }
+
+//      echo "<pre>";print_r($user_golive);
+
+      $uid =$user_row->field_users_uid;
+      if (array_key_exists("golive", $user_golive)) {
+        db_query("UPDATE field_data_field_excellone SET field_excellone_value = field_excellone_value +". $user_golive['golive']['correct_ans'] ." WHERE entity_id = ". $user_row->field_users_uid);
+        $users_list[$uid]['excelonz'] = $user_golive['golive']['correct_ans'];
+        $users_list[$uid]['totalq'] = $user_golive['golive']['correct_ans'] + $user_golive['golive']['wrong_ans'];
+        $users_list[$uid]['correcta'] = $user_golive['golive']['correct_ans'];
+        $user_list_sort[$uid] = $user_golive['golive']['correct_ans'];
+
+      }
+      else {
+        $users_list[$uid]['excelonz'] = 0;
+        $users_list[$uid]['totalq'] = 0;
+        $users_list[$uid]['correcta'] = 0;
+        $user_list_sort[$uid] = 0;
+      }
+
+   }
+   //@todo : repeated code temp.
+
+
+      if($user->uid == $author_uid) {
+        $user_golive =$_SESSION;
+
+      }
+      else{
+        $existing = db_select('sessions', 's')
+          ->fields('s', array('session'))
+          ->condition('uid', $author_uid)
+          ->execute()
+          ->fetchAssoc();
+        $user_golive =unserializesession($existing['session']);
+      }
+
+
+      $uid =$author_uid;
+      if (array_key_exists("golive", $user_golive)) {
+        db_query("UPDATE field_data_field_excellone SET field_excellone_value = field_excellone_value +". $user_golive['golive']['correct_ans'] ." WHERE entity_id = ". $uid);
+
+        $users_list[$uid]['excelonz'] = $user_golive['golive']['correct_ans'];
+        $users_list[$uid]['totalq'] = $user_golive['golive']['correct_ans'] + $user_golive['golive']['wrong_ans'];
+        $users_list[$uid]['correcta'] = $user_golive['golive']['correct_ans'];
+        $user_list_sort[$uid] = $user_golive['golive']['correct_ans'];
+
+      }
+      else {
+        $users_list[$uid]['excelonz'] = 0;
+        $users_list[$uid]['totalq'] = 0;
+        $users_list[$uid]['correcta'] = 0;
+        $user_list_sort[$uid] = $user_golive['golive']['correct_ans'];
+      }
+
+
+      arsort($user_list_sort);
+      $i = 1;
+      foreach($user_list_sort as $key => $val) {
+        $entity = entity_create("golive",
+          array(
+            'uid' => $key,
+            'type' => 'user',
+            'golive_nid' => $gnid,
+            'excelonz' => $users_list[$key]['excelonz'],
+            'totalq' => $users_list[$key]['totalq'],
+            'correcta' => $users_list[$key]['correcta'],
+            'rank' =>$i,
+            'time' =>time(),
+          ));
+        $en = entity_save('golive', $entity);
+        $i++;
+
+      }
+
+   //close node status
+    $num_updated = db_update('field_data_field_status')
+      ->fields(array(
+        'field_status_value' => "closed",
+      ))
+      ->condition('entity_id', $gnid)
+      ->execute();
+    //$users_list
+    //
+
+  }
+    $query1 = new EntityFieldQuery();
+    $query1->entityCondition('entity_type', 'golive')
+      ->propertyCondition('golive_nid', $gnid)
+      ->propertyOrderBy('correcta', 'DESC');
+    $result1 = $query1->execute();
+
+    $users_list = array();
+    //fetch information from golive entity
+    foreach ($result1['golive'] as $key => $user_array) {
+      $user_entity = entity_load_single('golive', $key);
+      $uid = $user_entity->uid;
+      //echo "<pre>";print_r($user_entity);
+      $users_list[$uid]['totalq'] = $user_entity->totalq;
+      $users_list[$uid]['correcta'] = $user_entity->correcta;
+      $users_list[$uid]['excelonz'] = $user_entity->excelonz;
+    }
+
+
+
+  $i = 1;
+  $output  = '<h1>Score Card</h1>';
+  foreach($users_list as $uid => $user_row) {
+
+    $user_inf = user_load($uid);
+
+    $picture = theme('image_style', array( 'path' =>  $user_inf->picture->uri, 'style_name' => 'user_pic_25', 'width' => '31', 'height' => '31'));
+
+    if($i == 1) {
+      $output .= "<div class='result_rank_one'><span class='result_rank_one_img'>1</span><h2>".$picture."CONGRATULATION " .$user_inf->field_first_name['und'][0]['safe_value'] . "<span>Scored " . $user_row['correcta'] . " Correct answers</span></h2></div>";
+      $i++;
+    }
+    else {
+      if($i ==2 ) {
+        $output .= "<div class='result_text_other'>TEAM SCORES</div>";
+      }
+
+      $output .= "<div class='result_other'><div class='result_rank'> " . $i++ . "</div>";
+
+      $output .= "<div class='result_right'><div class='result_first'>".$picture . $user_inf->field_first_name['und'][0]['safe_value'] . ' ' . $user_inf->field_last_name['und'][0]['safe_value'];
+
+      $output .= "<span>" . $user_row['correcta'] . " Correct answers</span></div>";
+
+      $width = $user_row['correcta'];
+      $width1 = $user_row['totalq'];
+      if(!is_numeric($width)) {
+        $width = 2;
+      }
+      if(!is_numeric($width1)) {
+        $width1 = 2;
+      }
+
+      $output .= "<div class='result_second'> <span class='corr' style='width:".$width."%;'>&nbsp;</span><span class='total' style='width:".
+      $width1."%;'>&nbsp;</span></div>"
+      . "<div class='second_text'>" . $user_row['correcta'] . " out of " . $user_row['totalq'] . " correct</div>";
+      $output .= "</div></div>";
+    }
+  }
+  $create_url = l("CREATE A NEW SESSSION", 'golive-dash');
+  $output .= "<div class='result_create_button'>".$create_url."</div>";
+
+  unset($_SESSION['golive']);
+  return $output;
+
+}
+/**
+ * Function to unserialize blob data store in sessions table field session.
+ * @param  [blob] $data [array format of session]
+ * @return [type]       [description]
+ */
+function unserializesession( $data ) {
+  if(strlen( $data) == 0) {
+    return array();
+  }
+
+  // match all the session keys and offsets
+  preg_match_all('/(^|;|\})([a-zA-Z0-9_]+)\|/i', $data, $matchesarray, PREG_OFFSET_CAPTURE);
+
+  $returnArray = array();
+
+  $lastOffset = null;
+  $currentKey = '';
+  foreach ( $matchesarray[2] as $value ) {
+    $offset = $value[1];
+    if(!is_null( $lastOffset)) {
+      $valueText = substr($data, $lastOffset, $offset - $lastOffset );
+      $returnArray[$currentKey] = unserialize($valueText);
+    }
+    $currentKey = $value[0];
+
+    $lastOffset = $offset + strlen( $currentKey )+1;
+  }
+
+  $valueText = substr($data, $lastOffset );
+  $returnArray[$currentKey] = unserialize($valueText);
+
+  return $returnArray;
+}
+
+
+
+function golive_notification_list() {
+  return drupal_get_form("golive_acc_rej_pg");
+}
+
+
+function golive_acc_rej_pg($form, &$form_state){
+  global $user;
+  $uid = $user->uid;
+
+
+  // gives list of users for the notificagtion page
+  $result_usrlst = db_query('SELECT nid_interger,field_time_value,
+    title FROM eck_notifications
+    JOIN field_data_field_time ft ON ft.entity_id = nid_interger
+    WHERE
+    uid = :uid AND request_status LIKE :pid ORDER BY nid_interger DESC',
+    array(':uid' => $uid, ':pid' => "Pending",))->fetchAll();
+
+  $curr =strtotime("-7 Hour");
+
+  foreach ($result_usrlst as $item) {
+    $not_date =strtotime($item->field_time_value);
+    if($curr > $not_date) {
+      continue;
+    }
+   global $tite;
+   global $nid;
+   $tite = $item->title;
+   $nid = $item->nid_interger;
+
+  $acc_fieldset = "acc_re_fieldset" . $item->nid_interger;
+ // echo $acc_re_fieldset;
+ //
+  //@todo : not a good solution to write query in loop and use user load every time.
+    $author_nid = db_select('node', 'n')
+    ->fields('n', array('uid'))
+    ->condition('nid', $nid)
+    ->range(0, 1)
+    ->execute()
+    ->fetchAssoc();
+    $author_uid = $author_nid['uid'];
+
+    $user_inf = user_load($author_uid);
+    $picture = theme('image_style', array( 'path' =>  $user_inf->picture->uri, 'style_name' => '45x45', 'width' => '45', 'height' => '45'));
+
+
+
+   // done for giving the buttons+nid
+  $accept_a = "accept" . "-" . $nid;
+  $reject_r = "reject" . "-" . $nid;
+
+  //start of form
+  $form[$tite] = array(
+    '#type' => 'markup',
+
+  );
+
+  $form[$nid . "st"] = array(
+       '#markup' => '<div class="input_wrapper1">'
+    );
+
+  $form[$nid . "pic"] = array(
+       '#markup' => '<div class="notification_opicture">'. $picture . '</div>'
+    );
+
+  $form[$acc_fieldset] = array(
+    '#type' => 'fieldset',
+    '#title' => $tite,
+  );
+
+  $form[$nid]['accept'] = array(
+    '#title' => 'Accept',
+   '#type' => 'button',
+    '#value' => 'accept',
+    '#name' => $nid,
+    );
+
+  $form[$reject_r]['reject'] = array(
+        '#type' => 'button',
+        '#value' => 'Reject',
+        '#name' => $nid,
+    );
+  $form[$nid . "end"] = array(
+       '#markup' => '</div>',
+    );
+
+  }
+  $form['golive_pager'] = array('#theme' => 'pager');
+  if(is_numeric($nid)) {
+    return $form;
+  }
+  else {
+    $form[$nid . "end"] = array(
+       '#markup' => '<div><h3>No Invitations<h3></div>',
+    );
+    return $form;
+  }
+
+}
+
+
+function golive_notification(){
+  global $user;
+  $request = $_GET['status'];
+  $node_id = $_GET['nid'];
+  $query = db_select('field_data_field_user_status', 'us');
+          $query->join('field_data_field_users', 'u',
+              'us.field_user_status_value = u.entity_id');
+          $query->condition('u.field_users_uid', $user->uid, '=');
+          $query->condition('us.entity_id', $node_id, '=');
+          $query->fields('us',array('field_user_status_value'));
+  $result = $query->execute();
+
+  $record = $result->fetchAll();
+  $field_collection_id = $record[0]->field_user_status_value;
+
+  if($request == 'accept'){
+    db_update('eck_notifications')
+    ->fields(array(
+      'request_status' => "Approved",
+      'notify' => "T",
+    ))
+    ->condition('nid_interger', $node_id)
+     ->condition('uid', $user->uid)
+    ->execute();
+     //echo "test1";
+     db_update('field_data_field_request_status')
+     ->fields(array(
+    'field_request_status_value' => "Approved",
+    ))
+      ->condition('entity_id', $field_collection_id)
+    ->execute();
+    }
+    elseif($request == 'Reject'){
+      db_update('eck_notifications')
+    ->fields(array(
+      'request_status' => "Rejected",
+      'notify' => "T",
+    ))
+    ->condition('nid_interger', $node_id)
+     ->condition('uid', $user->uid)
+    ->execute();
+      db_update('field_data_field_request_status')
+     ->fields(array(
+    'field_request_status_value' => "Rejected",
+    ))
+     ->condition('entity_id', $field_collection_id)
+    ->execute();
+    }
+    die();
+}
+
+
+/**
+ * @todo : nitish cooment
+ * @return type
+ */
+function golive_block_info() {
+
+  // set up an empty array which will contain the block contents
+  $block = array();
+  $blocks['golive_user_ref'] = array(
+    'info' => t('Custom Golive notification'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['create_go_live'] = array(
+    'info' => t('Create go live block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['join_block'] = array(
+    'info' => t('Join Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lw_go_live_won'] = array(
+    'info' => t('Go live won'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+ $blocks['lw_go_live_result_block'] = array(
+    'info' => t('Go live result block'),
+  );
+$blocks['lw_go_live_pending_invitation'] = array(
+    'info' => t('Play Off Pending Invitation'),
+  );
+  return $blocks;
+} // function onthisdate_block
+
+
+function golive_block_view($block_name = '') {
+  $block=array();
+   switch ($block_name) {
+     case 'golive_user_ref':
+       $block['subject'] = '';
+       $block['content'] = golive_user_ref();
+     break;
+    case 'create_go_live':
+       $block['subject'] = '';
+       $block['content'] = create_golive();
+     break;
+    case 'join_block':
+      $block['subject'] = '';
+      $block['content'] = golive_join();
+    break;
+    case 'lw_go_live_won';
+       $block['subject'] = 'Play Offs Won';
+       $block['content'] = lw_go_live_won();
+    break;
+    case 'lw_go_live_result_block';
+       $block['subject'] = 'Play Off result block';
+       $block['content'] = lw_go_live_result_block_func();
+    break;
+    case 'lw_go_live_pending_invitation';
+       $block['subject'] = 'Play Off Pending Invitations';
+       $block['content'] = lw_go_live_pending_invitation_function();
+    break;
+
+  }
+  return ($block);
+}
+
+function lw_go_live_pending_invitation_function(){
+  return drupal_get_form("golive_acc_rej_pg");
+}
+
+function lw_go_live_result_block_func() {
+  global $user;
+  $uid = $user->uid;
+ //fetch subject name
+  $golive_query= db_select('eck_golive', 'g');
+  $golive_query->join("node", "n", "n.nid=g.golive_nid");
+  $golive_query->fields("n", array('title'));
+  $golive_query->fields("g");
+  $golive_query->condition("g.uid", $uid)->orderBy('id', 'DESC');
+  $golive_result = $golive_query->range(0, 5)
+    ->execute()
+    ->fetchAll();
+
+  $output = '';
+  foreach ($golive_result as $row) {
+    $output .= "<div class='result_div'>";
+    $output .= "<div class='result_title'>" . $row->title;
+    $output .= "<span>" . date("Y-m-d", $row->time) . "</span></div>";
+    $output .= "<div class='result_outer'><div class='result_star'>" . $row->rank . "</div>";
+    $output .= "<div class='result_points'>" . $row->correcta . "<span> Correct answers</span></div></div>" ;
+    $output .= "</div>";
+  }
+  return $output;
+}
+
+
+/**
+ *
+ * @param type $form
+ * @param type $form_state
+ * @return string
+ *
+ * @todo nitish comment
+ */
+
+function golive_join() {
+  global $user, $base_url;
+
+  $output = "";
+  $uid = $user->uid;
+  $query = db_select('field_data_field_status', 'a');
+  $query->join('field_data_field_user_status', 'b', 'a.entity_id = b.entity_id');
+  $query->join('field_data_field_users', 'c', 'b.field_user_status_value = c.entity_id');
+
+  $query->condition('a.field_status_value', "started", 'like')
+        ->condition('c.field_users_uid', $uid, '=')
+        ->fields('a', array('entity_id'));
+
+    $result = $query->execute();
+  $record = $result->fetchAll();
+
+  foreach ($record as $item){
+    $query = db_select('node', 'a');
+    $query->join('field_data_field_user_status', 'b', 'a.nid = b.entity_id');
+    $query->join('field_data_field_request_status', 'c', 'b.field_user_status_value = c.entity_id');
+    $query->condition('c.field_request_status_value', "Approved", 'like')
+         ->condition('a.nid', $item->entity_id, '=')
+         ->fields('a', array('title'))
+         ->range(0,1);
+    $result = $query->execute();
+    $record = $result->fetchAll();
+
+    $output .= $record[0]->title . "<a href = '". $base_url . "/golive/take/".$item->entity_id."'> JOIN </a><br/>";
+
+  }
+  return $output;
+}
+function golive_user_ref() {
+  return drupal_get_form("golive_acc_rej");
+}
+
+function create_golive() {
+  global $base_url;
+  $create_url = $base_url . '/node/add/go-live';
+  $output = '<div class="golive-create"><a href="' . $create_url . '">CREATE GO LIVE</a></div>';
+ return $output;
+}
+
+
+function golive_acc_rej($form, &$form_state) {
+  global $base_url, $user;
+  $uid = $user->uid;
+  global $tite;
+  //$tite = $item->title;
+
+  //for the see more button
+  $create_url = $base_url . '/golive-dash/notifications_list';
+  $count_query = db_query('SELECT nid_interger,field_time_value,
+    title FROM eck_notifications
+    JOIN field_data_field_time ft ON ft.entity_id = nid_interger
+    WHERE
+    uid = :uid AND request_status LIKE :pid ORDER BY nid_interger ',
+    array(':uid' => $uid, ':pid' => "Pending"))->fetchAll();
+
+ $curr =strtotime("-7 Hour");
+
+  $count = 0;
+  foreach ($count_query as $item) {
+    $not_date =strtotime($item->field_time_value);
+    if($curr > $not_date) {
+      continue;
+    }
+    $count++;
+  }
+
+  // gives list of users
+  $result_usrlst = db_query('SELECT nid_interger,field_time_value,
+    title FROM eck_notifications
+    JOIN field_data_field_time ft ON ft.entity_id = nid_interger
+    WHERE
+    uid = :uid AND request_status LIKE :pid ORDER BY nid_interger DESC LIMIT 5',
+    array(':uid' => $uid, ':pid' => "Pending"))->fetchAll();
+    //for every user
+
+
+  //start of form
+  $form[$tite] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div class="count_notify">
+      <h5 class = "notify_title">NOTIFICATION</h5>
+      <span class = "notify_num">' . $count . '</span></div><div class = "notify_acc_rej">',
+
+  );
+
+  foreach ($result_usrlst as $item) {
+    $not_date =strtotime($item->field_time_value);
+    if($curr > $not_date) {
+      continue;
+    }
+   global $tite;
+   global $acc_re_fieldset;
+   global $nid;
+   $tite = $item->title;
+   $nid = $item->nid_interger;
+
+
+    $acc_fieldset = "acc_re_fieldset" . $item->nid_interger;
+    // echo $acc_re_fieldset;
+
+
+    //@todo : not a good solution to write query in loop and use user load every time.
+    $author_nid = db_select('node', 'n')
+    ->fields('n', array('uid'))
+    ->condition('nid', $nid)
+    ->range(0, 1)
+    ->execute()
+    ->fetchAssoc();
+    $author_uid = $author_nid['uid'];
+
+    $user_inf = user_load($author_uid);
+    $picture = theme('image_style', array( 'path' =>  $user_inf->picture->uri, 'style_name' => '45x45', 'width' => '45', 'height' => '45'));
+
+
+
+
+
+     // done for giving the buttons+nid
+    $accept_a = "accept" . "-" . $nid;
+    $reject_r = "reject" . "-" . $nid;
+
+
+     //start of form
+
+    $form[$nid . "st"] = array(
+      '#markup' => '<div class="input_wrapper">'
+    );
+
+     $form[$nid . "pic"] = array(
+       '#markup' => '<div class="notification_opicture">'. $picture . '</div>'
+    );
+
+    $form[$acc_fieldset] = array(
+      '#type' => 'fieldset',
+      '#title' => $tite,
+
+    );
+
+    $form[$reject_r]['reject'] = array(
+        '#type' => 'button',
+        '#value' => 'Reject',
+        '#name' => $nid,
+    );
+
+    $form[$nid]['accept'] = array(
+    '#title' => 'Accept',
+    '#type' => 'button',
+    '#value' => 'accept',
+    '#name' => $nid,
+    );
+
+  $form[$nid . "end"] = array(
+       '#markup' => '</div>',
+    );
+}
+
+//echo "<pre>";print_r($form);die();
+  /*
+  $form['$reject_rrss'] = array(
+
+       '#markup' => '<div id = "golive-acc-rej-link"><div class="golive-create">
+         <a href="' . $create_url . '">SEE MORE >></a></div></div></div>'
+    );
+
+  */
+  return $form;
+
+}
+
+
+
+/**
+ * Implements hook_nodejs_handlers_info().
+ */
+function golive_nodejs_handlers_info() {
+  return array(
+    drupal_get_path('module', 'golive') . '/nodejs.golive.js',
+  );
+}
+
+
+/**
+ * called from user dashboard view for filter
+ * @return [type] [description]
+ */
+function golive_dash_argument_filter() {
+  global $user;
+ /* $output = db_query('SELECT CONCAT(\'"\',GROUP_CONCAT(us.entity_id ORDER BY us.entity_id DESC SEPARATOR \'+\' ), \'"\') as nids FROM  `field_data_field_user_status` us
+    JOIN field_data_field_users u
+    ON u.entity_id = us.field_user_status_value
+    AND u.field_users_uid = 1')->fetchAssoc();
+*/
+
+$cust_output = db_query("SELECT DISTINCT(us.entity_id) as nids
+  FROM  `field_data_field_user_status` us
+  JOIN field_data_field_users u
+  ON u.entity_id = us.field_user_status_value
+  JOIN field_data_field_request_status s
+  ON s.entity_id = us.field_user_status_value
+  AND u.field_users_uid = :uid
+  AND s.field_request_status_value = 'Approved'
+  ORDER BY us.entity_id DESC",
+  array(':uid'=> $user->uid))->fetchAll();
+
+
+  foreach ($cust_output as $cust_row) {
+
+    $final_output .= $cust_row->nids . "+";
+  }
+
+
+  //fetch all node where author is current user.
+  $author_query = db_select("node", "n")
+    ->fields("n", array('nid'))
+    ->condition('uid', $user->uid)
+    ->execute()
+    ->fetchAll();
+  foreach ($author_query as $value) {
+    $final_output .=  $value->nid . "+";
+  }
+  $final_output = trim($final_output, "+");
+
+  return $final_output;
+}
+
+function lw_go_live_won() {
+  global $user;
+
+  drupal_add_js( drupal_get_path('module', 'golive') . '/go_live.js');
+
+  $query = db_select('eck_golive', 'g');
+  $query->condition('uid', $user->uid)
+      ->condition('rank', 1)
+    ->fields('g', array('excelonz'));
+  $result = $query->execute()->rowcount();
+
+  return '<div class="right-golive-won">'.'<div class="exc-box">' .$result.'</div>'.'</div>';
+}
+
+function golive_filter_argument_filter() {
+  global $user;
+  $uid = $user->uid;
+  //fetch users profile ID.
+    $pid_query = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','student')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+    $pid = $pid_query[0]->pid;
+
+  //$pid = 36;
+  //fetch user class name.
+    $query = db_select('field_data_field_class_user', 'c');
+    $query->fields('c')
+      ->condition('c.entity_id', $pid)
+      ->condition('c.delta', 0)
+      ->condition('c.bundle', 'student');
+    $result = $query->execute()
+      ->fetchAssoc();
+
+      return $result['field_class_user_tid'];
+
+}

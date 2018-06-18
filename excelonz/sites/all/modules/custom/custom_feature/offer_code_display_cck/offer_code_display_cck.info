@@ -1,0 +1,14 @@
+name = Offer Code Display CCK
+description = Offer Code Display CCK
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = offer_code_display_cck
+dependencies[] = features
+dependencies[] = text
+features[features_api][] = api:2
+features[field_base][] = body
+features[field_base][] = field_offer_code_code1
+features[field_instance][] = node-offer_code_display-body
+features[field_instance][] = node-offer_code_display-field_offer_code_code1
+features[node][] = offer_code_display

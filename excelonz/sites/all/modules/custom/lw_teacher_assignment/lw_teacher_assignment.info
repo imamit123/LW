@@ -1,0 +1,3 @@
+name = lw_teacher_assignment
+description = "Contain all function related to teacher assignment creation."
+core = 7.x

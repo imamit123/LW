@@ -1,0 +1,352 @@
+<?php
+/**
+ * @file
+ * Provide a assessments to attract user.
+ */
+
+
+/**
+ *  Implementation of hook_menu()
+ */
+function assessment_report_menu() {
+  // Submit a form without a page reload.
+  $items['assessments-report'] = array(
+    'title' => 'Assessment Report',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('assessment_report_form'),
+    'access callback' => TRUE,
+    //'file' => 'assessments.inc',
+  );
+  //@todo : remove this page. temp for custom query on server.
+  $items['assessments-report-custom-query'] = array(
+    'title' => 'Assessment Report',
+    'page callback' => 'assessment_report_custom_query',
+    'access callback' => TRUE,
+    //'file' => 'assessments.inc',
+  );
+  $items['content-count'] = array(
+    'title' => 'Assessment Report',
+    'page callback' => 'content_count_report',
+    'access callback' => TRUE,
+    //'file' => 'assessments.inc',
+  );
+  return $items;
+}
+
+function content_count_report() {
+  global $user;
+  if(!array_key_exists(3, $user->roles)) {
+    return "<h1>ACCESS DENIED</h1>";
+  }
+  $db_result = db_query("
+    SELECT td2.name AS Class,td1.name AS Subject,td.name As Topic,fs.bundle As type,
+    SUM(CASE WHEN td3.name = 'Easy' THEN 1 ELSE 0 END) AS 'Easy',
+    SUM(CASE WHEN td3.name = 'Very Easy' THEN 1 ELSE 0 END) AS 'VeryEasy',
+    SUM(CASE WHEN td3.name = 'Difficult' THEN 1 ELSE 0 END) AS 'Difficult',
+    SUM(CASE WHEN td3.name = 'Very Difficult' THEN 1 ELSE 0 END) AS 'VeryDifficult',
+    COUNT(fs.entity_id) AS 'TOTAL'
+    FROM field_data_field_subjects fs
+    LEFT JOIN taxonomy_term_hierarchy th ON fs.field_subjects_tid = th.tid
+    LEFT JOIN taxonomy_term_hierarchy th1 ON th.parent = th1.tid
+    LEFT JOIN field_data_field_question_level ql ON fs.entity_id = ql.entity_id
+    LEFT JOIN taxonomy_term_data td ON td.tid = fs.field_subjects_tid
+    LEFT JOIN taxonomy_term_data td1 ON td1.tid = th.parent
+    LEFT JOIN taxonomy_term_data td2 ON td2.tid = th1.parent
+    LEFT JOIN taxonomy_term_data td3 ON td3.tid = ql.field_question_level_tid
+    WHERE td.vid = 7
+    GROUP BY fs.bundle,td.tid
+    ORDER BY td2.name,td1.name, td.name
+    ");
+
+  $output = "<table>";
+  $output .= "<th>Class</th><th>Subject</th><th>Topic</th><th>Type</th><th>Easy</th><th>Very Easy</th>
+
+  <th>Difficult</th><th>Very Difficult</th><th>Total</th>";
+  foreach ($db_result as $row) {
+    if(!is_null($row->Class)) {
+      $output .= "<tr>";
+      $class = substr($row->Class,-1);
+      $output .= "<td>$class</td>";
+      $output .= "<td>$row->Subject</td>";
+      $output .= "<td>$row->Topic</td>";
+      $output .= "<td>$row->type</td>";
+      $output .= "<td>$row->Easy</td>";
+      $output .= "<td>$row->VeryEasy</td>";
+      $output .= "<td>$row->Difficult</td>";
+      $output .= "<td>$row->VeryDifficult</td>";
+      $output .= "<td>$row->TOTAL</td>";
+    }
+  }
+  $output .= "</table>";
+  return $output;
+}
+
+
+
+/**
+ * @todo : remove this function
+ */
+function assessment_report_custom_query() {
+  //$line_item = $row->line_item_id;
+  $line_item = 2169;
+  $fetch_order = db_select('eck_subscription', 's')
+    ->fields('s')
+    ->condition('line_item_id', $line_item)
+    ->range(0, 1)
+    ->execute()->fetchAssoc();
+
+    $today = date("y.m.d");
+    $time_final = strtotime($today);
+    $value = $fetch_order['qty'];
+
+    $time_final1 = 0;
+    $offerid = $fetch_order['offercodeid'];
+    if($offerid != 0) {
+      $offer_query = db_select('eck_offer_code', 'eo')
+        ->fields('eo')
+        ->condition('id', $offerid)
+        ->execute()
+        ->fetchAssoc();
+      if($offer_query['offer_code_type'] == 'month') {
+        $value = $value + $offer_query['offer_code_value'];
+      }
+      elseif($offer_query['offer_code_type'] == 'fixdate') {
+        $time_final1 = $offer_query['offer_code_fix_date'];
+      }
+    }
+    $days = $value;
+    if($time_final1 == 0) {
+      $time_final1 = strtotime('+'.$days.' month',$time_final);
+    }
+    echo $time_final1 . "<br/>";
+    echo date("d-M-Y",$time_final1);
+    echo $offerid;
+    echo "<pre>";print_r($fetch_order);die();
+
+}
+
+
+
+
+function assessment_report_form($form, $form_state) {
+  global $user;
+
+
+  //check for refresh scenario so load the DB entry.
+  if (array_key_exists('report_id', $_SESSION)) {
+    $en = entity_load_single("user_assessment", $_SESSION['report_id']);
+    $final_duration = elapsed_time($en->totaltime, 6) . '<br/>';
+    $total = $en->totalq;
+    $accuracy = round(($en->correcta *100) / $total, 2);
+    $correcta = $en->correcta;
+    $wronga = $total - $en->correcta;
+    $subject = $en->subject;
+    $topic_name = $en->topic;
+    $excellone = $en->session_excellone;
+    $term_id = $en->topic_tid;
+  }
+  else {
+
+    if(array_key_exists("user_orig_exc", $_SESSION)) {
+      $account = user_load($user->uid);
+      $edit = array(
+        'field_excellone' => array(
+        'und' => array(
+          0 => array(
+            'value' => $_SESSION['user_orig_exc'],
+            ),
+          ),
+        ),
+      );
+      user_save($account, $edit);
+    }
+    $term_id = $_SESSION['topic_tid'];
+
+    $duration = $_SESSION['timer_value'];
+    $final_duration = elapsed_time($duration, 6) . '<br/>';
+
+    $total = $_SESSION['correct_ans'] + $_SESSION['wrong_ans'];
+    $accuracy = round(($_SESSION['correct_ans'] *100) / $total, 2);
+    $correcta = $_SESSION['correct_ans'];
+    $wronga = $_SESSION['wrong_ans'];
+
+
+    $topic = taxonomy_term_load($_SESSION['topic_tid']);
+    $parents = taxonomy_get_parents($_SESSION['topic_tid']);
+
+
+    $topic_name = $topic->name;
+    foreach ($parents as $parent) {
+      $subject = $parent->name;
+    }
+    $excellone = $_SESSION['user_session_exc'];
+
+    $entity = entity_create("user_assessment",
+    array('subject' => $subject,
+      'uid' => $user->uid,
+      'type' => 'user',
+      'totalq' => $_SESSION['correct_ans'] + $_SESSION['wrong_ans'],
+      'correcta' => $_SESSION['correct_ans'],
+      'totaltime' => $duration,
+      'topic' => $topic_name,
+      'session_excellone' => $excellone,
+      'endtime' => time(),
+      'subject_tid' => $_SESSION['subject_tid'],
+      'topic_tid' => $_SESSION['topic_tid'],
+      'level' =>$_SESSION['user_current_level']
+      ));
+    $en = entity_save('user_assessment', $entity);
+    $_SESSION['report_id'] = $entity->id;
+
+      $total1 = $_SESSION['correct_ans'] + $_SESSION['wrong_ans'];
+      $total_c1 = $_SESSION['correct_ans'];
+
+      $total = $total1 - $_SESSION['prev_total'];
+      $total_c = $total_c1 - $_SESSION['prev_total_c'];
+    //save in user_info
+    $query1 = new EntityFieldQuery();
+    $query1->entityCondition('entity_type', 'user_info')
+      ->propertyCondition('uid', $user->uid)
+      ->propertyCondition('topic_id', $_SESSION['topic_tid'])
+      ->range(0, 1);
+    $result1 = $query1->execute();
+    if (isset($result1['user_info'])) {
+      $ui_ids = array_keys($result1['user_info']);
+      $ui_id = $ui_ids[0];
+      $ui_info = entity_load_single("user_info", $ui_id);
+      $ui_info->level = $_SESSION['user_current_level'];
+      $ui_info->totalq = $ui_info->totalq + $total;
+      $ui_info->totaltime =$ui_info->totaltime  + $duration;
+      $ui_info->correcta =$ui_info->correcta + $total_c;
+      $ui_info->total = ++$ui_info->total;
+
+      $en = entity_save('user_info', $ui_info);
+    }
+    $current_level =$_SESSION['user_current_level'];
+
+    //@todo : optimize and minimize the session variable
+    //unset all session variable of current session
+   assessment_report_unset();
+
+    $_SESSION['correct_ans'] = 0;
+    $_SESSION['wrong_ans'] = 0;
+    $total = $total1;
+
+  }
+
+
+
+  //$term_id = 817;
+  global $user, $base_url;
+
+  if($_SESSION['master'] == true) {
+    $badge_term = taxonomy_term_load($term_id);
+    $hide_opt = $badge_term->field_mastered_image['und'][0]['uri'];
+    $image_path = substr($badge_term->field_mastered_image['und'][0]['uri'], 9);
+
+    $image_cd = theme('image_style', array('style_name' => '130', 'path' => $image_path, 'width' => '130', 'height' => '130'));
+
+    $master .= "<div class='master'><h3>Master Trophy</h3> <span>$image_cd</span></div>";
+  }
+  if($_SESSION['cover'] == true) {
+    if(!array_key_exists('und', $badge_term->field_covered_image)) {
+      $badge_term = taxonomy_term_load($term_id);
+    }
+    $image_path = substr($badge_term->field_covered_image['und'][0]['uri'], 9);
+    $image_cd = theme('image_style', array('style_name' => '130', 'path' => $image_path, 'width' => '130', 'height' => '130'));
+    $cover .= "<div class='cover'><h3>Learner Badge</h3> <span>$image_cd</span></div>";
+
+  }
+  unset($_SESSION['master']);
+  unset($_SESSION['cover']);
+
+
+
+
+  $uid = $user->uid;
+  $name = user_load($user->uid);
+  $name = $name->field_first_name['und'][0]['value'];
+  $name = ucfirst($name);
+  $result = '<div class="ass_report"><h2>Dear ' . $name . ',</h2>';
+  $result .= '<h3> Session Performance Summary </h3>';
+
+  $result .= '<table><tr><td rowspan="2" class="val_top">';
+  $result .= '<div class="ass_left_box"><table><tr><td><span>Subject</span></td><td> ' . $subject . '</td></tr>';
+  $result .= '<tr><td><span>Topic</span></td><td> ' . $topic_name . '</td></tr>';
+  $result .= '<tr><td><span>Questions attempted</span></td><td> ' . $total . '</td></tr>';
+  $result .= '<tr><td><span>Time spent</span></td><td> ' . $final_duration . '</td></tr></table></div></td>';
+
+  $result .= '<td class="val_top"><div class="ass_rigth_box"><div class="ass_rigth_top_box"><div class="ass_accuracy"><span> Session accuracy</span><h1> ' . $accuracy . '%</h1></div>';
+  $result .= '<div class="ass_reached"><span>Current Level</span><div class="levels-change levels-'.$current_level.'">levels</div> <b>level ' . $current_level . '</b> </div></div>';
+  $result .= '</td></tr><tr><td class="val_bot">';
+
+
+  //$result .= 'Skills earn : ' . '(static)<bruser_current_level>';
+  $result .= '<div class="ass_rigth_box"><div class="ass_rigth_bot_box"><div class="ass_correct"><h3>Total Correct Answers</h3><span> ' . $correcta . '</span></div>';
+  $result .= '<div class="ass_wrong"><h3>Total Wrong Answers</h3><span> ' . $wronga . '</span></div></div></div>';
+  $result .= '</td></tr></table>';
+
+
+  //your rewards this session
+  $result .= '<div class="ass_excellonz">
+                <h2>Your rewards this session</h2>'
+                  .$cover.'<div class="excellonz-star-bg">
+                    <h3>Rewards earned in this session</h3>
+                    <div class="excellonz-bg"><span> ' . $_SESSION['user_orig_exc'] . '<b>Excelonz</b></span></div>
+                    </div>'.$master .'<div class="exc_title_bg">&nbsp;</div><div class="excellonz-bot-bg">&nbsp;</div>
+                  </div>
+                </div>';
+  //$result .= '<div class="ass_table"><span>Session Excellonz:</span> ' . $excellone . '</div>';
+
+
+
+
+  $form['result'] = array(
+    '#type' => 'markup',
+    '#markup' => $result,
+  );
+
+  return $form;
+}
+
+/**
+ *  Function to return the time taken in assessment.
+ */
+function elapsed_time($timestamp, $precision = 2) {
+   $time = $timestamp;
+   $a = array('decade' => 315576000, 'year' => 31557600, 'month' => 2629800, 'week' => 604800, 'day' => 86400, 'hour' => 3600, 'min' => 60, 'sec' => 1);
+   $i = 0;
+   foreach ($a as $k => $v) {
+    $$k = floor($time/$v);
+    if ($$k) $i++;
+      $time = $i >= $precision ? 0 : $time - $$k * $v;
+      $s = $$k > 1 ? 's' : '';
+      $$k = $$k ? $$k . ' ' . $k . $s . ' ' : '';
+      @$result .= $$k;
+    }
+   return $result ? $result : '0 secs';
+ }
+
+
+function assessment_report_unset() {
+  unset($_SESSION['question_level']);
+    unset($_SESSION['class']);
+    unset($_SESSION['question_asked']);
+    unset($_SESSION['question_lod']);
+    unset($_SESSION['level_name']);
+    unset($_SESSION['start_time']);
+    unset($_SESSION['qid']);
+    unset($_SESSION['topic_tid']);
+    unset($_SESSION['subject_tid']);
+    unset($_SESSION['correct_ans']);
+    unset($_SESSION['level_correct_ans']);
+    unset($_SESSION['level_wrong_ans']);
+    unset($_SESSION['user_session_exc']);
+    unset($_SESSION['wrong_ans']);
+    unset($_SESSION['timer_value']);
+    unset($_SESSION['user_class_value']);
+    unset($_SESSION['user_current_level']);
+    unset($_SESSION['prev_total']);
+    unset($_SESSION['prev_total_c']);
+    unset($_SESSION['free_sub']);
+}

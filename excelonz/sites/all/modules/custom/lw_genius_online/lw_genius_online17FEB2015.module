@@ -1,0 +1,1651 @@
+<?php
+/*
+ * Implementation of hook_menu().
+ */
+
+function lw_genius_online_menu() {
+  $items['pricingplans/form/%'] = array(
+  //    'title' => 'Choose a Subscription Package',
+    'page callback' => 'lw_subscription_package_callback',
+   // 'page arguments' => array('get_pricing_form'),
+    'access callback' => TRUE,
+  );
+   return $items;
+  }
+
+function lw_subscription_package_callback(){
+   global $user;
+   //for count Login
+  $uid = $user->uid;
+  $login_count =  first_login_get_data($uid, $key = NULL);
+  /*On page load check if order no exists for parent in eck_subscription or not -start*/
+  $order = commerce_cart_order_load($user->uid);
+  $order_no = $order->order_number;
+  $child_id = arg(2);
+  // echo '<pre>';
+  // print_r($_SESSION);
+if(array_key_exists('anonymous_coupon_code_one_time', $_SESSION)) {
+    activate_one_time_coupon_code_for_anonymous();
+    unset($_SESSION['anonymous_coupon_code_one_time']);
+  }
+/*On page load check if order no exists for parent in eck_subscription or not -END*/
+
+if(array_key_exists('duration_free', $_SESSION) && $_SESSION['duration_free'] == 1) {
+    static_page_free_product_add();
+    unset($_SESSION['duration_free']);
+  }
+ if(array_key_exists("count", $_SESSION['add_cart_anonymous']) && $login_count['count'] == 0) {
+  anonymous_user_cart_product_add();
+  anonymous_cart_value_after_create_user();
+  drupal_goto("checkout");
+
+ }
+ if(array_key_exists("wcount", $_SESSION['add_cart_anonymous']) && $login_count['count'] == 0) {
+  anonymous_user_cart_product_add();
+  anonymous_cart_value_after_create_user();
+  drupal_goto("checkout");
+
+ }
+ //echo $order_no;
+   if($order_no == '') {
+         unset($_SESSION['add_cart'][$child_id]);
+         unset($_SESSION['sub_count'][$child_id]);
+         unset($_SESSION['subject'][$child_id]);
+         unset($_SESSION['duration'][$child_id]);
+         unset($_SESSION['subject'][$child_id]);
+         unset($_SESSION['worksheet'][$child_id]);
+         unset($_SESSION['worksheet_duration'][$child_id]);
+         unset($_SESSION['gk_tid']);
+
+  }
+  return t('');
+}
+  function get_pricing_form($form, &$form_state) {
+    
+   $_SESSION['cart_detail'] = array();
+   $_SESSION['cart_detail1'] = array();
+     $months = array();
+     $months[12] = array(800, 1500, 2000, 2400);
+     global $base_url;
+    $form['#tree'] = TRUE;
+    // Need to know for what this form_state[num_names] is being used 
+    if (empty($form_state['num_names'])) {
+      $form_state['num_names'] = 1;
+    }
+    
+  
+  //@todo : nit code cleanup.
+  global $user;
+  $userid = $user->uid;
+  $cur_id = user_load($userid);// loading the parents id
+  $childid = array();
+  $r_child =arg(2); //get child id from url
+  //echo $r_child;
+  $child_arr = $cur_id->field_child_id['und'];
+ //  echo '<pre>';print_r($child_arr);die();
+  $free_check = db_select('eck_expiry', 'ee');
+  $free_check->fields("ee")
+    ->condition('uid', $user->uid)
+    ->condition('child_id', $r_child)
+    ->condition('purchase_type', 'free');
+  $free_count = $free_check->execute()->rowCount();
+  $order3 = commerce_cart_order_load($user->uid);
+  $order_nos = $order3->order_number;
+
+    
+if($order_nos != '') {
+    $subject_query = db_query("SELECT es.* FROM eck_subscription es JOIN commerce_line_item cl ON cl.line_item_id = es.line_item_id
+      WHERE es.order_id =".$order_nos."
+      AND child_uid =" . $r_child);
+  $default_cart = array();
+    foreach ($subject_query as $cart_subject) {
+
+      $default_cart[$cart_subject->subject_tid] = $cart_subject->qty;
+    }
+}
+ 
+  
+  if($child_arr != ''){
+    
+      $childid = $child_arr[0]['uid'];
+      $returned_array = get_child_subject_tids($childid);
+      $subject_tids = $returned_array['sub_term1'];
+      $class_tid = $returned_array['class_tid'];
+      $ordered_arr = array("English","Maths","Mathematics","Science","SST","Social Studies", "General Knowledge");
+      foreach ($ordered_arr as $value) {
+          foreach ($subject_tids as $k => $item) {
+            if($item->name == $value)
+                $sub_term[] = $item;
+        }
+     }
+
+   
+   
+    
+
+    $terms_sub= array();
+      foreach ($sub_term as $item) {
+        $key = $item->tid;
+        $value = $item->name;
+        $terms_sub[$key] = $value;
+      }
+      //echo '<pre>';print_r($terms_sub);die();
+}
+  
+ $terms = taxonomy_get_tree(2,$parent = 0, $max_depth = 1, $load_entities = FALSE);
+ //echo '<pre>';print_r($terms);die();
+  foreach ($terms as $item) {
+    $key = $item->tid;
+    $value = $item->name;
+    $terms_array[$key] = $value;
+  }
+  //echo '<pre>';print_r($terms_array);die();
+    $terms_dur = taxonomy_get_tree(4);
+    //echo '<pre>';print_r($terms_dur);die();
+
+   foreach ($terms_dur as $item) {
+
+    $key = $item->tid;
+    $term_load = taxonomy_term_load($key);
+    //echo '<pre>';print_r($term_load);die();
+    $term_price = $term_load->field_price_of_duration['und'][0]['value'];
+    $value_dur = $item->name;
+    $terms_array_dur[$key] = $value_dur;//loads the terms
+  }
+
+
+  foreach ($terms_dur as $item) {
+    $key = $item->tid;
+    $term_load = taxonomy_term_load($key);
+    $term_price = $term_load->field_price_of_duration['und'][0]['value'];// gets the price of the term
+    $value = $term_price;
+    $term_price_array[$key] = $value;
+  }
+    //echo '<pre>';print_r($term_price_array);die();
+
+  
+  $checkbox_checked = array();
+  //echo '<pre>';print_r($sub_term);die();
+   foreach ($sub_term as $key => $value){
+ 
+    //echo "<pre>";print_r($class_tid);die();
+    $prod_id = db_query('SELECT p.field_product_product_id
+      FROM field_data_field_product p,
+      field_data_field_class_user a,
+           field_data_field_subject b
+      WHERE
+      p.field_product_product_id = a.entity_id
+      AND p.field_product_product_id = b.entity_id
+      AND a.field_class_user_tid = :class1
+      AND b.field_subject_tid = :subject1', array(':class1' => $class_tid, ':subject1' => $sub_term[$key]->tid))->fetchField();
+
+    $s_tid = $sub_term[$key]->tid;
+      //echo "<pre>";print_r($s_tid);//die();
+    //print_r($prod_id);die();
+
+    if ($prod_id == ""){
+      drupal_set_message(t('Please enter all the Products'), 'status', TRUE);
+    }
+    
+  
+    else {
+         
+      $price_display_array = array();
+        if($free_count == 0)
+        $price_display_array[] = "Free";
+        $count = 0;
+        
+      foreach ($terms_dur as $item) {
+        $gr = $item->tid;
+        $term_load = taxonomy_term_load($gr);
+        $term_name[$gr] = $term_load->name;
+         
+        $term_price = $months[$term_load->name][0];                                                                    //
+
+        $product = commerce_product_load($prod_id);
+        $price = commerce_product_calculate_sell_price($product);
+        $price_amt = $price['amount'] *  $term_price;
+        $price_display1 = commerce_currency_format($price['amount'], $price['currency_code'], $product);
+        $price_display = commerce_currency_format($price_amt, $price['currency_code'], $product);
+        $key = $item->tid;
+        $price_display_array[$gr] = $price_display;
+
+        
+        $count++;
+        $form['class_wrap_start']['maths_unused'] = array(
+       '#type' => 'markup',
+         '#markup' => drupal_render(drupal_get_form('generate_maths_block_form')),
+         '#prefix' => '<span style="display:none;">',
+         '#suffix' => '</span>',
+           
+      );  
+       
+       $form['class_wrap_start']['allsubject'] = array(
+       '#type' => 'markup',
+          '#markup' => drupal_render(drupal_get_form('generate_all_subject_block_form')),
+           
+      );
+        $form['class_wrap_start']['maths'] = array(
+       '#type' => 'markup',
+          '#markup' => drupal_render(drupal_get_form('generate_maths_block_form')),
+           
+      );
+        $form['class_wrap_start']['science'] = array(
+        '#type' => 'markup',
+          '#markup' => drupal_render(drupal_get_form('generate_science_block_form')),
+           
+      );
+        
+      $form['class_wrap_start']['english'] = array(
+       '#type' => 'markup',
+          '#markup' => drupal_render(drupal_get_form('generate_english_block_form')),
+           
+      );
+      
+      $form['class_wrap_start']['SST'] = array(
+       '#type' => 'markup',
+          '#markup' => drupal_render(drupal_get_form('generate_sst_block_form')),
+           
+      );
+        
+ 
+      }
+
+  }
+        
+
+
+
+
+  }
+
+
+
+
+return $form;
+   
+
+}
+
+  
+
+
+
+function lw_genius_online_block_info() {
+    $block = array();
+    $blocks['pricing_maths_block'] = array(
+        'info' => t('Pricing Maths Block'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['pricing_english_block'] = array(
+        'info' => t('Pricing English Block'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['pricing_science_block'] = array(
+        'info' => t('Pricing Science Block'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['pricing_sst_block'] = array(
+        'info' => t('Pricing SST Block'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['your_cart_status_block'] = array(
+        'info' => t('Your Cart Status'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+  
+   $blocks['get_pricing_form_block'] = array(
+        'info' => t('Get Pricing form Block'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+   $blocks['pricing_all_subject_block'] = array(
+        'info' => t('Pricing all subject Block'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+
+    return $blocks;
+}
+
+
+
+function lw_genius_online_block_view($block_name = '') {
+    $block=array();
+    switch ($block_name) {
+        case 'pricing_maths_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('generate_maths_block_form');
+            break;
+        case 'pricing_english_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('generate_english_block_form');
+            break;
+        case 'pricing_science_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('generate_science_block_form');
+            break;
+        case 'pricing_sst_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('generate_sst_block_form');
+            break;
+        case 'your_cart_status_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('generate_your_cart_status_block_form');
+            break;
+       case 'get_pricing_form_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('get_pricing_form');
+            break;
+       case 'pricing_all_subject_block':
+            $block['subject'] = '';
+            $block['content'] = drupal_get_form('generate_all_subject_block_form');
+            break;
+     }
+     
+    return ($block);
+}
+
+
+/*Generate Maths Block Form*/
+function generate_Maths_block_form($form, &$form_state) {
+  $child_id = arg(2);
+  $returned_array = get_child_subject_tids($child_id);
+  $sub_tid ='';
+  global $base_url;
+  $current_path = $base_url.'/pricingplans/form/'.$child_id;
+  $form['#action'] = $current_path.'#generate-maths-block-form--10';
+  $class_name = $returned_array['class_name'];
+  foreach ($returned_array['sub_term1'] as $key => $value) {
+    if($value->name == 'Maths')
+      $sub_tid = $value->tid;
+  }
+  $gk = $returned_array['gk'];
+ 
+//Subject and Worksheet Expair Condition; 
+  $returned_attributes = make_checkboxes_disabled($sub_tid,$child_id);
+  $disabled = $returned_attributes['disabled'];
+  $attributes = $returned_attributes['attributes'];
+  $workdisabled =  $returned_attributes['workdisabled'];
+  $workattributes = $returned_attributes['workattributes'];
+  
+ //End Subject and Worksheet Expair;
+
+
+ //End Subject and Worksheet Expair;
+  $maths_image = array(
+    'path' => 'sites/all/modules/custom/lw_genius_online/images/math.png', 
+    'alt' => 'Excelonz Maths',
+    'title' => 'Excelonz Maths',
+    //'attributes' => array('class' => 'some-img', 'id' => 'my-img'),
+    );
+    
+    $image = theme('image', $maths_image);
+    
+    $form['image_'.$sub_tid] = array(
+      '#markup' => '<div class="product-image">'.$image.'</div><div class="main-div-product">', 
+    );
+
+  $form['info_text_'.$sub_tid] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="item-product"><p><span class="heading-product">Excelonz Maths Genius</span></p>
+          </div>'),
+    );
+
+   $form['practise_online_'.$sub_tid] = array(
+    '#type' =>'markup',
+    '#markup' => ('<div class="practice">Practice Online</div>'),
+   );
+
+   $form['worksheets_'.$sub_tid] = array(
+  '#type' =>'markup',
+  '#markup' => ('<div class="workshet">Worksheets</div>'),
+   );
+   
+
+   $form['practise_online_price_'.$sub_tid] = array(
+    '#type' =>'checkbox', 
+    '#title' => t('Rs.800 (annual)'),
+    '#disabled' => $disabled,
+    '#attributes' => $attributes,
+   );
+  
+   $form['worksheets_cnt_'.$sub_tid] = array(
+     '#type' =>'checkbox', 
+     '#title' => t('Rs.199 (25 Worksheets)'),
+     '#disabled' => $workdisabled,
+     '#attributes' => $workattributes,
+   );
+
+  $form['subject_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $sub_tid,
+   );
+  $form['class_name_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $class_name,
+   );
+  $form['gk_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $gk,
+   );
+   
+   $form['sub_name_hidden'] = array(
+    '#type' =>'hidden', 
+    '#value' => 'Maths',
+   );
+
+
+  
+   $form['submit_'.$sub_tid] = array('#type' => 'submit', '#value' => t('+ Add to Cart'),'#submit' => array('pricing_form_add_cart'),'#validate' => array('pricing_form_add_cart_validate'),);
+   
+   $form['learn_more'] = array('#type' => 'submit', '#value' => t('Learn More'),'#submit' => array('pricing_form_learn_more'),);
+
+  $form['div_close'] = array(
+  '#type' => 'markup',
+  '#markup' => ('</div>'),
+  );
+  
+  return $form;
+
+}
+
+
+/*Generate English Block Form*/
+function generate_English_block_form($form, &$form_state) {
+  $child_id = arg(2);
+  $returned_array = get_child_subject_tids($child_id); 
+  $sub_tid ='';
+  global $base_url;
+  $current_path = $base_url.'/pricingplans/form/'.$child_id;
+  $form['#action'] = $current_path.'#generate-maths-block-form--10';
+  foreach ($returned_array['sub_term1'] as $key => $value) {
+    if($value->name == 'English')
+      $sub_tid = $value->tid;
+  }
+  $gk = $returned_array['gk'];
+  //Subject and Worksheet Expair Condition; 
+  $returned_attributes = make_checkboxes_disabled($sub_tid,$child_id);
+  $disabled = $returned_attributes['disabled'];
+  $attributes = $returned_attributes['attributes'];
+  $workdisabled =  $returned_attributes['workdisabled'];
+  $workattributes = $returned_attributes['workattributes'];
+ //End Subject and Worksheet Expair;
+  $english_image = array(
+    'path' => 'sites/all/modules/custom/lw_genius_online/images/english.png', 
+    'alt' => 'Excelonz English',
+    'title' => 'Excelonz English',
+    //'attributes' => array('class' => 'some-img', 'id' => 'my-img'),
+    );
+    
+    $image = theme('image', $english_image);
+    $form['image_'.$sub_tid] = array(
+      '#markup' => '<div class="product-image">'.$image.'</div><div class="main-div-product">',
+    );
+
+  $form['info_text_'.$sub_tid] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="item-product" ><p><span class="heading-product">Excelonz English Genius</span></p>
+         </div>'
+        ),
+    );
+  
+   $form['practise_online_'.$sub_tid] = array(
+    '#type' =>'markup',
+    '#markup' => ('<div class="practice">Practice Online</div>'),
+  );
+
+   $form['worksheets_'.$sub_tid] = array(
+   '#type' =>'markup',
+   '#markup' => ('<div class="workshet">Worksheets</div>'),
+   );  
+
+
+   $form['practise_online_price_'.$sub_tid] = array(
+    '#type' =>'checkbox', 
+     '#title' => t('Rs.800 (annual)'),
+    '#disabled' => $disabled,
+    '#attributes' => $attributes,
+   );
+   
+   $form['worksheets_cnt_'.$sub_tid] = array(
+  '#type' =>'checkbox', 
+  '#title' => t('Rs.199 (25 Worksheets)'),
+  '#disabled' => $workdisabled,
+  '#attributes' => $workattributes,
+   );
+   $form['subject_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $sub_tid,
+   );
+  
+  $form['gk_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $gk,
+   );
+
+   $form['sub_name_hidden'] = array(
+    '#type' =>'hidden', 
+    '#value' => 'English',
+   );
+
+   $form['submit_'.$sub_tid] = array('#type' => 'submit', '#value' => t('+ Add to Cart'),'#submit' => array('pricing_form_add_cart'),'#validate' => array('pricing_form_add_cart_validate'),);
+   
+   $form['learn_more'] = array('#type' => 'submit', '#value' => t('Learn More'),'#submit' => array('pricing_form_learn_more'),);
+  
+   $form['div_close'] = array(
+  '#type' => 'markup',
+  '#markup' => ('</div>'),
+  );
+  
+   return $form;
+
+}
+
+/*Generate Science Block Form*/
+function generate_Science_block_form($form, &$form_state) {
+  $child_id = arg(2);
+  $returned_array = get_child_subject_tids($child_id); 
+  $sub_tid ='';
+  global $base_url;
+  $current_path = $base_url.'/pricingplans/form/'.$child_id;
+  $form['#action'] = $current_path.'#generate-maths-block-form--10';
+  foreach ($returned_array['sub_term1'] as $key => $value) {
+    if($value->name == 'Science')
+      $sub_tid = $value->tid;
+  }
+  $gk = $returned_array['gk'];
+  
+ //Subject and Worksheet Expair Condition; 
+  $returned_attributes = make_checkboxes_disabled($sub_tid,$child_id);
+  $disabled = $returned_attributes['disabled'];
+  $attributes = $returned_attributes['attributes'];
+  $workdisabled =  $returned_attributes['workdisabled'];
+  $workattributes = $returned_attributes['workattributes'];
+
+//End Subject and Worksheet Expair;
+ //End Subject and Worksheet Expair;
+  $science_image = array(
+    'path' => 'sites/all/modules/custom/lw_genius_online/images/science.png', 
+    'alt' => 'Excelonz Science',
+    'title' => 'Excelonz science',
+    //'attributes' => array('class' => 'some-img', 'id' => 'my-img'),
+    );
+    
+    $image = theme('image', $science_image);
+    $form['image_'.$sub_tid] = array(
+      '#markup' => '<div class="product-image">'.$image.'</div><div class="main-div-product">', 
+    );
+
+  $form['info_text_'.$sub_tid] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="item-product" ><p><span  class="heading-product">Excelonz Science Genius</span></p>
+                </div>'
+        ),
+    );
+  
+   $form['practise_online_'.$sub_tid] = array(
+    '#type' =>'markup',
+    '#markup' => ('<div class="practice">Practice Online</div>'),
+  );
+
+  $form['worksheets_'.$sub_tid] = array(
+  '#type' =>'markup',
+  '#markup' => ('<div class="workshet">Worksheets</div>'),
+   );
+
+
+   $form['practise_online_price_'.$sub_tid] = array(
+    '#type' =>'checkbox', 
+    '#title' => t('Rs.800 (annual)'),
+    '#disabled' => $disabled,
+    '#attributes' => $attributes,
+  );
+
+   $form['worksheets_cnt_'.$sub_tid] = array(
+  '#type' =>'checkbox', 
+  '#title' => t('Rs.199 (25 Worksheets)'),
+   '#disabled' => $workdisabled,
+   '#attributes' => $workattributes,
+   );
+
+   $form['subject_tid_hidden'] = array(
+    '#type' =>'hidden', 
+    '#value' => $sub_tid,
+   );
+   $form['gk_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $gk,
+   );
+   $form['sub_name_hidden'] = array(
+    '#type' =>'hidden', 
+    '#value' => 'Science',
+   );
+
+
+   $form['submit_'.$sub_tid] = array('#type' => 'submit', '#value' => t('+ Add to Cart'),'#submit' => array('pricing_form_add_cart'),'#validate' => array('pricing_form_add_cart_validate'),);
+  
+  $form['learn_more'] = array('#type' => 'submit', '#value' => t('Learn More'),'#submit' => array('pricing_form_learn_more'),);
+   
+  $form['div_close'] = array(
+  '#type' => 'markup',
+  '#markup' => ('</div>'),
+  );
+  
+   return $form;
+
+}
+
+/*Generate SST Block Form*/
+function generate_sst_block_form($form, &$form_state) {
+    $child_id = arg(2);
+  $returned_array = get_child_subject_tids($child_id); 
+  $sub_tid ='';
+  global $base_url;
+  $current_path = $base_url.'/pricingplans/form/'.$child_id;
+  $form['#action'] = $current_path.'#generate-maths-block-form--10';
+  foreach ($returned_array['sub_term1'] as $key => $value) {
+    if($value->name == 'SST')
+      $sub_tid = $value->tid;
+  }
+  $gk = $returned_array['gk'];
+  
+ //Subject and Worksheet Expair Condition; 
+  $returned_attributes = make_checkboxes_disabled($sub_tid,$child_id);
+  $disabled = $returned_attributes['disabled'];
+  $attributes = $returned_attributes['attributes'];
+  $workdisabled =  $returned_attributes['workdisabled'];
+  $workattributes = $returned_attributes['workattributes'];
+
+//End Subject and Worksheet Expair;
+  $sst_image = array(
+    'path' => 'sites/all/modules/custom/lw_genius_online/images/sst.png', 
+    'alt' => 'Excelonz SST',
+    'title' => 'Excelonz SST',
+    //'attributes' => array('class' => 'some-img', 'id' => 'my-img'),
+    );
+    
+    $image = theme('image', $sst_image);
+    $form['image_'.$sub_tid] = array(
+      '#markup' => '<div class="product-image">'.$image.'</div><div class="main-div-product">', 
+    );
+
+  $form['info_text_'.$sub_tid] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="item-product"><p><span class="heading-product">Excelonz SST Genius</span></p>
+                </div>'
+              ),
+    );
+
+   $form['practise_online_'.$sub_tid] = array(
+    '#type' =>'markup',
+    '#markup' => ('<div class="practice">Practice Online</div>'),
+  );
+
+  $form['worksheets_'.$sub_tid] = array(
+  '#type' =>'markup',
+  '#markup' => ('<div class="workshet">Worksheets</div>'),
+   ); 
+ 
+  $form['practise_online_price_'.$sub_tid] = array(
+    '#type' =>'checkbox', 
+     '#title' => t('Rs.800 (annual)'),
+   '#disabled' => $disabled,
+    '#attributes' => $attributes,
+  );
+
+   $form['worksheets_cnt_'.$sub_tid] = array(
+  '#type' =>'checkbox', 
+  '#title' => t('Rs.199 (25 Worksheets)'),
+  '#disabled' => $workdisabled,
+   '#attributes' => $workattributes,
+   );
+    $form['subject_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $sub_tid,
+   );
+   $form['gk_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $gk,
+   );
+   $form['sub_name_hidden'] = array(
+    '#type' =>'hidden', 
+    '#value' => 'SST',
+   );
+
+  
+
+   $form['submit_'.$sub_tid] = array('#type' => 'submit', '#value' => t('+ Add to Cart'),'#submit' => array('pricing_form_add_cart'),'#validate' => array('pricing_form_add_cart_validate'),);
+   
+   $form['learn_more'] = array('#type' => 'submit', '#value' => t('Learn More'),'#submit' => array('pricing_form_learn_more'),);
+
+  $form['div_close'] = array(
+  '#type' => 'markup',
+  '#markup' => ('</div>'),
+  );
+  
+   return $form;
+}
+
+function get_child_subject_tids($childid) {
+
+   //fetch users profile ID.
+      $pid_query = db_select('profile', 'p')
+      ->fields('p',array('pid'))
+      ->condition('uid', $childid)
+      ->condition('type','student')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+      $pid = $pid_query[0]->pid;
+
+      //fetch user class name.
+      $query = db_select('field_data_field_class_user', 'c');
+      $query->join("taxonomy_term_data", "uc", "c.field_class_user_tid=uc.tid");
+      $query->fields('uc')
+        ->condition('c.entity_id', $pid)
+        ->condition('c.delta', 0);
+      $result = $query->execute()
+        ->fetchAssoc();
+
+
+      $taxo_get = $result['tid'];
+    $taxo_load = taxonomy_term_load($taxo_get);
+      $class_name = $taxo_load->name;
+      $class_tid = $taxo_load->tid;
+
+
+      $sub_id = $taxo_load->field_subject['und'][0]['tid']; // gets the referenced sub
+      $sub_term1 = taxonomy_get_children($sub_id);
+      $gk_key = '';
+    foreach ($sub_term1 as $key => $value) {
+      if($value->name == "General Knowledge") {
+        $gk = $key;
+      }
+    }
+
+
+       
+     $return_array = array('sub_term1' => $sub_term1,'class_tid' =>$class_tid,'class_name'=>$class_name,'gk'=>$gk);
+  
+   return $return_array;
+    
+}
+
+function pricing_form_add_cart($form, &$form_state) {
+    save_add_to_cart_session($form,$form_state);
+    commerce_product_add($form, $form_state);
+}
+
+
+function get_subject_counts_and_price($form,$form_state) {
+  $childId = arg(2);
+   $subjec_tid = $form_state['values']['subject_tid_hidden'];
+if(isset($form_state['values']['subject_tid_hidden']) && $form_state['values']['subject_tid_hidden'] != '') {
+     if(($form_state['values']['worksheets_cnt_'.$subjec_tid] == 0 && $form_state['values']['practise_online_price_'.$subjec_tid] == 1) || ($form_state['values']['worksheets_cnt_'.$subjec_tid] == 0 || $form_state['values']['practise_online_price_'.$subjec_tid])) {
+        $subject = $form_state['values']['subject_tid_hidden'];
+        $_SESSION['sub_count'][$childId][$form_state['values']['subject_tid_hidden']] = $subject;
+      }
+  }
+  //echo '<pre>';print_r($_SESSION);die();
+  
+  //$subject_count  = count($_SESSION['sub_count']);
+
+  /*Maths Price Count*/
+  if($form_state['values']['sub_name_hidden'] == 'Maths') {
+      $sub_tid = $form_state['values']['subject_tid_hidden'];
+      if($form_state['values']['practise_online_price_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['subject'][$childId][$sub_tid])) {
+          $_SESSION['subject'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['duration'][$childId][$sub_tid] = 7;
+        }
+      }
+      if($form_state['values']['worksheets_cnt_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['worksheet'][$childId][$sub_tid])) {
+          $_SESSION['worksheet'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['worksheet_duration'][$childId][$sub_tid] = 7;
+        }
+      }
+
+  }
+
+  /*English Price Count*/
+  if($form_state['values']['sub_name_hidden'] == 'English') {
+      $sub_tid = $form_state['values']['subject_tid_hidden'];
+      if($form_state['values']['practise_online_price_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['subject'][$childId][$sub_tid])) {
+          $_SESSION['subject'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['duration'][$childId][$sub_tid] = 7;
+        }
+      }
+      if($form_state['values']['worksheets_cnt_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['worksheet'][$childId][$sub_tid])) {
+          $_SESSION['worksheet'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['worksheet_duration'][$childId][$sub_tid] = 7;
+        }
+      }
+
+  }
+  
+  /*Science Price Count*/
+  if($form_state['values']['sub_name_hidden'] == 'Science') {
+      $sub_tid = $form_state['values']['subject_tid_hidden'];
+      if($form_state['values']['practise_online_price_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['subject'][$childId][$sub_tid])) {
+          $_SESSION['subject'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['duration'][$childId][$sub_tid] = 7;
+        }
+      }
+      if($form_state['values']['worksheets_cnt_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['worksheet'][$childId][$sub_tid])) {
+          $_SESSION['worksheet'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['worksheet_duration'][$childId][$sub_tid] = 7;
+        }
+      }
+
+  }
+
+  
+  /*SST Price Count*/
+  if($form_state['values']['sub_name_hidden'] == 'SST') {
+    $sub_tid = $form_state['values']['subject_tid_hidden'];
+      if($form_state['values']['practise_online_price_'.$sub_tid] == 1) {
+           
+        if(!isset($_SESSION['subject'][$childId][$sub_tid])) {
+
+          $_SESSION['subject'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['duration'][$childId][$sub_tid] = 7;
+        }
+      }
+
+      if($form_state['values']['worksheets_cnt_'.$sub_tid] == 1) {
+        if(!isset($_SESSION['worksheet'][$childId][$sub_tid])) {
+          $_SESSION['worksheet'][$childId][$sub_tid] = $sub_tid;
+          $_SESSION['worksheet_duration'][$childId][$sub_tid] = 7;
+        }
+      }
+
+  }
+    return $_SESSION;
+  
+}
+
+
+function generate_your_cart_status_block_form($form, &$form_state) { 
+//echo '<pre>';print_r($_SESSION['add_cart']);die();
+  global $user;
+  $parent_id = $user->uid;
+  $child_id = arg(2);
+  $months = '12';
+  $math_tid = $_SESSION['add_cart'][$child_id]['math']['tid'];
+  $english_tid = $_SESSION['add_cart'][$child_id]['english']['tid'];
+  $science_tid = $_SESSION['add_cart'][$child_id]['science']['tid'];
+  $sst_tid = $_SESSION['add_cart'][$child_id]['sst']['tid'];
+  $return_array = add_cart_pricing_subjects();
+  $return_work_price = add_cart_pricing_work();
+  $prices = array(800,199);
+  $total_items =  get_total_items_in_cart($child_id);
+ 
+$result = db_select('eck_subscription', 'eck_sub')
+            ->fields('eck_sub',array('child_uid'))
+            ->condition('child_uid',$child_id)
+            ->execute();
+ $num_of_child = $result->rowCount();
+if($num_of_child == 0){
+     return t('');
+ }
+if($total_items != 0) {
+if(isset($_SESSION['add_cart'][$child_id])) {
+ 
+    $form['cart_details'] = array(
+            '#type'=> 'item',
+            '#markup'=> ('<div class="pricing-cart-detail">Cart Details<br/><span class="pricing-cart-item-count">You have '.$total_items.' items in your cart</span></div>'),
+    );
+}
+}
+  /*Maths*/
+  if(isset($_SESSION['add_cart'][$child_id]['math'])) {//print_r($_SESSION['add_cart']);
+    if(isset($_SESSION['add_cart'][$child_id]['math']['sub']) || isset($_SESSION['add_cart'][$child_id]['math']['work'])) {
+      $form['maths_text'] = array(
+            '#type'=> 'item',
+            '#markup'=> '<div class="pricing-product-name">Maths Genius</div>',
+          );
+
+    }
+    if(isset($_SESSION['add_cart'][$child_id]['math']['sub'])) {
+        
+        $math_text = '<div class="pricing-product-practice-online">Practice Online Rs. '.$prices[0].'</div>';
+        $form['maths_subject_cart_details'] = array(
+            '#type'=> 'item',
+            '#markup'=> $math_text,
+          );
+          
+          $form['delete_maths_sub'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$math_tid));
+    }
+    if(isset($_SESSION['add_cart'][$child_id]['math']['work'])) {
+          $math_text_work = '<div class="pricing-product-worksheet">25 Worksheets Rs. '.$prices[1].'</div>';
+          $form['maths_asgn_price'] = array(
+            '#type'=> 'item',
+            '#markup'=> $math_text_work,
+          );
+          $form['delete_maths_work'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$math_tid.'/del'));
+    }
+  }
+  /*English*/
+  if(isset($_SESSION['add_cart'][$child_id]['english'])) {
+  if(isset($_SESSION['add_cart'][$child_id]['english']['sub']) || isset($_SESSION['add_cart'][$child_id]['english']['work'])) {
+    $form['english_text'] = array(
+            '#type'=> 'item',
+            '#markup'=> '<div class="pricing-product-name">English Genius</div>',
+          );
+
+  }
+  if(isset($_SESSION['add_cart'][$child_id]['english']['sub'])) {
+        
+        $english_text = '<div class="pricing-product-practice-online">Practice Online Rs. '.$prices[0].'</div>';
+        $form['english_subject_cart_details'] = array(
+            '#type'=> 'item',
+            '#markup'=> $english_text,
+          );
+          
+          $form['delete_english_sub'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$english_tid));
+    }
+    if(isset($_SESSION['add_cart'][$child_id]['english']['work'])) {
+          $english_text_work = '<div class="pricing-product-worksheet">25 Worksheets Rs. '.$prices[1].'</div>';
+          $form['english_asgn_price'] = array(
+            '#type'=> 'item',
+            '#markup'=> $english_text_work,
+          );
+          $form['delete_english_work'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$english_tid.'/del'));
+    }
+  }
+
+/*Science*/
+  if(isset($_SESSION['add_cart'][$child_id]['science'])) {
+  if(isset($_SESSION['add_cart'][$child_id]['science']['sub']) || isset($_SESSION['add_cart'][$child_id]['science']['work'])) {
+    $form['science_text'] = array(
+            '#type'=> 'item',
+              '#markup'=> '<div class="pricing-product-name">Science Genius</div>',
+          );
+
+  }
+    if(isset($_SESSION['add_cart'][$child_id]['science']['sub'])) {
+        
+         $science_text = '<div class="pricing-product-practice-online">Practice Online Rs. '.$prices[0].'</div>';
+        $form['science_subject_cart_details'] = array(
+            '#type'=> 'item',
+            '#markup'=> $science_text,
+          );
+          
+          $form['delete_science_sub'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$science_tid));
+    }
+    if(isset($_SESSION['add_cart'][$child_id]['science']['work'])) {
+           $science_text_work = '<div class="pricing-product-worksheet">25 Worksheets Rs. '.$prices[1].'</div>';
+          $form['science_asgn_price'] = array(
+            '#type'=> 'item',
+            '#markup'=> $science_text_work,
+          );
+          $form['delete_science_work'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$science_tid.'/del'));
+    }
+  }
+/*SST*/
+
+  if(isset($_SESSION['add_cart'][$child_id]['sst'])) {
+  if(isset($_SESSION['add_cart'][$child_id]['sst']['sub']) || isset($_SESSION['add_cart'][$child_id]['sst']['work'])) {
+    $form['sst_text'] = array(
+            '#type'=> 'item',
+            '#markup'=> '<div class="pricing-product-name">SST Genius</div>',
+          );
+  }
+    if(isset($_SESSION['add_cart'][$child_id]['sst']['sub'])) {
+        
+        $sst_text = '<div class="pricing-product-practice-online">Practice Online Rs. '.$prices[0].'</div>';
+        $form['sst_subject_cart_details'] = array(
+            '#type'=> 'item',
+            '#markup'=> $sst_text,
+          );
+          
+          $form['delete_sst_sub'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$sst_tid));
+    }
+    if(isset($_SESSION['add_cart'][$child_id]['sst']['work'])) {
+           $sst_text_work = '<div class="pricing-product-worksheet">25 Worksheets Rs. '.$prices[1].'</div>';
+          $form['sst_asgn_price'] = array(
+            '#type'=> 'item',
+            '#markup'=> $sst_text_work,
+          );
+          $form['delete_sst_work'] = array('#type' => 'markup', '#markup' => l('X','subremove/'.$parent_id.'/'.$child_id.'/'.$months.'/'.$sst_tid.'/del'));
+    }
+  }
+if(isset($_SESSION['add_cart'][$child_id])) {
+ if($return_array['total'] != 0 || $return_work_price != 0) {
+  $form['cart_total_price'] = array(
+            '#type'=> 'markup',
+              '#markup'=> '<div class="pricing-checkout-total">Total Rs.'. 
+                  ($return_array['total'] + $return_work_price).'</div>',
+          );
+ if($return_array['total'] == 1500){
+       $Discunt_val = '100'; 
+ }
+ if($return_array['total'] == 2000){
+       $Discunt_val = '400'; 
+ }
+ if($return_array['total'] == 2400){
+       $Discunt_val = '800'; 
+ }
+if($return_array['total'] > 800){  
+$form['avail_discunt'] = array(
+            '#type'=> 'markup',
+            '#markup'=> '<div class="avail-offer">GK Complimentary <br/> Discount -<span style="color: #0066a5;"> Rs.'.$Discunt_val.'<span/></div>',
+          );
+}
+$form['avail_taxes'] = array(
+            '#type'=> 'markup',
+            '#markup'=> '<div class="avail-offer-taxes">Prices inclusive of taxes</div>',
+          );
+$form['avail_offer'] = array(
+            '#type'=> 'markup',
+            '#markup'=> '<div class="avail-offer">AVAIL OFFER<br/><p>Got an offer code? Avail it here.</p></div>',
+          );
+$form['coupon'] = coupon_code_form(); 
+  $form['checkout_link'] = array(
+            '#type'=> 'link',
+            '#title' => t('Checkout'),
+            '#href' => 'checkout',
+          );
+
+  }
+}
+
+  return $form;
+    
+
+
+}
+
+function save_add_to_cart_session($form, &$form_state) {
+  // unset($_SESSION['wtotalcost']);
+  // unset($_SESSION['totalcost']);
+  // unset($_SESSION['add_cart']);
+  // unset($_SESSION['sub_count']);
+  // unset($_SESSION['subject']);
+  // unset($_SESSION['duration']);
+  // unset($_SESSION['worksheet']);
+  // unset($_SESSION['worksheet_duration']);
+  // unset($_SESSION);
+  //  unset($_SESSION['add_cart_anonymous']);
+  //   unset($_SESSION['coupon']);
+ // die();
+//   // die();
+// // echo '<pre>';
+//  print_r($_SESSION);
+//  die('a');
+$childId = arg(2);
+    $subject_tid_hidden = $form_state['values']['subject_tid_hidden'];
+    $sub_name_hidden = $form_state['values']['sub_name_hidden'];
+
+    /*Add to cart for Maths*/
+    if($sub_name_hidden == 'Maths') {
+        if($form_state['values']['practise_online_price_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['math']['sub'])) {
+            $_SESSION['add_cart'][$childId]['math']['tid'] = $subject_tid_hidden;
+            $_SESSION['add_cart'][$childId]['math']['sub'] = 1;
+            
+        }
+        if($form_state['values']['worksheets_cnt_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['math']['work'])) {
+          $_SESSION['add_cart'][$childId]['math']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['math']['work'] = 1;
+          
+        }
+    }
+    /*Add to cart for English*/
+    if($sub_name_hidden == 'English') {
+        if($form_state['values']['practise_online_price_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['english']['sub'])) {
+          $_SESSION['add_cart'][$childId]['english']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['english']['sub'] = 1;
+          
+        }
+        if($form_state['values']['worksheets_cnt_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['english']['work'])) {
+          $_SESSION['add_cart'][$childId]['english']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['english']['work'] = 1;
+          
+        }
+    }
+    /*Add to cart for Science*/
+    if($sub_name_hidden == 'Science') {
+        if($form_state['values']['practise_online_price_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['science']['sub'])) {
+          $_SESSION['add_cart'][$childId]['science']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['science']['sub'] = 1;
+          
+        }
+        if($form_state['values']['worksheets_cnt_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['science']['work'])) {
+          $_SESSION['add_cart'][$childId]['science']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['science']['work'] = 1;
+          
+        }
+    }
+    /*Add to cart for SST*/
+    if($sub_name_hidden == 'SST') {
+        if($form_state['values']['practise_online_price_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['sst']['sub'])) {
+          $_SESSION['add_cart'][$childId]['sst']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['sst']['sub'] = 1;
+          
+        }
+        if($form_state['values']['worksheets_cnt_'.$subject_tid_hidden] == 1 && !isset($_SESSION['add_cart'][$childId]['sst']['work'])) {
+          $_SESSION['add_cart'][$childId]['sst']['tid'] = $subject_tid_hidden;
+          $_SESSION['add_cart'][$childId]['sst']['work'] = 1;
+          
+        }
+    }
+  $return_cart_session = $_SESSION;
+  return $return_cart_session;
+}
+
+function add_cart_pricing_subjects() {
+$months[12] = array(800,1500,2000,2400);
+global $user,$base_url;
+$child_id = arg(2);
+$uid = $user->uid;
+$order = commerce_cart_order_load($user->uid);
+$order_no = $order->order_number;
+$total_query = db_select('commerce_line_item', 'cl');
+  $total_query->addExpression("SUM(quantity)", 'total');
+  $total_query->condition('order_id', $order_no);
+  $topic_count = $total_query->execute()->fetchAssoc();
+  $topic_count_fin = round($topic_count['total']) * 100;
+$total_query = '';
+
+$line_itm_query = db_select('commerce_line_item', 'li');
+    $line_itm_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $line_itm_query->fields('li');
+    $line_itm_query->fields('es');
+    $line_itm_query->condition("es.uid", $uid);
+    $line_itm_query->condition("es.child_uid", $child_id);
+    $line_itm_query->condition("es.order_id", $order_no);
+    $line_itm_query->condition("es.worksheet_tid", '0');
+
+    $res = $line_itm_query->execute()->fetchAll();
+    
+    $prod_arra = array();
+
+    foreach ($res as $vv) {
+      $prod_arra[$vv->child_uid][$vv->qty]++ ;
+    }
+  
+    
+    $total_dummy = 0;
+    foreach ($prod_arra as $key => $value) {
+      foreach ($value as $mn => $tt) {
+        $total_dummy += $months[$mn][$tt-1];
+      }
+    } 
+  return array('total'=>$total_dummy,'total_items'=>$total_items);
+
+}
+
+function add_cart_pricing_work() {
+$months[12] = array(199, 398, 597, 796);
+global $user,$base_url;
+$child_id = arg(2);
+$uid = $user->uid;
+$order = commerce_cart_order_load($user->uid);
+$order_no = $order->order_number;
+  $total_query = db_select('commerce_line_item', 'cl');
+  $total_query->addExpression("SUM(quantity)", 'total');
+  $total_query->condition('order_id', $order_no);
+  $topic_count = $total_query->execute()->fetchAssoc();
+  $topic_count_fin = round($topic_count['total']) * 100;
+  $total_query = '';
+    $line_itm_query = db_select('commerce_line_item', 'li');
+    $line_itm_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $line_itm_query->fields('li');
+    $line_itm_query->fields('es');
+    $line_itm_query->condition("es.uid", $uid);
+    $line_itm_query->condition("es.child_uid", $child_id);
+    $line_itm_query->condition("es.order_id", $order_no);
+    $line_itm_query->condition("es.worksheet_tid", '0','<>');
+    $res = $line_itm_query->execute()->fetchAll();
+    $prod_arra = array();
+
+    foreach ($res as $vv) {
+      $prod_arra[$vv->child_uid][$vv->qty]++ ;
+    }
+  
+    
+    $total_dummy = 0;
+   
+    foreach ($prod_arra as $key => $value) {
+      foreach ($value as $mn => $tt) {
+        $total_dummy += $months[$mn][$tt-1];
+      }
+    } 
+  
+   
+ 
+  return $total_dummy;
+
+}
+
+function get_total_items_in_cart($cid) {
+  global $user;
+  $uid = $user->uid;
+  $order = commerce_cart_order_load($user->uid);
+  $order_no = $order->order_number;
+  $line_itm_query = db_select('commerce_line_item', 'li');
+  $line_itm_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+  $line_itm_query->fields('li');
+  $line_itm_query->fields('es');
+  $line_itm_query->condition("es.uid", $uid);
+  $line_itm_query->condition("es.child_uid", $cid);
+  $line_itm_query->condition("es.order_id", $order_no);
+  $res = $line_itm_query->execute()->fetchAll();
+  $count = count($res);
+  return $count;
+}
+
+function fetch_subject_expdate($sid,$cid){
+$result = db_select('eck_expiry', 'eck_exp')
+            ->fields('eck_exp',array('expiry_date'))
+            ->condition('child_id',$cid)
+            ->condition('subject_tid',$sid)
+            ->condition('purchase_type','paid')
+            ->condition('status',1)
+            ->execute()->fetchAll();
+$expiry_date = $result[0]->expiry_date;
+return $expiry_date;
+}
+
+function fetch_worksheet_expdate($sid,$cid){
+$result = db_select('eck_worksheet_expiry', 'eck_exp')
+            ->fields('eck_exp',array('expiry_date'))
+            ->condition('child_id',$cid)
+            ->condition('subject_tid',$sid)
+            ->condition('purchase_type','paid')
+            ->condition('status',1)
+            ->execute()->fetchAll();
+    $expiry_date = $result[0]->expiry_date;
+    $term = taxonomy_term_load($sid);
+    $name = $term->name;
+
+  $worksheet_count = db_select('eck_parent_assignment', 'eck_pa');
+  $worksheet_count->join('eck_worksheet_expiry','eck_we','eck_we.child_id=eck_pa.uid');
+  $worksheet_count->fields('eck_pa',array('id'));
+  $worksheet_count->condition('eck_pa.uid',$cid);
+  $worksheet_count->condition('eck_pa.subject',$name);
+  $worksheet_count->condition('eck_pa.worksheet_type','paid');
+  $worksheet_count->condition('eck_we.status','1');
+  $worksheet_count->where('eck_we.id=eck_pa.worksheet_exp_tid');
+  $worksheet_count_result = $worksheet_count->execute()->fetchall();
+  $num_of_results = count($worksheet_count_result);
+return array('expiry_date'=>$expiry_date,'worksheet_count'=>$num_of_results);
+}
+
+
+function make_checkboxes_disabled($sub_tid,$child_id) {
+  $sub_exp = fetch_subject_expdate($sub_tid,$child_id);
+  $work_exp = fetch_worksheet_expdate($sub_tid,$child_id);
+  $worksheet_expiry_date = $work_exp['expiry_date'];
+
+  $worksheet_count = $work_exp['worksheet_count'];
+  $today = date("y.m.d");
+  $time_exit = strtotime($today);
+ if(isset($sub_exp) && ($sub_exp > $time_exit)){
+   $disabled = TRUE;
+   $attributes = array('checked' => 'checked');
+ }else{
+   $disabled = FALSE;
+   $attributes = '';
+ }
+// if(($value->expiry_date > $time_exit) && ($num_of_results < 5)){
+if(($worksheet_expiry_date > $time_exit) && ($worksheet_count < 5)) { 
+      $workdisabled = TRUE;
+      $workattributes = array('checked' => 'checked');
+ }else{
+      $workdisabled = FALSE;
+      $workattributes = '';
+ }
+
+return array('disabled'=>$disabled,'attributes'=>$attributes,'workdisabled'=>$workdisabled,'workattributes' =>$workattributes);
+
+}
+
+function pricing_form_learn_more(){
+  drupal_set_message('<ul class="popup-learn-message"><strong>Practice Online: </strong><br/>
+<li><p>Annual subscription entitles your child to practice for 12 months. Practice on current class topics till 31st March and the next class from 1st April till the subscription ends. Subscription for Two classes for the cost of One. Valid for classes 1st till 7th only.</p></li>
+<li><p>Get General Knowledge FREE when you buy annual subscription for 2 or more subjects.
+</p></li>
+<li><p>This is a full value subscription which entitles you to all Excelonz features like unlimited practice across all Levels, tests & revisions, reports, rewards, Play Off with friends etc.</p></li>
+<strong>Worksheets:</strong>
+<li><p>Customize and create you own worksheet per topic
+Select questions across any or all difficulty levels as per your child’s ability</p></li>
+<li><p>Download, save, print as per your convenience</p> </li>');
+}
+
+
+function generate_all_subject_block_form($form, &$form_state){
+  global $user,$base_url;
+  $uid = $user->uid;
+  $child_id = arg(2);
+  $current_path = $base_url.'/pricingplans/form/'.$child_id;
+  $returned_array = get_child_subject_tids($child_id);
+  $sub_tid ='';
+  $class_name = $returned_array['class_name'];
+foreach ($returned_array['sub_term1'] as $key => $value) {
+  if($value->name == 'Maths'){
+      $sub_tid_maths = $value->tid;
+    }
+  if($value->name == 'English'){
+      $sub_tid_english = $value->tid;
+    }
+  if($value->name == 'Science'){
+      $sub_tid_science = $value->tid;
+    }
+  if($value->name == 'SST'){
+      $sub_tid_sst = $value->tid;
+    }
+  if($value->name != 'General Knowledge'){
+     $sub_tid[$value->name] = $value->tid; 
+   }
+  if($value->name != 'General Knowledge'){
+     $sub_tid_name[] = $value->name; 
+   }
+  }
+  $gk = $returned_array['gk'];
+  $practise_online_price_val = $form_state['input']['practise_online_price'];
+  $worksheets_cnt_val = $form_state['input']['worksheets_cnt'];
+
+
+if($practise_online_price_val == 1){
+        $practise = 1;
+        $englishpractise = 1;
+        $sciencepractise = 1;
+        $sstpractise = 1;
+    }else{
+        $practise = 0;
+        $englishpractise = 0;
+        $sciencepractise = 0;
+        $sstpractise = 0;
+ }
+  if($worksheets_cnt_val == 1){
+        $practisew = 1;
+        $englishpractisew = 1;
+        $sciencepractisew = 1;
+        $sstpractisew = 1;
+    }else{
+        $practisew = 0;
+        $englishpractisew = 0;
+        $sciencepractisew = 0;
+        $sstpractisew = 0;
+ }
+
+
+/*
+*IF User Already Perchage any Worksheet than not add in cart End End
+*/
+
+$maths_image = array(
+    'path' => 'sites/all/modules/custom/lw_genius_online/images/all_inone.png', 
+    'alt' => 'Excelonz Maths',
+    'title' => 'Excelonz Maths',
+    //'attributes' => array('class' => 'some-img', 'id' => 'my-img'),
+    );
+    
+    $image = theme('image', $maths_image);
+    $form['image_'.$sub_tid] = array(
+      '#markup' => '<div class="product-image">'.$image.'</div><div class="main-div-product">', 
+    );
+
+  $form['info_text_'.$sub_tid] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="item-product"><p><span class="heading-product">Excelonz All-In-One Genius</span></p>
+          </div>'),
+    );
+
+   $form['practise_online_'.$sub_tid] = array(
+    '#type' =>'markup',
+    '#markup' => ('<div class="practice">Practice Online</div>'),
+   );
+
+   $form['worksheets_'.$sub_tid] = array(
+  '#type' =>'markup',
+  '#markup' => ('<div class="workshet">Worksheets</div>'),
+   );
+   
+
+   $form['practise_online_price'] = array(
+    '#type' =>'checkbox', 
+    '#title' => t('Rs.2400 (annual)'),
+    '#disabled' => $subdisabled,
+    '#attributes' => $subattributes,
+   );
+  /////////////////////////////////////
+
+/*
+*IF User Already Perchage any Subject than not add in cart Start
+*/
+$already_subscribe =  fetch_subject_is_already_subscribe($child_id,$uid);
+$already_subscribe_tid = array();
+foreach ($already_subscribe as $key => $value) {
+    foreach ($value as $subkey => $subvalue) {
+      if($subvalue != $gk)
+       $already_subscribe_tid[] =  $subvalue;
+   }
+}
+$all_sub_id = array();
+foreach ($returned_array['sub_term1'] as $key => $value) {
+   if($value->name != 'General Knowledge'){
+         $all_sub_id[$value->name] = $value->tid; 
+       }
+   
+}
+if(array_key_exists('0', $already_subscribe_tid)) {
+         $diff_result = array_diff($all_sub_id,$already_subscribe_tid);
+      }else{
+         $diff_result = $all_sub_id;    
+      }
+foreach ($diff_result as $key => $value) {
+     $form['practise_online_price_'.$value] = array(
+          '#type' =>'hidden', 
+          '#value' => $practise,
+       );
+}
+/*
+*IF User Already Perchage any Subject than not add in cart End
+*/
+  /*
+*IF User Already Perchage any Work than not add in cart Start
+*/
+$already_subscribe_worksheet = fetch_worksheet_is_already_subscribe($child_id);
+$already_subscribe_worksheet_tid = array();
+foreach ($already_subscribe_worksheet as $key => $value) {
+    foreach ($value as $subkey => $subvalue) {
+      if($subvalue != $gk)
+       $already_subscribe_worksheet_tid[] =  $subvalue;
+   }
+}
+
+$all_work_id = array();
+foreach ($returned_array['sub_term1'] as $key => $value) {
+   if($value->name != 'General Knowledge'){
+         $all_work_id[$value->name] = $value->tid; 
+       }
+   
+}
+if(array_key_exists('0', $already_subscribe_worksheet_tid)) {
+         $diff_result_work = array_diff($all_work_id,$already_subscribe_worksheet_tid);
+      }else{
+         $diff_result_work = $all_work_id;    
+      }
+foreach ($diff_result_work as $key => $value) {
+     $form['worksheets_cnt_'.$value] = array(
+          '#type' =>'hidden', 
+          '#value' => $practisew,
+       );
+}
+/*
+*IF User Already Perchage any Work than not add in cart End
+*/
+   $form['worksheets_cnt'] = array(
+     '#type' =>'checkbox', 
+     '#title' => t('Rs.796 (100 Worksheets)'),
+     '#disabled' => $workdisabled,
+     '#attributes' => $workattributes,
+   );
+
+  $form['subject_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $sub_tid,
+   );
+  $form['class_name_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $class_name,
+   );
+  $form['gk_tid_hidden'] = array(
+  '#type' =>'hidden', 
+  '#value' => $gk,
+   );
+   
+   $form['sub_name_hidden'] = array(
+    '#type' =>'hidden', 
+    '#value' => $sub_tid_name,
+   );
+
+   $form['submit_'.$sub_tid] = array('#type' => 'submit', '#value' => t('+ Add to Cart'),'#submit' => array('pricing_form_add_cart_all_subject'),'#validate' => array('pricing_form_add_cart_validate_all_subject'),);
+   
+   $form['learn_more'] = array('#type' => 'submit', '#value' => t('Learn More'),'#submit' => array('pricing_form_learn_more_for_all_subject'),);
+
+  $form['div_close'] = array(
+  '#type' => 'markup',
+  '#markup' => ('</div>'),
+  );
+ 
+ $form['#action'] = $current_path.'#generate-maths-block-form--10'; 
+  return $form;
+ 
+  
+}
+
+function pricing_form_add_cart_all_subject($form, &$form_state){
+// echo '<pre>';
+// print_r($form_state);
+
+//   die('Amit Kumar');
+   all_in_one_save_add_to_cart_session($form,$form_state);
+   commerce_product_add($form, $form_state);
+}
+
+function all_in_one_save_add_to_cart_session($form, &$form_state) {
+  $childId = arg(2);
+  $subject_tid_hidden = $form_state['values']['subject_tid_hidden'];
+  $subject_arr = array('math'=>'Maths','english'=>'English','sst'=>'SST','science'=>'Science');
+foreach ($subject_tid_hidden as $key => $value) {
+    foreach ($subject_arr as $k => $item) {
+ if($key == $item) {
+    if($form_state['values']['practise_online_price'] == '1') {
+        if($form_state['values']['practise_online_price_'.$value] == 1 && !isset($_SESSION['add_cart'][$childId][$k]['sub'])) {
+            $_SESSION['add_cart'][$childId][$k]['tid'] = $value;
+            $_SESSION['add_cart'][$childId][$k]['sub'] = 1;
+            
+        }
+      }
+   if($form_state['values']['worksheets_cnt'] == '1') {
+      if($form_state['values']['worksheets_cnt_'.$value] == 1 && !isset($_SESSION['add_cart'][$childId][$k]['work'])) {
+           $_SESSION['add_cart'][$childId][$k]['tid'] = $value;
+           $_SESSION['add_cart'][$childId][$k]['work'] = 1;
+          }
+       }
+     }
+  }
+   $return_cart_session = $_SESSION;
+}
+  return $return_cart_session;
+}
+
+function get_subject_counts_and_price_for_all_subject($form,$form_state) {
+  $childId = arg(2);
+  $subject_arr = array('math'=>'Maths','english'=>'English','sst'=>'SST','science'=>'Science');
+  $subject_tid_hidden = $form_state['values']['subject_tid_hidden'];
+foreach ($subject_tid_hidden as $key => $subjec_tid) {
+   if(isset($subjec_tid) && $subjec_tid != '') {
+        if(($form_state['values']['worksheets_cnt_'.$subjec_tid] == 0 && $form_state['values']['practise_online_price_'.$subjec_tid] == 1) || ($form_state['values']['worksheets_cnt_'.$subjec_tid] == 0 || $form_state['values']['practise_online_price_'.$subjec_tid])) {
+        $subject = $subjec_tid;
+        $_SESSION['sub_count'][$childId][$subjec_tid] = $subject;
+      }
+  }
+}
+foreach ($subject_tid_hidden as $key => $sub_tid) {
+  foreach ($subject_arr as $k => $item) {
+   if($key == $item) {
+          if($form_state['values']['practise_online_price_'.$sub_tid] == 1) {
+                if(!isset($_SESSION['subject'][$childId][$sub_tid])) {
+                    $_SESSION['subject'][$childId][$sub_tid] = $sub_tid;
+                    $_SESSION['duration'][$childId][$sub_tid] = 7;
+                 }
+           }
+         if($form_state['values']['worksheets_cnt_'.$sub_tid] == 1) {
+                if(!isset($_SESSION['worksheet'][$childId][$sub_tid])) {
+                  $_SESSION['worksheet'][$childId][$sub_tid] = $sub_tid;
+                  $_SESSION['worksheet_duration'][$childId][$sub_tid] = 7;
+         }
+       }
+
+     }
+   }
+}
+    return $_SESSION;
+}
+
+function fetch_subject_is_already_subscribe($cid,$uid) {
+$result = db_select('eck_expiry', 'eck_exp')
+            ->fields('eck_exp',array('subject_tid'))
+             ->condition('child_id',$cid)
+            ->condition('uid',$uid)
+            //->condition('subject_tid',$sid)
+            ->condition('purchase_type','paid')
+            ->condition('status',1)
+            ->execute()->fetchAll();
+$expiry_date = $result[0]->subject_tid;
+return $result;
+}
+
+function fetch_worksheet_is_already_subscribe($cid) {
+$result = db_select('eck_worksheet_expiry', 'eck_exp')
+            ->fields('eck_exp',array('subject_tid'))
+            ->condition('child_id',$cid)
+            ->condition('purchase_type','paid')
+            ->condition('status',1)
+            ->execute()->fetchAll();
+  return $result;
+}
+
+
+function pricing_form_learn_more_for_all_subject(){
+  drupal_set_message('<ul class="popup-learn-message"><strong>Practice Online: </strong><br/>
+<li><p>All In One pack covers Maths, Science, English, Social Studies & General Knowledge.</p></li>
+<li><p> Annual subscription entitles your child to practice for 12 months. Practice on current class topics till 31st March and the next class from 1st April till the subscription ends. Subscription for Two classes for the cost of One. Valid for classes 1st till 7th only.
+</p></li>
+<li><p>This is a full value subscription which entitles you to all Excelonz features like unlimited practice across all Levels, tests & revisions, reports, rewards, Play Off with friends etc.</p></li>
+<strong>Worksheets:</strong>
+<li><p>Customize and create you own worksheet per topics across Maths, Science, English, Social Studies & General Knowledge</p></li>
+<li><p>Select questions across any or all difficulty levels as per your child’s ability</p>
+<li><p>Download, save, print as per your convenience</p></li>');
+}
+
+function pricing_form_add_cart_validate($form, &$form_state){
+$subject_tid = $form_state['input']['subject_tid_hidden'];
+$practise_online_price = $form_state['input']['practise_online_price_'.$subject_tid];
+$worksheets_cnt = $form_state['input']['worksheets_cnt_'.$subject_tid];
+
+// echo '<pre>';
+// print_r($form_state['input']);
+// die('Amit');
+if(!isset($practise_online_price) && !isset($worksheets_cnt)){
+       form_set_error('worksheets_cnt_anonymous', 'Kindly select your purchase option.');
+    }
+}
+
+function pricing_form_add_cart_validate_all_subject($form, &$form_state){
+$subject_tid = $form_state['input']['subject_tid_hidden'];
+$practise_online_price = $form_state['input']['practise_online_price'];
+$worksheets_cnt = $form_state['input']['worksheets_cnt'];
+if(!isset($practise_online_price) && !isset($worksheets_cnt)){
+       form_set_error('worksheets_cnt_anonymous', 'Kindly select your purchase option.');
+    }
+
+}

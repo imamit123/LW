@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Worksheet Expiry feature.
+ */
+
+include_once 'worksheet_expiry.features.inc';

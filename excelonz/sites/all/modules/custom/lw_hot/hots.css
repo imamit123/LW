@@ -1,0 +1,80 @@
+/*******
+CSS for Hots Section
+********/
+
+.brainteasers #main-content #main-content-header{
+	display: none;
+}
+
+.brainteasers #main-content #content{
+	padding: 0;
+	width: 100%;
+}
+
+.hot_answer_area{
+	float: left;
+	width: 70%;
+	margin-right: 3%;
+}
+
+.hot_area{
+  background: #f4f4f4;
+  -moz-box-shadow: inset 0px 0px 50px #929291;/*FF 3.5+*/
+-webkit-box-shadow: inset 0px 0px 50px #929291;/*Saf3-4, Chrome, iOS 4.0.2-4.2, Android 2.3+*/
+box-shadow: inset 0px 0px 50px #929291;
+ font-size: 18px;
+ padding: 20px;
+ min-height: 220px;
+ width: auto;
+}
+
+.brainteasers .fib_wrap{
+	margin-left: 10px;
+}
+
+.brainteasers .right_exl_block .hot_right_txt{
+    background-position: 0 -10px;
+	height: 110px;
+
+}
+
+.brainteasers .right_exl_block .hot_right_txt h2{
+  display: block;
+  margin: 0;
+  font-size: 24px;
+  text-align: center;
+  padding: 20px 0 0 0;
+  color: #fff;
+}
+
+.brainteasers #assessments-form .right_exl_block{
+	height: 315px;
+}
+
+.brainteasers #assessments-form .assessment-header-top{
+	float: left;
+	width: 74.7%;
+}
+
+.brainteasers #assessments-form .timer{
+	height: 40px;
+	z-index: 1;
+	top: 177px;
+	left: 872px;
+}
+
+.brainteasers #assessments-form #edit-finish,
+.brainteasers #assessments-form #edit-next{
+	top:332px;
+}
+
+.brainteasers #assessments-form .ajax-progress-throbber{
+  position: absolute;
+  bottom:180px;
+  right: 130px;
+}
+
+
+.page-skillmap #main-content header  {
+  display: none;
+}

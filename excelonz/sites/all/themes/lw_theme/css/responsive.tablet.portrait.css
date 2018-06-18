@@ -1,0 +1,40 @@
+/*
+ *   Important Information about this CSS File
+ *
+ * - Do not delete or rename this file, if you do not use it leave it blank (delete
+ *   everything) and the file will be skipped when you enable Production Mode in
+ *   the Global theme settings.
+ *
+ * - Read the _README file in this directory, it contains useful help and other information.
+ */
+/* Increase the body font size on small devices */
+html {
+  font-size: 81.3%;
+}
+
+#assessments-form .btn-wrap .btn-wrap-inner #submit-button, 
+#golive-form .btn-wrap .btn-wrap-inner #submit-button, 
+#lw-revision-form .btn-wrap .btn-wrap-inner #submit-button,
+#assessments-form .btn-wrap .btn-wrap-inner #reset, 
+#golive-form .btn-wrap .btn-wrap-inner #reset, 
+#lw-revision-form .btn-wrap .btn-wrap-inner #reset {
+  font-size: 1em;
+}
+
+#assessments-form .btn-wrap .btn-wrap-inner #reset,
+#golive-form .btn-wrap .btn-wrap-inner #reset,
+#lw-revision-form .btn-wrap .btn-wrap-inner #reset{
+  background: url(../images/no_ipad.png) no-repeat left top !important;
+  border-right: 0 none;
+  font-size: 0;
+  text-indent: -999em;
+}
+
+#assessments-form .btn-wrap .btn-wrap-inner #submit-button, 
+#golive-form .btn-wrap .btn-wrap-inner #submit-button, 
+#lw-revision-form .btn-wrap .btn-wrap-inner #submit-button {
+  background: url(../images/yes_ipad.png) no-repeat left top !important;
+  border-right: 0 none;
+  font-size: 0;
+  text-indent: -999em;
+}

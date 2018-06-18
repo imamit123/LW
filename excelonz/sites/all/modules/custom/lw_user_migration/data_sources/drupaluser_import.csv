@@ -1,0 +1,779 @@
+MID,email,name,field_first_name,field_middle_name,field_last_name,password,field_date_of_birth,field_class_user,field_subjects,field_schools,field_roll_numbers,field_city,field_branch,field_sports,field_music,field_arts_crafts
+1,,Animesh.S08,Animesh,,Singh,ths001,20.10.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,1,Lucknow,Mahanagar,NA,NA,NA
+2,,Aniket.B07,Aniket,,Banerjee,ths002,12.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,2,Lucknow,Mahanagar,NA,NA,NA
+3,,Aratrika.V07,Aratrika,,Verma,ths003,10.12.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,3,Lucknow,Mahanagar,NA,NA,NA
+4,,Aryan.S07,Aryan,,Sharma,ths004,06.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,4,Lucknow,Mahanagar,NA,NA,NA
+5,,Ayush.R07,Ayush,,Raghuvanshi,ths005,18.06.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,5,Lucknow,Mahanagar,NA,NA,NA
+6,,Ipshita.Y07,Ipshita,,Yadav,ths006,30.12.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,6,Lucknow,Mahanagar,NA,NA,NA
+7,,Jahnvi.M07,Jahnvi,,Maurya,ths007,05.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,7,Lucknow,Mahanagar,NA,NA,NA
+8,,KmSubhi.S07,KmSubhi,,Saxena,ths008,26.10.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,8,Lucknow,Mahanagar,NA,NA,NA
+9,,MohammadZaid.K08,MohammadZaid,,Khan,ths009,08.03.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,9,Lucknow,Mahanagar,NA,NA,NA
+10,,Navin.S07,Navin,,Shukla,ths010,19.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,10,Lucknow,Mahanagar,NA,NA,NA
+11,,Pragya.B07,Pragya,,Bisht,ths011,25.09.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,11,Lucknow,Mahanagar,NA,NA,NA
+12,,Saksham.S07,Saksham,,Singh,ths012,09.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,12,Lucknow,Mahanagar,NA,NA,NA
+13,,SumitKumar.T09,SumitKumar,,Tiwari,ths013,07.01.2009,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,13,Lucknow,Mahanagar,NA,NA,NA
+14,,Shreyansh.S07,Shreyansh,,Srivastava,ths014,14.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,14,Lucknow,Mahanagar,NA,NA,NA
+15,,Tulika.G07,Tulika,,Goyal,ths015,16.10.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,15,Lucknow,Mahanagar,NA,NA,NA
+16,,Yasir.A08,Yasir,,Ali,ths016,09.03.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,16,Lucknow,Mahanagar,NA,NA,NA
+17,,Yatharth.T07,Yatharth,,Tiwari,ths017,11.12.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,17,Lucknow,Mahanagar,NA,NA,NA
+18,,Raman.S08,Raman,,Singh,ths018,24.04.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,18,Lucknow,Mahanagar,NA,NA,NA
+19,,Rehan.R08,Rehan,,Raza,ths019,23.03.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,19,Lucknow,Mahanagar,NA,NA,NA
+20,,Vaibhavi.J09,Vaibhavi,,Jugran,ths020,08.04.2009,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,20,Lucknow,Mahanagar,NA,NA,NA
+21,,Yash.G08,Yash,,Gupta,ths021,25.06.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,21,Lucknow,Mahanagar,NA,NA,NA
+22,,Yashvi.S08,Yashvi,,Singh,ths022,18.05.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,22,Lucknow,Mahanagar,NA,NA,NA
+23,,Aradhya.Y07,Aradhya,,Yadav,ths023,26.09.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,23,Lucknow,Mahanagar,NA,NA,NA
+24,,Jeshan.C08,Jeshan,,Chowdhary,ths024,26.08.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,24,Lucknow,Mahanagar,NA,NA,NA
+25,,Aaditya.r07,Aaditya,,rai,ths025,22.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,25,Lucknow,Mahanagar,NA,NA,NA
+26,,Devansh.S08,Devansh,,Singh,ths026,06.05.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,26,Lucknow,Mahanagar,NA,NA,NA
+27,,Hammad.A07,Hammad,,Aqeel,ths027,21.07.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,27,Lucknow,Mahanagar,NA,NA,NA
+28,,Lakshya.A07,Lakshya,,Awasthi,ths028,09.10.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,28,Lucknow,Mahanagar,NA,NA,NA
+29,,Aadita.S07,Aadita,,Saran,ths029,18.09.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,29,Lucknow,Mahanagar,NA,NA,NA
+30,,Abdul.S07,Abdul,,Samad,ths030,18.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,30,Lucknow,Mahanagar,NA,NA,NA
+31,,Bilal.J07,Bilal,,Jeelani,ths031,19.12.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,31,Lucknow,Mahanagar,NA,NA,NA
+32,,Anushka.M08,Anushka,,Mehta,ths032,18.01.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,32,Lucknow,Mahanagar,NA,NA,NA
+33,,Ram.S08,Ram,,Shankdhar,ths033,08.10.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,33,Lucknow,Mahanagar,NA,NA,NA
+34,,Aadya.S07,Aadya,,Srivastava,ths034,18.05.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,34,Lucknow,Mahanagar,NA,NA,NA
+35,,Aradhya.S08,Aradhya,,Singh,ths035,21.12.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,35,Lucknow,Mahanagar,NA,NA,NA
+36,,Aanya.R07,Aanya,,Rajput,ths036,23.03.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,36,Lucknow,Mahanagar,NA,NA,NA
+37,,Anya.S07,Anya,,Singh,ths037,07.09.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,37,Lucknow,Mahanagar,NA,NA,NA
+38,,Asheesh.K07,Asheesh,,Kumar,ths038,14.11.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,38,Lucknow,Mahanagar,NA,NA,NA
+39,,Divija.J07,Divija,,Joshi,ths039,17.12.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,39,Lucknow,Mahanagar,NA,NA,NA
+40,,Gauri.D07,Gauri,,Dubey,ths040,25.09.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,40,Lucknow,Mahanagar,NA,NA,NA
+41,,Ishita.S07,Ishita,,Singh,ths041,04.12.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,41,Lucknow,Mahanagar,NA,NA,NA
+42,,Kaajal.R07,Kaajal,,Rai,ths042,27.09.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,42,Lucknow,Mahanagar,NA,NA,NA
+43,,Kushagra.P08,Kushagra,,Patel,ths043,03.03.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,43,Lucknow,Mahanagar,NA,NA,NA
+44,,Pranshu.K07,Pranshu,,Kumar,ths044,02.07.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,44,Lucknow,Mahanagar,NA,NA,NA
+45,,Ribhav.S07,Ribhav,,Sharma,ths045,24.05.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,45,Lucknow,Mahanagar,NA,NA,NA
+46,,Rushda.Z07,Rushda,,Zamir,ths046,25.08.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,46,Lucknow,Mahanagar,NA,NA,NA
+47,,Rimjhim.A07,Rimjhim,,Agarwal,ths047,24.09.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,47,Lucknow,Mahanagar,NA,NA,NA
+48,,Raiyan.K08,Raiyan,,Khan,ths048,16.05.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,48,Lucknow,Mahanagar,NA,NA,NA
+49,,Sara.F07,Sara,,Farooqui,ths049,13.10.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,49,Lucknow,Mahanagar,NA,NA,NA
+50,,Shaurya.V07,Shaurya,,Verma,ths050,06.09.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,50,Lucknow,Mahanagar,NA,NA,NA
+51,,Shreyashi.Y08,Shreyashi,,Yadav,ths051,22.04.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,51,Lucknow,Mahanagar,NA,NA,NA
+52,,SumayyaNajmul.J08,SumayyaNajmul,,Jafri,ths052,22.02.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,52,Lucknow,Mahanagar,NA,NA,NA
+53,,ShreyaSingh.G07,ShreyaSingh,,Gihar,ths053,27.09.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,53,Lucknow,Mahanagar,NA,NA,NA
+54,,Arjita.S08,Arjita,,Srivastava,ths054,21.01.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,54,Lucknow,Mahanagar,NA,NA,NA
+55,,UditA.A07,UditA,,Agarwal,ths055,07.08.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,55,Lucknow,Mahanagar,NA,NA,NA
+56,,Vanshiha.A08,Vanshiha,,Agarwal,ths056,27.06.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,56,Lucknow,Mahanagar,NA,NA,NA
+57,,Zuhair.F08,Zuhair,,Farooqui,ths057,03.02.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,57,Lucknow,Mahanagar,NA,NA,NA
+58,,Trisha.M08,Trisha,,Mittal,ths058,09.02.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,58,Lucknow,Mahanagar,NA,NA,NA
+59,,Manas.D08,Manas,,Dubey,ths059,07.08.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,59,Lucknow,Mahanagar,NA,NA,NA
+60,,Nisiddh.P08,Nisiddh,,Pradhan,ths060,23.03.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,60,Lucknow,Mahanagar,NA,NA,NA
+61,,Parth.S08,Parth,,Sarathi,ths061,09.01.2008,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,61,Lucknow,Mahanagar,NA,NA,NA
+62,,Safi.H07,Safi,,Haider,ths062,22.08.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,62,Lucknow,Mahanagar,NA,NA,NA
+63,,Saksham.P07,Saksham,,Pande,ths063,19.11.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,63,Lucknow,Mahanagar,NA,NA,NA
+64,,Shashank.S07,Shashank,,Suyash,ths064,06.02.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,64,Lucknow,Mahanagar,NA,NA,NA
+65,,Garima.G07,Garima,,Gupta,ths065,19.10.2007,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,65,Lucknow,Mahanagar,NA,NA,NA
+66,,Aanya.D08,Aanya,,Dubey,ths066,06.03.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,66,Lucknow,Mahanagar,NA,NA,NA
+67,,Aditi.S07,Aditi,,Srivastava,ths067,16.05.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,67,Lucknow,Mahanagar,NA,NA,NA
+68,,Akshita.S08,Akshita,,Shukla,ths068,12.07.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,68,Lucknow,Mahanagar,NA,NA,NA
+69,,Ananya.M07,Ananya,,Mishra,ths069,21.08.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,69,Lucknow,Mahanagar,NA,NA,NA
+70,,Anugya.T07,Anugya,,Tiwari,ths070,18.12.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,70,Lucknow,Mahanagar,NA,NA,NA
+71,,Aryan.K08,Aryan,,Kumar,ths071,11.09.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,71,Lucknow,Mahanagar,NA,NA,NA
+72,,Deepanjali.P07,Deepanjali,,Prajapati,ths072,17.11.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,72,Lucknow,Mahanagar,NA,NA,NA
+73,,Gagandeep.S07,Gagandeep,,Singh,ths073,12.11.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,73,Lucknow,Mahanagar,NA,NA,NA
+74,,Mahika.S09,Mahika,,Singh,ths074,30.03.2009,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,74,Lucknow,Mahanagar,NA,NA,NA
+75,,Nabiha.A07,Nabiha,,Ahmad,ths075,15.12.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,75,Lucknow,Mahanagar,NA,NA,NA
+76,,Shivangi.J08,Shivangi,,Jugran,ths076,17.06.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,76,Lucknow,Mahanagar,NA,NA,NA
+77,,Shivani.S08,Shivani,,Singh,ths077,04.06.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,77,Lucknow,Mahanagar,NA,NA,NA
+78,,Shrankhala.S08,Shrankhala,,Sresth,ths078,01.04.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,78,Lucknow,Mahanagar,NA,NA,NA
+79,,Shubh.J08,Shubh,,Jaiswal,ths079,23.04.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,79,Lucknow,Mahanagar,NA,NA,NA
+80,,Sourish.T08,Sourish,,Tiwari,ths080,13.04.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,80,Lucknow,Mahanagar,NA,NA,NA
+81,,Tanvi.W08,Tanvi,,Whig,ths081,30.01.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,81,Lucknow,Mahanagar,NA,NA,NA
+82,,Vaishnavi.J07,Vaishnavi,,Jaiswal,ths082,22.09.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,82,Lucknow,Mahanagar,NA,NA,NA
+83,,Vidushi.S07,Vidushi,,Sahu,ths083,01.12.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,83,Lucknow,Mahanagar,NA,NA,NA
+84,,Yashwant.V07,Yashwant,,Verma,ths084,04.04.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,84,Lucknow,Mahanagar,NA,NA,NA
+85,,Sheejal.S07,Sheejal,,Srivastava,ths085,28.09.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,85,Lucknow,Mahanagar,NA,NA,NA
+86,,Swarika.B08,Swarika,,Bajpai,ths086,23.11.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,86,Lucknow,Mahanagar,NA,NA,NA
+87,,Aryan.S08,Aryan,,Sharma,ths087,28.09.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,87,Lucknow,Mahanagar,NA,NA,NA
+88,,Pratishtha.K08,Pratishtha,,Khare,ths088,31.01.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,88,Lucknow,Mahanagar,NA,NA,NA
+89,,Divyanshu.K08,Divyanshu,,Kureel,ths089,15.02.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,89,Lucknow,Mahanagar,NA,NA,NA
+90,,Shreyashi.R09,Shreyashi,,Rai,ths090,09.07.2009,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,90,Lucknow,Mahanagar,NA,NA,NA
+91,,Shazia.A07,Shazia,,Akhtar,ths091,06.01.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,91,Lucknow,Mahanagar,NA,NA,NA
+92,,Vatika.A07,Vatika,,Agarwal,ths092,01.09.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,92,Lucknow,Mahanagar,NA,NA,NA
+93,,Shivangi.K07,Shivangi,,Kanojia,ths093,01.09.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,93,Lucknow,Mahanagar,NA,NA,NA
+94,,Sudiksha.S08,Sudiksha,,Singh,ths094,01.04.2008,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,94,Lucknow,Mahanagar,NA,NA,NA
+95,,Aabija.G06,Aabija,,Gupta,ths095,22.12.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,95,Lucknow,Mahanagar,NA,NA,NA
+96,,Afza.N07,Afza,,Niyaz,ths096,02.07.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,96,Lucknow,Mahanagar,NA,NA,NA
+97,,Akshit.M07,Akshit,,Mehta,ths097,01.02.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,97,Lucknow,Mahanagar,NA,NA,NA
+98,,AnanyPrakash.S06,AnanyPrakash,,Srivastava,ths098,23.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,98,Lucknow,Mahanagar,NA,NA,NA
+99,,Ananya.S07,Ananya,,Saxena,ths099,22.01.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,99,Lucknow,Mahanagar,NA,NA,NA
+100,,AnkitKumar.S07,AnkitKumar,,Singh,ths100,04.07.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,100,Lucknow,Mahanagar,NA,NA,NA
+101,,Anushka.M07,Anushka,,Mishra,ths101,30.09.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,101,Lucknow,Mahanagar,NA,NA,NA
+102,,Armaan.K06,Armaan,,Katiyaar,ths102,25.12.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,102,Lucknow,Mahanagar,NA,NA,NA
+103,,Ardhanaya.B07,Ardhanaya,,Bajpai,ths103,16.02.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,103,Lucknow,Mahanagar,NA,NA,NA
+104,,Areeba.K06,Areeba,,Khan,ths104,04.03.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,104,Lucknow,Mahanagar,NA,NA,NA
+105,,AsitKumar.K06,AsitKumar,,Kashyap,ths105,21.10.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,105,Lucknow,Mahanagar,NA,NA,NA
+106,,Atharva.M06,Atharva,,Mishra,ths106,11.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,106,Lucknow,Mahanagar,NA,NA,NA
+107,,Avni.S06,Avni,,Singh,ths107,26.07.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,107,Lucknow,Mahanagar,NA,NA,NA
+108,,Ayushmaan.S07,Ayushmaan,,Singh,ths108,04.02.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,108,Lucknow,Mahanagar,NA,NA,NA
+109,,Elhaam.K06,Elhaam,,Khan,ths109,11.02.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,109,Lucknow,Mahanagar,NA,NA,NA
+110,,Kushagra.G06,Kushagra,,Gupta,ths110,18.04.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,110,Lucknow,Mahanagar,NA,NA,NA
+111,,Mishti.A07,Mishti,,Agarwal,ths111,28.04.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,111,Lucknow,Mahanagar,NA,NA,NA
+112,,Muneesha.B06,Muneesha,,Bari,ths112,18.10.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,112,Lucknow,Mahanagar,NA,NA,NA
+113,,Parth.S06,Parth,,Sinha,ths113,15.11.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,113,Lucknow,Mahanagar,NA,NA,NA
+114,,Pragya.P07,Pragya,,Patel,ths114,18.03.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,114,Lucknow,Mahanagar,NA,NA,NA
+115,,MohammadAkram.F05,MohammadAkram,,Farooqui,ths115,12.11.2005,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,115,Lucknow,Mahanagar,NA,NA,NA
+116,,MohammadUmar.U05,MohammadUmar,,Usman,ths116,16.09.2005,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,116,Lucknow,Mahanagar,NA,NA,NA
+117,,Ritika.C07,Ritika,,Channa,ths117,29.06.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,117,Lucknow,Mahanagar,NA,NA,NA
+118,,Sanad.S06,Sanad,,Sharma,ths118,15.08.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,118,Lucknow,Mahanagar,NA,NA,NA
+119,,Saumya.J07,Saumya,,Jaiswal,ths119,03.01.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,119,Lucknow,Mahanagar,NA,NA,NA
+120,,Saksham.P06,Saksham,,Prabhakar,ths120,19.10.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,120,Lucknow,Mahanagar,NA,NA,NA
+121,,Tanvi.S06,Tanvi,,Srivastava,ths121,17.11.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,121,Lucknow,Mahanagar,NA,NA,NA
+122,,Vrinda.A07,Vrinda,,Arora,ths122,01.01.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,122,Lucknow,Mahanagar,NA,NA,NA
+123,,HariBint.T06,HariBint,,Tarique,ths123,19.12.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,123,Lucknow,Mahanagar,NA,NA,NA
+124,,Aaryan.G07,Aaryan,,Gupta,ths124,26.06.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,124,Lucknow,Mahanagar,NA,NA,NA
+125,,Adrika.Y07,Adrika,,Yadav,ths125,29.07.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,125,Lucknow,Mahanagar,NA,NA,NA
+126,,Alina.A06,Alina,,Ali,ths126,24.06.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,126,Lucknow,Mahanagar,NA,NA,NA
+127,,Anshika.S06,Anshika,,Srivastava,ths127,11.09.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,127,Lucknow,Mahanagar,NA,NA,NA
+128,,Anshita.S07,Anshita,,Srivastava,ths128,19.01.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,128,Lucknow,Mahanagar,NA,NA,NA
+129,,Ahmed.H07,Ahmed,,Hazim,ths129,19.03.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,129,Lucknow,Mahanagar,NA,NA,NA
+130,,Akshay.S06,Akshay,,Sharma,ths130,19.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,130,Lucknow,Mahanagar,NA,NA,NA
+131,,Aviral.P07,Aviral,,Pathak,ths131,02.04.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,131,Lucknow,Mahanagar,NA,NA,NA
+132,,Dafia.S07,Dafia,,Siddiqui,ths132,28.06.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,132,Lucknow,Mahanagar,NA,NA,NA
+133,,Devanshi.B06,Devanshi,,Bora,ths133,04.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,133,Lucknow,Mahanagar,NA,NA,NA
+134,,Divyansh.D06,Divyansh,,Dixit,ths134,29.12.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,134,Lucknow,Mahanagar,NA,NA,NA
+135,,Faeza.Z08,Faeza,,Zafar,ths135,19.02.2008,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,135,Lucknow,Mahanagar,NA,NA,NA
+136,,Ila.D07,Ila,,Dwivedi,ths136,07.01.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,136,Lucknow,Mahanagar,NA,NA,NA
+137,,Ishaan.J08,Ishaan,,Jain,ths137,25.02.2008,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,137,Lucknow,Mahanagar,NA,NA,NA
+138,,Kanika.U08,Kanika,,Upreti,ths138,31.03.2008,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,138,Lucknow,Mahanagar,NA,NA,NA
+139,,Kartikey.M07,Kartikey,,Mishra,ths139,02.02.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,139,Lucknow,Mahanagar,NA,NA,NA
+140,,Kushagra.A06,Kushagra,,Awasthi,ths140,10.12.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,140,Lucknow,Mahanagar,NA,NA,NA
+141,,Lakshaya.S06,Lakshaya,,Singh,ths141,28.12.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,141,Lucknow,Mahanagar,NA,NA,NA
+142,,Ibrahim.M07,Ibrahim,,Mohammad,ths142,17.07.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,142,Lucknow,Mahanagar,NA,NA,NA
+143,,Zaid.M06,Zaid,,Mohammad,ths143,01.01.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,143,Lucknow,Mahanagar,NA,NA,NA
+144,,Muskaan.S06,Muskaan,,Singh,ths144,22.09.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,144,Lucknow,Mahanagar,NA,NA,NA
+145,,Nakshatra.M06,Nakshatra,,Manaral,ths145,07.07.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,145,Lucknow,Mahanagar,NA,NA,NA
+146,,Nilaksha.S06,Nilaksha,,Srivastava,ths146,03.07.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,146,Lucknow,Mahanagar,NA,NA,NA
+147,,RudraPratap.S05,RudraPratap,,Singh,ths147,09.12.2005,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,147,Lucknow,Mahanagar,NA,NA,NA
+148,,Saarthak.T06,Saarthak,,Tripathi,ths148,26.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,148,Lucknow,Mahanagar,NA,NA,NA
+149,,Sheheriyaar.Z06,Sheheriyaar,,Zubair,ths149,26.08.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,149,Lucknow,Mahanagar,NA,NA,NA
+150,,Swastika.A06,Swastika,,Agarwal,ths150,17.10.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,150,Lucknow,Mahanagar,NA,NA,NA
+151,,Swastik.K07,Swastik,,Katyayan,ths151,10.02.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,151,Lucknow,Mahanagar,NA,NA,NA
+152,,Umay.H05,Umay,,Hari,ths152,16.09.2005,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,152,Lucknow,Mahanagar,NA,NA,NA
+153,,UjjwalPratap.S07,UjjwalPratap,,Singh,ths153,17.09.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,153,Lucknow,Mahanagar,NA,NA,NA
+154,,Vaibhav.G06,Vaibhav,,Gupta,ths154,10.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,154,Lucknow,Mahanagar,NA,NA,NA
+155,,Akshat.K07,Akshat,,Kumar,ths155,15.05.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,155,Lucknow,Mahanagar,NA,NA,NA
+156,,Alafia.A07,Alafia,,Aziz,ths156,18.02.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,156,Lucknow,Mahanagar,NA,NA,NA
+157,,Alex.S06,Alex,,Sonker,ths157,15.03.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,157,Lucknow,Mahanagar,NA,NA,NA
+158,,Anant.K06,Anant,,Kumar,ths158,30.12.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,158,Lucknow,Mahanagar,NA,NA,NA
+159,,Amogh.S07,Amogh,,Shekhar,ths159,27.08.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,159,Lucknow,Mahanagar,NA,NA,NA
+160,,Animesh.T06,Animesh,,Tiwari,ths160,22.05.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,160,Lucknow,Mahanagar,NA,NA,NA
+161,,Anushka.M06,Anushka,,Mishra,ths161,03.09.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,161,Lucknow,Mahanagar,NA,NA,NA
+162,,Arpit.S06,Arpit,,Shukla,ths162,29.06.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,162,Lucknow,Mahanagar,NA,NA,NA
+163,,Atharva.V06,Atharva,,Vaish,ths163,21.11.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,163,Lucknow,Mahanagar,NA,NA,NA
+164,,Darshish.T06,Darshish,,Tiwari,ths164,04.08.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,164,Lucknow,Mahanagar,NA,NA,NA
+165,,Deepika.J06,Deepika,,Jaiswal,ths165,25.05.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,165,Lucknow,Mahanagar,NA,NA,NA
+166,,Gauransh.S07,Gauransh,,Singh,ths166,05.08.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,166,Lucknow,Mahanagar,NA,NA,NA
+167,,Ishaan.G06,Ishaan,,Gupta,ths167,21.06.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,167,Lucknow,Mahanagar,NA,NA,NA
+168,,Kanishka.V07,Kanishka,,Verma,ths168,02.02.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,168,Lucknow,Mahanagar,NA,NA,NA
+169,,Kushal.S08,Kushal,,Singh,ths169,06.01.2008,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,169,Lucknow,Mahanagar,NA,NA,NA
+170,,Manthan.S06,Manthan,,Shukla,ths170,03.10.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,170,Lucknow,Mahanagar,NA,NA,NA
+171,,MohammadArsalan.A06,MohammadArsalan,,Arif,ths171,10.04.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,171,Lucknow,Mahanagar,NA,NA,NA
+172,,Megha.M07,Megha,,Mishra,ths172,14.02.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,172,Lucknow,Mahanagar,NA,NA,NA
+173,,Pranjal.S08,Pranjal,,Srivastava,ths173,22.12.2008,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,173,Lucknow,Mahanagar,NA,NA,NA
+174,,Siddhi.C07,Siddhi,,Chaurasiya,ths174,05.07.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,174,Lucknow,Mahanagar,NA,NA,NA
+175,,Sindul.J06,Sindul,,Jaiswal,ths175,20.08.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,175,Lucknow,Mahanagar,NA,NA,NA
+176,,Utkarsh.P06,Utkarsh,,Pandey,ths176,05.05.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,176,Lucknow,Mahanagar,NA,NA,NA
+177,,Vishal.R07,Vishal,,Rawat,ths177,18.01.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,177,Lucknow,Mahanagar,NA,NA,NA
+178,,Yukti.D07,Yukti,,Dwivedi,ths178,01.07.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,178,Lucknow,Mahanagar,NA,NA,NA
+179,,Zainab.F06,Zainab,,Fatima,ths179,26.11.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,179,Lucknow,Mahanagar,NA,NA,NA
+180,,Shubhankar.M07,Shubhankar,,MIshra,ths180,29.10.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,180,Lucknow,Mahanagar,NA,NA,NA
+181,,Kavya.G07,Kavya,,Gupta,ths181,13.03.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,181,Lucknow,Mahanagar,NA,NA,NA
+182,,Adarsh.C06,Adarsh,,Chitransh,ths182,06.11.2006,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,182,Lucknow,Mahanagar,NA,NA,NA
+183,,Rakshita.S05,Rakshita,,Srivastava,ths183,09.11.2005,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,183,Lucknow,Mahanagar,NA,NA,NA
+184,,Aaditya.S05,Aaditya,,Saran,ths184,18.02.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,184,Lucknow,Mahanagar,NA,NA,NA
+185,,Akansh.S06,Akansh,,Singh,ths185,21.11.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,185,Lucknow,Mahanagar,NA,NA,NA
+186,,Alisha.N05,Alisha,,Naaz,ths186,15.05.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,186,Lucknow,Mahanagar,NA,NA,NA
+187,,Anveshika.S05,Anveshika,,Singh,ths187,02.03.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,187,Lucknow,Mahanagar,NA,NA,NA
+188,,Areeba.S06,Areeba,,Siddiqui,ths188,22.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,188,Lucknow,Mahanagar,NA,NA,NA
+189,,Arnav.P05,Arnav,,Patel,ths189,22.07.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,189,Lucknow,Mahanagar,NA,NA,NA
+190,,AyushKumar.Y05,AyushKumar,,Yadav,ths190,23.09.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,190,Lucknow,Mahanagar,NA,NA,NA
+191,,Akshat.M06,Akshat,,Maurya,ths191,06.06.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,191,Lucknow,Mahanagar,NA,NA,NA
+192,,Akshat.U05,Akshat,,Upadhyay,ths192,09.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,192,Lucknow,Mahanagar,NA,NA,NA
+193,,AryanNitin.P06,AryanNitin,,Pachauri,ths193,30.01.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,193,Lucknow,Mahanagar,NA,NA,NA
+194,,Ayush.P07,Ayush,,Pandey,ths194,24.03.2007,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,194,Lucknow,Mahanagar,NA,NA,NA
+195,,Bhumika.T06,Bhumika,,Trivedi,ths195,11.07.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,195,Lucknow,Mahanagar,NA,NA,NA
+196,,Deeksha.T05,Deeksha,,Tripathi,ths196,30.11.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,196,Lucknow,Mahanagar,NA,NA,NA
+197,,Devansh.S05,Devansh,,Sahu,ths197,17.10.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,197,Lucknow,Mahanagar,NA,NA,NA
+198,,Divyanshi.S06,Divyanshi,,Singh,ths198,08.08.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,198,Lucknow,Mahanagar,NA,NA,NA
+199,,Gungun.V05,Gungun,,Vaish,ths199,03.11.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,199,Lucknow,Mahanagar,NA,NA,NA
+200,,Harshleen.K05,Harshleen,,Kaur,ths200,18.09.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,200,Lucknow,Mahanagar,NA,NA,NA
+201,,Kushal.G06,Kushal,,Gupta,ths201,12.05.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,201,Lucknow,Mahanagar,NA,NA,NA
+202,,Krish.C05,Krish,,Chaddha,ths202,23.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,202,Lucknow,Mahanagar,NA,NA,NA
+203,,Kusharga.S06,Kusharga,,Singh,ths203,13.12.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,203,Lucknow,Mahanagar,NA,NA,NA
+204,,MohammadAyan.S05,MohammadAyan,,Siddiqui,ths204,26.11.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,204,Lucknow,Mahanagar,NA,NA,NA
+205,,Mohammad.U06,Mohammad,,Usaid,ths205,12.04.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,205,Lucknow,Mahanagar,NA,NA,NA
+206,,Muskan.P06,Muskan,,Papola,ths206,15.02.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,206,Lucknow,Mahanagar,NA,NA,NA
+207,,Palak.M05,Palak,,MIshra,ths207,25.03.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,207,Lucknow,Mahanagar,NA,NA,NA
+208,,Parth.M06,Parth,,Mittal,ths208,30.05.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,208,Lucknow,Mahanagar,NA,NA,NA
+209,,Prakhar.A05,Prakhar,,Arora,ths209,30.08.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,209,Lucknow,Mahanagar,NA,NA,NA
+210,,Rashi.S06,Rashi,,Singh,ths210,14.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,210,Lucknow,Mahanagar,NA,NA,NA
+211,,Rushil.S06,Rushil,,Singh,ths211,30.07.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,211,Lucknow,Mahanagar,NA,NA,NA
+212,,Saloni.C05,Saloni,,Chandra,ths212,02.08.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,212,Lucknow,Mahanagar,NA,NA,NA
+213,,Shivansh.R05,Shivansh,,Raj,ths213,06.05.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,213,Lucknow,Mahanagar,NA,NA,NA
+214,,Sneha.B05,Sneha,,Bajpai,ths214,04.10.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,214,Lucknow,Mahanagar,NA,NA,NA
+215,,Toyesh.G06,Toyesh,,Gupta,ths215,03.08.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,215,Lucknow,Mahanagar,NA,NA,NA
+216,,Vaibhavi.S06,Vaibhavi,,Singh,ths216,03.10.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,216,Lucknow,Mahanagar,NA,NA,NA
+217,,Vaibhav.C06,Vaibhav,,Chauhan,ths217,17.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,217,Lucknow,Mahanagar,NA,NA,NA
+218,,Yougesh.Y06,Yougesh,,Yadav,ths218,22.06.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,218,Lucknow,Mahanagar,NA,NA,NA
+219,,Satya.P06,Satya,,Prakash,ths219,08.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,219,Lucknow,Mahanagar,NA,NA,NA
+220,,Aadya.J05,Aadya,,Jain,ths220,05.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,220,Lucknow,Mahanagar,NA,NA,NA
+221,,Garima.T05,Garima,,Tiwari,ths221,22.07.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,221,Lucknow,Mahanagar,NA,NA,NA
+222,,MohammadAyaz.K05,MohammadAyaz,,Khan,ths222,11.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,222,Lucknow,Mahanagar,NA,NA,NA
+223,,Akshat.S06,Akshat,,Singh,ths223,06.09.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,223,Lucknow,Mahanagar,NA,NA,NA
+224,,Akshat.K06,Akshat,,Kumar,ths224,04.03.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,224,Lucknow,Mahanagar,NA,NA,NA
+225,,Akshat.S05,Akshat,,Shukla,ths225,08.11.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,225,Lucknow,Mahanagar,NA,NA,NA
+226,,AlkeshSingh.B06,AlkeshSingh,,Bisht,ths226,15.01.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,226,Lucknow,Mahanagar,NA,NA,NA
+227,,Ammar.A06,Ammar,,Ali,ths227,29.04.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,227,Lucknow,Mahanagar,NA,NA,NA
+228,,Ananya.B06,Ananya,,Bajpai,ths228,16.01.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,228,Lucknow,Mahanagar,NA,NA,NA
+229,,Anshika.V05,Anshika,,Verma,ths229,19.12.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,229,Lucknow,Mahanagar,NA,NA,NA
+230,,Arya.K05,Arya,,Khanna,ths230,19.05.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,230,Lucknow,Mahanagar,NA,NA,NA
+231,,Aryan.K05,Aryan,,Kumar,ths231,11.10.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,231,Lucknow,Mahanagar,NA,NA,NA
+232,,Aryan.V06,Aryan,,Verma,ths232,22.08.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,232,Lucknow,Mahanagar,NA,NA,NA
+233,,Avichal.S05,Avichal,,Srivastava,ths233,25.10.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,233,Lucknow,Mahanagar,NA,NA,NA
+234,,Divyansh.K05,Divyansh,,Kushwaha,ths234,17.11.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,234,Lucknow,Mahanagar,NA,NA,NA
+235,,Divyanshu.R04,Divyanshu,,Rai,ths235,21.04.2004,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,235,Lucknow,Mahanagar,NA,NA,NA
+236,,Firdaus.A06,Firdaus,,Afridi,ths236,10.05.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,236,Lucknow,Mahanagar,NA,NA,NA
+237,,Gaurav.G05,Gaurav,,Gupta,ths237,03.02.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,237,Lucknow,Mahanagar,NA,NA,NA
+238,,Ishita.S07,Ishita,,Srivastava,ths238,04.05.2007,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,238,Lucknow,Mahanagar,NA,NA,NA
+239,,Jhanvi.V05,Jhanvi,,Verma,ths239,07.11.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,239,Lucknow,Mahanagar,NA,NA,NA
+240,,MayankKumar.V05,MayankKumar,,Verma,ths240,22.08.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,240,Lucknow,Mahanagar,NA,NA,NA
+241,,MohammadAnas.K06,MohammadAnas,,Khan,ths241,05.03.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,241,Lucknow,Mahanagar,NA,NA,NA
+242,,MohammadSaad.A06,MohammadSaad,,Alam,ths242,03.03.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,242,Lucknow,Mahanagar,NA,NA,NA
+243,,Nuwaira.N06,Nuwaira,,Noor,ths243,26.03.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,243,Lucknow,Mahanagar,NA,NA,NA
+244,,Ojusvi.G06,Ojusvi,,Gupta,ths244,11.04.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,244,Lucknow,Mahanagar,NA,NA,NA
+245,,Palak.S05,Palak,,Srivastava,ths245,26.06.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,245,Lucknow,Mahanagar,NA,NA,NA
+246,,Pragati.K06,Pragati,,Kumar,ths246,08.08.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,246,Lucknow,Mahanagar,NA,NA,NA
+247,,Prakhar.S06,Prakhar,,Shankhdhar,ths247,11.07.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,247,Lucknow,Mahanagar,NA,NA,NA
+248,,Raghav.P05,Raghav,,Pandey,ths248,10.12.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,248,Lucknow,Mahanagar,NA,NA,NA
+249,,Sadaf.S06,Sadaf,,Sayeed,ths249,27.12.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,249,Lucknow,Mahanagar,NA,NA,NA
+250,,Sanskriti.A06,Sanskriti,,Agarwal,ths250,30.01.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,250,Lucknow,Mahanagar,NA,NA,NA
+251,,Saransh.S04,Saransh,,Shukla,ths251,24.10.2004,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,251,Lucknow,Mahanagar,NA,NA,NA
+252,,Shashwat.M05,Shashwat,,Mohan,ths252,04.12.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,252,Lucknow,Mahanagar,NA,NA,NA
+253,,Shivi.T06,Shivi,,Tiwari,ths253,03.02.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,253,Lucknow,Mahanagar,NA,NA,NA
+254,,Sambhav.S05,Sambhav,,Sharma,ths254,06.11.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,254,Lucknow,Mahanagar,NA,NA,NA
+255,,Shreya.M05,Shreya,,Mishra,ths255,04.10.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,255,Lucknow,Mahanagar,NA,NA,NA
+256,,Shreyansh.M06,Shreyansh,,Mishra,ths256,28.10.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,256,Lucknow,Mahanagar,NA,NA,NA
+257,,Shrishti.T06,Shrishti,,Tripathi,ths257,04.03.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,257,Lucknow,Mahanagar,NA,NA,NA
+258,,Saheem.K05,Saheem,,Khan,ths258,06.08.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,258,Lucknow,Mahanagar,NA,NA,NA
+259,,Shubhi.N06,Shubhi,,Nath,ths259,12.06.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,259,Lucknow,Mahanagar,NA,NA,NA
+260,,SubheshBhan.S05,SubheshBhan,,Singh,ths260,23.11.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,260,Lucknow,Mahanagar,NA,NA,NA
+261,,Taru.S05,Taru,,Srivastava,ths261,27.12.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,261,Lucknow,Mahanagar,NA,NA,NA
+262,,Upanshu.T05,Upanshu,,Tiwari,ths262,10.09.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,262,Lucknow,Mahanagar,NA,NA,NA
+263,,Vidushi.S07,Vidushi,,Srivastava,ths263,02.07.2007,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,263,Lucknow,Mahanagar,NA,NA,NA
+264,,VishveshRaj.G05,VishveshRaj,,Gupta,ths264,13.12.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,264,Lucknow,Mahanagar,NA,NA,NA
+265,,ZayedRizwaan.K06,ZayedRizwaan,,Khan,ths265,24.08.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,265,Lucknow,Mahanagar,NA,NA,NA
+266,,Musa.M06,Musa,,Mohammad,ths266,25.05.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,266,Lucknow,Mahanagar,NA,NA,NA
+267,,Ritija.P05,Ritija,,Pandey,ths267,07.10.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,267,Lucknow,Mahanagar,NA,NA,NA
+268,,Aditi.S04,Aditi,,Srivastava,ths268,14.05.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,268,Lucknow,Mahanagar,NA,NA,NA
+269,,Aditya.S06,Aditya,,Singh,ths269,03.02.2006,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,269,Lucknow,Mahanagar,NA,NA,NA
+270,,Aliza.T04,Aliza,,Tabrez,ths270,11.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,270,Lucknow,Mahanagar,NA,NA,NA
+271,,Aniket.K04,Aniket,,Kumar,ths271,11.05.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,271,Lucknow,Mahanagar,NA,NA,NA
+272,,Atharv.B05,Atharv,,Bhardwaj,ths272,19.07.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,272,Lucknow,Mahanagar,NA,NA,NA
+273,,Devang.P05,Devang,,Pathak,ths273,17.04.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,273,Lucknow,Mahanagar,NA,NA,NA
+274,,Hitesh.A03,Hitesh,,Agarwal,ths274,18.09.2003,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,274,Lucknow,Mahanagar,NA,NA,NA
+275,,Laraib.M04,Laraib,,Momeen,ths275,31.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,275,Lucknow,Mahanagar,NA,NA,NA
+276,,Malay.T04,Malay,,Tripathi,ths276,31.12.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,276,Lucknow,Mahanagar,NA,NA,NA
+277,,Manya.S05,Manya,,Sharma,ths277,14.11.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,277,Lucknow,Mahanagar,NA,NA,NA
+278,,Mayank.K05,Mayank,,Kandwal,ths278,18.04.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,278,Lucknow,Mahanagar,NA,NA,NA
+279,,Nainsi.S05,Nainsi,,Srivastava,ths279,19.06.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,279,Lucknow,Mahanagar,NA,NA,NA
+280,,Privani.T05,Privani,,Tiwari,ths280,28.04.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,280,Lucknow,Mahanagar,NA,NA,NA
+281,,Sabreena.K04,Sabreena,,Khan,ths281,08.12.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,281,Lucknow,Mahanagar,NA,NA,NA
+282,,Saniya.I05,Saniya,,Izhar,ths282,23.09.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,282,Lucknow,Mahanagar,NA,NA,NA
+283,,Sarvagya.S04,Sarvagya,,Singh,ths283,03.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,283,Lucknow,Mahanagar,NA,NA,NA
+284,,Satakshi.S04,Satakshi,,Singh,ths284,11.10.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,284,Lucknow,Mahanagar,NA,NA,NA
+285,,ShauryaP.S04,ShauryaP,,Singh,ths285,11.10.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,285,Lucknow,Mahanagar,NA,NA,NA
+286,,Shaurya.S04,Shaurya,,Srivastava,ths286,20.07.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,286,Lucknow,Mahanagar,NA,NA,NA
+287,,Shivashri.T04,Shivashri,,Tiwari,ths287,23.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,287,Lucknow,Mahanagar,NA,NA,NA
+288,,Simran.S04,Simran,,Srivastava,ths288,27.10.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,288,Lucknow,Mahanagar,NA,NA,NA
+289,,Sparsh.B05,Sparsh,,Bhargava,ths289,26.07.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,289,Lucknow,Mahanagar,NA,NA,NA
+290,,Vyom.A04,Vyom,,Anand,ths290,19.11.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,290,Lucknow,Mahanagar,NA,NA,NA
+291,,Yashi.S06,Yashi,,Singh,ths291,20.02.2006,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,291,Lucknow,Mahanagar,NA,NA,NA
+292,,Lakshita.S04,Lakshita,,Singh,ths292,18.05.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,292,Lucknow,Mahanagar,NA,NA,NA
+293,,Riddhima.T05,Riddhima,,Tripathi,ths293,15.07.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,293,Lucknow,Mahanagar,NA,NA,NA
+294,,Aditya.B04,Aditya,,Bhatt,ths294,20.06.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,294,Lucknow,Mahanagar,NA,NA,NA
+295,,Animesh.P05,Animesh,,Pandey,ths295,23.01.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,295,Lucknow,Mahanagar,NA,NA,NA
+296,,Anupraksha.S04,Anupraksha,,Sharma,ths296,25.11.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,296,Lucknow,Mahanagar,NA,NA,NA
+297,,Anushka.V04,Anushka,,Verma,ths297,09.05.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,297,Lucknow,Mahanagar,NA,NA,NA
+298,,Farhan.A05,Farhan,,Ahmad,ths298,26.03.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,298,Lucknow,Mahanagar,NA,NA,NA
+299,,Kaunain.F03,Kaunain,,Fatima,ths299,07.11.2003,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,299,Lucknow,Mahanagar,NA,NA,NA
+300,,Nutan.S05,Nutan,,Shukla,ths300,01.05.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,300,Lucknow,Mahanagar,NA,NA,NA
+301,,Rakshit.P04,Rakshit,,Pandey,ths301,29.09.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,301,Lucknow,Mahanagar,NA,NA,NA
+302,,Rashi.V05,Rashi,,Verma,ths302,04.02.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,302,Lucknow,Mahanagar,NA,NA,NA
+303,,Saksham.D05,Saksham,,Dixit,ths303,08.06.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,303,Lucknow,Mahanagar,NA,NA,NA
+304,,Tulika.B04,Tulika,,Bhatt,ths304,04.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,304,Lucknow,Mahanagar,NA,NA,NA
+305,,Akshit.K04,Akshit,,Katiyal,ths305,12.09.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,305,Lucknow,Mahanagar,NA,NA,NA
+306,,Amritansh.C04,Amritansh,,Chaurasiya,ths306,09.10.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,306,Lucknow,Mahanagar,NA,NA,NA
+307,,Angad.S04,Angad,,Sharma,ths307,17.06.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,307,Lucknow,Mahanagar,NA,NA,NA
+308,,Anshita.P05,Anshita,,Pratap,ths308,10.05.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,308,Lucknow,Mahanagar,NA,NA,NA
+309,,Arnav.S04,Arnav,,Sharma,ths309,01.05.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,309,Lucknow,Mahanagar,NA,NA,NA
+310,,Ayush.J05,Ayush,,Jaiswal,ths310,15.07.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,310,Lucknow,Mahanagar,NA,NA,NA
+311,,AyushKumar.S05,AyushKumar,,Singh,ths311,31.08.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,311,Lucknow,Mahanagar,NA,NA,NA
+312,,Dakshi.T05,Dakshi,,Tiwari,ths312,25.03.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,312,Lucknow,Mahanagar,NA,NA,NA
+313,,Divy.C04,Divy,,Chitravanshi,ths313,26.05.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,313,Lucknow,Mahanagar,NA,NA,NA
+314,,Harsh.V04,Harsh,,Vaish,ths314,14.06.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,314,Lucknow,Mahanagar,NA,NA,NA
+315,,KartikSingh.B04,KartikSingh,,Bhakuni,ths315,01.11.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,315,Lucknow,Mahanagar,NA,NA,NA
+316,,Komal.V06,Komal,,Verma,ths316,28.08.2006,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,316,Lucknow,Mahanagar,NA,NA,NA
+317,,Kotish.T05,Kotish,,Trivedi,ths317,28.05.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,317,Lucknow,Mahanagar,NA,NA,NA
+318,,Mantasha.J04,Mantasha,,Jamal,ths318,28.07.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,318,Lucknow,Mahanagar,NA,NA,NA
+319,,Ali.M04,Ali,,Mohammad,ths319,02.02.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,319,Lucknow,Mahanagar,NA,NA,NA
+320,,MohammadHaroon.A05,MohammadHaroon,,Asad,ths320,03.11.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,320,Lucknow,Mahanagar,NA,NA,NA
+321,,Nikita.R04,Nikita,,Rawat,ths321,20.11.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,321,Lucknow,Mahanagar,NA,NA,NA
+322,,Pranjita.S05,Pranjita,,Saxena,ths322,01.05.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,322,Lucknow,Mahanagar,NA,NA,NA
+323,,Prince.J04,Prince,,Jaiswal,ths323,21.03.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,323,Lucknow,Mahanagar,NA,NA,NA
+324,,Rudra.S04,Rudra,,Shukla,ths324,09.08.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,324,Lucknow,Mahanagar,NA,NA,NA
+325,,Shivanshu.S06,Shivanshu,,Shukla,ths325,24.04.2006,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,325,Lucknow,Mahanagar,NA,NA,NA
+326,,Shreejanya.U04,Shreejanya,,Upreti,ths326,10.11.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,326,Lucknow,Mahanagar,NA,NA,NA
+327,,Stuti.S04,Stuti,,Shukla,ths327,18.08.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,327,Lucknow,Mahanagar,NA,NA,NA
+328,,Talha.A04,Talha,,Aman,ths328,25.07.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,328,Lucknow,Mahanagar,NA,NA,NA
+329,,Vadaant.P05,Vadaant,,Pandey,ths329,16.01.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,329,Lucknow,Mahanagar,NA,NA,NA
+330,,Vaishnavi.V04,Vaishnavi,,Verma,ths330,28.09.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,330,Lucknow,Mahanagar,NA,NA,NA
+331,,Vaishwik.M05,Vaishwik,,Mishra,ths331,14.08.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,331,Lucknow,Mahanagar,NA,NA,NA
+332,,Vidit.S05,Vidit,,Sati,ths332,12.04.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,332,Lucknow,Mahanagar,NA,NA,NA
+333,,Vinayak.M04,Vinayak,,Mishra,ths333,06.10.2004,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,333,Lucknow,Mahanagar,NA,NA,NA
+334,,UtkarshN.D05,UtkarshN,,Dwivedi,ths334,10.08.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,334,Lucknow,Mahanagar,NA,NA,NA
+335,,Yash.P05,Yash,,Patel,ths335,06.02.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,335,Lucknow,Mahanagar,NA,NA,NA
+336,,Yashi.M05,Yashi,,Mishra,ths336,19.11.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,336,Lucknow,Mahanagar,NA,NA,NA
+337,,Abdullah.B02,Abdullah,,Basheer,ths337,01.09.2002,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,337,Lucknow,Mahanagar,NA,NA,NA
+338,,Abhinav.S04,Abhinav,,Singh,ths338,04.03.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,338,Lucknow,Mahanagar,NA,NA,NA
+339,,Aishnaa.A04,Aishnaa,,Agarwal,ths339,15.10.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,339,Lucknow,Mahanagar,NA,NA,NA
+340,,Ajay.D04,Ajay,,Dwivedi,ths340,07.10.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,340,Lucknow,Mahanagar,NA,NA,NA
+341,,Aman.A04,Aman,,Arya,ths341,08.07.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,341,Lucknow,Mahanagar,NA,NA,NA
+342,,Ananya.N03,Ananya,,Nanda,ths342,25.03.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,342,Lucknow,Mahanagar,NA,NA,NA
+343,,AnimeshP.S04,AnimeshP,,Singh,ths343,04.09.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,343,Lucknow,Mahanagar,NA,NA,NA
+344,,Anshika.M04,Anshika,,Mehra,ths344,13.03.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,344,Lucknow,Mahanagar,NA,NA,NA
+345,,Anukriti.V03,Anukriti,,Verma,ths345,25.10.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,345,Lucknow,Mahanagar,NA,NA,NA
+346,,Arsalan.A02,Arsalan,,Ali,ths346,01.10.2002,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,346,Lucknow,Mahanagar,NA,NA,NA
+347,,Arshan.R04,Arshan,,Rizvi,ths347,19.08.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,347,Lucknow,Mahanagar,NA,NA,NA
+348,,Aryan.S03,Aryan,,Sharma,ths348,13.04.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,348,Lucknow,Mahanagar,NA,NA,NA
+349,,Ayush.K03,Ayush,,Kumar,ths349,07.06.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,349,Lucknow,Mahanagar,NA,NA,NA
+350,,Ayush.S03,Ayush,,Srivastava,ths350,23.10.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,350,Lucknow,Mahanagar,NA,NA,NA
+351,,Harsh.P04,Harsh,,Pandey,ths351,14.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,351,Lucknow,Mahanagar,NA,NA,NA
+352,,Ishika.T03,Ishika,,Tripathi,ths352,19.11.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,352,Lucknow,Mahanagar,NA,NA,NA
+353,,Jagrav.P04,Jagrav,,Pant,ths353,19.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,353,Lucknow,Mahanagar,NA,NA,NA
+354,,Jahnvi.M01,Jahnvi,,Mishra,ths354,12.11.2001,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,354,Lucknow,Mahanagar,NA,NA,NA
+355,,Kanishka.D03,Kanishka,,Dwivedi,ths355,22.12.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,355,Lucknow,Mahanagar,NA,NA,NA
+356,,Mehak.F03,Mehak,,Fatima,ths356,23.10.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,356,Lucknow,Mahanagar,NA,NA,NA
+357,,Yahya.M03,Yahya,,Mohammad,ths357,15.11.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,357,Lucknow,Mahanagar,NA,NA,NA
+358,,Pooja.S03,Pooja,,Singh,ths358,08.03.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,358,Lucknow,Mahanagar,NA,NA,NA
+359,,Prakhar.S04,Prakhar,,Sharma,ths359,18.07.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,359,Lucknow,Mahanagar,NA,NA,NA
+360,,Prakhar.S06,Prakhar,,Shukla,ths360,02.05.2006,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,360,Lucknow,Mahanagar,NA,NA,NA
+361,,Shaswat.K02,Shaswat,,Kumar,ths361,09.04.2002,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,361,Lucknow,Mahanagar,NA,NA,NA
+362,,Siddhant.S04,Siddhant,,Singh,ths362,16.03.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,362,Lucknow,Mahanagar,NA,NA,NA
+363,,Siddharth.S03,Siddharth,,Srivastava,ths363,04.09.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,363,Lucknow,Mahanagar,NA,NA,NA
+364,,Somya.S04,Somya,,Singh,ths364,27.06.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,364,Lucknow,Mahanagar,NA,NA,NA
+365,,Srutika.M04,Srutika,,Mishra,ths365,12.03.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,365,Lucknow,Mahanagar,NA,NA,NA
+366,,Stuti.J04,Stuti,,Jaiswal,ths366,16.04.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,366,Lucknow,Mahanagar,NA,NA,NA
+367,,Tanisha.V05,Tanisha,,Verma,ths367,15.05.2005,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,367,Lucknow,Mahanagar,NA,NA,NA
+368,,Varnit.M04,Varnit,,Maurya,ths368,26.04.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,368,Lucknow,Mahanagar,NA,NA,NA
+369,,Varun.B04,Varun,,Bora,ths369,12.01.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,369,Lucknow,Mahanagar,NA,NA,NA
+370,,Abhay.K04,Abhay,,Kumar,ths370,25.11.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,370,Lucknow,Mahanagar,NA,NA,NA
+371,,Abhishek.G04,Abhishek,,Gupta,ths371,09.08.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,371,Lucknow,Mahanagar,NA,NA,NA
+372,,Akshat.S04,Akshat,,Sharma,ths372,09.02.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,372,Lucknow,Mahanagar,NA,NA,NA
+373,,Alok.S04,Alok,,Singh,ths373,14.04.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,373,Lucknow,Mahanagar,NA,NA,NA
+374,,AmanRasheed.A03,AmanRasheed,,Ansari,ths374,01.06.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,374,Lucknow,Mahanagar,NA,NA,NA
+375,,Aman.K03,Aman,,Krishnan,ths375,16.09.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,375,Lucknow,Mahanagar,NA,NA,NA
+376,,Amina.S05,Amina,,Saheer,ths376,18.01.2005,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,376,Lucknow,Mahanagar,NA,NA,NA
+377,,Ananya.T05,Ananya,,Tiwari,ths377,27.03.2005,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,377,Lucknow,Mahanagar,NA,NA,NA
+378,,Ansh.C03,Ansh,,Chitravanshi,ths378,22.04.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,378,Lucknow,Mahanagar,NA,NA,NA
+379,,Arjun.T04,Arjun,,Tripathi,ths379,01.09.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,379,Lucknow,Mahanagar,NA,NA,NA
+380,,Aryansh.S03,Aryansh,,Srivastava,ths380,16.11.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,380,Lucknow,Mahanagar,NA,NA,NA
+381,,Ashay.K04,Ashay,,Kumar,ths381,08.02.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,381,Lucknow,Mahanagar,NA,NA,NA
+382,,AyushKunwar.S04,AyushKunwar,,Singh,ths382,16.07.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,382,Lucknow,Mahanagar,NA,NA,NA
+383,,Chirantan.T04,Chirantan,,Talukdar,ths383,12.06.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,383,Lucknow,Mahanagar,NA,NA,NA
+384,,Diksha.B05,Diksha,,Bhardwaj,ths384,08.05.2005,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,384,Lucknow,Mahanagar,NA,NA,NA
+385,,HamzaRasheed.K04,HamzaRasheed,,Khan,ths385,09.01.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,385,Lucknow,Mahanagar,NA,NA,NA
+386,,Jai.T04,Jai,,Tyagi,ths386,01.08.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,386,Lucknow,Mahanagar,NA,NA,NA
+387,,Khushi.S04,Khushi,,Srivastava,ths387,10.04.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,387,Lucknow,Mahanagar,NA,NA,NA
+388,,KTapas.V04,KTapas,,Vishwakarma,ths388,23.01.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,388,Lucknow,Mahanagar,NA,NA,NA
+389,,Mansi.S04,Mansi,,Singh,ths389,10.01.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,389,Lucknow,Mahanagar,NA,NA,NA
+390,,Milit.A03,Milit,,Arya,ths390,21.07.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,390,Lucknow,Mahanagar,NA,NA,NA
+391,,Paras.A04,Paras,,Agarwal,ths391,24.05.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,391,Lucknow,Mahanagar,NA,NA,NA
+392,,Pranjal.S04,Pranjal,,Srivastava,ths392,19.05.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,392,Lucknow,Mahanagar,NA,NA,NA
+393,,Preetika.A03,Preetika,,Agarwal,ths393,28.11.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,393,Lucknow,Mahanagar,NA,NA,NA
+394,,RayyanAhmad.S03,RayyanAhmad,,Siddiqui,ths394,09.12.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,394,Lucknow,Mahanagar,NA,NA,NA
+395,,Rishabh.D04,Rishabh,,Dev,ths395,08.09.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,395,Lucknow,Mahanagar,NA,NA,NA
+396,,Saif.A04,Saif,,Ali,ths396,09.01.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,396,Lucknow,Mahanagar,NA,NA,NA
+397,,Sakshi.S04,Sakshi,,Singh,ths397,20.04.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,397,Lucknow,Mahanagar,NA,NA,NA
+398,,Tanishka.K04,Tanishka,,Kumar,ths398,12.01.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,398,Lucknow,Mahanagar,NA,NA,NA
+399,,Srishti.S04,Srishti,,Shukla,ths399,15.11.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,399,Lucknow,Mahanagar,NA,NA,NA
+400,,SyedPrimroseHasan.R05,SyedPrimroseHasan,,Rizvi,ths400,17.02.2005,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,400,Lucknow,Mahanagar,NA,NA,NA
+401,,Tanya.D03,Tanya,,Dutta,ths401,10.03.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,401,Lucknow,Mahanagar,NA,NA,NA
+402,,UtkarshVikram.S03,UtkarshVikram,,Singh,ths402,11.06.2003,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,402,Lucknow,Mahanagar,NA,NA,NA
+403,,Aditya.G04,Aditya,,Govil,ths403,19.02.2004,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,403,Lucknow,Mahanagar,NA,NA,NA
+404,,Aishwarya.S02,Aishwarya,,Srivastava,ths404,19.10.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,404,Lucknow,Mahanagar,NA,NA,NA
+405,,Akansha.S03,Akansha,,Shukla,ths405,15.03.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,405,Lucknow,Mahanagar,NA,NA,NA
+406,,Amaan.K02,Amaan,,Kapoor,ths406,04.10.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,406,Lucknow,Mahanagar,NA,NA,NA
+407,,Anmol.S04,Anmol,,Singh,ths407,29.11.2004,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,407,Lucknow,Mahanagar,NA,NA,NA
+408,,AnadiKrishna.D04,AnadiKrishna,,Dwivedi,ths408,04.10.2004,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,408,Lucknow,Mahanagar,NA,NA,NA
+409,,Anushree.T03,Anushree,,Tiwari,ths409,25.03.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,409,Lucknow,Mahanagar,NA,NA,NA
+410,,Garima.G03,Garima,,Gupta,ths410,17.10.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,410,Lucknow,Mahanagar,NA,NA,NA
+411,,Harinitha.W03,Harinitha,,Wasathhara,ths411,12.12.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,411,Lucknow,Mahanagar,NA,NA,NA
+412,,Harsh.S03,Harsh,,Sanwal,ths412,20.01.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,412,Lucknow,Mahanagar,NA,NA,NA
+413,,Harshini.S03,Harshini,,Saxena,ths413,23.12.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,413,Lucknow,Mahanagar,NA,NA,NA
+414,,Jatin.A02,Jatin,,Agarwal,ths414,05.12.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,414,Lucknow,Mahanagar,NA,NA,NA
+415,,Jhalak.K02,Jhalak,,Kanaujia,ths415,27.11.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,415,Lucknow,Mahanagar,NA,NA,NA
+416,,Ali.M02,Ali,,Mohammad,ths416,23.10.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,416,Lucknow,Mahanagar,NA,NA,NA
+417,,Tabish.M03,Tabish,,Mohammad,ths417,13.01.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,417,Lucknow,Mahanagar,NA,NA,NA
+418,,Zakariya.M05,Zakariya,,Mohammad,ths418,15.11.2005,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,418,Lucknow,Mahanagar,NA,NA,NA
+419,,Prafulla.S02,Prafulla,,Shukla,ths419,24.12.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,419,Lucknow,Mahanagar,NA,NA,NA
+420,,Ruchika.A02,Ruchika,,Agarwal,ths420,11.12.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,420,Lucknow,Mahanagar,NA,NA,NA
+421,,Sanskriti.S02,Sanskriti,,Srivastava,ths421,25.11.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,421,Lucknow,Mahanagar,NA,NA,NA
+422,,Sarisha.S03,Sarisha,,Srivastava,ths422,17.06.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,422,Lucknow,Mahanagar,NA,NA,NA
+423,,Siddhart.D03,Siddhart,,Dixit,ths423,01.07.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,423,Lucknow,Mahanagar,NA,NA,NA
+424,,Shambhavi.J03,Shambhavi,,Jugran,ths424,28.03.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,424,Lucknow,Mahanagar,NA,NA,NA
+425,,Abhijeet.S02,Abhijeet,,Singh,ths425,14.10.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,425,Lucknow,Mahanagar,NA,NA,NA
+426,,Anshika.S03,Anshika,,Shukla,ths426,26.08.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,426,Lucknow,Mahanagar,NA,NA,NA
+427,,Anshika.S04,Anshika,,Srivastava,ths427,08.03.2004,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,427,Lucknow,Mahanagar,NA,NA,NA
+428,,Aradhya.S02,Aradhya,,Sharma,ths428,07.09.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,428,Lucknow,Mahanagar,NA,NA,NA
+429,,Archita.S03,Archita,,Singh,ths429,14.03.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,429,Lucknow,Mahanagar,NA,NA,NA
+430,,Ayesha.T01,Ayesha,,Tariq,ths430,13.07.2001,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,430,Lucknow,Mahanagar,NA,NA,NA
+431,,Charu.G02,Charu,,Gupta,ths431,05.04.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,431,Lucknow,Mahanagar,NA,NA,NA
+432,,Ch.V02,Ch,,Vishwanath,ths432,28.09.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,432,Lucknow,Mahanagar,NA,NA,NA
+433,,Drishti.J02,Drishti,,Jaiswal,ths433,16.12.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,433,Lucknow,Mahanagar,NA,NA,NA
+434,,Harsh.S03,Harsh,,Saxena,ths434,25.11.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,434,Lucknow,Mahanagar,NA,NA,NA
+435,,Ikshita.S03,Ikshita,,Singh,ths435,14.12.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,435,Lucknow,Mahanagar,NA,NA,NA
+436,,Jhanvi.T03,Jhanvi,,Tiwari,ths436,26.09.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,436,Lucknow,Mahanagar,NA,NA,NA
+437,,Kunal.B03,Kunal,,Bisht,ths437,22.10.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,437,Lucknow,Mahanagar,NA,NA,NA
+438,,MohammadShahnawaz.K04,MohammadShahnawaz,,Khan,ths438,16.03.2004,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,438,Lucknow,Mahanagar,NA,NA,NA
+439,,Nikita.K02,Nikita,,Kandpal,ths439,22.12.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,439,Lucknow,Mahanagar,NA,NA,NA
+440,,Rishi.J03,Rishi,,Jaiswal,ths440,04.10.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,440,Lucknow,Mahanagar,NA,NA,NA
+441,,Saharsh.T02,Saharsh,,Trivedi,ths441,18.11.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,441,Lucknow,Mahanagar,NA,NA,NA
+442,,Sanskar.G02,Sanskar,,Gupta,ths442,21.11.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,442,Lucknow,Mahanagar,NA,NA,NA
+443,,Sanskriti.K02,Sanskriti,,Kandpal,ths443,23.10.2002,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,443,Lucknow,Mahanagar,NA,NA,NA
+444,,Siddhi.S03,Siddhi,,Singh,ths444,06.07.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,444,Lucknow,Mahanagar,NA,NA,NA
+445,,Sanistha.A04,Sanistha,,Agnihotri,ths445,24.03.2004,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,445,Lucknow,Mahanagar,NA,NA,NA
+446,,Vatsal.J03,Vatsal,,Jaiswal,ths446,15.06.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,446,Lucknow,Mahanagar,NA,NA,NA
+447,,Waquar.A03,Waquar,,Akhtar,ths447,14.02.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,447,Lucknow,Mahanagar,NA,NA,NA
+448,,Abdul.A01,Abdul,,Ahad,ths448,13.02.2001,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,448,Lucknow,Mahanagar,NA,NA,NA
+449,,AvishekRanjan.J02,AvishekRanjan,,Jha,ths449,08.02.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,449,Lucknow,Mahanagar,NA,NA,NA
+450,,Aditi.S02,Aditi,,Srivastava,ths450,21.03.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,450,Lucknow,Mahanagar,NA,NA,NA
+451,,Adrika.S03,Adrika,,Srivastava,ths451,02.04.2003,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,451,Lucknow,Mahanagar,NA,NA,NA
+452,,Aniket.G01,Aniket,,Gupta,ths452,03.08.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,452,Lucknow,Mahanagar,NA,NA,NA
+453,,Aqsa.A01,Aqsa,,Ajaz,ths453,28.11.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,453,Lucknow,Mahanagar,NA,NA,NA
+454,,Aryan.P02,Aryan,,Patel,ths454,20.09.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,454,Lucknow,Mahanagar,NA,NA,NA
+455,,Aryan.S00,Aryan,,Srivastava,ths455,15.06.2000,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,455,Lucknow,Mahanagar,NA,NA,NA
+456,,Ashmita.Y01,Ashmita,,Yadav,ths456,13.09.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,456,Lucknow,Mahanagar,NA,NA,NA
+457,,Atharv.J02,Atharv,,Jain,ths457,02.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,457,Lucknow,Mahanagar,NA,NA,NA
+458,,Avichal.P01,Avichal,,Piyush,ths458,13.07.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,458,Lucknow,Mahanagar,NA,NA,NA
+459,,Ayush.S01,Ayush,,Shukla,ths459,08.06.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,459,Lucknow,Mahanagar,NA,NA,NA
+460,,Ayushi.M00,Ayushi,,Mittal,ths460,30.09.2000,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,460,Lucknow,Mahanagar,NA,NA,NA
+461,,Ishita.M02,Ishita,,Maurya,ths461,23.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,461,Lucknow,Mahanagar,NA,NA,NA
+462,,Jai.J02,Jai,,Joshi,ths462,14.10.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,462,Lucknow,Mahanagar,NA,NA,NA
+463,,Laiba.K02,Laiba,,Khan,ths463,06.06.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,463,Lucknow,Mahanagar,NA,NA,NA
+464,,Mahima.R02,Mahima,,Rai,ths464,10.10.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,464,Lucknow,Mahanagar,NA,NA,NA
+465,,MirzaDanish.B01,MirzaDanish,,Beg,ths465,25.11.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,465,Lucknow,Mahanagar,NA,NA,NA
+466,,Yunus.M02,Yunus,,Mohammad,ths466,28.02.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,466,Lucknow,Mahanagar,NA,NA,NA
+467,,Nandini.B02,Nandini,,Bhushan,ths467,09.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,467,Lucknow,Mahanagar,NA,NA,NA
+468,,Nida.J01,Nida,,Jeelani,ths468,24.08.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,468,Lucknow,Mahanagar,NA,NA,NA
+469,,Poornima.K04,Poornima,,Kumari,ths469,24.01.2004,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,469,Lucknow,Mahanagar,NA,NA,NA
+470,,Pratham.P02,Pratham,,Pandey,ths470,31.07.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,470,Lucknow,Mahanagar,NA,NA,NA
+471,,Raji.S02,Raji,,Shukla,ths471,26.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,471,Lucknow,Mahanagar,NA,NA,NA
+472,,Rakshak.V02,Rakshak,,Verma,ths472,22.08.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,472,Lucknow,Mahanagar,NA,NA,NA
+473,,S.M02,S,,Megha,ths473,03.10.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,473,Lucknow,Mahanagar,NA,NA,NA
+474,,SalajShekhar.J01,SalajShekhar,,Jugran,ths474,26.11.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,474,Lucknow,Mahanagar,NA,NA,NA
+475,,Sambhavee.S02,Sambhavee,,Srivastava,ths475,05.09.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,475,Lucknow,Mahanagar,NA,NA,NA
+476,,Sapna.B02,Sapna,,Bisht,ths476,22.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,476,Lucknow,Mahanagar,NA,NA,NA
+477,,Satyam.D02,Satyam,,Dwivedi,ths477,20.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,477,Lucknow,Mahanagar,NA,NA,NA
+478,,Sushmita.B01,Sushmita,,Bose,ths478,18.10.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,478,Lucknow,Mahanagar,NA,NA,NA
+479,,Tanya.S02,Tanya,,Saxena,ths479,05.07.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,479,Lucknow,Mahanagar,NA,NA,NA
+480,,Tanya.S02,Tanya,,Singh,ths480,07.02.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,480,Lucknow,Mahanagar,NA,NA,NA
+481,,Tushar.A01,Tushar,,Agarwal,ths481,29.07.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,481,Lucknow,Mahanagar,NA,NA,NA
+482,,Urvashi.S02,Urvashi,,Singh,ths482,05.03.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,482,Lucknow,Mahanagar,NA,NA,NA
+483,,Vani.J02,Vani,,Jaiswal,ths483,02.01.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,483,Lucknow,Mahanagar,NA,NA,NA
+484,,Vanisha.D02,Vanisha,,Deb,ths484,06.07.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,484,Lucknow,Mahanagar,NA,NA,NA
+485,,Wajiha.F02,Wajiha,,Fatima,ths485,12.06.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,485,Lucknow,Mahanagar,NA,NA,NA
+486,,YashRaj.S01,YashRaj,,Sonker,ths486,02.09.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,486,Lucknow,Mahanagar,NA,NA,NA
+487,,Yukti.S03,Yukti,,Singh,ths487,15.10.2003,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,487,Lucknow,Mahanagar,NA,NA,NA
+488,,Aditya.S03,Aditya,,Srivastava,ths488,06.01.2003,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,488,Lucknow,Mahanagar,NA,NA,NA
+489,,Abhishek.Y02,Abhishek,,Yadav,ths489,06.03.2002,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,489,Lucknow,Mahanagar,NA,NA,NA
+490,,Aditi.S02,Aditi,,Shukla,ths490,18.02.2002,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,490,Lucknow,Mahanagar,NA,NA,NA
+491,,Alok.S03,Alok,,Shukla,ths491,15.08.2003,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,491,Lucknow,Mahanagar,NA,NA,NA
+492,,Ankur.K01,Ankur,,Kumar,ths492,24.03.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,492,Lucknow,Mahanagar,NA,NA,NA
+493,,Areeba.A01,Areeba,,Ansari,ths493,19.08.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,493,Lucknow,Mahanagar,NA,NA,NA
+494,,Arun.C01,Arun,,Chaubey,ths494,21.01.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,494,Lucknow,Mahanagar,NA,NA,NA
+495,,Ayushi.S00,Ayushi,,Srivastava,ths495,17.11.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,495,Lucknow,Mahanagar,NA,NA,NA
+496,,Bhavya.S02,Bhavya,,Saxena,ths496,16.07.2002,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,496,Lucknow,Mahanagar,NA,NA,NA
+497,,Devansh.D00,Devansh,,Dixit,ths497,01.08.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,497,Lucknow,Mahanagar,NA,NA,NA
+498,,DivyaniRoy.C01,DivyaniRoy,,Chaudhary,ths498,18.01.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,498,Lucknow,Mahanagar,NA,NA,NA
+499,,Faisal.S00,Faisal,,Siddiqui,ths499,18.10.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,499,Lucknow,Mahanagar,NA,NA,NA
+500,,Harshil.T00,Harshil,,Tomar,ths500,25.08.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,500,Lucknow,Mahanagar,NA,NA,NA
+501,,Harshit.J01,Harshit,,Jain,ths501,08.06.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,501,Lucknow,Mahanagar,NA,NA,NA
+502,,Ishaan.B01,Ishaan,,Bhattacharya,ths502,06.02.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,502,Lucknow,Mahanagar,NA,NA,NA
+503,,Ishika.J01,Ishika,,Jaiswal,ths503,10.10.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,503,Lucknow,Mahanagar,NA,NA,NA
+504,,Ishita.S00,Ishita,,Sankritayan,ths504,22.10.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,504,Lucknow,Mahanagar,NA,NA,NA
+505,,Kritika.S00,Kritika,,Srivastava,ths505,17.11.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,505,Lucknow,Mahanagar,NA,NA,NA
+506,,Kartikay.S01,Kartikay,,Singh,ths506,14.06.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,506,Lucknow,Mahanagar,NA,NA,NA
+507,,Mantasa.K01,Mantasa,,Khan,ths507,19.03.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,507,Lucknow,Mahanagar,NA,NA,NA
+508,,Makdoom.K01,Makdoom,,Khan,ths508,16.08.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,508,Lucknow,Mahanagar,NA,NA,NA
+509,,MohammadAsif.K01,MohammadAsif,,Khan,ths509,01.01.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,509,Lucknow,Mahanagar,NA,NA,NA
+510,,Neha.K01,Neha,,Kumari,ths510,07.11.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,510,Lucknow,Mahanagar,NA,NA,NA
+511,,Nishu.A00,Nishu,,Agarwal,ths511,25.08.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,511,Lucknow,Mahanagar,NA,NA,NA
+512,,Noor.F01,Noor,,Fatima,ths512,06.04.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,512,Lucknow,Mahanagar,NA,NA,NA
+513,,Pragyan.U00,Pragyan,,Upadhyay,ths513,10.10.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,513,Lucknow,Mahanagar,NA,NA,NA
+514,,Rishita.Y02,Rishita,,Yadav,ths514,20.03.2002,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,514,Lucknow,Mahanagar,NA,NA,NA
+515,,Rishika.A01,Rishika,,Agarwal,ths515,08.05.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,515,Lucknow,Mahanagar,NA,NA,NA
+516,,Ramesh.P00,Ramesh,,Pandey,ths516,06.03.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,516,Lucknow,Mahanagar,NA,NA,NA
+517,,Saksham.J01,Saksham,,Jaiswal,ths517,07.06.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,517,Lucknow,Mahanagar,NA,NA,NA
+518,,Sakshi.S02,Sakshi,,Singh,ths518,01.05.2002,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,518,Lucknow,Mahanagar,NA,NA,NA
+519,,Sudhanshu.P02,Sudhanshu,,Pandey,ths519,12.08.2002,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,519,Lucknow,Mahanagar,NA,NA,NA
+520,,Suditya.S01,Suditya,,Singh,ths520,25.03.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,520,Lucknow,Mahanagar,NA,NA,NA
+521,,Vatsal.B03,Vatsal,,Bajpai,ths521,10.07.2003,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,521,Lucknow,Mahanagar,NA,NA,NA
+522,,Vedanshi.S01,Vedanshi,,Shukla,ths522,17.06.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,522,Lucknow,Mahanagar,NA,NA,NA
+523,,Yash.K99,Yash,,Kanojia,ths523,26.06.1999,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,523,Lucknow,Mahanagar,NA,NA,NA
+524,,Yashwardhan.R01,Yashwardhan,,Rathore,ths524,22.09.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,524,Lucknow,Mahanagar,NA,NA,NA
+525,,Yuyudhan.T01,Yuyudhan,,Tiwari,ths525,09.03.2001,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,525,Lucknow,Mahanagar,NA,NA,NA
+526,,Sonali.S00,Sonali,,Singh,ths526,23.10.2000,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Tender Hearts School,526,Lucknow,Mahanagar,NA,NA,NA
+527,,Aarya.T07,Aarya,,Tripathi,ths527,04.07.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,527,Lucknow,Kursi Road,NA,NA,NA
+528,,Ashutosh.R07,Ashutosh,,Rai,ths528,01.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,528,Lucknow,Kursi Road,NA,NA,NA
+529,,Ashwin.N07,Ashwin,,Negi,ths529,12.07.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,529,Lucknow,Kursi Road,NA,NA,NA
+530,,Ayush.S08,Ayush,,Srivastava,ths530,12.06.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,530,Lucknow,Kursi Road,NA,NA,NA
+531,,Devyani.D08,Devyani,,Dwivedi,ths531,01.05.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,531,Lucknow,Kursi Road,NA,NA,NA
+532,,Harshil.P07,Harshil,,Pandey,ths532,02.10.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,532,Lucknow,Kursi Road,NA,NA,NA
+533,,JapleenKaur.J08,JapleenKaur,,Juneja,ths533,01.07.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,533,Lucknow,Kursi Road,NA,NA,NA
+534,,Kartikay.G08,Kartikay,,Garg,ths534,11.03.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,534,Lucknow,Kursi Road,NA,NA,NA
+535,,UjjwalKumar.V08,UjjwalKumar,,Vishwakarma,ths535,15.01.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,535,Lucknow,Kursi Road,NA,NA,NA
+536,,Vedarth.S08,Vedarth,,Sharma,ths536,17.07.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,536,Lucknow,Kursi Road,NA,NA,NA
+537,,Vinayak.G08,Vinayak,,Garg,ths537,11.03.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,537,Lucknow,Kursi Road,NA,NA,NA
+538,,Utkarsh.V07,Utkarsh,,Verma,ths538,14.06.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,538,Lucknow,Kursi Road,NA,NA,NA
+539,,Bhoomi.S07,Bhoomi,,Singh,ths539,15.04.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,539,Lucknow,Kursi Road,NA,NA,NA
+540,,Pragati.S07,Pragati,,Singh,ths540,14.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,540,Lucknow,Kursi Road,NA,NA,NA
+541,,Prasham.N07,Prasham,,Nagpal,ths541,21.07.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,541,Lucknow,Kursi Road,NA,NA,NA
+542,,AdityaGautam.S08,AdityaGautam,,Singh,ths542,28.09.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,542,Lucknow,Kursi Road,NA,NA,NA
+543,,Arnav.S07,Arnav,,Srivastava,ths543,10.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,543,Lucknow,Kursi Road,NA,NA,NA
+544,,Dhruv.K07,Dhruv,,Kumar,ths544,27.07.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,544,Lucknow,Kursi Road,NA,NA,NA
+545,,Ayesha.J11,Ayesha,,Jamal,ths545,20.01.2011,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,545,Lucknow,Kursi Road,NA,NA,NA
+546,,Arnav.S08,Arnav,,Sharma,ths546,21.01.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,546,Lucknow,Kursi Road,NA,NA,NA
+547,,Atharv.U08,Atharv,,Upadhyay,ths547,29.03.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,547,Lucknow,Kursi Road,NA,NA,NA
+548,,Yeshasvi.G08,Yeshasvi,,Gaur,ths548,07.01.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,548,Lucknow,Kursi Road,NA,NA,NA
+549,,YusraHaider.Z08,YusraHaider,,Zaidi,ths549,21.04.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,549,Lucknow,Kursi Road,NA,NA,NA
+550,,Abhinav.A07,Abhinav,,Anand,ths550,20.10.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,550,Lucknow,Kursi Road,NA,NA,NA
+551,,Akshat.V08,Akshat,,Verma,ths551,29.12.2008,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,551,Lucknow,Kursi Road,NA,NA,NA
+552,,Alisha.I06,Alisha,,Imran,ths552,16.11.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,552,Lucknow,Kursi Road,NA,NA,NA
+553,,Amishi.T06,Amishi,,Trivedi,ths553,17.10.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,553,Lucknow,Kursi Road,NA,NA,NA
+554,,Anshika.J07,Anshika,,Joshi,ths554,26.05.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,554,Lucknow,Kursi Road,NA,NA,NA
+555,,Arnav.S06,Arnav,,Singh,ths555,02.12.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,555,Lucknow,Kursi Road,NA,NA,NA
+556,,Astha.S06,Astha,,Sharma,ths556,09.11.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,556,Lucknow,Kursi Road,NA,NA,NA
+557,,Avantika.M06,Avantika,,Mishra,ths557,17.11.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,557,Lucknow,Kursi Road,NA,NA,NA
+558,,Devansh.V06,Devansh,,Verma,ths558,22.08.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,558,Lucknow,Kursi Road,NA,NA,NA
+559,,Fariha.I07,Fariha,,Imran,ths559,01.01.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,559,Lucknow,Kursi Road,NA,NA,NA
+560,,Harshvardhan.B07,Harshvardhan,,Bhatt,ths560,06.01.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,560,Lucknow,Kursi Road,NA,NA,NA
+561,,Hitesh.G07,Hitesh,,Gehani,ths561,02.03.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,561,Lucknow,Kursi Road,NA,NA,NA
+562,,Ishani.D06,Ishani,,Daga,ths562,21.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,562,Lucknow,Kursi Road,NA,NA,NA
+563,,Kashvi.A07,Kashvi,,Agarwal,ths563,19.05.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,563,Lucknow,Kursi Road,NA,NA,NA
+564,,Kulsum.M07,Kulsum,,Mirza,ths564,27.07.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,564,Lucknow,Kursi Road,NA,NA,NA
+565,,Nandini.J06,Nandini,,Jain,ths565,13.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,565,Lucknow,Kursi Road,NA,NA,NA
+566,,Navya.S08,Navya,,Srivastava,ths566,01.01.2008,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,566,Lucknow,Kursi Road,NA,NA,NA
+567,,Parnika.S07,Parnika,,Shukla,ths567,11.01.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,567,Lucknow,Kursi Road,NA,NA,NA
+568,,Pramath.C07,Pramath,,Chatterjee,ths568,15.09.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,568,Lucknow,Kursi Road,NA,NA,NA
+569,,Pranav.M07,Pranav,,Mishra,ths569,01.03.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,569,Lucknow,Kursi Road,NA,NA,NA
+570,,Ridhima.S07,Ridhima,,Sharma,ths570,19.05.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,570,Lucknow,Kursi Road,NA,NA,NA
+571,,Rudransh.R06,Rudransh,,Rajendra,ths571,07.12.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,571,Lucknow,Kursi Road,NA,NA,NA
+572,,Samridhi.A07,Samridhi,,Awasthi,ths572,12.07.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,572,Lucknow,Kursi Road,NA,NA,NA
+573,,Sanmukh.S06,Sanmukh,,Singh,ths573,24.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,573,Lucknow,Kursi Road,NA,NA,NA
+574,,Saumya.S07,Saumya,,Singh,ths574,24.03.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,574,Lucknow,Kursi Road,NA,NA,NA
+575,,Shantanu.D06,Shantanu,,Dwivedi,ths575,10.10.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,575,Lucknow,Kursi Road,NA,NA,NA
+576,,Shruti.S07,Shruti,,Singh,ths576,26.07.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,576,Lucknow,Kursi Road,NA,NA,NA
+577,,Unnati.S06,Unnati,,Singh,ths577,28.08.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,577,Lucknow,Kursi Road,NA,NA,NA
+578,,Abdullah.I06,Abdullah,,Irfan,ths578,14.08.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,578,Lucknow,Kursi Road,NA,NA,NA
+579,,Adarsh.G07,Adarsh,,Giri,ths579,21.04.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,579,Lucknow,Kursi Road,NA,NA,NA
+580,,Akshat.C07,Akshat,,Choudhary,ths580,06.03.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,580,Lucknow,Kursi Road,NA,NA,NA
+581,,Akshat.D06,Akshat,,Dinesh,ths581,22.12.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,581,Lucknow,Kursi Road,NA,NA,NA
+582,,Alina.K07,Alina,,Khan,ths582,06.02.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,582,Lucknow,Kursi Road,NA,NA,NA
+583,,Anaya.S07,Anaya,,Srivastava,ths583,02.09.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,583,Lucknow,Kursi Road,NA,NA,NA
+584,,Anshika.S07,Anshika,,Satyawali,ths584,10.12.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,584,Lucknow,Kursi Road,NA,NA,NA
+585,,Anshika.S07,Anshika,,Seth,ths585,27.01.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,585,Lucknow,Kursi Road,NA,NA,NA
+586,,Arvika.G07,Arvika,,Gautam,ths586,16.07.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,586,Lucknow,Kursi Road,NA,NA,NA
+587,,Fatima.A06,Fatima,,Ahmed,ths587,19.09.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,587,Lucknow,Kursi Road,NA,NA,NA
+588,,Inaya.I07,Inaya,,Imran,ths588,05.01.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,588,Lucknow,Kursi Road,NA,NA,NA
+589,,Ishani.S06,Ishani,,Singh,ths589,17.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,589,Lucknow,Kursi Road,NA,NA,NA
+590,,Kanishka.G07,Kanishka,,Gupta,ths590,23.06.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,590,Lucknow,Kursi Road,NA,NA,NA
+591,,Mahi.M06,Mahi,,Mishra,ths591,21.09.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,591,Lucknow,Kursi Road,NA,NA,NA
+592,,MohammadShadab.K07,MohammadShadab,,Khan,ths592,29.06.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,592,Lucknow,Kursi Road,NA,NA,NA
+593,,Navya.M07,Navya,,Mishra,ths593,12.11.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,593,Lucknow,Kursi Road,NA,NA,NA
+594,,Nitya.A07,Nitya,,Amit,ths594,07.09.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,594,Lucknow,Kursi Road,NA,NA,NA
+595,,Parth.P06,Parth,,Pathak,ths595,06.09.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,595,Lucknow,Kursi Road,NA,NA,NA
+596,,Prajjval.S06,Prajjval,,Srivastava,ths596,05.10.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,596,Lucknow,Kursi Road,NA,NA,NA
+597,,Pranamya.A07,Pranamya,,Awasthi,ths597,21.11.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,597,Lucknow,Kursi Road,NA,NA,NA
+598,,Ridhima.S06,Ridhima,,Sharma,ths598,30.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,598,Lucknow,Kursi Road,NA,NA,NA
+599,,Rishita.M07,Rishita,,MIshra,ths599,07.03.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,599,Lucknow,Kursi Road,NA,NA,NA
+600,,Siddhant.S07,Siddhant,,Shukla,ths600,23.01.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,600,Lucknow,Kursi Road,NA,NA,NA
+601,,Shambhavi.S09,Shambhavi,,Srivastava,ths601,05.01.2009,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,601,Lucknow,Kursi Road,NA,NA,NA
+602,,Shaurya.S06,Shaurya,,Singh,ths602,11.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,602,Lucknow,Kursi Road,NA,NA,NA
+603,,ShreshthaRaj.S07,ShreshthaRaj,,Singh,ths603,29.08.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,603,Lucknow,Kursi Road,NA,NA,NA
+604,,Shubham.A06,Shubham,,Agarwal,ths604,05.10.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,604,Lucknow,Kursi Road,NA,NA,NA
+605,,Shubhangi.T07,Shubhangi,,Thakur,ths605,08.02.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,605,Lucknow,Kursi Road,NA,NA,NA
+606,,TanishiS.N07,TanishiS,,Nayaka,ths606,06.01.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,606,Lucknow,Kursi Road,NA,NA,NA
+607,,Ananya.G06,Ananya,,Gupta,ths607,23.09.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,607,Lucknow,Kursi Road,NA,NA,NA
+608,,Anushka.C05,Anushka,,Chauhan,ths608,04.10.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,608,Lucknow,Kursi Road,NA,NA,NA
+609,,Aryan.R05,Aryan,,Rai,ths609,29.08.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,609,Lucknow,Kursi Road,NA,NA,NA
+610,,Apurva.S05,Apurva,,Singh,ths610,21.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,610,Lucknow,Kursi Road,NA,NA,NA
+611,,Bhumika.G05,Bhumika,,Goswami,ths611,30.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,611,Lucknow,Kursi Road,NA,NA,NA
+612,,Drishti.S05,Drishti,,Singh,ths612,27.08.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,612,Lucknow,Kursi Road,NA,NA,NA
+613,,Kartikay.G05,Kartikay,,Gupta,ths613,15.11.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,613,Lucknow,Kursi Road,NA,NA,NA
+614,,Nysa.S05,Nysa,,Srivastava,ths614,13.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,614,Lucknow,Kursi Road,NA,NA,NA
+615,,Sonia.H06,Sonia,,Hasan,ths615,17.12.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,615,Lucknow,Kursi Road,NA,NA,NA
+616,,Sanskar.T05,Sanskar,,Tandon,ths616,22.12.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,616,Lucknow,Kursi Road,NA,NA,NA
+617,,Shagun.C06,Shagun,,Choudhary,ths617,07.08.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,617,Lucknow,Kursi Road,NA,NA,NA
+618,,Suryansh.P06,Suryansh,,Pandey,ths618,14.05.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,618,Lucknow,Kursi Road,NA,NA,NA
+619,,Tahzeeb.A05,Tahzeeb,,Ahmad,ths619,02.10.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,619,Lucknow,Kursi Road,NA,NA,NA
+620,,Tayyaba.A05,Tayyaba,,Arshad,ths620,11.05.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,620,Lucknow,Kursi Road,NA,NA,NA
+621,,Vasvi.C05,Vasvi,,Chaturvedi,ths621,27.10.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,621,Lucknow,Kursi Road,NA,NA,NA
+622,,Vishwas.T06,Vishwas,,Tripathi,ths622,04.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,622,Lucknow,Kursi Road,NA,NA,NA
+623,,Yuvraj.R06,Yuvraj,,Rawat,ths623,20.02.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,623,Lucknow,Kursi Road,NA,NA,NA
+624,,Shubhankar.S07,Shubhankar,,Shukla,ths624,03.01.2007,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,624,Lucknow,Kursi Road,NA,NA,NA
+625,,Adrika.S04,Adrika,,Srivastava,ths625,05.09.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,625,Lucknow,Kursi Road,NA,NA,NA
+626,,Amulya.S05,Amulya,,Srivastava,ths626,09.09.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,626,Lucknow,Kursi Road,NA,NA,NA
+627,,Anand.K05,Anand,,Kanchan,ths627,30.04.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,627,Lucknow,Kursi Road,NA,NA,NA
+628,,Arpit.S05,Arpit,,Singh,ths628,02.01.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,628,Lucknow,Kursi Road,NA,NA,NA
+629,,Arunabh.V05,Arunabh,,Verma,ths629,12.04.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,629,Lucknow,Kursi Road,NA,NA,NA
+630,,Diya.T05,Diya,,Talwar,ths630,02.05.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,630,Lucknow,Kursi Road,NA,NA,NA
+631,,Hrishita.T05,Hrishita,,Tiwari,ths631,06.05.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,631,Lucknow,Kursi Road,NA,NA,NA
+632,,Kabir.S05,Kabir,,Srivastava,ths632,20.04.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,632,Lucknow,Kursi Road,NA,NA,NA
+633,,KirtiVardhanRaj.P04,KirtiVardhanRaj,,Pathak,ths633,17.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,633,Lucknow,Kursi Road,NA,NA,NA
+634,,Kritika.S05,Kritika,,Singh,ths634,11.10.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,634,Lucknow,Kursi Road,NA,NA,NA
+635,,Piyush.V05,Piyush,,Verma,ths635,20.08.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,635,Lucknow,Kursi Road,NA,NA,NA
+636,,Pranay.N05,Pranay,,Narain,ths636,30.05.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,636,Lucknow,Kursi Road,NA,NA,NA
+637,,Prakriti.J04,Prakriti,,Juneja,ths637,09.11.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,637,Lucknow,Kursi Road,NA,NA,NA
+638,,Rachit.R06,Rachit,,Rawat,ths638,10.10.2006,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,638,Lucknow,Kursi Road,NA,NA,NA
+639,,Riddima.S05,Riddima,,Singh,ths639,11.03.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,639,Lucknow,Kursi Road,NA,NA,NA
+640,,Shraddha.S05,Shraddha,,Singh,ths640,27.05.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,640,Lucknow,Kursi Road,NA,NA,NA
+641,,Shreya.S06,Shreya,,Srivastava,ths641,28.12.2006,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,641,Lucknow,Kursi Road,NA,NA,NA
+642,,Yuruque.H05,Yuruque,,Hassan,ths642,09.03.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,642,Lucknow,Kursi Road,NA,NA,NA
+643,,AkshayPratap.S04,AkshayPratap,,Singh,ths643,15.08.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,643,Lucknow,Kursi Road,NA,NA,NA
+644,,Aditya.S04,Aditya,,Srivastava,ths644,01.09.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,644,Lucknow,Kursi Road,NA,NA,NA
+645,,Ansh.D03,Ansh,,Daga,ths645,10.07.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,645,Lucknow,Kursi Road,NA,NA,NA
+646,,Abul.H03,Abul,,Hasan,ths646,10.04.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,646,Lucknow,Kursi Road,NA,NA,NA
+647,,Arsh.S05,Arsh,,Srivastava,ths647,14.06.2005,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,647,Lucknow,Kursi Road,NA,NA,NA
+648,,Nishkarsh.A04,Nishkarsh,,Awasthi,ths648,08.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,648,Lucknow,Kursi Road,NA,NA,NA
+649,,Amaan.S03,Amaan,,Siddiqui,ths649,16.10.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,649,Lucknow,Kursi Road,NA,NA,NA
+650,,Aditi.B04,Aditi,,Bhatt,ths650,01.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,650,Lucknow,Kursi Road,NA,NA,NA
+651,,Abhijeet.C04,Abhijeet,,Chowdhary,ths651,02.05.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,651,Lucknow,Kursi Road,NA,NA,NA
+652,,Aditi.S04,Aditi,,Singh,ths652,28.10.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,652,Lucknow,Kursi Road,NA,NA,NA
+653,,Anushka.V04,Anushka,,Verma,ths653,17.08.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,653,Lucknow,Kursi Road,NA,NA,NA
+654,,Kislay.M04,Kislay,,Mishra,ths654,08.12.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,654,Lucknow,Kursi Road,NA,NA,NA
+655,,Manas.K03,Manas,,Kapoor,ths655,29.10.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,655,Lucknow,Kursi Road,NA,NA,NA
+656,,MohammadAdeem.K04,MohammadAdeem,,Khan,ths656,04.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,656,Lucknow,Kursi Road,NA,NA,NA
+657,,Rishabh.M04,Rishabh,,Mudgal,ths657,27.01.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,657,Lucknow,Kursi Road,NA,NA,NA
+658,,Shaily.S04,Shaily,,Singh,ths658,21.03.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,658,Lucknow,Kursi Road,NA,NA,NA
+659,,Shantanu.D04,Shantanu,,Dwivedi,ths659,25.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,659,Lucknow,Kursi Road,NA,NA,NA
+660,,SushantKr.S03,SushantKr,,Singh,ths660,27.08.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,660,Lucknow,Kursi Road,NA,NA,NA
+661,,Chirayu.V04,Chirayu,,Verma,ths661,19.07.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,661,Lucknow,Kursi Road,NA,NA,NA
+662,,Dhruv.S04,Dhruv,,Srivastava,ths662,07.04.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,662,Lucknow,Kursi Road,NA,NA,NA
+663,,Arya.A03,Arya,,Arti,ths663,03.09.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,663,Lucknow,Kursi Road,NA,NA,NA
+664,,Aryaa.S02,Aryaa,,Singh,ths664,25.12.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,664,Lucknow,Kursi Road,NA,NA,NA
+665,,Dhruv.S03,Dhruv,,Srivastava,ths665,18.08.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,665,Lucknow,Kursi Road,NA,NA,NA
+666,,Jahnavi.S03,Jahnavi,,Singh,ths666,05.08.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,666,Lucknow,Kursi Road,NA,NA,NA
+667,,Mohak.M02,Mohak,,Mehrotra,ths667,30.07.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,667,Lucknow,Kursi Road,NA,NA,NA
+668,,Praksha.R04,Praksha,,Raawat,ths668,20.09.2004,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,668,Lucknow,Kursi Road,NA,NA,NA
+669,,ShayifA.S05,ShayifA,,Siddiqui,ths669,10.05.2005,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,669,Lucknow,Kursi Road,NA,NA,NA
+670,,Meenal.S03,Meenal,,Singh,ths670,08.02.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,670,Lucknow,Kursi Road,NA,NA,NA
+671,,Rudrakshi.R03,Rudrakshi,,Rajendra,ths671,28.06.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,671,Lucknow,Kursi Road,NA,NA,NA
+672,,Arohi.S04,Arohi,,Srivastava,ths672,16.04.2004,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,672,Lucknow,Kursi Road,NA,NA,NA
+673,,Dhruv.B01,Dhruv,,Bipin,ths673,16.12.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,673,Lucknow,Kursi Road,NA,NA,NA
+674,,MohammadZoha.K02,MohammadZoha,,Khan,ths674,13.08.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,674,Lucknow,Kursi Road,NA,NA,NA
+675,,Riya.V01,Riya,,Verma,ths675,29.01.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,675,Lucknow,Kursi Road,NA,NA,NA
+676,,Saksham.S01,Saksham,,Singh,ths676,12.03.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,676,Lucknow,Kursi Road,NA,NA,NA
+677,,Shantanu.P01,Shantanu,,Pathak,ths677,12.09.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,677,Lucknow,Kursi Road,NA,NA,NA
+678,,Shruti.S03,Shruti,,Srivastava,ths678,24.09.2003,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,678,Lucknow,Kursi Road,NA,NA,NA
+679,,Stuti.A02,Stuti,,Agarwal,ths679,20.04.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,679,Lucknow,Kursi Road,NA,NA,NA
+680,,Sarthak.M01,Sarthak,,Mehrotra,ths680,09.11.2001,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,680,Lucknow,Kursi Road,NA,NA,NA
+681,,Khushi.K02,Khushi,,Karan,ths681,12.06.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,681,Lucknow,Kursi Road,NA,NA,NA
+682,,Tanishq.A02,Tanishq,,Agarwal,ths682,11.10.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,682,Lucknow,Kursi Road,NA,NA,NA
+683,,Chandrashekhar.R09,Chandrashekhar,,Rai,ths683,5/1/2009,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,683,Lucknow,Mahanagar,NA,NA,NA
+684,,Pratham.M07,Pratham,,Mishra,ths684,14-07-2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,684,Lucknow,Mahanagar,NA,NA,NA
+685,,Yash.S06,Yash,,Sahu,ths685,24-05-2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,685,Lucknow,Mahanagar,NA,NA,NA
+686,,Varun.P07,Varun,,Pandey,ths686,4/12/2007,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,686,Lucknow,Mahanagar,NA,NA,NA
+687,,Estella.R06,Estella,,Rizvi,ths687,1/1/2006,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,687,Lucknow,Mahanagar,NA,NA,NA
+688,,Amaan.K06,Amaan,,Khan,ths688,13-05-2006,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,688,Lucknow,Mahanagar,NA,NA,NA
+689,,Kaushiki.S06,Kaushiki,,Srivastava,ths689,29-07-2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,689,Lucknow,Kursi Road,NA,NA,NA
+690,,Zaynab.X08,Zaynab,,X,ths690,03.02.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,690,Lucknow,Mahanagar,NA,NA,NA
+691,,Shreya.X07,Shreya,,X,ths691,12.03.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,691,Lucknow,Mahanagar,NA,NA,NA
+692,,Surbhi.X07,Surbhi,,X,ths692,01.05.2007,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Tender Hearts School,692,Lucknow,Mahanagar,NA,NA,NA
+693,,Nishtha.X07,Nishtha,,X,ths693,01.08.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,693,Lucknow,Mahanagar,NA,NA,NA
+694,,Ritwik.X06,Ritwik,,X,ths694,15.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,694,Lucknow,Mahanagar,NA,NA,NA
+695,,Ashi.X07,Ashi,,X,ths695,11.01.2007,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,695,Lucknow,Mahanagar,NA,NA,NA
+696,,Piyush.X05,Piyush,,X,ths696,17.04.2005,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,696,Lucknow,Mahanagar,NA,NA,NA
+697,,Haryshwa.X05,Haryshwa,,X,ths697,28.09.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,697,Lucknow,Mahanagar,NA,NA,NA
+698,,Kanishka.X05,Kanishka,,X,ths698,02.10.2005,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,698,Lucknow,Mahanagar,NA,NA,NA
+699,,Saakshi.X06,Saakshi,,X,ths699,09.10.2006,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,699,Lucknow,Mahanagar,NA,NA,NA
+700,,Kartikey.X04,Kartikey,,X,ths700,22.05.2004,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,700,Lucknow,Mahanagar,NA,NA,NA
+701,,Aanshi.S05,Aanshi,,Srivastava,ths701,05.03.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,701,Lucknow,Mahanagar,NA,NA,NA
+702,,Asadullah.M06,Asadullah,,Muhammad,ths702,12.04.2006,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,702,Lucknow,Mahanagar,NA,NA,NA
+703,,Shashank.X05,Shashank,,X,ths703,01.07.2005,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,703,Lucknow,Mahanagar,NA,NA,NA
+704,,Gauri.X04,Gauri,,X,ths704,01.10.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,704,Lucknow,Mahanagar,NA,NA,NA
+705,,Jaspreet.S03,Jaspreet,,Singh,ths705,26.12.2003,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,705,Lucknow,Mahanagar,NA,NA,NA
+706,,Shrishty.X04,Shrishty,,X,ths706,09.02.2004,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,706,Lucknow,Mahanagar,NA,NA,NA
+707,,Yashoditya.S05,Yashoditya,,Srivastava,ths707,25.12.2005,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,707,Lucknow,Mahanagar,NA,NA,NA
+708,,Vaishnavi.X04,Vaishnavi,,X,ths708,18.09.2004,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Tender Hearts School,708,Lucknow,Mahanagar,NA,NA,NA
+709,,Anubhav.X03,Anubhav,,X,ths709,21.06.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,709,Lucknow,Mahanagar,NA,NA,NA
+710,,Arish.S02,Arish,,Singh,ths710,25.12.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,710,Lucknow,Mahanagar,NA,NA,NA
+711,,Nidhi.X03,Nidhi,,X,ths711,24.03.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,711,Lucknow,Mahanagar,NA,NA,NA
+712,,Omanshi.S03,Omanshi,,Singh,ths712,30.01.2003,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,712,Lucknow,Mahanagar,NA,NA,NA
+713,,Pallav.X02,Pallav,,X,ths713,02.05.2002,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,713,Lucknow,Mahanagar,NA,NA,NA
+714,,Siddhant.X03,Siddhant,,X,ths714,14.02.2003,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Tender Hearts School,714,Lucknow,Mahanagar,NA,NA,NA
+715,,Satyabhama.T02,Satyabhama,,Tiwari,ths715,03.05.2002,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Tender Hearts School,715,Lucknow,Mahanagar,NA,NA,NA
+716,,Avlokita.X06,Avlokita,,X,ths716,24.09.2006,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,716,Lucknow,Kursi Road,NA,NA,NA
+717,,Kamraan.W05,Kamraan,,Waris,ths717,10.12.2005,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,717,Lucknow,Kursi Road,NA,NA,NA
+718,,Ramiz.X07,Ramiz,,X,ths718,08.08.2007,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,718,Lucknow,Kursi Road,NA,NA,NA
+719,,Ayushi.X06,Ayushi,,X,ths719,13.11.2006,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Tender Hearts School,719,Lucknow,Kursi Road,NA,NA,NA
+720,,Anshika.X06,Anshika,,X,ths720,29.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,720,Lucknow,Kursi Road,NA,NA,NA
+721,,Paarth.X06,Paarth,,X,ths721,29.03.2006,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Tender Hearts School,721,Lucknow,Kursi Road,NA,NA,NA
+722,,Hansika.X05,Hansika,,X,ths722,22.07.2005,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Tender Hearts School,722,Lucknow,Kursi Road,NA,NA,NA
+723,,Aidentrial.T08,Aidentrial,,Taylor,misc001,20.10.2008,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,1,New Delhi,Mahipalpur,NA,NA,NA
+724,,Alexandertrial.M07,Alexandertrial,,Moore,misc002,12.08.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,2,New Delhi,Mahipalpur,NA,NA,NA
+725,,Alexandertrial.M07,Alexandertrial,,Mitchell,misc003,10.12.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,3,New Delhi,Mahipalpur,NA,NA,NA
+726,,Andrewtrial.G07,Andrewtrial,,Garcia,misc004,06.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,4,New Delhi,Mahipalpur,NA,NA,NA
+727,,Anthonytrial.H07,Anthonytrial,,Harris,misc005,18.06.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,5,New Delhi,Mahipalpur,NA,NA,NA
+728,,Benjamintrial.M07,Benjamintrial,,Martin,misc006,30.12.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,6,New Delhi,Mahipalpur,NA,NA,NA
+729,,Braydentrial.N07,Braydentrial,,Nelson,misc007,05.11.2007,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-General Knowledge",Misctrial School,7,New Delhi,Mahipalpur,NA,NA,NA
+730,,Calebtrial.L07,Calebtrial,,Lopez,misc008,26.10.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,8,New Delhi,Mahipalpur,NA,NA,NA
+731,,Cartertrial.A08,Cartertrial,,Adams,misc009,08.03.2008,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,9,New Delhi,Mahipalpur,NA,NA,NA
+732,,Christiantrial.H07,Christiantrial,,Hill,misc010,19.08.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,10,New Delhi,Mahipalpur,NA,NA,NA
+733,,Christophertrial.L07,Christophertrial,,Lewis,misc011,25.09.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,11,New Delhi,Mahipalpur,NA,NA,NA
+734,,Danieltrial.A07,Danieltrial,,Anderson,misc012,09.08.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,12,New Delhi,Mahipalpur,NA,NA,NA
+735,,Davidtrial.M09,Davidtrial,,Martinez,misc013,07.01.2009,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,13,New Delhi,Mahipalpur,NA,NA,NA
+736,,Dylantrial.W07,Dylantrial,,Wright,misc014,14.11.2007,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-General Knowledge",Misctrial School,14,New Delhi,Mahipalpur,NA,NA,NA
+737,,Elijahtrial.J07,Elijahtrial,,Jackson,misc015,16.10.2007,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,15,New Delhi,Mahipalpur,NA,NA,NA
+738,,Elitrial.T08,Elitrial,,Turner,misc016,09.03.2008,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,16,New Delhi,Mahipalpur,NA,NA,NA
+739,,Ethantrial.W07,Ethantrial,,Williams,misc017,11.12.2007,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,17,New Delhi,Mahipalpur,NA,NA,NA
+740,,Evantrial.P08,Evantrial,,Parker,misc018,24.04.2008,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,18,New Delhi,Mahipalpur,NA,NA,NA
+741,,Evantrial.P08,Evantrial,,Patrick,misc019,23.03.2008,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,19,New Delhi,Mahipalpur,NA,NA,NA
+742,,Gabrieltrial.L09,Gabrieltrial,,Lee,misc020,08.04.2009,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,20,New Delhi,Mahipalpur,NA,NA,NA
+743,,Gavintrial.C08,Gavintrial,,Carter,misc021,25.06.2008,3-C,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-General Knowledge",Misctrial School,21,New Delhi,Mahipalpur,NA,NA,NA
+744,,Henrytrial.R08,Henrytrial,,Roberts,misc022,18.05.2008,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,22,New Delhi,Mahipalpur,NA,NA,NA
+745,,Huntertrial.P07,Huntertrial,,Phillips,misc023,26.09.2007,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,23,New Delhi,Mahipalpur,NA,NA,NA
+746,,Isaactrial.K08,Isaactrial,,King,misc024,26.08.2008,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,24,New Delhi,Mahipalpur,NA,NA,NA
+747,,Isaiahtrial.P07,Isaiahtrial,,Perez,misc025,22.08.2007,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,25,New Delhi,Mahipalpur,NA,NA,NA
+748,,Jacksontrial.R08,Jacksontrial,,Rodriguez,misc026,06.05.2008,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,26,New Delhi,Mahipalpur,NA,NA,NA
+749,,Jacktrial.C07,Jacktrial,,Campbell,misc027,21.07.2007,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,27,New Delhi,Mahipalpur,NA,NA,NA
+750,,Jacobtrial.S07,Jacobtrial,,Smith,misc028,09.10.2007,4-D,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-General Knowledge",Misctrial School,28,New Delhi,Mahipalpur,NA,NA,NA
+751,,Jamestrial.W07,Jamestrial,,White,misc029,18.09.2007,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,29,New Delhi,Mahipalpur,NA,NA,NA
+752,,Jaydentrial.M07,Jaydentrial,,Miller,misc030,18.11.2007,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,30,New Delhi,Mahipalpur,NA,NA,NA
+753,,Johntrial.Y07,Johntrial,,Young,misc031,19.12.2007,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,31,New Delhi,Mahipalpur,NA,NA,NA
+754,,Johntrial.Y08,Johntrial,,York,misc032,18.01.2008,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,32,New Delhi,Mahipalpur,NA,NA,NA
+755,,Jonathantrial.G08,Jonathantrial,,Green,misc033,08.10.2008,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,33,New Delhi,Mahipalpur,NA,NA,NA
+756,,Jonathantrial.G07,Jonathantrial,,Gabriel,misc034,18.05.2007,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,34,New Delhi,Mahipalpur,NA,NA,NA
+757,,Jordantrial.E08,Jordantrial,,Evans,misc035,21.12.2008,5-E,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-General Knowledge",Misctrial School,35,New Delhi,Mahipalpur,NA,NA,NA
+758,,Josephtrial.R07,Josephtrial,,Robinson,misc036,23.03.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,36,New Delhi,Mahipalpur,NA,NA,NA
+759,,Joshuatrial.T07,Joshuatrial,,Thompson,misc037,07.09.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,37,New Delhi,Mahipalpur,NA,NA,NA
+760,,Landontrial.S07,Landontrial,,Scott,misc038,14.11.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,38,New Delhi,Mahipalpur,NA,NA,NA
+761,,Liamtrial.D07,Liamtrial,,Davis,misc039,17.12.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,39,New Delhi,Mahipalpur,NA,NA,NA
+762,,Logantrial.C07,Logantrial,,Clark,misc040,25.09.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,40,New Delhi,Mahipalpur,NA,NA,NA
+763,,Lucastrial.A07,Lucastrial,,Allen,misc041,04.12.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,41,New Delhi,Mahipalpur,NA,NA,NA
+764,,Luketrial.B07,Luketrial,,Baker,misc042,27.09.2007,6-F,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-General Knowledge",Misctrial School,42,New Delhi,Mahipalpur,NA,NA,NA
+765,,Masontrial.J08,Masontrial,,Johnson,misc043,03.03.2008,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,43,New Delhi,Mahipalpur,NA,NA,NA
+766,,Matthewtrial.T07,Matthewtrial,,Thomas,misc044,02.07.2007,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,44,New Delhi,Mahipalpur,NA,NA,NA
+767,,Michaeltrial.W07,Michaeltrial,,Wilson,misc045,24.05.2007,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,45,New Delhi,Mahipalpur,NA,NA,NA
+768,,Nathantrial.H07,Nathantrial,,Hernandez,misc046,25.08.2007,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,46,New Delhi,Mahipalpur,NA,NA,NA
+769,,Nicholastrial.E07,Nicholastrial,,Edwards,misc047,24.09.2007,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,47,New Delhi,Mahipalpur,NA,NA,NA
+770,,Noahtrial.J08,Noahtrial,,Jones,misc048,16.05.2008,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,48,New Delhi,Mahipalpur,NA,NA,NA
+771,,Owentrial.G07,Owentrial,,Gonzalez,misc049,13.10.2007,7-G,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-General Knowledge",Misctrial School,49,New Delhi,Mahipalpur,NA,NA,NA
+772,,Ryantrial.H07,Ryantrial,,Hall,misc050,06.09.2007,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,50,New Delhi,Mahipalpur,NA,NA,NA
+773,,Ryantrial.H08,Ryantrial,,Hollywood,misc051,22.04.2008,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,51,New Delhi,Mahipalpur,NA,NA,NA
+774,,Samueltrial.W08,Samueltrial,,Walker,misc052,22.02.2008,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,52,New Delhi,Mahipalpur,NA,NA,NA
+775,,Tylertrial.C07,Tylertrial,,Collins,misc053,27.09.2007,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,53,New Delhi,Mahipalpur,NA,NA,NA
+776,,Williamtrial.B08,Williamtrial,,Brown,misc054,21.01.2008,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,54,New Delhi,Mahipalpur,NA,NA,NA
+777,,Williamtrial.B07,Williamtrial,,Baxter,misc055,07.08.2007,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,55,New Delhi,Mahipalpur,NA,NA,NA
+778,,Wyatttrial.M08,Wyatttrial,,Mitchell,misc056,27.06.2008,8-H,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-General Knowledge",Misctrial School,56,New Delhi,Mahipalpur,NA,NA,NA

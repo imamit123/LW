@@ -1,0 +1,47 @@
+<?php
+
+function single_login_schema() {
+  $schema['single_login'] = array(
+    'fields' => array(
+      'single_login_id'  => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE),
+      'uid' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE),
+      'counter' => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => 0),
+    ),
+    'unique keys' => array(
+      'uid' => array('uid')
+    ),
+    'indexes' => array(
+      'counter' => array('counter')
+    ),
+    'primary key' => array('single_login_id'),
+  );
+  
+  $schema['single_login_history'] = array(
+    'fields' => array(
+      'history_id'  => array('type' => 'serial', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => 10),
+      'uid'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => 10),
+      'session_id'  => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE),
+      'date'      => array('type' => 'int', 'not null' => TRUE, 'disp-width' => 11),
+      'ip'      => array('type' => 'varchar', 'length' => 15, 'not null' => TRUE),
+      'browser'    => array('type' => 'varchar', 'length' => 255, 'not null' => TRUE),
+      'type'      => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE, 'default' => 'login'),
+    ),
+    'unique keys' => array(
+      'session_id' => array('session_id')
+    ),
+    'indexes' => array(
+      'uid' => array('uid')
+    ),
+    'primary key' => array('history_id'),
+  );
+  
+  $schema['single_login_current_session'] = array(
+    'fields' => array(
+      'uid'      => array('type' => 'int', 'unsigned' => TRUE, 'not null' => TRUE, 'disp-width' => 10),
+      'session_id'  => array('type' => 'varchar', 'length' => 64, 'not null' => TRUE),
+    ),
+    'primary key' => array('uid', 'session_id'),
+  );
+
+  return $schema;
+}

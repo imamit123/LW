@@ -1,0 +1,3 @@
+name = assessments
+description = "Contain all the logic and code related to Assessments."
+core = 7.x

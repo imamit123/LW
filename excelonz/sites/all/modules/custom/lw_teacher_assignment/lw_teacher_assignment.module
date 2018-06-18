@@ -1,0 +1,1988 @@
+<?php
+/*custom block for menu tabs on teacher assignment page */
+
+function lw_teacher_assignment_block_info() {
+    $block = array();
+    $blocks['create_teacher_assignment'] = array(
+        'info' => t('Create Teacher Assignment'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['view_teacher_assignment'] = array(
+        'info' => t('View Teacher Assignment'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['detail_assignment_view'] = array(
+        'info' => t('Detail Assignment View'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['menu_tabs'] = array(
+        'info' => t('Menu Tabs'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['sort_by'] = array(
+        'info' => t('Sort By'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['detail_assignment_worksheet'] = array(
+        'info' => t('Detail Assignment Worksheet'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    return $blocks;
+}
+
+function lw_teacher_assignment_block_view($block_name = '') {
+    $block=array();
+    switch ($block_name) {
+        case 'create_teacher_assignment':
+            $block['subject'] = '';
+            $block['content'] = generate_assignment_code_form();
+            break;
+        case 'view_teacher_assignment':
+            $block['subject'] = '';
+            $block['content'] = view_assignment_list_form();
+            break;
+        case 'detail_assignment_view':
+            $block['subject'] = '';
+            $block['content'] = detail_assignment_view();
+            break;
+        case 'menu_tabs':
+            $block['subject'] = '';
+            $block['content'] = menu_tabs();
+            break;
+        case 'sort_by':
+            $block['subject'] = '';
+            $block['content'] = sort_by();
+            break;
+        case 'detail_assignment_worksheet':
+            $block['subject'] = '';
+            $block['content'] = detail_assignment_worksheet_view();
+            break;
+    }
+    return ($block);
+}
+
+
+function lw_teacher_assignment_menu($form, $form_state) {
+
+    $items['report/teacher/assignment'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Create your own customised assignment for your students or go back to view your older assignments when you need to.',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('generate_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['report/teacher/assignment/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Edit Assignment',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('generate_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['report/teacher/assignments/view'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Create your own customised assignment for your students or go back to view your older assignments when you need to.',
+        'page callback' => 'drupal_get_form',
+        //'page arguments' => array('generate_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['report/teacher/assignments/view/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        //'title' => 'Detail Assignment',
+        'page callback' => 'drupal_get_form',
+        // 'page arguments' => array('generate_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['report/teacher/view/assignment/worksheet/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        //'title' => 'Worksheet',
+        'page callback' => 'drupal_get_form',
+        // 'page arguments' => array('generate_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['report/teacher/change/question'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Change Question',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('change_question'),
+        'access callback' => TRUE,
+    );
+
+    return $items;
+
+}
+
+
+
+
+/*code for detail worksheet page four start*/
+
+function detail_assignment_worksheet_view() {
+
+
+
+
+    $f_output = generate_detail_assignment_worksheet_layout();
+
+    return $header.$f_output;
+
+
+
+
+
+
+
+
+}
+
+/*code for detail worksheet page four start*/
+
+
+/*code for sort by filter start*/
+function sort_by($form, &$form_state) {
+
+    $form['sort_by'] = array(
+        '#type' => 'select',
+        '#title' => 'Sort By',
+        '#maxlength' => 127,
+        '#options' => array(1=>'class',2=>'topic',3=>'date'),
+        //'#required' => TRUE,
+        '#default_value' => 'class',
+    );
+
+
+
+    //echo '<pre>';
+    //print_r($form['sort_by']['#options']);die();
+
+    return $form;
+
+
+
+
+
+}
+
+
+/*code for sort by filter start*/
+
+
+/* ment tabs satrt*/
+
+function menu_tabs() {
+    global $base_url;
+    $tab1= l('Create New Assignment','report/teacher/assignment');
+    $tab2= l('View My Assignment','report/teacher/assignments/view');
+
+    $output = '<div class="first_tab">'.$tab1.'</div>';
+    $output .= '<div class="second_tab">'.$tab2.'</div>';
+    $output .= '<div class="blank_div">'.'</div>';
+    return $output;
+}
+
+/* ment tabs end*/
+
+
+/* detail assignment view start*/
+function detail_assignment_view() {
+    global $base_url;
+    $final_output = generate_detail_assignment_layout();
+
+    $curnt_url = $_GET['q'];
+    $assig_no = $_GET['number'];
+
+    $g_again_url = $base_url .'/report/teacher/view/assignment/worksheet';
+    $curnt_str_expld = explode('/', $curnt_url);
+    $c_a_id = $curnt_str_expld[4];
+
+    $q_str = $_GET['number'];
+    $buttons .= l(t('Save'), 'report/teacher/assignments/view', array('attributes' => array('class' => array('save')))). '&nbsp;';
+    $buttons .= l(t('Create Worksheet Now'),$g_again_url.'/'.$c_a_id, array('query' => array('id' => $assig_no),'attributes' => array('id' => 'my-id',
+        'class' => 'create-worksheet-now')));
+    $buttons .= l(t('Generate again'), $base_url.'/'.$curnt_url,array('attributes' => array('id' => 'generate-again', 'class' => 'detail-asg-btns'),'query' => array('number' => $q_str,'gagain' =>'gagain' ))). '&nbsp;';
+    $buttons .= l(t('Discard'), $base_url.'/'.$curnt_url,array('attributes' => array('id' => 'discard-asgn', 'class' => 'detail-asg-btns'),'query' => array('number' => $q_str,'discard' =>'discard' ))). '&nbsp;';
+
+
+    /*Generate again code starts*/
+    if(isset($_GET['gagain']) && ($_GET['gagain'] == 'gagain')) {
+        $q_str = $_GET['q'];
+        $s_no = $_GET['number'];
+
+
+        $q_str_expld = explode('/', $q_str);
+        $a_id = $q_str_expld[4];
+        $query = db_query("SELECT * FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $a_id));
+        $records = array();
+        foreach($query as $values) {
+            $records[]=$values;
+        }
+        $topic_id = $records[0]->topic_id;
+        $easy = $records[0]->easy;
+        $very_easy = $records[0]->very_easy;
+        $difficult = $records[0]->difficult;
+        $very_difficult = $records[0]->very_difficult;
+        $fetched_nids = $records[0]->nids;
+        $nids  = generate_assignment_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult);
+        $q = db_query("UPDATE {eck_teacher_assignment} SET nids = :nids WHERE id = :id", array(':nids'=>$nids,':id' => $a_id));
+        drupal_goto('report/teacher/assignments/view/' . $a_id ,array('query'=>array('number'=>$s_no)));
+
+
+
+
+    }
+
+    global $user;
+    $profile = profile2_load_by_user($user->uid,'teacher_profile');
+    $school_id = $profile->field_schools['und'][0]['tid'];
+    $school_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $school_id, '=')
+        //->orderBy('tid')
+        ->execute()
+        ->fetchAll();
+    $school_name = $school_object[0]->name;
+    $assignment_no = $_GET['number'];
+    $subject_a = $records[0]->subject;
+    $explod = explode('-',$subject_a);
+    $class = $explod[0];
+    $subject = $explod[1];
+    $class_array = array();
+    $class_array = str_split($class);
+    $class_name = $class_array[6];
+    $due_date =$records[0]->due_date;
+    $due_date = date('d-m-Y',strtotime($due_date));
+    $created_date =$records[0]->created_date;
+    $created_date = date('d-m-Y',strtotime($created_date));
+    $easy =$records[0]->easy;
+    $very_easy =$records[0]->very_easy;
+    $difficult =$records[0]->difficult;
+    $very_difficult =$records[0]->very_difficult;
+    $topic =$records[0]->topic;
+    /*header code start*/
+    $header .= '<div class="header_wrap"><div class="school-name"><span>School:' .$school_name. '</span></div>';
+    $header .= '<div class="inner-wrap"><div class="assin-no-wrap"><span class="assig-no">Assignment no:' .$assignment_no. '</span>';
+    $header .= '<span class="created-date">Date Created:' .$created_date. '</span>';
+    $header .= '<span class"due-date">Due Date :' .$due_date. '</span></div>';
+    $header .= '<div class="class-name-wrap"><span class="class-name">Class:' .$class_name. '</span>';
+    $header .= '<span class="subject">Subject:' .$subject. '</span>';
+    $header .= '<span class="topic">Topic:&nbsp;'.$topic.'</span></div>';
+    $header .= '<div class="third-row"><span class="record">Level Key: VE = Very Easy, E = Easy, D = Difficult, VD = Very Difficult</span>';
+    $header .= '<span class="q-level">'.l('Edit Criteria',$base_url.'/report/teacher/assignment/' . $records[0]->id,array('fragment'=>'very_easy_textbox')).'</span></div><br/></div></div>';
+    /*header code ends*/
+
+
+
+    /*Generate again code ends*/
+
+
+
+
+    /*Assignment Discard code starts*/
+    if(isset($_GET['discard']) && ($_GET['discard'] == 'discard')) {
+        $q_str = $_GET['q'];
+        $q_str_expld = explode('/', $q_str);
+        $assign_id = $q_str_expld[4];
+        $query = db_query("DELETE FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assign_id));
+        drupal_goto('report/teacher/assignment');
+
+
+    }
+
+    return $final_output.$buttons;
+
+
+}
+
+/*view assignment listing block start*/
+function view_assignment_list_form(){
+    global $user;
+    $r = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid", array(':uid' => $user->uid));
+    $serial_number = $r->rowCount();
+    $records = array();
+    foreach($r as $values) {
+        $records[]=$values;
+
+
+    }
+
+    for($i=0;$i<count($records);$i++){
+        global $base_url;
+        $due_date = date('d-m-Y',strtotime($records[$i]->due_date));
+        //$created_date = date('d-m-Y',strtotime($records[$i]->created_date));
+        $created_date = $records[$i]->created_date;
+        $created_date = explode('/', $created_date);
+        $created_date = implode('-', $created_date);
+        $count = 1;
+        $count = $count + $i;
+        $output .= '<tr><td>'.$count. '</td>';
+        $output .= '<td>'. $records[$i]->subject. '</td>';
+        $output .= '<td>'. $records[$i]->topic. '</td>';
+        $output .= '<td>'. $created_date. '</td>';
+        $output .= '<td>'. $due_date. '</td>';
+        // $output .= '<td>'.'<a href='.$base_url .'/report/teacher/assignment/'.$records[$i]->id.'>' . 'Edit'.'</a></td>';
+        $output .= '<td>'.l('View','report/teacher/assignments/view/' . $records[$i]->id,array('query'=>array('number'=>$count))).'</td>';
+        $output .= '<td>'.l(t('X'),'report/teacher/assignments/view/',array('query' => array('id'=>$records[$i]->id,'number' => $count,'d' =>'del' ))). '</td></tr>';
+
+
+    }
+    /*Click (X) link code start*/
+    if(isset($_GET['d']) && ($_GET['d'] == 'del')) {
+        $assign_id = $_GET['id'];
+        $query = db_query("DELETE FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assign_id));
+        drupal_goto('report/teacher/assignments/view');
+    }
+    /*Click (X) link code ends*/
+
+    $table_head = "<table id='assignment_sort' class = 'tablesorter'><thead>
+      <tr>
+      <th>No.</th>
+      <th>Class & Subject</th>
+      <th>Topic</th>
+      <th>Created</th>
+      <th>Due</th>
+      <th class = 'view-tab'></th>
+      <th class = 'view-tab'></th>
+      </tr></thead>";
+    return $table_head .$output . '</table>';
+
+    /* code for filter assignments start */
+
+
+
+    /* code for filter assignments end */
+
+}
+
+/*view assignment listing block ends*/
+
+
+
+
+/*edit assignment code start*/
+
+function generate_assignment_code_form($form, &$form_state) {
+
+
+
+
+
+
+
+    $assignment_id = arg(3);
+    $r = db_query("SELECT * FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assignment_id));
+
+    foreach($r as $result) {
+
+        $class = $result->class;
+        $subject = $result->subject;
+        $topic = $result->topic;
+        $due_date = $result->due_date;
+        $very_easy = $result->very_easy;
+        $easy = $result->easy;
+
+        $difficult = $result->difficult;
+
+        $very_difficult = $result->very_difficult;
+        $total = $result->total;
+        $selected_topic_id = $result->topic_id;
+
+
+
+    }
+
+    /*edit assignment code end*/
+
+
+
+
+
+    global $user;
+
+    $profile = profile2_load_by_user($user->uid,'teacher_profile');
+
+    $subject_tid = $profile-> field_subjects['und'][0]['tid'];
+
+   // $subject = $profile-> field_subjects['und'];
+
+// echo '<pre>';
+// print_r($profile->field_collection_class_subject);
+
+// print_r($subject);
+
+    // $subject_id = array();
+    // foreach($subject as $value){
+
+    //     $subject_id[] = $value['tid'];
+
+
+    // }
+
+    // $class = db_select('taxonomy_term_hierarchy', 'th')
+    //     ->fields("th", array('tid','parent'))
+    //     ->condition('parent', $subject_id, 'IN')
+    //     //->orderBy('parent')
+    //     ->execute()
+    //     ->fetchAll();
+    // $a = array();
+    // foreach($class as $value) {
+
+
+    //     $a[$value->parent] = $value->tid ;
+    // }
+    // $final_topics = array();
+    // foreach($a as $key=>$value){
+
+    //     $final_topics[] = taxonomy_get_children($key);
+    // }
+    // $topic_options = array();
+    // foreach($final_topics as $topic_list) {
+
+    //     foreach($topic_list as $topic_names) {
+    //         $topic_options[$topic_names->tid] = $topic_names->name;
+    //     }
+    // }
+
+
+    $uid_detail = '';
+    $names = '';
+    $uid = $user->uid;
+    /*Code to get Class(es) of a Teacher STARTS*/
+    $result = db_select('profile', 'p')
+        ->fields('p',array('pid'))
+        ->condition('uid',$uid)
+        ->condition('type','teacher_profile')
+        ->range(0, 1)
+        ->execute()
+        ->fetchAll();
+    $pid = $result[0]->pid;
+
+    $subject_query = db_query("SELECT th.*  FROM `taxonomy_term_hierarchy` th
+ JOIN taxonomy_term_data td ON th.tid = td.tid AND td.vid = 7
+ WHERE th.tid IN (SELECT a.tid from taxonomy_term_hierarchy a, taxonomy_term_hierarchy b WHERE a.parent = b.tid and b.parent = 0) AND th.parent != 0");
+    $subject_in = "(";
+    foreach($subject_query as $subject_row) {
+        $subject_in .= $subject_row->tid . ",";
+    }
+    $subject_in .= "-1)";
+
+ //    $re = db_query("SELECT field_schools_tid, parent, field_class1_tid, field_branch_tid, field_subjects_tid
+ //   FROM field_data_field_schools s, field_data_field_class1 cl, field_data_field_branch b, field_data_field_subjects sb, taxonomy_term_hierarchy th
+ // WHERE s.entity_id = :pid
+ // AND field_subjects_tid IN $subject_in
+ // AND s.entity_id = cl.entity_id
+ // AND s.entity_id = b.entity_id
+ // AND s.entity_id = sb.entity_id
+ // AND s.bundle =  'teacher_profile'
+ // AND th.tid = cl.field_class1_tid", array(':pid'=> $pid));
+/*
+*Change Bya Amit - add field collection for new change in teacher
+**/
+$re = db_query("SELECT field_schools_tid, parent, field_branch_tid, field_collection_class_subject_value,field_collection_of_class_tid,field_collection_of_subject_tid
+                  FROM field_data_field_schools s, field_data_field_branch b,  field_data_field_collection_of_subject sb, taxonomy_term_hierarchy th ,field_data_field_collection_class_subject ccs,field_data_field_collection_of_class coc
+    WHERE s.entity_id = :pid
+    AND field_collection_of_subject_tid IN $subject_in
+    AND s.entity_id = b.entity_id
+    AND sb.entity_id = ccs.field_collection_class_subject_value
+    AND s.entity_id = ccs.entity_id
+    AND coc.entity_id = ccs.field_collection_class_subject_value
+    AND s.bundle =  'teacher_profile'
+    AND th.tid = coc.field_collection_of_class_tid", array(':pid'=> $pid));
+
+    $user_sub_tid = array();
+    $user_class_tid = array();
+    $query_string = array();
+
+    foreach($re as $classname) {
+        $user_sub_tid[] = $classname->field_collection_of_subject_tid;
+        if($classname->parent != 0) {
+            $user_class_tid[$classname->parent][$classname->field_collection_of_class_tid] = $classname->field_collection_of_class_tid;
+        }
+        $query_string[] =$classname->field_collection_of_class_tid;
+
+    }
+
+//echo '<pre>';
+//print_r($user_class_tid);
+    $class_name = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $query_string, 'IN')
+        ->orderBy('tid')
+        ->execute()
+        ->fetchAll();
+
+    $term_name_array = array();
+    foreach($class_name as $row) {
+        $term_name_array[$row->tid] = $row->name;
+    }
+
+    //class option array
+    $options_class = array();
+    foreach($user_class_tid as $key => $parent) {
+        foreach($parent as $c_key => $child) {
+            $options_class[$c_key] =$term_name_array[$key] . $term_name_array[$c_key];
+
+        }
+    }
+
+    /*Code to get Class(es) of a Teacher ENDS*/
+
+    $ts = taxonomy_term_load_multiple($user_sub_tid);
+    $options_class1 = array();
+    foreach ($ts as $key=>$term) {
+        $options_class1[$term->tid] = $term->name;
+    }
+
+    foreach ($options_class1 as $key => $value) {
+        $parent_class = taxonomy_get_parents($key);
+        $parent_class_tid = key($parent_class);
+        $q_res = db_select('taxonomy_term_data', 'td')
+            ->fields("td", array('name'))
+            ->condition('tid', $parent_class_tid, '=')
+            ->execute()
+            ->fetchAssoc();
+        $c_name = $q_res['name'];
+        $sub_arr[$key] = $c_name .'-'.$value;
+    }
+    asort($sub_arr);
+    $cl_id = taxonomy_get_parents($selected_topic_id);
+    $clas_id = key($cl_id);
+    //$value_dropdown_first = isset($form_state['values']['select_subject']) ? $form_state['values']['select_subject'] : $clas_id;
+    $value_dropdown_first = isset($form_state['values']['select_subject']) ? $form_state['values']['select_subject'] : (isset($clas_id)?$clas_id:key($sub_arr));
+
+
+
+
+
+
+     //echo '<pre>';print_r(asort($sub_arr));die();
+
+    /*$form['select_class'] = array(
+        '#type' => 'select',
+        '#title' => 'Select Class',
+        '#maxlength' => 127,
+        '#options' => $options_class,
+        //'#required' => TRUE,
+        '#default_value' => !empty($class) ? $class : '',
+    );*/
+    $form['select_subject'] = array(
+        '#type' => 'select',
+        '#title' => 'Select Subject',
+        '#maxlength' => 127,
+        '#options' => $sub_arr,
+        '#required' => TRUE,
+        //'#default_value' => $value_dropdown_first,
+        '#default_value' => $clas_id,
+        '#ajax' => array(
+            'event'=>'change',
+            'callback' =>'lw_teacher_assignment_ajax_callback',
+            'wrapper' => 'topic_wrapper',
+        ),
+    );
+
+    $form['select_topic'] = array(
+        '#type' => 'select',
+        '#title' => 'Select Topic',
+        '#options' => lw_teacher_assignment_second_dropdown_options($value_dropdown_first),
+        //'#description' => t('Choose an option.'),
+        '#required' => TRUE,
+        '#prefix' => '<div class="form-item" id="topic_wrapper">',
+        '#suffix' => '</div>',
+        '#default_value' => $selected_topic_id,
+        //'#default_value' => array('select' => 'topic'),
+
+    );
+    $form['assignment_created_date'] = array(
+        '#type' => 'textfield',
+        //'#type' => 'hidden',
+        '#title' => 'current_date',
+        //'#element_validate' => array('_headbar_is_empty'),
+        //'#required' => TRUE,
+        //'#access' => FALSE,
+        '#default_value' => date('d/m/Y'),
+    );
+
+
+    $form['#attributes'] = array('class' => 'form-item');
+
+    $form['assignment_due_date'] = array(
+        '#type' => 'date_popup',
+        '#date_format' => 'j F Y',
+        //'#date_year_range' => '0:+2',
+        '#datepicker_options' => array(
+        'minDate' => 0,
+        ),
+        '#title' => 'Set a due date',
+        //'#attributes' =>array('placeholder' => t('Calender Section')),
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#required' => TRUE,
+        '#default_value' => !empty($due_date) ? $due_date : '',
+    );
+    $form['info_text'] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div>'.'<span class="first-description">'.'You may select upto a maximum of 20 questions per assignment'.'</span>'.'<br/>'.'<span class="second-description">'.'Choose the number of questions required at each level of difficulty'.'</span>'.'</div>'),
+    );
+
+    $form['level_header'] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="question-header">'.'<span class="level">'.'Difficulty level'.'</span>'.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.'<span class="no-question">'.'No. of Questions '.'</span>'.'</div>'),
+    );
+
+    $form['very_easy'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Very Easy',
+        '#size'=>'5',
+        '#id'=>'very_easy_textbox',
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#default_value' => !empty($very_easy) ? $very_easy : '',
+    );
+    $form['easy'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Easy',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($easy) ? $easy : '',
+    );
+    $form['difficult'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Difficult',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($difficult) ? $difficult : '',
+    );
+    $form['very_difficult'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Very Difficult',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($very_difficult) ? $very_difficult : '',
+    );
+    $form['total'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Total',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('Auto Sum of 4 above')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($total) ? $total : '',
+    );
+    $form['error_text'] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<span id="error_msg"></span>'),
+    );
+
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => isset($assignment_id)?t('Update'):t('Create'),
+    );
+
+    return $form;
+
+}
+
+/*ajax for topic dropdown */
+
+
+function lw_teacher_assignment_ajax_callback($form, &$form_state) {
+    return $form['select_topic'];
+
+}
+
+function lw_teacher_assignment_second_dropdown_options($key = '') {
+
+    $get_parent_child_ids = db_select('taxonomy_term_hierarchy', 'th')
+        ->fields("th", array('tid','parent'))
+        ->condition('parent', $key, '=')
+        //->orderBy('parent')
+        ->execute()
+        ->fetchAll();
+    $a = array();
+    foreach($get_parent_child_ids as $value) {
+
+
+        $a[$value->parent][] = $value->tid ;
+    }
+    $final_topics = array();
+    foreach($a as $key=>$value){
+
+        $final_topics[] = taxonomy_get_children($key);
+    }
+    // print_r($final_topics);
+    $topic_options_list = array();
+    foreach($final_topics as $topic_list) {
+
+        foreach($topic_list as $topic_names) {
+            $topic_options_list[$topic_names->tid] = $topic_names->name;
+        }
+        asort($topic_options_list);
+    }
+    return $topic_options_list;
+}
+
+
+
+/* end of form ajax*/
+
+/*function _headbar_is_empty($element, &$form_state) {
+    if (empty($element['#value'])) {
+        form_set_error($element['#name'], t('Question difficulty text field should not be empty.',
+            array('!module' => $element['#title'])));
+    }
+}*/
+
+function generate_assignment_code_form_validate($form, &$form_state) {
+    $total = $form_state['input']['total'];
+    if($total > 20) {
+         form_set_error('condition' , t('You can Select a Maximum of 20 question per assignment.'));
+    }
+}
+
+
+
+
+
+
+
+function generate_assignment_code_form_submit($form, &$form_state) {
+    global $user;
+    $topic_id = $form_state['values']['select_topic'];
+    $class_id  = taxonomy_get_parents($topic_id);
+    $c_id = key($class_id);
+    $res = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('name'))
+        ->condition('tid', $c_id, '=')
+        ->execute()
+        ->fetchAssoc();
+    $subject_id = $form_state['values']['select_subject'];
+    $class =  $res['name'];
+    $due_date = $form_state['values']['assignment_due_date'];
+    $created_date = $form_state['values']['assignment_created_date'];
+    $subject = $form_state['complete form']['select_subject']['#options'][$subject_id];
+    $topic = $form_state['complete form']['select_topic']['#options'][$topic_id];
+    $very_easy = $form_state['values']['very_easy'];
+    $easy = $form_state['values']['easy'];
+    $difficult = $form_state['values']['difficult'];
+    $very_difficult = $form_state['values']['very_difficult'];
+    $total = $form_state['values']['total'];
+    $arg3 = arg(3);
+    $profile = profile2_load_by_user($user->uid,'teacher_profile');
+
+    if(isset($arg3) && !empty($arg3)) {
+        $final_nids =  get_all_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult);
+        $q = db_query("UPDATE {eck_teacher_assignment} SET type = :type,uid = :uid,subject = :subject,topic = :topic,due_date = :due_date,very_easy=:very_easy,easy =:easy,very_difficult=:very_difficult,total=:total,difficult=:difficult,created_date=:created_date,topic_id=:topic_id,nids=:nids WHERE id = :id", array(':type'=>'user',':uid'=>$user->uid,':subject'=>$subject,':subject'=>$subject,':topic'=>$topic,':due_date'=>$due_date,':very_easy'=>$very_easy,':easy'=>$easy,':very_difficult'=>$very_difficult,':total'=>$total,':difficult'=>$difficult,':created_date'=>$created_date,':topic_id'=>$topic_id,':id'=>$arg3,':nids'=>$final_nids));
+        $usr_assignments = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid", array(':uid' => $user->uid));
+        $seril_number =  $usr_assignments->rowCount();
+
+        drupal_goto('report/teacher/assignments/view/' . $arg3 ,array('query'=>array('number'=>$seril_number)));
+
+    }
+    $final_nids =  get_all_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult);
+    $entity = entity_create('teacher_assignment',
+        array(
+            'uid' => $user->uid,
+            'type' => 'user',
+            'due_date' => $due_date,
+            'created_date' => $created_date,
+            'subject' => $subject,
+            'topic' => $topic,
+            'topic_id' => $topic_id,
+            'very_easy' => $very_easy,
+            'easy' => $easy,
+            'difficult' => $difficult,
+            'very_difficult' => $very_difficult,
+            'total' => $total,
+            'nids'=> $final_nids,
+        )
+    );
+    $en = entity_save('teacher_assignment', $entity);
+    $results = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid ORDER BY id DESC LIMIT 1", array(':uid' => $user->uid));
+    $res_arr = array();
+    foreach($results as $r_values) {
+        $res_arr[]=$r_values;
+    }
+
+    $ass_id = $res_arr[0]->id;
+
+    $r = db_query("SELECT * FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $ass_id));
+    $user_assignments = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid", array(':uid' => $user->uid));
+    $serial_number =  $user_assignments->rowCount();
+    drupal_goto('report/teacher/assignments/view/' . $ass_id ,array('query'=>array('number'=>$serial_number)));
+}
+
+
+/*function for Fill in the blank html start*/
+function fib_generate_html($node){
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $question_title = $node->field_question_text['und'][0]['value'];
+    $n_type  = $node->type;
+    $blank_str2 = '____________ ';
+    $question_title_val =  preg_replace("#@([^~]+)@#",$blank_str2, $question_title);
+    $pattern = '#@([^~]+)@#'; // If '~' character found in fib question then fib will not work
+    preg_match($pattern, $question_title, $matches);
+    $chars = preg_split('/ /', $matches[1], -1, PREG_SPLIT_OFFSET_CAPTURE);
+    $answer = $chars[0][0];
+    //$output = '<td>'.'sno'.'</td>';
+    $output .= '<td>'.$Q_level.'</td>';
+    $output .= '<td>'.$question_title_val.'</td>';
+    $output .='<td class="Correct">'.$answer.'</td>';
+    $output .= '<td>'.change_question_link($node->nid,$Q_level,$Q_level_tid,$n_type).'</td>';
+
+    return $output;
+}
+/*function for Fill in the blank html ends*/
+
+
+
+/*function for MCQ html start*/
+function mcq_generate_html($node){
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $question_uri = $node->field_question_image['und'][0]['uri'];
+    $question_text = $node->field_question_text['und'][0]['value'];
+    $style_mcq = 'answer_img_mcq';
+    $img_path_mcq = image_style_url($style_mcq, $question_uri);
+    $Q_level = question_level($Q_level_tid);
+    $output .= '<td>'.$Q_level.'</td>';
+    if($question_uri != "") {
+        $output .= '<td>'."<div>"."<img src='".$img_path_mcq."' />".'<div class="text-after-image">'.$question_text.'</div>'."</div>".'</td>';
+
+    }
+    else {
+        $output .= '<td>'.$question_text.'</td>';
+    }
+    //$output .= '<td>'.$Q_level.'</td>';
+    //$output .= '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    $n_type  = $node->type;
+    $val= '';
+    $out = '';
+    foreach ($node->field_question_options['und'] as $option) {
+        $options = entity_load("field_collection_item", array($option['value'], ));
+        $option_class = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+        $val  .= '<div>'.$options[$option['value']]->field_option_1['und'][0]['value'].'</div>';
+        $ans_img = $options[$option['value']]->field_image_option['und'][0]['filename'];
+        if (array_key_exists('und', $options[$option['value']]->field_image_option)) {
+            $img_path_mcq = '';
+            $img_mcq = '';
+            $img_path_mcq = '';
+            $opt_img = '';
+            $img_txt_label = '';
+            $img_mcq = $options[$option['value']]->field_image_option['und'][0]['uri'];
+
+            $style_mcq = 'answer_img_mcq';
+            if($options[$option['value']]->field_option_1['und'][0]['value']){
+                $img_txt_label = '<div class=ans-bt-img>'.$options[$option['value']]->field_option_1['und'][0]['value'] .'</div>';
+            }
+
+
+            $img_path_mcq = image_style_url($style_mcq, $img_mcq);
+            $out .= "<div class=$option_class>"."<img src='".$img_path_mcq."' />".$img_txt_label."</div>";
+        }
+        else {
+
+            $out .= "<div class=$option_class>" .$options[$option['value']]->field_option_1['und'][0]['value'] . "</div>";
+        }
+    }
+
+    $output .= "<td>" .$out."</td>";
+    $output .= '<td>'.change_question_link($node->nid,$Q_level,$Q_level_tid,$n_type).'</td>';
+    return $output;
+}
+
+/*function for MCQ html ends*/
+
+
+/*function for Match the following html start*/
+function match_the_following_generate_html($node){
+    //echo '<pre>';print_r($node);die();
+    $n_type  = $node->type;
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $output .= '<td>'.$Q_level.'</td>';
+    $output .= '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    foreach ($node->field_correct_match_word['und'] as $option) {
+        $options = entity_load("field_collection_item", array($option['value'], ));
+        $correct_matches .= '<div>'.$options[$option['value']]->field_correct_match['und'][0]['value'].'</div>';
+        $img_match = $options[$option['value']]->field_image_option['und'][0]['uri'];
+        $img_match_correct = $options[$option['value']]->field_correct_image['und'][0]['uri'];
+        $style_match = 'match_120x112';
+        $img_path_m1 = image_style_url($style_match, $img_match);
+        $img_path_m2 = image_style_url($style_match, $img_match_correct);
+        $img_path_m3 = image_style_url($style_match, $img_match_random);
+
+        if ($img_match) {
+            $g_img_output .= '<div>'.'<img src="'.$img_path_m1.'" />'.'</div>';
+
+        }
+        if ($img_match_correct) {
+            $c_img_output .= '<div>'.'<img src="'.$img_path_m2.'" />'.'</div>';
+        }
+    }
+
+    //$output .= '<td id="correct_matches">'.$correct_matches.'</td>';
+    //$output .= '<td id="given_img_matches">'.$g_img_output.'</td>';
+    //$output .= '<td id="correct_img_matches">'.$c_img_output.'</td>';
+
+    foreach ($node->field_correct_match_word['und'] as $option) {
+        $options = entity_load("field_collection_item", array($option['value'], ));
+        $given_words .= '<div>'.$options[$option['value']]->field_given_word['und'][0]['value'].'</div>';
+
+    }
+    //$output .= '<td id="given_matches">'.$given_words.'</td>';
+    
+    if($img_match != "") {
+        $output .= '<td id="given_img_matches">'.$g_img_output.'</td>';
+        $output .= '<td id="correct_img_matches">'.$c_img_output.'</td>';
+    }
+    else {
+        $output .= '<td id="given-words">'.$given_words.'</td>';
+        $output .= '<td id="correct_matches">'.$correct_matches.'</td>';
+    }
+    $output .= '<td>'.change_question_link($node->nid,$Q_level,$Q_level_tid,$n_type).'</td>';
+    return $output;
+}
+
+/*function for Match the following html ends*/
+
+
+/*function for True/False html start*/
+function true_and_false_generate_html($node){
+    $output = '';
+    $out= '';
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $question_text = $node->field_question_text['und'][0]['value'];
+    $question_image = $node->field_question_image['und'][0]['uri'];
+    $img_tf_path = image_style_url("truandfalse", $question_image);
+    $Q_level = question_level($Q_level_tid);
+    $output .= '<td>'.$Q_level.'</td>';
+    if($question_image != "") {
+        $output .= '<td>'."<div>"."<img src='".$img_tf_path."' />".'<div class="text-after-image">'.$question_text.'</div>'."</div>".'</td>';
+    }
+    else {
+        $output .= '<td>'.$question_text.'</td>';
+    }
+    //$output .= '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    $n_type  = $node->type;
+    foreach ($node->field_answer_choices['und'] as $option) { // change in the field collection name
+
+        $options = entity_load("field_collection_item", array($option['value'], ));
+        $option_class = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+        $val1 = $options[$option['value']]->field_option_1['und'][0]['value'];
+        if($val1 == "") {
+            $img_tf = $options[$option['value']]->field_image_option['und'][0]['uri'];
+
+            $img_tf_path = image_style_url("truandfalse", $img_tf);
+            $out .=  "<div class=$option_class>"."<img src='".$img_tf_path."' />"."</div>";
+        }
+        else {
+
+            $out .= "<div class=$option_class>".$val1."</div>";
+        }
+
+    }
+    $output .= '<td>'.$out.'</td>';
+    $output .= '<td>'.change_question_link($node->nid,$Q_level,$Q_level_tid,$n_type).'</td>';
+
+    return $output;
+}
+
+/*function for True/False html ends*/
+
+
+/*function for Jumble/Un-jumble html start*/
+function jumble_generate_html($node){
+    $n_type  = $node->type;
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $output .= '<td>'.$Q_level.'</td>';
+    $output .= '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    $jumble_wrap = '';
+    $jumb_def_ques = '';
+    $val_jumb = '';
+    $random1 = array();
+    $j = 0;
+    foreach ($node->field_correct_word['und'] as $option) {
+
+        if(strlen($option['value']) > 1) {
+            $val_jumb .= '<div>'.$option['value'] .'</div>';
+        }
+        else {
+            $val_jumb .= '<div>'.$option['value'].'</div>';
+        }
+        $random1[] = $option['value'];
+
+
+    }
+
+    /*shuffle($random1);
+    echo '<pre>';print_r($random1);die();
+    foreach ($random1 as $options) {
+        $val .= '<div class="extra"><span> '.$random1[$j].' </span></div>';
+        $jumble_wrap = '<td class="answer-option">'.$val.'</td>';
+        $j++;
+
+    }*/
+    $output .= '<td>'.$val_jumb.'</td>';
+    $output .= '<td>'.change_question_link($node->nid,$Q_level,$Q_level_tid,$n_type).'</td>';
+    return $output;
+}
+
+/*function for Jumble/Un-jumble html ends*/
+
+/*To get nids for assignment questions start*/
+
+function generate_assignment_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult) {
+
+
+    /*code for step three for saving nids in entity type start*/
+
+    global $user;
+    $profile = profile2_load_by_user($user->uid,'teacher_profile');
+
+    /*fecth all nids for easy level starts*/
+    $easy_nid = db_select('node', 'n');
+    $easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $easy_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $easy_nids = $easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 14)
+        ->orderRandom()
+        ->range(0, $easy)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for easy level ends*/
+
+
+    /*fecth all nids for very easy level starts*/
+    $v_easy_nid = db_select('node', 'n');
+    $v_easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $v_easy_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $v_easy_nids = $v_easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 13)
+        ->orderRandom()
+        ->range(0, $very_easy)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for very easy level ends*/
+
+
+
+    /*fecth all nids for difficult level starts*/
+    $d_nid = db_select('node', 'n');
+    $d_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $d_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $d_nids = $d_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 15)
+        ->orderRandom()
+        ->range(0, $difficult)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for difficult level ends*/
+
+
+
+    /*fecth all nids for very difficult level starts*/
+    $vd_nid = db_select('node', 'n');
+    $vd_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $vd_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $vd_nids = $vd_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 16)
+        ->orderRandom()
+        ->range(0, $very_difficult)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for very difficult level ends*/
+
+    $result1 = array_merge($easy_nids,$v_easy_nids);
+    $result2  = array_merge($d_nids,$vd_nids);
+    $result = array_merge($result1,$result2);
+
+    foreach($result as $values) {
+
+        $nids[] = $values->nid;
+
+    }
+    $final_nids = serialize($nids);
+    return $final_nids;
+
+
+}
+
+
+
+
+/*To get nids for assignment*/
+
+
+
+/*Function to generate layout for detail assignment view(starts)*/
+
+function generate_detail_assignment_layout() {
+    global $base_url;
+    $assign_id = arg(4);
+    $get_all_nids = db_query("SELECT nids FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assign_id));
+    $r = db_query("SELECT * FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assign_id));
+
+    $records = array();
+    foreach($r as $values) {
+        $records[]=$values;
+
+
+    }
+    global $user;
+    $profile = profile2_load_by_user($user->uid,'teacher_profile');
+    $school_id = $profile->field_schools['und'][0]['tid'];
+    $school_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $school_id, '=')
+        ->execute()
+        ->fetchAll();
+    $school_name = $school_object[0]->name;
+    $assignment_no = $_GET['number'];
+    $subject_a = $records[0]->subject;
+    $explod = explode('-',$subject_a);
+    $class = $explod[0];
+    $subject = $explod[1];
+    $class_array = array();
+    $class_array = str_split($class);
+    $class_name = $class_array[6];
+    $due_date =$records[0]->due_date;
+    $due_date = date('d-m-Y',strtotime($due_date));
+    $created_date =$records[0]->created_date;
+    //$created_date = date('d-m-Y',strtotime($created_date));
+    //$created_date = $records[$i]->created_date;
+    $created_date = explode('/', $created_date);
+    $created_date = implode('-', $created_date);
+    $easy =$records[0]->easy;
+    $very_easy =$records[0]->very_easy;
+    $difficult =$records[0]->difficult;
+    $very_difficult =$records[0]->very_difficult;
+    $topic =$records[0]->topic;
+    /*header code start*/
+    $header .= '<div class="header_wrap"><div class="school-name"><span>School:' .$school_name. '</span></div>';
+    $header .= '<div class="inner-wrap"><div class="assin-no-wrap"><span class="assig-no"><label>Assignment no:</label>' .$assignment_no. '</span>';
+    $header .= '<span class="created-date"><label>Date Created:</label>' .$created_date. '</span>';
+    $header .= '<span class"due-date"><label>Due Date:</label>' .$due_date. '</span></div>';
+    $header .= '<div class="class-name-wrap"><span class="class-name"><label>Class:</label>' .$class_name. '</span>';
+    $header .= '<span class="subject"><label>Subject:</label>' .$subject. '</span>';
+    $header .= '<span class="topic"><label>Topic:</label>'.$topic.'</span></div>';
+    $header .= '<div class="third-row"><span class="record"><label>Level Key:</label>VE = Very Easy, E = Easy, D = Difficult, VD = Very Difficult</span>';
+   $header .= '<span class="q-level">'.l('Edit Criteria',$base_url.'/report/teacher/assignment/' . $records[0]->id,array('fragment'=>'very_easy_textbox')).'</span></div><br/></div></div>';
+    
+    /*header code ends*/
+
+    $ids = array();
+    foreach($get_all_nids as $values) {
+        $ids[]=$values;
+
+    }
+    $nids_serialized = $ids[0]->nids;
+    $nids_serialized = unserialize($nids_serialized);
+
+    $html = '';
+    $html .= '<table class="teacher_assignment"><tr class="trhead">
+              <th>S.No</th>
+              <th>Level</th>
+              <th>Question</th>
+              <th>Answer Options</th>
+             </tr>';
+    $i =1;
+    foreach($nids_serialized as $value) {
+
+
+        $node = node_load($value);
+        $type = $node->type;
+        $html .= '<tr>';
+        $html .= '<td>'.$i.'</td>';
+        //echo '<pre>';print_r($nids_serialized);die();
+
+        if($type == 'fib') {
+            $html .= fib_generate_html($node);
+
+        }
+        if($type == 'mcq') {
+            $html .= mcq_generate_html($node);
+
+
+        }
+        if($type == 'match_the_following') {
+
+            $html .= match_the_following_generate_html($node);
+        }
+        if($type == 'true_and_false') {
+            $html .= true_and_false_generate_html($node);
+        }
+        if($type == 'jumble') {
+            $html .= jumble_generate_html($node);
+        }
+        $html .= '</tr>';
+        $i = ++$i;
+    }
+
+
+    $html .= '</table>';
+    // echo '<pre>';print_r(array($html));die();
+    return $header.$html;
+}
+/*Function to generate layout for detail assignment view(Ends)*/
+
+
+
+
+function question_level($tid) {
+    $text = "";
+    if($tid == 13) {
+        $text = 'VE';
+    }
+    if($tid == 14) {
+        $text = 'E';
+    }
+    if($tid == 15) {
+        $text = 'D';
+    }
+    if($tid == 16) {
+        $text = 'VD';
+    }
+    return $text;
+
+}
+
+
+
+/*function for generating html for worksheet page four  start*/
+/*function for worksheet fill in the blanks start*/
+
+function fib_generate_worksheet_html($node){
+    $output = array();
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $question_title = $node->field_question_text['und'][0]['value'];
+
+    $blank_str2 = '____________ ';
+    $question_title_val =  preg_replace("#@([^~]+)@#",$blank_str2, $question_title);
+    $pattern = '#@([^~]+)@#'; // If '~' character found in fib question then fib will not work
+    preg_match($pattern, $question_title, $matches);
+    $chars = preg_split('/ /', $matches[1], -1, PREG_SPLIT_OFFSET_CAPTURE);
+    $output['c_ans'] = $chars[0][0];
+    //$output = '<td>'.'sno'.'</td>';
+    $output['answer'] = '<td class="blank_field"><span class="text-blank-wrap">Answer<br><span class="blank-text">'.$blank_str2.'</span></span>'.'</td>';
+    $output['qlevel'] = '<td>'.$Q_level.'</td>';
+    $output['qtext'] = '<td>'.$question_title_val.'</td>';
+
+    return $output;
+}
+
+/*function for worksheet fill in the blanks end*/
+
+/*function for worksheet MCQ start*/
+function mcq_generate_worksheet_html($node){
+    //echo '<pre>';print_r($node);die();
+    $question_text = $node->field_question_text['und'][0]['value'];
+    $q_uri = $node->field_question_image['und'][0]['uri'];
+    $q_style_mcq = 'answer_img_mcq';
+    $q_img_path_mcq = image_style_url($q_style_mcq, $q_uri);
+    $output = array();
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $output['qlevel'] = '<td>'.$Q_level.'</td>';
+    if(isset($q_uri) && !empty($q_uri)) {
+        $output['qtext'] = '<td>'."<img src='".$q_img_path_mcq."' />".'<div class="text-after-image">'.$node->field_question_text['und'][0]['value'].'</div>'.'</td>';
+    }
+    else {
+        $output['qtext'] = '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+
+    }
+    //if($q_uri != "") {
+        //$output['qtext'] = '<td>'."<img src='".$q_img_path_mcq."' />".$question_text.'</td>';
+   // }
+    //else {
+        //$output['qtext'] = '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+
+    //}
+    $n_type  = $node->type;
+    $val= '';
+    $out = '';
+
+
+    foreach ($node->field_question_options['und'] as $option) {
+        $options = entity_load("field_collection_item", array($option['value'], ));
+
+        /*code for correct answer key on pdf page start*/
+
+        $option_class = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+        if($option_class == 'Correct') {
+            $output['c_ans'] = $options[$option['value']]->field_option_1['und'][0]['value'];
+        }
+        /*code for correct answer key on pdf page end*/
+
+
+        /*code for correct answer key on pdf page start*/
+        $val  .= '<div>'.$options[$option['value']]->field_option_1['und'][0]['value'].'</div>';
+        $ans_img = $options[$option['value']]->field_image_option['und'][0]['filename'];
+        if (array_key_exists('und', $options[$option['value']]->field_image_option)) {
+            $img_path_mcq = '';
+            $img_mcq = '';
+            $img_path_mcq = '';
+            $opt_img = '';
+            $img_txt_label = '';
+            $img_mcq = $options[$option['value']]->field_image_option['und'][0]['uri'];
+
+            $style_mcq = 'answer_img_mcq';
+            if($options[$option['value']]->field_option_1['und'][0]['value']){
+                $img_txt_label = '<div class=ans-bt-img>'.$options[$option['value']]->field_option_1['und'][0]['value'] .'</div>';
+            }
+
+
+            $img_path_mcq = image_style_url($style_mcq, $img_mcq);
+            $out .= "<div class=''>"."<img src='".$img_path_mcq."' />"."</div>";
+            $correct = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+            //echo '<pre>'; print_r($options);
+            if($correct == 'Correct') {
+                $correct_uri = $options[$option['value']]->field_image_option['und'][0]['uri'];
+                $img_path_mcq = image_style_url($style_mcq, $correct_uri);
+                $output['correct_img'] = "<div class=''>"."<img src='".$img_path_mcq."' />"."</div>";
+
+
+            }
+        }
+        else {
+
+            $out .= "<div class='mcq-text'>" .$options[$option['value']]->field_option_1['und'][0]['value'] ."</div>";
+        }
+    }
+
+
+    $output['html'] = '<td class="match-image mcq-image">' .$out.'</td>';
+    //echo '<pre>';print_r($output);die();
+    return $output;
+}
+
+/*function for worksheet MCQ end*/
+
+/*function for worksheet Match the following start*/
+
+function match_the_following_generate_worksheet_html($node){
+    //echo '<pre>';print_r($node);die();
+    $output = array();
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $output['qlevel'] = '<td>'.$Q_level.'</td>';
+    $output['qtext'] = '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    $given_image = array();
+    $given_images = array();
+    foreach ($node->field_correct_match_word['und'] as $option) {
+        $options = entity_load("field_collection_item", array($option['value'], ));
+        $correct_matches .= '<div>'.$options[$option['value']]->field_correct_match['und'][0]['value'].'</div>';
+        $img_match = $options[$option['value']]->field_image_option['und'][0]['uri'];
+        $img_match_correct = $options[$option['value']]->field_correct_image['und'][0]['uri'];
+        $style_match = 'match_120x112';
+        $img_path_m1 = image_style_url($style_match, $img_match);
+        $img_path_m2 = image_style_url($style_match, $img_match_correct);
+        $img_path_m3 = image_style_url($style_match, $img_match_random);
+
+        if ($img_match) {
+            $g_img_output .= '<div>'.'<img src="'.$img_path_m1.'" />'.'</div>';
+            $given_image[] .= '<div>'.'<img src="'.$img_path_m1.'" />'.'</div>';
+        }
+        if ($img_match_correct) {
+            $c_img_output .= '<div>'.'<img src="'.$img_path_m2.'" />'.'</div>';
+            $given_images[] .= '<div>'.'<img src="'.$img_path_m2.'" />'.'</div>';
+        }
+
+
+    }
+    shuffle($given_images);
+    $g_images_suff = '';
+    foreach($given_images as $value){
+        $g_words .= $value;
+    }
+
+    $output['img_suff_match'] = '<td class="match-image">'.$g_words.'</td>';
+    //echo '<pre>';print_r($g_words);die();
+
+
+    $output['img_match'] = '<td class="given-image match-image">'.$g_img_output.'</td>';
+    $output['img_pdf'] = '<div class="image-ans-mtf-1">'.$g_img_output.'</div>';
+    $output['img_match_correct'] = '<td>'.$c_img_output.'</td>';
+    $output['img_pdf_correct'] = '<div class="image-ans-mtf-2">'.$c_img_output.'</div>';
+    $output['c_matches'] = '<td id="correct_matches">'.$correct_matches.'</td>';
+    $output['c_matches1'] = '<div class="c-matches-1">'.$correct_matches.'</div>';
+    //$output .= '<td id="given_img_matches">'.$g_img_output.'</td>';
+    //$output .= '<td id="correct_img_matches">'.$c_img_output.'</td>';
+    $given_words = array();
+    $given_word = array();
+    foreach ($node->field_correct_match_word['und'] as $option) {
+
+        $options = entity_load("field_collection_item", array($option['value'], ));
+        $given_words[] = $options[$option['value']]->field_given_word['und'][0]['value'];
+        $given_word[] = $options[$option['value']]->field_given_word['und'][0]['value'];
+
+    }
+
+    shuffle($given_words);
+    $g_words = '';
+    foreach($given_words as $value){
+        $g_words .= '<div>'.$value.'</div>';
+    }
+    $output['g_words'] = '<td id="given_matches">'.$g_words.'</td>';
+    $g_word = '';
+    foreach($given_word as $value){
+        if(!empty($value)) {
+            $g_word .= '<div>'.$value.'</div>';
+        }
+
+    }
+    $output['g_word'] = $g_word;
+    $output['g_word_pdf'] = '<div class="g-word">'.$g_word.'</div>';
+
+    if($img_match != "" && $img_match_correct != "") {
+        unset($output['c_matches']);
+        unset($output['g_words']);
+    }
+    else {
+        unset($output['img_match']);
+        unset($output['img_suff_match']);
+
+
+    }
+    return $output;
+}
+
+/*function for worksheet Match the following end*/
+
+/*function for true/false start*/
+
+function true_and_false_generate_worksheet_html($node){
+    //echo '<pre>';print_r($node);die();
+    $output = array();
+    $out= '';
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $image_question = $node->field_question_image['und'][0]['uri'];
+    $img_tf_path = image_style_url("truandfalse", $image_question);
+    $Q_level = question_level($Q_level_tid);
+    $output['qlevel'] = '<td>'.$Q_level.'</td>';
+
+    if(isset($image_question) && !empty($image_question)) {
+        $output['qtext'] = '<td>'."<img src='".$img_tf_path."' />".'<div class="text-after-image">'.$node->field_question_text['und'][0]['value'].'</div>'.'</td>';
+    }
+    else {
+        $output['qtext'] = '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+
+    }
+
+    //if($image_question != "") {
+       // $output['qimage'] = '<td>'."<div class=''>"."<img src='".$img_tf_path."' />".$node->field_question_text['und'][0]['value']."</div>".'</td>';
+    //}
+    //else {
+     // $output['qtext'] = '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    //}
+
+    foreach ($node->field_answer_choices['und'] as $option) { // change in the field collection name
+
+        $options = entity_load("field_collection_item", array($option['value'], ));
+
+        /*code for correct answer key on pdf page start*/
+        $option_class = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+        if($option_class == 'Correct') {
+            $output['c_answer'] = $options[$option['value']]->field_option_1['und'][0]['value'];
+        }
+
+        /*code for correct answer key on pdf page end*/
+
+
+
+        $val1 = $options[$option['value']]->field_option_1['und'][0]['value'];
+        if($val1 == "") {
+            $img_tf = $options[$option['value']]->field_image_option['und'][0]['uri'];
+
+            $img_tf_path = image_style_url("truandfalse", $img_tf);
+            $out .=  "<div class='pdf-true-false'>"."<img src='".$img_tf_path."' />"."</div>";
+            $correct = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+            //echo '<pre>'; print_r($options);
+            if($correct == 'Correct') {
+                $correct_uri = $options[$option['value']]->field_image_option['und'][0]['uri'];
+                $img_path_mcq = image_style_url("truandfalse", $correct_uri);
+                $output['correct_img'] = "<div class=''>"."<img src='".$img_path_mcq."' />"."</div>";
+
+
+            }
+        }
+        else {
+
+            $out .= "<div class=''>".$val1."</div>";
+        }
+
+    }
+    $output['html'] = '<td class="match-image mcq-image pdf-true-false">'.$out.'</td>';
+    //echo '<pre>';print_r($ou);die();
+
+    return $output;
+}
+
+/*function for true/false end*/
+
+/*function for jumble start*/
+
+function jumble_generate_worksheet_html($node){
+    $output =array();
+    $blank_str2 = '____________ ';
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $output['qlevel'] = '<td>'.$Q_level.'</td>';
+    $output['qtext'] = '<td>'.$node->field_question_text['und'][0]['value'].'</td>';
+    $jumble_wrap = '';
+    $jumb_def_ques = '';
+    $val_jumb = '';
+    $random1 = array();
+    //$random2 = array();
+    $j = 0;
+    foreach ($node->field_correct_word['und'] as $option) {
+
+        if(strlen($option['value']) > 1) {
+            $output['c_ans'] .= '<div>'.$option['value'] .'</div>';
+        }
+        else {
+            $output['c_ans'] .= '<div>'.$option['value'].'</div>';
+        }
+        $random1[] = $option['value'];
+        $random2[] = $option['value'];
+
+
+    }
+    //echo '<pre>';print_r($val_jumb);die();
+
+    shuffle($random1);
+
+    foreach ($random1 as $options) {
+        $val .= '<div class="">'.$random1[$j].'</div>';
+        $jumble_wrap = $val;
+        $j++;
+
+    }
+    /*foreach ($random2 as $options) {
+        $val .= '<div class="">'.$random2[$j].'</div>';
+        $jumbl_wrap = '<div class="">'.$val.'</div>';
+        $j++;
+
+    }*/
+    $output['janswer'] = '<td class="blank_field"><span class="text-blank-wrap">Answer<span class="blank-text">'.$blank_str2.'</span></span>'.'</td>';
+    $output['jumbled'] = '<td class="jumble-text">'.$jumble_wrap.'</td>';
+    // $output['unjumbled'] = '<td>'.$jumbl_wrap.'<a href="#">'."change Question".'</a>'.'</td>';
+    return $output;
+}
+
+/*function for jumble end*/
+
+/*function for generating html for worksheet page four  end*/
+
+
+
+
+function generate_detail_assignment_worksheet_layout() {
+    global $base_url;
+    $q_string  = $_GET['q'];
+    $q_string_expl = explode('/',$q_string);
+
+    $assign_id = $q_string_expl[5];
+    $get_all_nids = db_query("SELECT nids FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assign_id));
+    $r = db_query("SELECT * FROM {eck_teacher_assignment} WHERE id = :id", array(':id' => $assign_id));
+
+    $records = array();
+    foreach($r as $values) {
+        $records[]=$values;
+
+
+    }
+    global $user;
+    $profile = profile2_load_by_user($user->uid,'teacher_profile');
+    $school_id = $profile->field_schools['und'][0]['tid'];
+    $school_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $school_id, '=')
+        ->execute()
+        ->fetchAll();
+    $school_name = $school_object[0]->name;
+    $assignment_no = $_GET['id'];
+    $subject_a = $records[0]->subject;
+    $explod = explode('-',$subject_a);
+    $class = $explod[0];
+    $subject = $explod[1];
+    $class_array = array();
+    $class_array = str_split($class);
+    $class_name = $class_array[6];
+    $due_date =$records[0]->due_date;
+    $due_date = date('d-m-Y',strtotime($due_date));
+    $created_date =$records[0]->created_date;
+    //$created_date = date('d-m-Y',strtotime($created_date));
+    //echo '<pre>';print_r($created_date);die();
+    $easy =$records[0]->easy;
+    $very_easy =$records[0]->very_easy;
+    $difficult =$records[0]->difficult;
+    $very_difficult =$records[0]->very_difficult;
+    $topic =$records[0]->topic;
+    /*header code start*/
+    if(isset($_GET['print']) && ($_GET['print'] == 'print')) {
+        $header .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        <head>
+        <link rel="stylesheet" type="text/css" href=' . $base_url .'/sites/all/themes/lw_theme/css/pdf.css media="all" />
+        <title></title>
+        </head> ';
+    }
+
+    $header .= '<div class="header_wrap"><div class="pdf-logo-wrap"><span><img src=' . $base_url .'/sites/all/themes/lw_theme/logo.png /></span></div>';
+    $header .= '<div class="header_wrap"><div class="school-name"><span>School:' .$school_name. '</span></div>';
+    $header .= '<div class="inner-wrap"><div class="assin-no-wrap"><span class="assig-no">Student Name :</span>';
+    $header .= '<span class="created-date">Roll No :</span>';
+  //  $header .= '<span class"due">School :</span></div>';
+    $header .= '<span class="class-name">Class:' .$class_name. '</span></div>';
+    //$header .= '';
+    $header .= '<div class="class-name-wrap"><span class="subject">Subject:' .$subject. '</span>';
+    $header .= '<span class="topic">Topic:&nbsp;'.$topic.'</span><span class="assig-no">Assignment no:' .$assignment_no. '</span></div>';
+    $header .= '<div class="assin-no-wrap">';
+    $header .= '<span class="created-date">Date Created:' .$created_date. '</span>';
+    $header .= '<span class"due">Due Date :' .$due_date. '</span></div>';
+    $header .= '<br/></div></div><br/>';
+    //$header .= '<span class="q-level">'.l('Edit Criteria','/report/teacher/assignment/' . $records[0]->id,array('fragment'=>'very_easy_textbox')).'</div><br/></div></div>';
+    /*header code ends*/
+    $ids = array();
+    foreach($get_all_nids as $values) {
+        $ids[]=$values;
+
+    }
+    $nids_serialized = $ids[0]->nids;
+    $nids_serialized = unserialize($nids_serialized);
+
+    $html = '';
+    $html .= '<table class="teacher_assignment no-level-table"><tr class="trhead">
+              <th>S.No</th>
+              <th>Question</th>
+              <th colspan="2">Answer Options</th>
+
+             </tr>';
+    $i =1;
+    foreach($nids_serialized as $value) {
+
+
+        $node = node_load($value);
+        $type = $node->type;
+        $html .= '<tr>';
+        $html .= '<td>'.$i.'</td>';
+        if($type == 'fib') {
+            $htm = fib_generate_worksheet_html($node);
+            //echo '<pre>';print_r($htm);die();
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['answer'];
+            $c_ans .= '<div>'.$i.'.&nbsp;FIB Answer is&nbsp;'.$htm['c_ans'].'</div>';
+
+
+        }
+        if($type == 'mcq') {
+            $htm = mcq_generate_worksheet_html($node);
+           //echo '<pre>';print_r($htm);die();
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['html'];
+            if(empty($htm['c_ans'])) {
+                $c_ans .= '<div class="mcq-image-ans">'.$i.'.&nbsp;Correct Ans Image is&nbsp;'.$htm['correct_img'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="mcq-ans">'.$i.'.&nbsp;Correct Ans option is&nbsp;'.$htm['c_ans'].'</div>';
+            }
+
+
+
+        }
+        if($type == 'match_the_following') {
+
+            $htm = match_the_following_generate_worksheet_html($node);
+           //echo '<pre>';print_r($htm['img_pdf_correct']);die();
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+
+                $html .= $htm['g_words'];
+                $html .= $htm['c_matches'];
+
+
+            $html .= $htm['img_match'];
+            $html .= $htm['img_suff_match'];
+            $g_word_ans =  $htm['g_word'];
+            //print_r($g_word_ans);die();
+
+            //$html .= $htm['img_match_correct'];
+           // $html .= $htm['g_words'];
+            //$html .= $htm['c_matches'];
+
+
+
+               // $html .= $htm['img_match'];
+                //$html .= $htm['img_suff_match'];
+
+           // $html .= $htm['c_matches'];
+            //$html .= $htm['g_words'];
+            //$g_word_ans =  $htm['g_word'];
+            //print_r($g_word_ans);
+           // var_dump(empty($g_word_ans));die();
+
+            if(empty($htm['g_word'])) {
+                    //die('image');
+               // $c_ans .= '<div>'.$i.'.&nbsp;MTF is&nbsp;'.$htm['img_match'].$htm['img_match_correct'].'</div>';
+              //  $c_ans .= $htm['img_match'].$htm['img_match_correct'];
+                $c_ans .= '<div class="image-ans-mtf">'.$i.'.&nbsp;MTF Answer is&nbsp;'.$htm['img_pdf'].$htm['img_pdf_correct'].'</div>';
+            }
+            else {
+               // die('text');
+                $c_ans .= '<div class="mtf-text-ques">'.$i.'.&nbsp;MTF Answer is&nbsp;'.$htm['c_matches1'].$htm['g_word_pdf'].'</div>';
+
+            }
+
+        }
+
+        if($type == 'true_and_false') {
+            $htm = true_and_false_generate_worksheet_html($node);
+            // $html .= $htm['qlevel'];
+            //$html .= $htm['qtext'];
+            //$html .= $htm['html'];
+            //$html .= $htm['qimage'];
+            //echo '<pre>';print_r($htm);//die();
+            if(empty($htm['qimage'])) {
+                $html .= $htm['qtext'];
+            }
+            else {
+                $html .= $htm['qimage'];
+            }
+            $html .= $htm['html'];
+            if(empty($htm['c_answer'])) {
+                $c_ans .= '<div class="true-and-false-image-ans">'.$i.'.&nbsp;Correct Ans Image is&nbsp;'.$htm['correct_img'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="true-and-false-ans">'.$i.'.&nbsp;Correct Ans option is&nbsp;'.$htm['c_answer'].'</div>';
+            }
+
+
+        }
+        if($type == 'jumble') {
+            $htm = jumble_generate_worksheet_html($node);
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['jumbled'];
+            $html .= $htm['janswer'];
+            $c_ans .= '<div class="jumble-ans">'.$i.'.&nbsp;Unjumble answer is&nbsp;'.$htm['c_ans'].'</div>';
+
+        }
+        $html .= '</tr>';
+        $html .= '<tr class="pdf-bottom-border"><td></td><td></td><td></td><td></td></tr>';
+        $i++;
+    }
+    //$html .= '<tr><td class="copy-write" colspan="4">© 2013 Learning World Education Solutions Pvt. Ltd ( LWES). Excelonz is a brand of LWES. All Rights Reserved. This content may not be used, altered, copied,re-used or redistributed without prior consent from LWES.</td></tr>';
+    //echo '<pre>';print_r($c_ans);die();
+    //$html .= '<tr><td>'.$c_ans.'</td></tr>';
+    $html .= '</table>';
+    $query_str = $_GET['q'];
+    $query_str = $base_url.'/'.$query_str;
+    $buttons = l(t('Download'),$query_str ,array('query' => array('print' =>'print','id'=>$assignment_no,'class'=>'class'.$class_name,'subject'=>$subject),'attributes' => array('target'=>'_blank')));
+    $class_name = $_GET['class'];
+    $subject_name = $_GET['subject'];
+    if(isset($_GET['print']) && ($_GET['print'] == 'print')) {
+        require_once("sites/all/modules/print/lib/dompdf/dompdf_config.inc.php");
+        $dompdf = new DOMPDF;
+        $ans = '<div style="page-break-before: always;">'.'Correct Answer is'.$c_ans.'</div>';
+        $header .= $html.$ans;
+        $html = mb_convert_encoding($header, 'HTML-ENTITIES', 'UTF-8');
+
+        $dompdf->load_html($html);
+
+        $dompdf->render();
+
+        $font = Font_Metrics::get_font("din", "regular");
+        $canvas = $dompdf->get_canvas();
+        $canvas->page_text(72, 750, "© 2013 Learning World Education Solutions Pvt. Ltd ( LWES). Excelonz is a brand of LWES. All Rights Reserved. This content may not be used, altered, copied,re-used or redistributed without prior consent from LWES.", $font, 6, array(0,0,0));
+        //print_r( $dompdf->output_html() ).die();
+        $dompdf->stream($class_name.$subject_name."Assignment.pdf");
+    }
+
+    return $header.$html.$buttons;
+}
+
+
+
+/*change Question Function Start*/
+function change_question() {
+    $Nid = $_GET['Qnid'];
+    $Ql = $_GET['Ql'];
+    $Qlevel12 = $_GET['Qlevel'];
+    $arg  = arg(4);
+    global $user;
+    $usr_assignments = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid AND id = :id", array(':uid' => $user->uid,':id'=>$arg));
+    foreach($usr_assignments as $key =>$assignment) {
+        $assig_nids = $assignment->nids;
+        $assig_id = $assignment->id;
+        $assig_topic_id = $assignment->topic_id;
+        $unserialize_nids = unserialize($assig_nids);
+    }
+
+    $Arr_Key = array_keys($unserialize_nids,$Nid);
+    $key = $Arr_Key[0];
+    $node = node_load($unserialize_nids[$key]);
+
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $q_type = $node->type;
+
+//	 die();
+    $very_easy = 1;
+    $v_easy_nid = db_select('node', 'n');
+    $v_easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $v_easy_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $v_easy_nids = $v_easy_nid->fields('n', array('nid'))
+        ->fields('fl',array('field_question_level_tid'))
+        ->condition('field_subjects_tid', $assig_topic_id)
+        ->condition('field_question_level_tid', $Q_level_tid,'=')
+//       ->condition('field_question_level_tid',$Qlevel12,"=")
+        ->condition("n.nid",$Nid,"<>")
+        ->orderRandom()
+        ->range(0, $very_easy)
+        ->execute()
+        ->fetchAll();
+    foreach($v_easy_nids as $values) {
+        $nids = $values->nid;
+    }
+    $unserialize_nids[$key] = $nids;
+    $final_nids = serialize($unserialize_nids);
+    $arr = array('number'=>$seril_number,'Ql'=>$Q_level,'Qnid'=>$node->nid,'Qlevel'=>$Q_level_tid,'AssId'=>$arg,'Ntype'=>$node->type);
+    $q = db_query("UPDATE {eck_teacher_assignment} SET nids = :nids WHERE id = :id", array(':nids'=>$final_nids,':id' => $arg));
+    $usr_assignments = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid", array(':uid' => $user->uid));
+    $seril_number =  $usr_assignments->rowCount();
+    $arr = array('number'=>$seril_number,'Ql'=>$Q_level,'Qnid'=>$node->nid,'Qlevel'=>$Q_level_tid,'AssId'=>$arg,'Ntype'=>$node->type);
+    $output .= '<td class="chnage-que">'.l('Change The Question','report/teacher/assignments/view/'.$arg,array('query'=>$arr)).'</td>';
+    drupal_goto('report/teacher/assignments/view/' . $arg,array('query'=>$arr));
+}
+
+function change_question_link($pass_nid,$level,$level_tid,$ntype){
+    global $user;
+    $Nid = $_GET['Qnid'];
+    $arg  = arg(4);
+    $usr_assignments = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid AND id = :id", array(':uid' => $user->uid,':id'=>$arg));
+    foreach($usr_assignments as $key =>$assignment) {
+        $assig_nids = $assignment->nids;
+        $assig_id = $assignment->id;
+        $assig_topic_id = $assignment->topic_id;
+        $unserialize_nids = unserialize($assig_nids);
+    }
+
+    $Arr_Key = array_keys($unserialize_nids,$Nid);
+    $key = $Arr_Key['0'];
+
+    $node = node_load($unserialize_nids);
+    $Q_level_tid = $node->field_question_level['und'][0]['tid'];
+    $Q_level = question_level($Q_level_tid);
+    $q_type = $node->type;
+    $very_easy = 1;
+    $usr_assignments = db_query("SELECT * FROM {eck_teacher_assignment} WHERE uid = :uid", array(':uid' => $user->uid));
+    $seril_number =  $usr_assignments->rowCount();
+    $arr = array('number'=>$seril_number,'Ql'=>$level,'Qnid'=>$pass_nid,'Qlevel'=>$level_tid,'AssId'=>$arg,'Ntype'=>$ntype);
+    $output = '<td class="chnage-que">'.l('Change The Question','report/teacher/change/question/'.$arg ,array('query'=>$arr)).'</td>';
+
+    return 	$output;
+}
+/*change Question Function End*/
+
+
+/*function to get all seariclized Question node Ids START*/
+
+function get_all_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult) {
+
+	/*fecth all nids for easy level starts*/
+    $easy_nid = db_select('node', 'n');
+    $easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $easy_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $easy_nids = $easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 14)
+        ->orderRandom()
+        ->range(0, $easy)
+        ->execute()
+        ->fetchAll();
+     
+    /*fecth all nids for easy level ends*/
+
+
+    /*fecth all nids for very easy level starts*/
+    $v_easy_nid = db_select('node', 'n');
+    $v_easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $v_easy_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $v_easy_nids = $v_easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 13)
+        ->orderRandom()
+        ->range(0, $very_easy)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for very easy level ends*/
+
+
+
+    /*fecth all nids for difficult level starts*/
+    $d_nid = db_select('node', 'n');
+    $d_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $d_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $d_nids = $d_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 15)
+        ->orderRandom()
+        ->range(0, $difficult)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for difficult level ends*/
+
+
+
+    /*fecth all nids for very difficult level starts*/
+    $vd_nid = db_select('node', 'n');
+    $vd_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $vd_nid->leftJoin('field_data_field_question_level', 'fl', 'fl.entity_id = n.nid');
+    $vd_nids = $vd_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->condition('field_question_level_tid', 16)
+        ->orderRandom()
+        ->range(0, $very_difficult)
+        ->execute()
+        ->fetchAll();
+    /*fecth all nids for very difficult level ends*/
+
+$result1 = array_merge($easy_nids,$v_easy_nids);
+  $result2  = array_merge($d_nids,$vd_nids);
+    $result = array_merge($result1,$result2);
+    foreach($result as $values) {
+
+        $nids[] = $values->nid;
+
+    }
+    $final_nids = serialize($nids);
+
+    return $final_nids;
+}
+/*function to get all seariclized Question node Ids ENDS*/
+
+
+
+
+
+
+
+

@@ -1,0 +1,174 @@
+<?php
+
+function lw_notification_cronapi($op, $job = NULL) {
+  $items['parent_first_notification_when_no_child_add'] = array(
+    'description' => 'Send First mail when No child Add',
+    'rule' => '0 * * * *', // Every 5 minutes
+  );
+  $items['parent_secand_notification_when_no_child_add'] = array(
+    'description' => 'Send Second mail when No child Add',
+    'rule' => '4 0 * * *', // Every 5 minutes
+  );
+
+  return $items;
+}
+
+
+/*
+*Implement Hook_menu()
+*
+*/
+function lw_notification_menu(){
+$items = array();
+
+   $items['test_mail'] = array(
+    'title' => 'Check Mail for Parent',
+    'page callback' => 'parent_first_notification_when_no_child_add',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+    $items['test_mail2'] = array(
+    'title' => 'Check Mail for Parent',
+    'page callback' => 'parent_secand_notification_when_no_child_add',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/*
+*Implement Mail Content - Register parent not add any child Send first Notification 1 Hours.
+*/
+
+function lw_notification_mail($keys, &$message, $params){
+
+ // url_send = "http://www.excelonz.com/user/" . $params['uid'];
+
+ if($params['subject'] == "You have registered with www.excelonz.com") {
+     $firstmessage = t("We notice that you have not created an id for your child. Hence your child cannot start enjoying unlimited practise.To get her/him started, simply follow the step wise instructions below:.");
+}elseif ($params['subject'] == "You haven't registered Your child  with www.excelonz.com"){
+ $firstmessage =  t("To Get Your Child Started, simply follow the step wise instructions below:");
+ $testmessage = t("Thank you for registering your parent id with us. However, we notice that you have not registered your child. Without your child registration, the online practise sessions cannot be started.");
+
+}
+  $message['subject'] = $params['subject'];
+ 
+  $message['body'][] .= t("Hello !username
+
+Welcome to the world of Excelonz.
+
+".$testmessage."
+
+At Excelonz, there are two ids - one for the child to use for practising online and the second for the parent to check how the child is progressing. Once your child starts practicing, you can login with your parent ID to view your child’s assessment reports, schedule revisions & tests and do lots more.
+
+Your parent id is
+
+Login ID: !mail
+
+".$firstmessage."
+
+1.Click on the link - excelonz / sign in
+2.Login using your above ID and Password
+3.On your dashboard header, click on your image and select 'My Account'. 
+4.Now simply go the link ' Add Child '
+5.Enter the child details 
+6.Select the Subscription - Annual or Free Trial
+
+As soon as the child registration is complete you will receive an email from admin@excelonz.com with an ID for your child and her/his password.
+
+In case your child wishes to change his/her password the new password will be sent to you at !mail
+
+In case of any queries, do call us at +919717543111 or simply write to us at support@excelonz.com.
+
+Thank You!
+Team Excelonz
+", array('!username' => ucfirst($params['username']),'!mail' => $params['mail']),array('!uid' =>$params['uid']));
+
+}
+
+
+/*
+*Implement Mail Flow - Register parent not add any child Send first Notification 1 Hours.
+*/
+
+function parent_first_notification_when_no_child_add(){
+    $notification_query = db_select('lw_parent_notification', 'lpn');
+    $notification_query->leftjoin('users', 'u',"u.uid = lpn.uid");
+    $notification_query->fields('lpn',array('uid','notification'));
+    $notification_query->fields('u',array('mail'));
+    $notification_query_result = $notification_query->execute()->fetchall();
+    foreach($notification_query_result as $notification_key=>$notification_val){
+        $notification_array[$notification_val->mail] = $notification_val->uid;
+    }
+
+      $query = db_select('users', 'u');
+      $query->leftjoin('field_data_field_child_id', 'fci',"fci.entity_id = u.uid");
+      $query->join('users_roles', 'r', 'u.uid = r.uid');
+      $query->fields('u',array('uid','mail'));
+      $query->fields('fci',array('entity_id'));
+      $query->condition('u.status', '1');
+      $query->condition("r.rid", 5);
+      $query->condition('u.created', '1411084800','>');
+      $query->isNull('fci.entity_id');
+      $query_result = $query->execute()->fetchall();
+    foreach($query_result as $key=>$val){
+             $uid_array[$val->mail] = $val->uid;
+     }
+  if(isset($notification_array)){
+     $add_new_user = array_diff($uid_array, $notification_array);  
+
+  }else{
+    $add_new_user = $uid_array;  
+  }
+ // echo '<pre>';
+ // print_r($uid_array);
+ // print_r($add_new_user);
+ // die();
+foreach($add_new_user as $key => $val){
+   $user = user_load($val);
+    $parent_mail = $key;
+    $name = $user->field_first_name['und'][0]['value'];
+    $params = array(
+          'username' => $name,
+          'mail' => $key,
+          'uid' => $val,
+          'subject' => "You have registered with www.excelonz.com",
+    );
+       drupal_mail('lw_notification', 'lw_notification_mail', $parent_mail, "en", $params);
+   // drupal_mail('lw_custom', 'parent_first_notification_mail', $parent_mail, "en", $params1);
+    $nid = db_insert('lw_parent_notification')
+               ->fields(array('id', 'uid', 'notification'))
+               ->values(array('uid' => $val,'notification' => 1,))->execute();
+    }
+}
+
+/*
+*Implement Mail Flow - Register parent not add any child Send first Notification 24 Hours.
+*/
+function parent_secand_notification_when_no_child_add(){
+  $notification_query = db_select('lw_parent_notification', 'lpn');
+  $notification_query->join('users', 'u',"lpn.uid = u.uid");
+  $notification_query->join('field_data_field_first_name', 'fname',"fname.entity_id = u.uid");
+  $notification_query->fields('fname',array('field_first_name_value'));
+  $notification_query->fields('lpn',array('uid','notification'));
+  $notification_query->fields('u',array('mail','name','pass'));
+  $notification_query->condition('lpn.notification', '1');
+  $notification_query_result = $notification_query->execute()->fetchall();
+foreach($notification_query_result as $notification_key=>$notification_val){
+$parent_mail = $notification_val->mail;
+$parent_uid = $notification_val->uid;
+    $params = array(
+          'username' => $notification_val->field_first_name_value,
+          'mail' => $notification_val->mail,
+          'uid' => $notification_val->uid,
+          'subject' => "You haven't registered Your child  with www.excelonz.com",
+    );
+      drupal_mail('lw_notification', 'lw_notification_mail', $parent_mail, "en", $params);
+      $output = db_update('lw_parent_notification')
+             ->fields(array('notification' => 2))
+             ->condition('uid', $parent_uid)
+             ->execute();
+ 
+   }
+}
+

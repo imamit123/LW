@@ -1,0 +1,2821 @@
+<?php
+
+/**
+ * @file
+ *
+ */
+
+
+/**
+ * @todo : nitish cooment
+ * @return type
+ */
+function lw_report_block_info() {
+
+  // set up an empty array which will contain the block contents
+  $block = array();
+
+  $blocks['golive_req_block'] = array(
+    'info' => t('Golive Req  Notification Block'),
+  );
+  $blocks['user_dashboard_chart'] = array(
+    'info' => t('User Dashboard Chart'),
+  );
+  $blocks['subject_dashboard_chart'] = array(
+    'info' => t('Subject Dashboard Chart'),
+  );
+  $blocks['subject_dashboard_topic_table'] = array(
+    'info' => t('Subject Dashboard Topic Table'),
+  );
+  $blocks['teacher_subject_student_perf'] = array(
+    'info' => t('Teacher student performance report'),
+  );
+  $blocks['teacher_subject_topic_perf'] = array(
+    'info' => t('Teacher topic performance report'),
+  );
+  $blocks['parent_subject_topic_table'] = array(
+    'info' => t('Parent Subject Topic Table'),
+  );
+  $blocks['subject_dashboard_topic_news'] = array(
+    'info' => t('Subject Dashboard Topic news'),
+  );
+  $blocks['topic_progress_chart'] = array(
+    'info' => t('Topic progress report chart'),
+  );
+  $blocks['teacher_topic_prog_chart'] = array(
+    'info' => t('Teacher Topic progress'),
+  );
+  $blocks['teacher_topic_performance'] = array(
+    'info' => t('Teacher Topic performance'),
+  );
+  $blocks['user_dashboard_chart'] = array(
+    'info' => t('User Dashboard Chart'),
+  );
+
+  $blocks['parent_dashboard_chart'] = array(
+    'info' => t('Parent Dashboard Chart'),
+  );
+  $blocks['parent_dashboard_child'] = array(
+    'info' => t('Parent Dashboard Child list'),
+  );
+  $blocks['teacher_student_performance_all'] = array(
+    'info' => t('teacher student wise performance report'),
+  );
+ $blocks['teacher_topic_performance_all'] = array(
+    'info' => t('teacher topic wise performance report'),
+  );
+  return $blocks;
+
+}
+
+
+function lw_report_block_view($block_name = '') {
+  $block = array();
+  switch ($block_name) {
+    case 'golive_req_block':
+      $block['subject'] = '';
+      $block['content'] = golive_req_notification_block();
+      break;
+    case 'user_dashboard_chart':
+      $block['subject'] = '';
+      $block['content'] = user_dashboard_subject_chart();
+      break;
+    case 'subject_dashboard_chart':
+      $block['subject'] = '';
+      $block['content'] = subject_dashboard_subject_chart();
+      break;
+    case 'subject_dashboard_topic_table':
+      $block['subject'] = '';
+      $block['content'] = subject_dashboard_subject_topic_group();
+      break;
+    case 'teacher_subject_student_perf':
+      $block['subject'] = '';
+      $block['content'] = teacher_subject_student_performance();
+      break;
+    case 'teacher_subject_topic_perf':
+      $block['subject'] = '';
+      $block['content'] = teacher_subject_topic_performance();
+      break;
+    case 'parent_subject_topic_table':
+      $block['subject'] = '';
+      $block['content'] = parent_subject_topic_group();
+      break;
+    case 'subject_dashboard_topic_news':
+      $block['subject'] = '';
+      $block['content'] = subject_dashboard_subject_topic_news();
+      break;
+    case 'topic_progress_chart':
+      $block['subject'] = '';
+      $block['content'] = topic_progres_trend_chart();
+      break;
+    case 'teacher_topic_prog_chart':
+      $block['subject'] = '';
+      $block['content'] = teacher_topic_progres_trend_chart();
+      break;
+    case 'parent_dashboard_chart':
+      $block['subject'] = '';
+      $block['content'] = parent_dashboard_subject_chart();
+      break;
+    case 'parent_dashboard_child':
+      $block['subject'] = '';
+      $block['content'] = parent_dashboard_child_list();
+      break;
+    case 'teacher_topic_performance':
+      $block['subject'] = '';
+      $block['content'] = teacher_topic_performance_report();
+      break;
+    case 'teacher_student_performance_all':
+      $block['subject'] = '';
+      $block['content'] = teacher_student_performance_all_report();
+      break;
+    case 'teacher_topic_performance_all':
+      $block['subject'] = '';
+      $block['content'] = teacher_topic_performance_all_report();
+      break;
+
+  }
+
+  return ($block);
+}
+
+
+
+/**
+ * Block to show teacher performance report topic all
+ */
+function teacher_subject_topic_performance() {
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/swfobject.js');
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/downloadify.min.js');
+  global $user;
+  global $base_url;
+  $uid = $user->uid;
+if($_GET['Section'] == '0' || $_GET['subject'] == '0'){
+      return drupal_set_message(t('please select section and subject.'), 'error');
+}
+
+  if(!array_key_exists("Section", $_GET)) {
+    return "";
+  }
+  $result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  $pid = $result[0]->pid;
+
+  //Query to fetch user class subject section detail.
+  $re = db_query("SELECT field_schools_tid, field_branch_tid
+        FROM field_data_field_schools s,  field_data_field_branch b
+    WHERE s.entity_id = :pid
+    AND s.entity_id = b.entity_id
+    AND s.bundle =  'teacher_profile'", array(':pid'=> $pid));
+
+  foreach($re as $teacher_inf) {
+    $school_tid = $teacher_inf->field_schools_tid;
+    $branch_tid = $teacher_inf->field_branch_tid;
+  }
+
+  $subject_name = $_GET['subject'];
+  $section_tid = $_GET['Section'];
+
+  if($subject_name == '') {
+    //@todo : Need to improve query or other solution
+      $subject_query = db_query("SELECT th.*  FROM `taxonomy_term_hierarchy` th
+        JOIN taxonomy_term_data td ON th.tid = td.tid AND td.vid = 7
+        WHERE th.tid IN (SELECT a.tid from taxonomy_term_hierarchy a, taxonomy_term_hierarchy b WHERE a.parent = b.tid and b.parent = 0) AND th.parent != 0");
+      $subject_in1 = "(";
+      foreach($subject_query as $subject_row) {
+        $subject_in1 .= $subject_row->tid . ",";
+      }
+      $subject_in1 .= "-1)";
+    //Query to fetch user class subject section detail.
+    $re = db_query("SELECT DISTINCT(field_subjects_tid), td.name
+      FROM field_data_field_subjects sb
+      JOIN taxonomy_term_data td ON td.tid = sb.field_subjects_tid
+      WHERE sb.entity_id = :pid
+      AND field_subjects_tid IN $subject_in1
+      AND sb.bundle =  'teacher_profile'", array(':pid'=> $pid));
+    $subject_name = array();
+    foreach ($re as $subject_info) {
+      $subject_name = $subject_info->name;
+      break;
+    }
+  }
+  //fetch sec name with parent name join.
+  $sec_joinname = db_query("SELECT td.tid, th.parent, td.name
+    FROM taxonomy_term_data td,
+    taxonomy_term_hierarchy th
+    WHERE
+      th.tid = $section_tid
+    AND
+      (td.tid = th.tid or td.tid = th.parent)"
+  );
+
+
+  $sec_array = array();
+  foreach($sec_joinname as $subject_nm_row) {
+      if($subject_nm_row->tid == $subject_nm_row->parent) {
+        $class_name = $subject_nm_row->name;
+        $class_tid = $subject_nm_row->tid;
+      }
+      else {
+        $section_name = $subject_nm_row->name;
+      }
+  }
+  $sec_name = $class_name . $section_name;
+
+
+
+  $query = db_select('field_data_field_subject', 'fs');
+   $query->fields('fs',array('field_subject_tid',));
+    $query->condition('bundle', 'class');
+    $query->condition('entity_id', $class_tid);
+    $query->range(0, 1);
+    $result = $query->execute()->fetchAssoc();
+  $subject_head_tid = $result['field_subject_tid'];
+
+
+
+  $subject_child = taxonomy_get_tree(7, $subject_head_tid);
+
+  foreach ($subject_child as $key => $value) {
+    //echo "<pre>";print_r($value);
+
+    if($value->name == $subject_name) {
+      //echo $value->
+      $subject_tid = $value->tid;
+    }
+  }
+
+  $topic_list = taxonomy_get_children($subject_tid, 7);
+  $topic_array = array();
+  $topic_array1 = "(";
+  foreach ($topic_list as $key => $value) {
+    $topic_array[] = $value->tid;
+    $topic_array1 .= $value->tid . ",";
+  }
+  $topic_array1 .= "-1)";
+
+  //@todo :j2r query improve make it db_select.
+  $user_query = db_query("SELECT p.uid, field_roll_numbers_value, field_first_name_value, field_class_user_tid
+    FROM profile p
+    JOIN field_data_field_class_user c ON c.entity_id = p.pid AND c.bundle = 'student' AND c.delta = 1
+    JOIN field_data_field_subjects s ON s.entity_id = p.pid AND s.bundle = 'student' AND c.delta > 0
+    JOIN field_data_field_schools sl ON sl.entity_id = p.pid AND sl.bundle = 'student'
+    JOIN field_data_field_branch b ON b.entity_id = p.pid AND b.bundle = 'student'
+    LEFT JOIN field_data_field_roll_numbers rno ON rno.entity_id = p.pid AND b.bundle = 'student'
+    JOIN field_data_field_first_name fn ON fn.entity_id = p.uid
+    WHERE p.type = 'student'
+    AND c.field_class_user_tid = $section_tid
+    AND s.field_subjects_tid = $subject_tid
+    AND sl.field_schools_tid = $school_tid
+    AND b.field_branch_tid = $branch_tid");
+
+  $user_list = array();
+  $total_user = 0;
+  $user_list1 = "(";
+  foreach ($user_query as $key => $value) {
+    $user_list[] = $value->uid;
+    $user_list1 .= $value->uid . ",";
+    $total_user++;
+  }
+    $user_list1 .= "-1)";
+
+
+  $results = db_query("SELECT
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+    END as lvl,
+    topic_id,
+    sum(correcta) as correct,
+    sum(totalq)  as total,
+      count(uid) as count
+    FROM eck_user_info WHERE uid in $user_list1 and topic_id in $topic_array1 GROUP BY topic_id,lvl", array(':uid' => $user_list1, ':topic_tid' => $topic_array1));
+
+
+  $topic_final = array();
+  foreach($results as $result) {
+
+    $topic_final[$result->topic_id][$result->lvl] = $result->count;
+    $topic_final[$result->topic_id]['name'] = $topic_list[$result->topic_id]->name;
+    $topic_final[$result->topic_id]['accuracy'] = round(($result->correct*100)/$result->total, 2);
+  }
+
+
+
+
+  //table output
+  $output .= "<div id ='table_export'>";
+  $output .= '<table id="myTable" class="tablesorter"><thead>';
+  $output .= "<tr class='header_top'><th class='header top'>&nbsp;</th>";
+  $output .= "<th class='header top'>&nbsp;</th>";
+  $output .= "<th class='header top' colspan='3'>Number of students</th>";
+  $output .= "<th class='header top'>&nbsp;</th>";
+  $output .= "<th class='header top'>Number of students</th>";
+  $output .= "<th class='header top'>Average</th>";
+  $output .= "<th class='header top'>View</th></tr>";
+  $output .= "<tr class='header_bot'><th class='header'>Class</th>";
+  $output .= "<th class='header'>Topic</th>";
+  $output .= "<th class='header'>Mastered</th>";
+  $output .= "<th class='header'>Covered</th>";
+  $output .= "<th class='header'>Started</th>";
+  $output .= "<th class='header'>Total</th>";
+  $output .= "<th class='header'>not started</th>";
+  $output .= "<th class='header'>accuracy</th>";
+  $output .= "<th class='header'>details</th></tr>";
+  $output .= "</thead><tbody>";
+
+  $total_topic = 0;
+  foreach($topic_final as $key => $result) {
+    $total_topic++;
+    $started = $result['mastered'] + $result['covered'] + $result['started'];
+    $not_started =$total_user - $started ;
+    $link_url = $base_url."/teacher/topic/report/" . $key . "/" . $subject_tid .'/' .$section_tid;
+    $link = l("View Detail", $link_url,  array('query' => array('class' => $class_tid)));
+
+    $output .= "<tr><td>" . $class_name . "</td>";
+    $output .= "<td>" . $result['name'] . "</td>";
+    $output .= "<td>" . $result['mastered'] . "</td>";
+    $output .= "<td>" . $result['covered'] . "</td>";
+    $output .= "<td>" . $result['started'] . "</td>";
+    $output .= "<td>" . $started . "</td>";
+    $output .= "<td>" . $not_started . "</td>";
+    $output .= "<td>" . $result['accuracy'] . "</td>";
+    $output .= "<td>" . $link . "</td>";
+    $output .= "</tr>";
+  }
+  //echo "<pre>";print_r($topic_final);
+   if($total_topic == 0 ) {
+   $output .= "<tr><td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "<td></td>";
+   $output .= "</tr>";
+ }
+  $output .= "</tbody></table></div><div class='outer_print'><div id='print'>Print</div><div href='#' id='downloadify'>download</div></div>";
+
+ //Upper block started
+    $head_output .= "<div class='total_Student'>Total Number of Students: " . $total_user ."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Total Number of Topics: " . $total_topic ."</div>";
+  ///upper block over;
+
+  return $head_output . $output;
+
+
+
+}
+
+
+
+/**
+ * Block to show teacher pertofmance report topic wise
+ */
+function teacher_topic_performance_all_report() {
+  global $user;
+  if($_GET['op'] != 'Create Report') {
+      return "";
+  }
+  $result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  $pid = $result[0]->pid;
+
+  //Query to fetch user class subject section detail.
+  $re = db_query("SELECT field_schools_tid, field_branch_tid
+        FROM field_data_field_schools s,  field_data_field_branch b
+    WHERE s.entity_id = :pid
+    AND s.entity_id = b.entity_id
+    AND s.bundle =  'teacher_profile'", array(':pid'=> $pid));
+
+  foreach($re as $teacher_inf) {
+    $school_tid = $teacher_inf->field_schools_tid;
+    $branch_tid = $teacher_inf->field_branch_tid;
+  }
+
+///fetch information from GET
+  $subject_name =$_GET['subject'];
+
+  $subject_list = taxonomy_get_term_by_name($subject_name);
+  $subject_lists = array();
+  $subject_in = "(";
+  foreach($subject_list as $subject_key => $subject_desc) {
+    $subject_lists[] =$subject_key;
+    $subject_in .= $subject_key . ",";
+  }
+  $subject_in .= "0)";
+  $class_tid =$_GET['Section'];
+ //fetch information from GET
+  $subject_name =$_GET['subject'];
+   $subject_list = taxonomy_get_term_by_name($subject_name);
+  $subject_lists = array();
+  $subject_in = "(";
+  foreach($subject_list as $subject_key => $subject_desc) {
+    $subject_lists[] =$subject_key;
+    $subject_in .= $subject_key . ",";
+  }
+  $subject_in .= "0)";
+
+  echo "class ". $class_tid . "<br/>";
+  echo "subject " .$subject_in . "<br/>";
+
+  die();
+
+  return "here";
+}
+
+
+/**
+ * Block to show teacher performance report student list.
+ */
+function teacher_student_performance_all_report() {
+  global $base_url;
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/swfobject.js');
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/downloadify.min.js');
+
+  global $user;
+  $uid = $user->uid;
+
+  if(!array_key_exists("Section", $_GET)) {
+    return "";
+  }
+
+  $result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  $pid = $result[0]->pid;
+
+  //Query to fetch user class subject section detail.
+  $re = db_query("SELECT field_schools_tid, field_branch_tid
+        FROM field_data_field_schools s,  field_data_field_branch b
+    WHERE s.entity_id = :pid
+    AND s.entity_id = b.entity_id
+    AND s.bundle =  'teacher_profile'", array(':pid'=> $pid));
+
+  foreach($re as $teacher_inf) {
+    $school_tid = $teacher_inf->field_schools_tid;
+    $branch_tid = $teacher_inf->field_branch_tid;
+  }
+
+  //fetch information from GET
+  $subject_name =$_GET['subject'];
+
+  if($subject_name == '') {
+
+    //@todo : Need to improve query or other solution
+      $subject_query = db_query("SELECT th.*  FROM `taxonomy_term_hierarchy` th
+        JOIN taxonomy_term_data td ON th.tid = td.tid AND td.vid = 7
+        WHERE th.tid IN (SELECT a.tid from taxonomy_term_hierarchy a, taxonomy_term_hierarchy b WHERE a.parent = b.tid and b.parent = 0) AND th.parent != 0");
+      $subject_in1 = "(";
+      foreach($subject_query as $subject_row) {
+        $subject_in1 .= $subject_row->tid . ",";
+      }
+      $subject_in1 .= "-1)";
+    //Query to fetch user class subject section detail.
+    // $re = db_query("SELECT DISTINCT(field_subjects_tid), td.name
+    //   FROM field_data_field_subjects sb
+    //   JOIN taxonomy_term_data td ON td.tid = sb.field_subjects_tid
+    //   WHERE sb.entity_id = :pid
+    //   AND field_subjects_tid IN $subject_in1
+    //   AND sb.bundle =  'teacher_profile'", array(':pid'=> $pid));
+/*
+*Change By Amit - query return all subject related with filed collection
+**/
+$keys =$_GET['Section'][0];
+$re = db_query("SELECT DISTINCT(field_collection_of_subject_tid), td.name
+      FROM field_data_field_collection_of_subject cos
+      JOIN field_data_field_collection_class_subject ccs 
+      ON ccs.field_collection_class_subject_value = cos.entity_id
+      JOIN taxonomy_term_data td ON td.tid = cos.field_collection_of_subject_tid
+      JOIN field_data_field_collection_of_class coc  ON coc.entity_id = ccs.field_collection_class_subject_value 
+      WHERE ccs.entity_id = :pid
+      AND field_collection_of_subject_tid IN $subject_in1
+      AND ccs.bundle =  'teacher_profile'AND coc.field_collection_of_class_tid = :key", array(':pid'=> $pid,':key'=> $keys));
+    $subject_name = array();
+    foreach ($re as $subject_info) {
+     $subject_name = $subject_info->name;
+      break;
+    }
+  }
+
+  $subject_list = taxonomy_get_term_by_name($subject_name);
+
+//print_r($subject_list);
+
+  $subject_lists = array();
+  $subject_in = "(";
+  foreach($subject_list as $subject_key => $subject_desc) {
+    $subject_lists[] =$subject_key;
+    $subject_in .= $subject_key . ",";
+  }
+  $subject_in .= "0)";
+
+
+
+
+  $section_tid =$_GET['Section'];
+  $sec_query = "(";
+    $sec_in = array();
+    foreach ($section_tid as $row) {
+      $sec_query .= $row . ",";
+      $sec_in[] =$row;
+    }
+    $sec_query .= "-1)";
+
+  //fetch sec name with parent name join.
+  $sec_joinname = db_query("SELECT th.tid, th.parent, td.name
+    FROM taxonomy_term_data td,
+     taxonomy_term_hierarchy th
+    WHERE
+    th.tid IN $sec_query
+    AND
+    (td.tid = th.tid or td.tid = th.parent)");
+  $sec_array = array();
+  foreach($sec_joinname as $subject_nm_row) {
+    $sec_array[$subject_nm_row->tid] .=$subject_nm_row->name;
+  }
+
+  //@todo :j2r query improve make it db_select.
+  $user_query = db_query("SELECT p.uid, field_roll_numbers_value, field_first_name_value, field_class_user_tid,field_last_name_value
+    FROM profile p
+    JOIN field_data_field_class_user c ON c.entity_id = p.pid AND c.bundle = 'student' AND c.delta = 1
+    JOIN field_data_field_subjects s ON s.entity_id = p.pid AND s.bundle = 'student' AND c.delta > 0
+    JOIN field_data_field_schools sl ON sl.entity_id = p.pid AND sl.bundle = 'student'
+    JOIN field_data_field_branch b ON b.entity_id = p.pid AND b.bundle = 'student'
+    LEFT JOIN field_data_field_roll_numbers rno ON rno.entity_id = p.pid AND b.bundle = 'student'
+    JOIN field_data_field_first_name fn ON fn.entity_id = p.uid
+    JOIN field_data_field_last_name ln ON ln.entity_id = p.uid
+    WHERE p.type = 'student'
+    AND c.field_class_user_tid IN $sec_query
+    AND s.field_subjects_tid IN $subject_in
+    AND sl.field_schools_tid = $school_tid
+    AND b.field_branch_tid = $branch_tid");
+
+
+  $user_list = array();
+  $user_info = array();
+  $uid_in = "(";
+  foreach ($user_query as $value) {
+    $uid_in .=$value->uid . ",";
+    $user_list[] = $value->uid;
+    $user_info[$value->uid]['no'] =$value->field_roll_numbers_value;
+    $user_info[$value->uid]['name'] =$value->field_first_name_value . " " . $value->field_last_name_value;
+    $user_info[$value->uid]['sec'] = $value->field_class_user_tid;
+  }
+  $uid_in .= "-1)";
+
+ // echo "<pre>";print_r($user_info);
+
+  //count total number of topic in subject
+  $topic_count_query = db_select('taxonomy_term_hierarchy', 'th');
+  $topic_count_query->fields("th", array('parent'));
+  $topic_count_query->addExpression("COUNT(tid)", 'total');
+  $topic_count_query->condition('parent', $subject_lists, "IN");
+  $topic_count_query->groupBy('parent');
+  $topic_count = $topic_count_query->execute()->fetchAll();
+
+  $topic_number = 0;
+  $topic_count_array = array();
+  foreach($topic_count as $topic_row) {
+    $topic_count_array[$topic_row->parent] = $topic_row->total;
+    $topic_number++;
+  }
+
+  $start_date = strtotime($_GET['Start_date']['date']);
+  $end_date = strtotime($_GET['End_date']['date']);
+
+  $end_date += 90000;
+  if ($start_date != '') {
+    //query to fetch user level info base on topic from user_info entity
+    $user_info_query = db_query("select uid,
+      case
+        WHEN max(level)=1 THEN 'started'
+        WHEN max(level)=2 THEN 'started'
+        WHEN max(level)=3 THEN 'started'
+        WHEN max(level)=4 THEN 'covered'
+        WHEN max(level)=5 THEN 'covered'
+        WHEN max(level)=6 THEN 'mastered'
+        ELSE 'not started'
+      END as lvl,
+      sum(totalq) as totalq,
+      sum(correcta) as correcta,
+      subject_tid
+      FROM eck_user_assessment ui
+      WHERE UID IN $uid_in
+      AND subject_tid IN $subject_in
+      AND endtime > $start_date
+      AND endtime <= $end_date
+      GROUP BY UID,topic_tid");
+  }
+  else {
+    //query to fetch user level info base on topic from user_info entity
+    $user_info_query = db_query("select uid,
+      case
+        WHEN level=1 THEN 'started'
+        WHEN level=2 THEN 'started'
+        WHEN level=3 THEN 'started'
+        WHEN level=4 THEN 'covered'
+        WHEN level=5 THEN 'covered'
+        WHEN level=6 THEN 'mastered'
+        ELSE 'not started'
+      END as lvl,
+      totalq,
+      correcta,
+      subject_tid
+      FROM eck_user_info ui
+      WHERE UID IN $uid_in
+      AND subject_tid IN $subject_in");
+  }
+
+
+  $total_topic_array = array();
+  foreach($user_info_query as $user_row) {
+      $user_info[$user_row->uid][$user_row->lvl]++;
+      $user_info[$user_row->uid]['subject_total'] = $topic_count_array[$user_row->subject_tid];
+      $user_info[$user_row->uid]['subject_tid'] =$user_row->subject_tid;
+      $user_info[$user_row->uid]['totalq'] += $user_row->totalq;
+      $user_info[$user_row->uid]['correcta'] += $user_row->correcta;
+      if(!array_key_exists($user_row->subject_tid, $total_topic_array)) {
+        $total_topic_array[$user_row->subject_tid] =$topic_count_array[$user_row->subject_tid];
+      }
+  }
+  $total_topic_final = 0;
+  foreach ($total_topic_array as $key => $value) {
+    $total_topic_final =$total_topic_final + $value;
+  }
+/*
+*Changes By Amit 
+* @return fetch all subject related to class  
+*/
+//@todo :amit relation 
+  $sec_joinname_new1 = db_query("SELECT th.tid, th.parent, td.name
+    FROM taxonomy_term_data td,
+     taxonomy_term_hierarchy th
+    WHERE
+    th.tid IN $sec_query
+    AND
+    (td.tid = th.parent)");
+  //$sec_joinname_new = array();
+  foreach($sec_joinname_new1 as $subject_nm_row1) {
+       $sec_class_array = $subject_nm_row1->name;
+  }
+  //$sec_array_tid;
+$Class = 'Class '. $sec_class_array;
+  $class_query =  db_query("SELECT td.tid,name from `taxonomy_term_data` td 
+                              where td.tid in (select th.tid from taxonomy_term_hierarchy th JOIN taxonomy_term_data td1 ON td1.tid= th.parent AND td1.name = '".$Class."')");
+foreach($class_query as $class_row) {
+ $class_in[$class_row->tid] = $class_row->name;
+  }
+
+//End By Amit
+
+  //@todo : Need to improve query or other solution
+  $subject_query = db_query("SELECT th.*  FROM `taxonomy_term_hierarchy` th
+    JOIN taxonomy_term_data td ON th.tid = td.tid AND td.vid = 7
+    WHERE th.tid IN (SELECT a.tid from taxonomy_term_hierarchy a, taxonomy_term_hierarchy b WHERE a.parent = b.tid and b.parent = 0) AND th.parent != 0");
+  $subject_in1 = "(";
+  foreach($subject_query as $subject_row) {
+    $subject_in1 .= $subject_row->tid . ",";
+  }
+  $subject_in1 .= "-1)";
+
+
+  //Query to fetch user class subject section detail.
+  // $re = db_query("SELECT DISTINCT(field_subjects_tid), td.name
+  //     FROM field_data_field_subjects sb
+  //   JOIN taxonomy_term_data td ON td.tid = sb.field_subjects_tid
+  //   WHERE sb.entity_id = :pid
+  //   AND field_subjects_tid IN $subject_in1
+  //   AND sb.bundle =  'teacher_profile'", array(':pid'=> $pid));
+/*
+*Change By amit relation with field collection 
+*Class and subject relation. 
+**/
+$re = db_query("SELECT DISTINCT(field_collection_of_subject_tid), td.name
+              FROM field_data_field_collection_of_subject cos
+              JOIN field_data_field_collection_class_subject ccs 
+              ON ccs.field_collection_class_subject_value = cos.entity_id
+              JOIN field_data_field_collection_of_class coc 
+              ON ccs.field_collection_class_subject_value = coc.entity_id
+              JOIN taxonomy_term_data td ON td.tid = cos.field_collection_of_subject_tid
+              WHERE ccs.entity_id = :pid
+              AND field_collection_of_subject_tid IN $subject_in1
+              AND coc.field_collection_of_class_tid IN $sec_query
+              AND ccs.bundle =  'teacher_profile'", array(':pid'=> $pid));
+$subject_name1 = array();
+  // foreach ($re as $subject_info) {
+  //   //change bya amit
+  //  if (isset($class_in[$subject_info->field_subjects_tid])) {
+  //         $subject_name1[$subject_info->name] = $subject_name1->field_subjects_tid;
+  //   }
+  // }
+//change when field collection use..
+foreach ($re as $subject_info) {
+    if (isset($class_in[$subject_info->field_collection_of_subject_tid])) {
+           $subject_name1[$subject_info->name] = $subject_name1->field_collection_of_subject_tid;
+  }
+     // $subject_name1_tid[$subject_info->field_subjects_tid] = $subject_info->name;
+  }
+
+  global $base_url;
+
+  //echo "<pre>";print_r($_GET);die();
+  //@todo : improve code and workflow.
+  $output .= "<div class='tab_outer'>";
+  foreach($subject_name1 as $key => $subject_name_row) {
+    //make it as active
+    if($key == $subject_name) {
+      $output .= "<div class='tab_link active'>$key</div>";
+    }
+    else {
+
+      $link = "<a href='".$base_url."/report/teacher/student?subject=".$key.
+      "&Section[]=" . implode('&amp;Section[]=', array_map('urlencode', $_GET['Section']))."'>" . $key . "</a>";
+      $output .= "<div class='tab_link'>" . $link . "</div>";
+    }
+  }
+  $output .= "</div>";
+
+
+
+  $sec_query_fetch = db_query("SELECT count(DISTINCT(c.entity_id)) as total,
+    field_class_user_tid
+    FROM `field_data_field_class_user` c,
+    field_data_field_schools s,
+    field_data_field_branch b,
+    field_data_field_subjects sb
+    WHERE
+    c.bundle = 'student'
+    AND
+    field_schools_tid = $school_tid
+    AND
+    field_branch_tid = $branch_tid
+    AND
+    c.entity_id = s.entity_id
+    AND
+    c.entity_id = sb.entity_id
+    AND
+    c.entity_id = b.entity_id
+    AND sb.field_subjects_tid IN $subject_in
+    AND `field_class_user_tid` IN $sec_query
+    GROUP BY field_class_user_tid");
+
+  $total_student = 0;
+  foreach($sec_query_fetch as $sec_res) {
+    $output_temp .="<div class='te_class'>";
+    $total_student +=$sec_res->total;
+    $output_temp .= "Class " .$sec_array[$sec_res->field_class_user_tid] . " <span> " .$sec_res->total;
+    $output_temp .= "</span></div>";
+  }
+
+  $output .= "<div class='total_Student'>Total Number of Students: " . $total_student ."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     Total Topics in syllabus: ".$total_topic_final.'</div>';
+  $output .=$output_temp;
+  ///upper block over;
+
+
+  //table output
+  $output .= "<div id ='table_export'>";
+  $output .= '<table id="myTable" class="tablesorter"><thead>';
+  $output .= "<tr class='header_top'><th class='header top'>&nbsp;</th>";
+  $output .= "<th class='header top'>Roll</th>";
+  $output .= "<th class='header top'>Student</th>";
+  $output .= "<th class='header top' colspan='3'>Number of Topics</th>";
+  $output .= "<th class='header top'>&nbsp;</th>";
+  $output .= "<th class='header top'>Number of Topics</th>";
+  $output .= "<th class='header top'>Average</th>";
+  $output .= "<th class='header top'>View</th></tr>";
+  $output .= "<tr class='header_bot'><th class='header'>Class</th>";
+  $output .= "<th class='header'>NO</th>";
+  $output .= "<th class='header'>Name</th>";
+  $output .= "<th class='header'>Mastered</th>";
+  $output .= "<th class='header'>Covered</th>";
+  $output .= "<th class='header'>Started</th>";
+  $output .= "<th class='header'>Total</th>";
+  $output .= "<th class='header'>remaining</th>";
+  $output .= "<th class='header'>accuracy</th>";
+  $output .= "<th class='header'>details</th></tr>";
+  $output .= "</thead><tbody>";
+
+
+
+  foreach($user_info as $uuid => $user_row) {
+
+    $total = $user_row['mastered'] + $user_row['covered'] +  $user_row['started'];
+    $left =$user_row['subject_total'] - $total;
+    $output .="<tr><td>" .$sec_array[$user_row['sec']] . "</td>";
+    $output .= "<td>" . $user_row['no'] . "</td>";
+    $output .= "<td>" . $user_row['name'] . "</td>";
+    $output .= "<td>" . $user_row['mastered'] . "</td>";
+    $output .= "<td>" . $user_row['covered'] . "</td>";
+    $output .= "<td>" . $user_row['started'] . "</td>";
+    $output .= "<td>" . $total. "</td>";
+    $output .= "<td>" .  $left. "</td>";
+    $output .= "<td>" .  round($user_row['correcta']*100/$user_row['totalq'], 2). "</td>";
+
+
+    if(array_key_exists('subject_tid', $user_row)) {
+      $subject_temp = $user_row['subject_tid'];
+    }
+    else {
+
+    }
+    $perf_link = $base_url."/report/performance/teacher/" . $subject_temp . "/" . $uuid;
+    $output .= "<td>" . l("View Detail", $perf_link) . "</td>";
+
+    $output .= "</tr>";
+  }
+  $output .= "</tbody></table></div><div class='outer_print'><div id='print'>Print</div><div href='#' id='downloadify'>download</div></div>";
+
+  return $output;
+}
+
+
+/**
+ * Block to show topic performance report for teacher
+ */
+function teacher_topic_performance_report() {
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/swfobject.js');
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/downloadify.min.js');
+  global $user;
+  $uid = $user->uid;
+
+$result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  $pid = $result[0]->pid;
+  //@todo : pid add.
+ 
+  $re = db_query("SELECT field_schools_tid,
+    field_branch_tid,field_collection_of_class_tid
+    FROM field_data_field_schools s, field_data_field_branch b, taxonomy_term_hierarchy th,field_data_field_collection_of_class coc ,field_data_field_collection_class_subject ccs
+    WHERE s.entity_id = :pid
+    AND s.entity_id = b.entity_id
+    AND s.bundle =  'teacher_profile'
+    AND coc.entity_id = ccs.field_collection_class_subject_value
+    AND th.parent !=0
+    AND th.tid = coc.field_collection_of_class_tid AND coc.field_collection_of_class_tid = :key", 
+     array(':pid'=> $pid,':key'=> arg(5)));
+  $user_class_tid = '(';
+  foreach($re as $name) {
+    //print_r($name);
+    $user_class_tid .= $name->field_collection_of_class_tid . ',';
+  }
+
+  $user_class_tid .= '0)';
+
+//print_r($user_class_tid);
+  $school_tid = $name->field_schools_tid;
+  $branch_tid = $name->field_branch_tid;
+
+
+  $topic_tid = arg(3);
+
+
+  //convert it into db_select
+  $users_query = db_query("SELECT DISTINCT (u.uid), u.name
+    FROM users u
+    JOIN profile p ON u.uid = p.uid
+    AND p.type = 'student'
+    JOIN field_data_field_class_user uc ON field_class_user_tid in ".$user_class_tid."
+    AND p.pid = uc.entity_id
+    JOIN field_data_field_schools s ON field_schools_tid =:sid
+    AND p.pid = s.entity_id
+    JOIN field_data_field_branch b ON field_branch_tid =:bid
+    AND p.pid = uc.entity_id", array(":sid"=> $school_tid, ":bid" => $branch_tid) );
+
+  $user_array = array();
+  $user_list = '(';
+
+  foreach ($users_query as $user_query) {
+    $user_array[$user_query->uid] = $user_query->name;
+    $user_list .= $user_query->uid . ",";
+  }
+  $user_list .= "0)";
+
+    //@todo : make it db_select
+  $user_assessment_query = db_query("SELECT total,
+    totaltime as time,
+    totalq,
+    correcta,
+    level,
+    ROUND(correcta*100/totalq) as accuracy,
+    uid
+    FROM eck_user_info
+    WHERE uid in ".$user_list."
+    AND topic_id = ".$topic_tid);
+
+
+  $user_array1 = array();
+  foreach ($user_assessment_query as $user_assessment) {
+    $user_array1[$user_assessment->uid] = array (
+      'total' => $user_assessment->total,
+      'time' => $user_assessment->time,
+      'totalq' => $user_assessment->totalq,
+      'correcta' => $user_assessment->correcta,
+      'level' => $user_assessment->level,
+      'accuracy' => $user_assessment->accuracy,
+    );
+  }
+
+
+  $output = '';
+  $master = array();
+  $covered = array();
+  $started = array();
+  $not_start = array();
+//@todo : add rank for global and school
+
+  foreach ($user_array as $key => $value) {
+    if(array_key_exists($key, $user_array1)) {
+
+     if($user_array1[$key]['level'] > 5) {
+        $master[$key] = $user_array1[$key];
+      }
+      elseif($user_array1[$key]['level'] < 6 && $user_array1[$key]['level'] > 3){
+        $covered[$key] = $user_array1[$key];
+      }
+      else {
+        $started[$key] = $user_array1[$key];
+      }
+    }
+    else {
+      $not_start[$key] = $value;
+    }
+  }
+
+
+
+
+
+  //table output
+  $output .= "<div id ='table_export'>";
+  $output .= '<table id="myTable" class="report-perf">';
+  $output .= "<tbody><tr><th>Student Name</th>";
+  $output .= "<th># of Sessions</th>";
+  $output .= "<th>Total time spent</th>";
+  $output .= "<th># of Questions attempted</th>";
+  $output .= "<th># of Correct answers</th>";
+  $output .= "<th>Accuracy</th>";
+  $output .= "<th>Current level</th>";
+  $output .= "<th>View progress</th>";
+  $output .= "</tr>";
+
+  $total_student = 0;
+  $time_spend = 0;
+  $output .= "<tr class='tittle_bg'><td colspan = 8>Students who have Mastered</td></tr>";
+  foreach($master as $k=>$v) {
+    $link = l("Click Here", "teacher-topic-progress/" . $topic_tid . "/" . arg(4) . "/" . $k, array('attributes' =>array('target' =>'_blank')));
+    //$link = '<a href="'.teacher-topic-progress.'/' . $topic_tid . "/" . arg(4) . "/" . $k.'" target="_blank">Click Here</a>';
+    $output .= "<tr>";
+    $output .= "<td>" . get_name($k) . "</td>";
+    $output .= "<td>" . $v['total'] . "</td>";
+    $output .= "<td>" . elapsed_time($v['time']) . "</td>";
+    $output .= "<td>" . $v['totalq'] . "</td>";
+    $output .= "<td>" . $v['correcta'] . "</td>";
+    $output .= "<td>" . $v['accuracy'] . "</td>";
+    $output .= "<td>" . $v['level'] . "</td>";
+    $output .= "<td>" . $link . "</td>";
+    $output .= "</tr>";
+    $total_student++;
+    $time_spend += $v['time'];
+  }
+
+  $output .= "<tr class='tittle_bg'><td colspan = 8>Students who have Covered</td></tr>";
+  foreach($covered as $k=>$v) {
+
+    $link = l("Click Here", "teacher-topic-progress/" . $topic_tid . "/" . arg(4) . "/" . $k, array('attributes' =>array('target' =>'_blank')));
+    $output .= "<tr>";
+    $output .= "<td>" . get_name($k) . "</td>";
+    $output .= "<td>" . $v['total'] . "</td>";
+    $output .= "<td>" . elapsed_time($v['time']) . "</td>";
+    $output .= "<td>" . $v['totalq'] . "</td>";
+    $output .= "<td>" . $v['correcta'] . "</td>";
+    $output .= "<td>" . $v['accuracy'] . "</td>";
+    $output .= "<td>" . $v['level'] . "</td>";
+    $output .= "<td>" . $link . "</td>";
+    $output .= "</tr>";
+    $total_student++;
+    $time_spend += $v['time'];
+  }
+
+  $output .= "<tr class='tittle_bg'><td colspan = 8>Students who have Started</td></tr>";
+  foreach($started as $k=>$v) {
+
+    $link = l("Click Here", "teacher-topic-progress/" . $topic_tid . "/" . arg(4) . "/" . $k, array('attributes' =>array('target' =>'_blank')));
+    $output .= "<tr>";
+    $output .= "<td>" . get_name($k) . "</td>";
+    $output .= "<td>" . $v['total'] . "</td>";
+    $output .= "<td>" . elapsed_time($v['time']) . "</td>";
+    $output .= "<td>" . $v['totalq'] . "</td>";
+    $output .= "<td>" . $v['correcta'] . "</td>";
+    $output .= "<td>" . $v['accuracy'] . "</td>";
+    $output .= "<td>" . $v['level'] . "</td>";
+    $output .= "<td>" . $link . "</td>";
+    $output .= "</tr>";
+    $total_student++;
+    $time_spend += $v['time'];
+  }
+
+  $output .= "<tr class='tittle_bg'><td colspan = 8>Students who have not Started</td></tr>";
+  foreach($not_start as $k=>$v) {
+    $output .= "<tr><td colspan = 8>". get_name($k) . "</td></tr>";
+    $total_student++;
+  }
+  $output .= "</tbody></table>";
+  $output .= "</table></div><div class='outer_print'><div id='print'>Print</div><div href='#' id='downloadify'>download</div></div></div>";
+
+
+//Upper block started
+ $tid_a = array();
+ $tid_a[] = $topic_tid;
+ $tid_a[] = arg(4);
+ $tid_a[] = arg(5);
+ $tid_a[] = $_GET['class'];
+
+   $topic_name_query= db_select('taxonomy_term_data', 'td')
+     ->fields("td", array('tid', 'name'))
+     ->condition('tid', $tid_a, "IN")
+     ->range(0, 4)
+     ->execute()
+     ->fetchAll();
+ //   echo '<pre>';
+//print_r($topic_name_query);
+     foreach ($topic_name_query as $key => $value) {
+       if($value->tid == arg(4)) {
+         $subject_name = $value->name;
+       }
+       elseif($value->tid == $topic_tid) {
+         $topic_name = $value->name;
+       }elseif($value->tid == arg(5)) {
+         $class_sec = $value->name;
+       }
+       else {
+         $class_name = $value->name;
+       }
+
+     }
+
+     $head_output .= "<div class='report_top'><div class='your_class_sub'><ul><li>Class : 
+     ".$class_name.$class_sec."</li><li>Subject : ".$subject_name."</li></ul></div>";
+     $head_output .= "<div class='back_button'><a href='".$_SERVER['HTTP_REFERER']."'>See another Topic</a></div><h2>".$topic_name."'s Performance Report</h2>";
+
+      $head_output .= "<ul><li>Total Students : ". $total_student . "</li><li>Total Time Spent : " .
+       elapsed_time($time_spend)
+       ."</li></ul></div>";
+
+
+ //Upper block over
+
+
+  return $head_output . $output;
+}
+
+
+
+/*
+ * Block for teacher student topic progress report.
+ */
+function teacher_topic_progres_trend_chart() {
+
+  $topic_tid = arg(1);
+  $subject_tid = arg(2);
+  $uid = arg(3);
+  $term = taxonomy_term_load($subject_tid);
+  $names = $term->name;
+
+  $result = db_query("select td.name, td.tid,
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+      ELSE 'not started'
+    END as lvl
+    ,level
+    FROM taxonomy_term_data td, taxonomy_term_hierarchy th
+    LEFT JOIN eck_user_info ui
+    ON th.tid = topic_id and ui.uid = :uid
+    WHERE
+      th.tid=td.tid
+      and
+      th.parent = :subject_tid
+    order by level desc",  array(':uid' => $uid, ':subject_tid' => $subject_tid));
+
+  $topic_group = array();
+  foreach ($result as $row) {
+    $topic_group[$row->lvl][$row->tid][] = $row->name;
+    $topic_group[$row->lvl][$row->tid][] = $row->level;
+  }
+
+
+  foreach($re as $name) {
+    $user_class_info = $name->field_class_user_tid;
+    $user_schools_tid =$name->field_schools_tid;
+    $user_branch_tid = $name->field_branch_tid;
+  }
+
+  //$output = "<div class='back_button'><a href='".$_SERVER['HTTP_REFERER']."'>Back to Performance Report</a></div>";
+  $output .= '<div class="link_expand"><span id="expand" class="exp">Expand All</span><span id="collapse" class="exp">Collapse All</span></div>';
+  $output .="<div class='report_top'><h2>" . get_name($uid) . "'s " . $names = $term->name . " Progress Maps</h2></div>";
+  $topic_level = array('mastered', 'covered', 'started', 'not started');
+  foreach ($topic_level as $level) {
+    $output .= "<div class='subject_report'>
+      <span class='lft'>" . 'Topics ' . $level . "</span>
+      <div class='row'>";
+
+    if (array_key_exists($level, $topic_group)) {
+      foreach ($topic_group[$level] as $key => $val) {
+
+$url = "teacher-topic-progress/" . $key . "/". arg(2) . "/" . arg(3) ;
+        $output .= "<div class='row1'>
+                      <span class='sp1 sp'>" .
+
+
+        l($val[0], $url) . "</span></div>";
+
+        if($key == $topic_tid) {
+
+          //@todo : call view
+
+  //print views_embed_view('teacher_assessment_progress_report','block_1');die();
+
+    $topic_query = db_select('eck_user_assessment', 'ua')
+      ->fields("ua", array('endtime', 'level', 'endtime', 'totalq'))
+      ->condition('uid', $uid)
+      ->condition('topic_tid', $topic_tid)
+      ->orderBy('id', 'DESC')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+
+    $last_time = $topic_query[0]->endtime;
+
+    $topic_query1 = db_select('eck_user_level', 'ua')
+      ->fields("ua")
+      ->condition('uid', $uid)
+      ->condition('topic_tid', $topic_tid)
+      ->orderBy('id')
+      ->execute()
+      ->fetchAll();
+
+
+
+      $topic_name_query= db_select('taxonomy_term_data', 'td')
+      ->fields("td", array('name'))
+      ->condition('tid', $topic_tid)
+      ->range(0, 1)
+      ->execute()
+      ->fetchAssoc();
+      $topic_name = $topic_name_query['name'];
+
+      $l = 0;
+      $total_q = 0;
+      $chart_info = array();
+      $chart_info[] = array(0, 1);
+      foreach($topic_query1 as $chart_row) {
+        $total_q += $chart_row->total;
+        if($l != $chart_row->level) {
+          $chart_info[] = array(intval($total_q), intval($chart_row->level));
+        }
+        $l =$chart_row->level;
+      }
+
+  $level = array();
+  $date_desc = array();
+  $date_list = "var date_i = new Array('";
+  $i = 1;
+  foreach ($topic_query as $result) {
+    $level[] = intval($result->level);
+    $date_desc[] = $i;
+    $date_list .= "','" . date("Y-m-d", $result->endtime);
+    $i++;
+  }
+    $date_list .= "');";
+
+  //check other table if level 1 and result is 0
+        if(!array_key_exists(1, $chart_info)) {
+          $user_inf_query = db_select('eck_user_info', 'ui')
+            ->fields("ui")
+            ->condition('uid', $uid)
+            ->condition('topic_id', $topic_tid)
+            ->range(0,1)
+            ->execute()
+            ->fetchAll();
+            $chart_info[] = array(intval($user_inf_query[0]->totalq), 1);
+        }
+
+
+
+    $output .= lw_report_topic_line_chart($chart_info, $date_desc, $date_list, $topic_name);
+        }
+
+      }
+    }
+
+    $output .= "</div></div>";
+  }
+
+  return $output;
+}
+
+/*
+ * Block for teacher student subject performance report.
+ */
+function teacher_subject_student_performance() {
+  global $base_url;
+
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/swfobject.js');
+  drupal_add_js(drupal_get_path('theme', 'lw_theme') . '/scripts/downloadify.min.js');
+//die();
+  global $user;
+  $subject_tid = arg(3);
+  $uid = arg(4);
+ if (!is_numeric(arg(3)) || !is_numeric(arg(4))) {
+    $uid = arg(3);
+      return  get_name($uid) .'   Has no current assignments';
+  }
+
+  $result = db_query("select td.name, td.tid,
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+      ELSE 'not started'
+    END as lvl
+    ,level
+    FROM taxonomy_term_data td, taxonomy_term_hierarchy th
+    LEFT JOIN eck_user_info ui
+    ON th.tid = topic_id and ui.uid = :uid
+    WHERE
+      th.tid=td.tid
+      and
+      th.parent = :subject_tid
+    order by level desc",  array(':uid' => $uid, ':subject_tid' => $subject_tid));
+
+  $topic_group = array();
+  foreach ($result as $row) {
+    $topic_group[$row->lvl][$row->tid][] = $row->name;
+    $topic_group[$row->lvl][$row->tid][] = $row->level;
+  }
+
+  //profile id
+  $result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','student')
+  ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  //echo '<pre>';print_r($result);die();
+  $pid = $result[0]->pid;
+
+
+  //fetch users school and branch
+  $re = db_query("SELECT field_schools_tid, field_class_user_tid, field_branch_tid
+    FROM field_data_field_schools s, field_data_field_class_user cl, field_data_field_branch b, taxonomy_term_hierarchy th
+   WHERE s.entity_id = :pid
+   AND s.entity_id = cl.entity_id
+   AND s.entity_id = b.entity_id
+   AND s.bundle =  'student'
+   AND th.parent =0
+   AND th.tid = cl.field_class_user_tid", array(':pid'=> $pid));
+
+
+  foreach($re as $name) {
+    $user_class_info = $name->field_class_user_tid;
+    $user_schools_tid =$name->field_schools_tid;
+    $user_branch_tid = $name->field_branch_tid;
+  }
+
+  // Upper block code
+
+
+    //@todo :j2r query improve make it db_select.
+      $user_query = db_query("SELECT p.uid, field_roll_numbers_value, field_first_name_value, field_class_user_tid
+        FROM profile p
+        JOIN field_data_field_class_user c ON c.entity_id = p.pid AND c.bundle = 'student' AND c.delta = 1
+        JOIN field_data_field_subjects s ON s.entity_id = p.pid AND s.bundle = 'student' AND c.delta > 0
+        JOIN field_data_field_branch b ON b.entity_id = p.pid AND b.bundle = 'student'
+        LEFT JOIN field_data_field_roll_numbers rno ON rno.entity_id = p.pid AND b.bundle = 'student'
+        JOIN field_data_field_first_name fn ON fn.entity_id = p.uid
+        WHERE p.type = 'student'
+        AND p.uid = $uid
+        AND s.field_subjects_tid = $subject_tid
+        AND b.field_branch_tid = $user_branch_tid");
+
+      $tid_name = array();
+      $tid_name[] = $subject_tid;
+      $tid_name[] = $user_class_info;
+      foreach ($user_query as $value) {
+        $sec_tid = $value->field_class_user_tid;
+        $tid_name[] = $value->field_class_user_tid;
+        $roll_no = $value->field_roll_numbers_value;
+      }
+
+      //subject name fetch
+      $subject_name_query= db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('name', 'tid'))
+        ->condition('tid', $tid_name, "IN")
+        ->execute()
+        ->fetchAll();
+
+        foreach($subject_name_query as $value) {
+          $tid_name[$value->tid] = $value->name;
+        }
+
+      $topic_stat = db_select('eck_user_assessment', 'ui');
+      $topic_stat->addExpression("count(id)", "total");
+      $topic_stat->addExpression("sum(totaltime)", "time");
+      $topic_stat->condition('uid', $uid);
+      $topic_stat->condition('subject_tid', $subject_tid);
+      $topic_stat_res = $topic_stat->execute()->fetchAssoc();
+
+      $output .= "<div class='back_button'><a href='".$_SERVER['HTTP_REFERER']."'>See another Student</a></div>";
+
+      $output .= "<div class='report_top'>";
+      $output .= "<h2>" . get_name($uid) . "'s " . $tid_name[$subject_tid] . " Report</h2>";
+      $output .= '<ul><li>Class ' . $tid_name[$user_class_info] . $tid_name[$sec_tid] ."</li>";
+      $output .= "<li>Time spent " . elapsed_time($topic_stat_res['time']). "</li>";
+      $output .= '<li>Roll No ' . $roll_no ."</li>";
+
+
+
+
+
+      $output .= "<li>Session Done " . $topic_stat_res['total']. "</li>";
+
+      $output .= "</ul></div>";
+
+    // Upper block over
+
+
+  $str = array();
+  $wea = array();
+  $output .= '<div id="table_export"><table id ="myTable" class="report-perf">';
+  $output .= "<tr><th>Name of Topic</th><th># of Sessions</th>
+  <th>Total time spent</th><th># of questions attempted</th>
+  <th># of correct answers</th>
+  <th>Accuracy</th>
+  <th>Current Level</th>
+  <th>Global rank</th>
+  <th>School rank</th>
+  <th>View Progress</th></tr>";
+  $topic_level = array('mastered', 'covered', 'started', 'not started');
+  foreach ($topic_level as $level) {
+    $output .= "<tr class='tittle_bg'><td><span class='lft'>" . 'Topics ' . $level . "</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+
+    if (array_key_exists($level, $topic_group)) {
+      foreach ($topic_group[$level] as $key => $val) {
+
+        $topic_cal_query = db_select('eck_user_info', 'ui');
+        $topic_cal_query->addExpression('total', 'no');
+        $topic_cal_query->addExpression('totaltime', 'totaltime');
+        $topic_cal_query->addExpression('totalq', 'totalq');
+        $topic_cal_query->addExpression('correcta', 'correcta');
+        $topic_cal_query->addExpression('level', 'maxlevel');
+        $topic_cal_query->addExpression('ROUND(correcta*100/totalq, 2)', 'accuracy');
+        $topic_cal_query_res = $topic_cal_query->condition('uid', $uid)->condition('topic_id', $key)
+        ->execute()
+        ->fetchAssoc();
+
+
+      if($topic_cal_query_res['accuracy'] != '') {
+
+
+        //fetching users rank in global
+        $perc_query1 = db_select('eck_user_info', 'ua');
+        $perc_query1->LEFTJOIN('field_data_field_class_user', 'uc', 'field_class_user_tid = ' . $user_class_info);
+        $perc_query1->JOIN('profile', 'p', 'p.uid = ua.uid');
+        $perc_query1->fields('ua', array('uid'));
+        $perc_query1->addExpression('ROUND(correcta*100/totalq)', 'accuracy');
+        $perc_query1->condition('topic_id', $key);
+        $perc_query1->condition('uc.bundle', 'student');
+        $perc_query1->where('p.pid = uc.entity_id');
+        $perc_query1->groupBy('uid');
+        $perc_query1->havingCondition('accuracy',  $topic_cal_query_res['accuracy'], '>');
+        $perc_result = $perc_query1->execute()->rowCount();
+
+        //fetching users rank in school
+        $perc_query2 = db_select('eck_user_info', 'ua');
+        $perc_query2->Join('field_data_field_class_user', 'uc', 'field_class_user_tid = ' . $user_class_info);
+        $perc_query2->Join('field_data_field_schools', 's', 'field_schools_tid = ' . $user_schools_tid);
+        $perc_query2->Join('field_data_field_branch', 'b', 'field_branch_tid = ' . $user_branch_tid);
+        $perc_query2->JOIN('profile', 'p', 'p.uid = ua.uid');
+        $perc_query2->fields('ua', array('uid'));
+        $perc_query2->addExpression('ROUND(correcta*100/totalq)', 'accuracy');
+        $perc_query2->condition('topic_id', $key);
+        $perc_query2->condition('uc.bundle', 'student');
+        $perc_query2->where('p.pid = uc.entity_id');
+        $perc_query2->where('p.pid = s.entity_id');
+        $perc_query2->where('p.pid = b.entity_id');
+
+        $perc_query2->groupBy('uid');
+        $perc_query2->havingCondition('accuracy',  $topic_cal_query_res['accuracy'], '>');
+        $perc_result2 = $perc_query2->execute()->rowCount();
+
+      }
+
+      $head_output = "<tr><td><span class='sp1 sp'>" . $val[0] . "</span></td>";
+      $output_1 = '';
+        if (is_numeric($val[1])) {
+          $output_1 .= "<td><span class='prog-report'>" . $topic_cal_query_res['no'] . "</span></td>";
+          $output_1 .= "<td><span class='prog-report'>" . elapsed_time($topic_cal_query_res['totaltime']) . "</span></td>";
+          $output_1 .= "<td><span class='prog-report'>" . $topic_cal_query_res['totalq'] . "</span></td>";
+          $output_1 .= "<td> <span class='prog-report'>" . $topic_cal_query_res['correcta'] . "</span></td>";
+
+          $output_1 .= "<td><span class='prog-report'>" . $topic_cal_query_res['accuracy'] . "</span></td>";
+
+          // strength and weakness arrray entry
+           if ($topic_cal_query_res['maxlevel'] > 3) {
+            if($topic_cal_query_res['accuracy'] > 79) {
+              $topic_cal_query_res['name'] = $val[0];
+              $str[] = $topic_cal_query_res;
+
+            }
+            elseif($topic_cal_query_res['accuracy'] < 51) {
+              $wea[] = $topic_cal_query_res;
+            }
+          }
+
+
+
+          $output_1 .= "<td><span class='prog-report'>" . $topic_cal_query_res['maxlevel'] . "</span></td>";
+          $output_1 .= "<td><span class='prog-report'>" . ++$perc_result  . "</span></td>";
+          $output_1 .= "<td><span class='prog-report'>" . ++$perc_result2 . "</span>";
+          $prog_link = $base_url."/teacher-topic-progress/". $key ."/" . $subject_tid . "/" . $uid;
+          $output_1 .= "<td>" . l('View Progress', $prog_link, array('attributes' =>array('target' =>'_blank')))."</td>";
+          //$output_1 .= "<td><a href='".$prog_link."' target="_blank">View Progress</a></td>";
+          $output_1 .= "</td>";
+
+        }
+        else {
+            $head_output ="<tr><td colspan = 10><span class='sp1 sp'>" . $val[0] . "</span></td>";
+        }
+        $output .= $head_output . $output_1;
+
+        $output .= "</tr>";
+      }
+    }
+
+  }
+  $output .= "</table></div><div class='outer_print'><div id='print'>Print</div><div href='#' id='downloadify'>download</div></div>";
+
+  $str_output = '';
+
+      if(array_key_exists(0, $str) or array_key_exists(0, $wea)) {
+        $str_output = '<div class="strengths"><h2>Strengths</h2>';
+        if(array_key_exists(0, $str)) {
+          foreach ($str as $value) {
+            $str_output .= "<div class='strengths_row'>" . $value['name'] . "</div>";
+          }
+        }
+        else {
+          //$str_output .= "<div class='strengths_row'>Needs more data!</div>";
+        }
+        $str_output .= '</div>';
+
+      //  $str_output .= '<div class="weaknesses"><h2>Weaknesses</h2>';
+      if(array_key_exists(0, $wea)) {
+          foreach ($wea as $value) {
+            //$wea_link = l("link", "revision/home/student/". $value['tid']);
+            $str_output .= "<div class='Weaknesses_row'>" . $value['name'] . "</div>";
+          }
+      }
+      else {
+      //  $str_output .= "<div class='Weaknesses_row'>Needs more data!</div>";
+      }
+      $str_output .= '</div>';
+      }
+
+      $skillmap_output = "<div class='skillmap_div'>" . l("Skillmap", "skillmap/" . arg(4) . "/" . arg(3)) . "</div>";
+
+    $skillmap_output = skillmap_page(arg(4),arg(3));
+
+  return $output . $str_output . $skillmap_output;
+}
+
+function get_name($uid,$status = "full"){
+  $query = db_select('field_data_field_first_name', 'fn');
+  $query->join('field_data_field_last_name', 'fl', 'fn.entity_id = fl.entity_id');
+  $result = $query->fields('fn', array("field_first_name_value"))
+        ->fields('fl', array('field_last_name_value'))
+        ->condition('fl.entity_id', $uid)
+        ->execute()
+        ->fetchAll();
+
+  // /echo  "<pre>";print_r($result);
+  if($status == "full") {
+  $name = $result[0]->field_first_name_value . " " . $result[0]->field_last_name_value;
+  }
+  elseif($status == "first") {
+    $name = $result[0]->field_first_name_value;
+  }
+
+  //echo  "<pre>";print_r($full_name);die();
+  //echo $full_name;die();
+  return($name);
+}
+
+function parent_dashboard_name($uid) {
+  global $user;
+  $user_id = $user->uid;
+  $ul = user_load($user_id);// @todo: Make a query instead of user_load()
+  //echo"<pre>"; print_r($ul);die();
+  $salutation = $ul->field_salution['und'][0]['value'];
+  $l_name = $ul->field_last_name['und'][0]['value'];
+  $mess = 'Welcome ';
+  $sal_last_name = $mess . $salutation . "." . $l_name;
+  return $sal_last_name;
+}
+
+/**
+ * block for listing child referenced with parent
+ */
+function parent_dashboard_child_list() {
+  global $base_url;
+  global $user;
+  $uid = $user->uid;
+  $active_uid = 0;
+
+  $output = '';
+  $num_child = '';
+  $child_first_name = '';
+  //fetch all ther referenced children.
+    $child_list = db_select('field_data_field_child_id', 'cl')
+      ->fields("cl", array('field_child_id_uid'))
+      ->condition('entity_id', $uid)
+      ->orderBy('delta')
+      ->execute()
+      ->fetchAll();
+    $count = 'first';
+  foreach ($child_list as $child) {
+
+     $child_name_query = db_select('users', 'u')
+      ->fields("u", array('name'))
+      ->condition('uid', $child->field_child_id_uid)
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+      $child_name = get_name($child->field_child_id_uid, "first"). "'s Progress";
+      $child_name = $child_name_query[0]->name;
+      $child_first_name = get_name($child->field_child_id_uid, "first");
+
+      //$child_name = get_name($child->field_child_id_uid);
+     //echo '<pre>';print_r($child_first_name);die();
+     //$child_name = $child_name_query[0]->name;
+     $class = 'user_list';
+     if (arg(2) == '' && $count == 'first') {
+      $active_uid = $child->field_child_id_uid;
+       $count = "sec";
+       $class = 'active';
+     }
+
+     if (arg(2) == $child->field_child_id_uid) {
+      $active_uid = $child->field_child_id_uid;
+       $class = 'active';
+     }
+      $output .= '<li>'.l($child_first_name, 'dashboard/parent/' . $child->field_child_id_uid, array('attributes' => array('class' => array($class)))).'</li>';
+      // removed the subscription link
+     //</td></div>'
+    // $output .= '<div id = "buy_subs"><td>'.l(t('Buy subscription'), 'subscription/form/' . $child->field_child_id_uid). '</td></div>';
+      // / echo "<pre>";print_r($child);die();
+
+  }
+  $profile_name = "See ". get_name($active_uid, "first") . "'s Profile";
+
+  if($active_uid){
+    $output .=  '<div id = "dash_prof"><tr><td>'.l($profile_name, 'user/' . $active_uid).'</td></tr></div>'; // user profile link
+  }
+  $a = explode('<li>', $output);
+  $num = count($a);
+  $num1 = $num - 1;
+ if ($num1 < 3){
+  $link_child = l("Add Child", "admin/people/p2rp-create/student");
+ }
+ else {
+   $link_child = '<a onClick="javascript: alert(\'For adding more children, please buy our enterprise subscription\')">Add Child</a>';
+ }
+ $output .= '<li class="addChild" style="cursor:pointer">'.$link_child.'</li>';
+ $output .= '<li class="second-parent">' . l('Add Parent', $base_url . '/profile-second_parent/' . $uid) . '</li>';
+ //$output .= '<li class="addChild">'.$link_child.'</li>';
+ //$output .=  '<div id = "dash_prof"><tr><td>'.l(t('See Profile'), 'user/' . $child->field_child_id_uid).'</td></tr></div>'; // user profile link
+
+  parent_dashboard_name($uid);
+  $_SESSION['first_child'] = $active_uid;
+  return '<h2>' . parent_dashboard_name($uid) . '</h2>'.'<div class="child-menu">'.'<ul class="childList">'.$output.'</ul>'.'</div>';
+}
+
+
+/**
+ * block for topic dashboard topic chart.
+ */
+function topic_progres_trend_chart() {
+
+  global $user;
+  if (in_array("Parent", $user->roles))  {
+    $uid = arg(2);
+  }
+  else {
+    $uid = $user->uid;
+  }
+  $topic_tid = arg(1);
+
+  //fetch current terms parent
+  $parent_query = DB_select('taxonomy_term_hierarchy', 'th');
+  $parent_query->fields("th", array("parent"));
+  $parent_query->condition("tid", $topic_tid);
+  $parent_result = $parent_query->execute()->fetchAssoc();
+
+
+  $subject_tid = $parent_result['parent'];
+
+
+ $result = db_query("select td.name, td.tid,
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+      ELSE 'not started'
+    END as lvl
+    ,level
+    FROM taxonomy_term_data td, taxonomy_term_hierarchy th
+    LEFT JOIN eck_user_info ui
+    ON th.tid = topic_id and ui.uid = :uid
+    WHERE
+      th.tid=td.tid
+      and
+      th.parent = :subject_tid
+    order by level desc",  array(':uid' => $uid, ':subject_tid' => $subject_tid));
+
+  $topic_group = array();
+  foreach ($result as $row) {
+    $topic_group[$row->lvl][$row->tid][] = $row->name;
+    $topic_group[$row->lvl][$row->tid][] = $row->level;
+  }
+
+
+  foreach($re as $name) {
+    $user_class_info = $name->field_class_user_tid;
+    $user_schools_tid =$name->field_schools_tid;
+    $user_branch_tid = $name->field_branch_tid;
+  }
+
+  $output = '<div class="link_expand"><span id="expand" class="exp">Expand All</span><span id="collapse" class="exp">Collapse All</span></div>';
+  $topic_level = array('mastered', 'covered', 'started');
+  foreach ($topic_level as $level) {
+    $output .= "<div class='subject_report'><span class='lft'>" . 'Topics ' . $level . "</span>";
+
+    $output .= "<div class='row'>";
+    if (array_key_exists($level, $topic_group)) {
+      foreach ($topic_group[$level] as $key => $val) {
+
+        $url = l("Click here to Expand", "topic-progress-report/" . $key . "/" . arg(2)) ;
+
+
+        if($key == $topic_tid) {
+          $output .= "<div class='row-left'><div class='sp1 sp'>" . $val[0] ."</div>";
+          //@todo : call view
+
+          //print views_embed_view('teacher_assessment_progress_report','block_1');die();
+          $topic_query = db_select('eck_user_assessment', 'ua')
+            ->fields("ua", array('endtime', 'level', 'endtime', 'totalq'))
+            ->condition('uid', $uid)
+            ->condition('topic_tid', $topic_tid)
+            ->orderBy('id', 'DESC')
+            ->range(0, 1)
+            ->execute()
+            ->fetchAll();
+
+          //echo "<pre>";print_r($topic_query);die();
+          $last_time = $topic_query[0]->endtime;
+
+          $topic_query1 = db_select('eck_user_level', 'ua')
+            ->fields("ua")
+            ->condition('uid', $uid)
+            ->condition('topic_tid', $topic_tid)
+            ->orderBy('id')
+            ->execute()
+            ->fetchAll();
+
+
+          $topic_name_query= db_select('taxonomy_term_data', 'td')
+          ->fields("td", array('name'))
+          ->condition('tid', $topic_tid)
+          ->range(0, 1)
+          ->execute()
+          ->fetchAssoc();
+          $topic_name = $topic_name_query['name'];
+
+          /*$l = 0;
+          $total_q = 0;
+          $chart_info = array();
+          foreach($topic_query as $chart_row) {
+              $total_q += $chart_row->totalq;
+              if($l != $chart_row->level) {
+                $chart_info[] = array(intval($total_q), intval($chart_row->level));
+              }
+              $l =$chart_row->level;
+          }
+         // echo "<pre>";print_r($chart_info);
+         */
+
+          $l = 0;
+          $total_q = 0;
+          $chart_info = array();
+          $chart_info[] = array(0, 1);
+          foreach($topic_query1 as $chart_row) {
+              $total_q += $chart_row->total;
+              if($l != $chart_row->level) {
+                $chart_info[] = array(intval($total_q), intval($chart_row->level));
+              }
+              $l =$chart_row->level;
+          }
+
+
+          $level = array();
+          $date_desc = array();
+          $date_list = "var date_i = new Array('";
+          $i = 1;
+          //$last_time = '';
+
+
+
+          $level[] = 1;
+          //@todo : test we need this loop or not !!
+          foreach ($topic_query as $result) {
+            $level[] = intval($result->level);
+            $date_desc[] = $i;
+            $date_list .= "','" . date("Y-m-d", $result->endtime);
+            $i++;
+            //$last_time = $result->endtime;
+          }
+
+
+        //h other table if level 1 and result is 0
+        if(!array_key_exists(1, $chart_info)) {
+          $user_inf_query = db_select('eck_user_info', 'ui')
+            ->fields("ui")
+            ->condition('uid', $uid)
+            ->condition('topic_id', $topic_tid)
+            ->range(0,1)
+            ->execute()
+            ->fetchAll();
+            $chart_info[] = array(intval($user_inf_query[0]->totalq), 1);
+        }
+
+          $date_list .= "');";
+          $output .= "<div class='last-date'>Last date of practice " .'<span>'. date("Y-m-d", $last_time) .'</span></div>';
+          $output .= "<div class='close-click'><a href='#'>Click here ";
+
+
+
+          $output .= "<span>to close report</span>" .'</a></div></div>'. lw_report_topic_line_chart($chart_info, $date_desc, $date_list, $topic_name);
+          $output_temp .= "</div>";
+        }
+        else {
+          $output .= "<div class='row-right'><div class='sp1 sp'>" . $val[0] ."</div>";
+          $output .=$url . "</div>" ;
+        }
+      }
+    }
+    $output .= "</div></div>";
+  }
+
+  return $output;
+}
+
+/**
+ * block for subject dashboard topic news.
+ */
+function subject_dashboard_subject_topic_news() {
+  if (!is_numeric(arg(3))) {
+     return '';
+  }
+  global $user;
+  $subject_tid = arg(3);
+  $name =  user_load($user->uid);
+  $name = $name->field_first_name['und'][0]['value'];
+  //SELECT * FROM `eck_user_info` where uid = 1 and subject_tid = 12 order by level desc
+  $topic_query = db_select('eck_user_info', 'ui')
+    ->fields("ui", array('topic_id', 'topic', 'level',  ))
+    ->condition('uid', $user->uid)
+    ->condition('subject_tid', $subject_tid)
+    ->condition('level', 6, "<")
+    ->orderBy('level', 'DESC')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAssoc();
+    $output ='<div class = "news_block">';
+    $output .='<div class = "left"> </div>';
+    $output .='<div class = "good_news">';
+
+    if (array_key_exists("topic_id", $topic_query)) {
+      if($topic_query['level'] < 4) {
+        $level_away = "You are " . (4-$topic_query['level']) . " level(s) away from the Learner Badge for the topic: ".strtoupper($topic_query['topic']);
+      }
+      else {
+        $level_away = "You are " . (6-$topic_query['level']) . " level(s) away from the Master Trophy for the topic: ".strtoupper($topic_query['topic']) ;
+      }
+
+      $output .= '<h2>' . $name . ', guess what?</h2>';
+      $output .= '<h3>' . $level_away . '</h3></div>' ;
+      $output .= '<div class="go_practice">' .
+      l("Start this topic now!", "assessments/take", array('query' => array('tid' => $topic_query['topic_id'], 'ptid' => $subject_tid)))
+          . '</div>';
+    }
+    else {
+      $output = "You have not Practiced yet!!";
+    }
+    $output .='</div>';
+    $output .='</div>';
+  return $output;
+}
+
+
+/**
+ * block for parent subject topic listing
+ */
+function parent_subject_topic_group() {
+  if (!is_numeric(arg(3))) {
+     return '';
+  }
+  $uid = arg(4);
+
+  $subject_tid = arg(3);
+
+  $result = db_query("select td.name, td.tid,
+    case
+      WHEN ui.level=1 THEN 'started'
+      WHEN ui.level=2 THEN 'started'
+      WHEN ui.level=3 THEN 'started'
+      WHEN ui.level=4 THEN 'covered'
+      WHEN ui.level=5 THEN 'covered'
+      WHEN ui.level=6 THEN 'mastered'
+      ELSE 'not started'
+    END as lvl
+    ,ui.level
+    ,ui.totalq
+    ,totaltime
+    ,ROUND(correcta*100/(totalq),2) as accuracy
+    FROM taxonomy_term_data td, taxonomy_term_hierarchy th
+    LEFT JOIN eck_user_info ui
+    ON th.tid = topic_id and ui.uid = :uid
+    WHERE
+      th.tid=td.tid
+      and
+      th.parent = :subject_tid
+    order by level desc",  array(':uid' => $uid, ':subject_tid' => $subject_tid));
+
+  $topic_group = array();
+  foreach ($result as $row) {
+    $topic_group[$row->lvl][$row->tid][] = $row->name;
+    $topic_group[$row->lvl][$row->tid]['level'] = $row->level;
+    $topic_group[$row->lvl][$row->tid]['totalq'] = $row->totalq;
+    $topic_group[$row->lvl][$row->tid]['maxlevel'] = $row->maxlevel;
+    $topic_group[$row->lvl][$row->tid]['totaltime'] = $row->totaltime;
+    $topic_group[$row->lvl][$row->tid]['accuracy'] = $row->accuracy;
+  }
+
+
+
+
+  $output = '<div class="link_expand"><span id="expand" class="exp">Expand All</span><span id="collapse" class="exp">Collapse All</span></div>';
+  $topic_level = array('mastered', 'covered', 'started', 'not started');
+
+
+  $table_head = "<table>
+      <tr>
+      <th>Topic</th>
+      <th># of Q's</th>
+      <th>Accuracy</th>
+      <th>Highest Level</th>
+      <th>Time Spent</th>
+      <th>Percentile</th>
+      <th>View Progress</th></tr>";
+  $table_footer = "</table>";
+
+  $str = '';
+  $wea = '';
+
+  foreach ($topic_level as $level) {
+    $output .= "<div class='subject_report'><span class='lft'>" . 'Topics ' . $level . "</span>";
+
+    if (array_key_exists($level, $topic_group)) {
+         $output .= "<div class='row'>";
+      $table_output = '';
+      foreach ($topic_group[$level] as $key => $val) {
+
+      $table_output .= "<tr><td>" . $val[0] . "</td>";
+
+        if (is_numeric($val['level'])) {
+
+          if($val['level'] > 3) {
+            if($val['accuracy'] > 79) {
+                $str[] = $val;
+            }
+            elseif($val['accuracy'] < 51) {
+              $val['tid'] = $key;
+              $wea[] = $val;
+            }
+          }
+
+          $table_output .= "<td>" . $val['totalq'] . "</td>";
+          $table_output .= "<td>" . $val['accuracy'] . "%</td>";
+          $table_output .= "<td>" . $val['level'] ."</td>";
+          $table_output .= "<td>" . elapsed_time($val['totaltime']) . "</td>";
+          $table_output .= "<td>" . "-" . "</td>";
+          $table_output .=  "<td>" . l("Click Here", "topic-progress-report/" . $key . "/" . "$uid" ) . "</td>";
+
+        }
+        $table_output .= "</tr>";
+      }
+      $output .= $table_head . $table_output . $table_footer . "</div>";
+    }
+    else {
+      $output .="<div class=row><div class='no_topic'>No topic $level yet</div></div>";
+    }
+
+    $output .= "</div>";
+  }
+
+  $str_output = '';
+  if(arg(0) == "report") {
+      if($str != '') {
+        $str_output = '<div class="strengths"><h2>Strengths</h2>';
+        foreach ($str as $value) {
+          $str_output .= "<div class='strengths_row'>" . $value[0] . "</div>";
+        }
+        $str_output .= '</div>';
+      }
+      if($wea != '') {
+       // $str_output = '<div class="weaknesses"><h2>Weaknesses</h2>';
+        foreach ($wea as $value) {
+          $wea_link = l("link", "revision/home/student/". $value['tid'] . "/" . $uid);
+          $str_output .= "<div class='Weaknesses_row'>" . $value[0] . "<span class=link>" . $wea_link . "</span></div></div>";
+        }
+      }
+      $str_output .= "<div class='page-report-performance-teacher'>" . skillmap_page($uid, $subject_tid) ."</div>";
+  }
+
+  return $output . $str_output;
+}
+
+
+/**
+ * block for subject dashboard topic listing
+ */
+function subject_dashboard_subject_topic_group() {
+  if (!is_numeric(arg(3))) {
+     return '';
+  }
+  global $user;
+  $subject_tid = arg(3);
+
+  $result = db_query("select td.name, td.tid,
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+      ELSE 'not started'
+    END as lvl
+    ,level
+    ,ui.totalq
+    ,totaltime
+    ,ROUND(correcta*100/(totalq),2) as accuracy
+    FROM taxonomy_term_data td, taxonomy_term_hierarchy th
+    LEFT JOIN eck_user_info ui
+    ON th.tid = topic_id and ui.uid = :uid
+    WHERE
+      th.tid=td.tid
+      and
+      th.parent = :subject_tid
+    order by level desc",  array(':uid' => $user->uid, ':subject_tid' => $subject_tid));
+
+  $topic_group = array();
+  foreach ($result as $row) {
+    $topic_group[$row->lvl][$row->tid][] = $row->name;
+    $topic_group[$row->lvl][$row->tid]['level'] = $row->level;
+    $topic_group[$row->lvl][$row->tid]['totalq'] = $row->totalq;
+    $topic_group[$row->lvl][$row->tid]['maxlevel'] = $row->maxlevel;
+    $topic_group[$row->lvl][$row->tid]['totaltime'] = $row->totaltime;
+    $topic_group[$row->lvl][$row->tid]['accuracy'] = $row->accuracy;
+  }
+
+  $output = '';
+  $topic_level = array('mastered', 'covered', 'started', 'not started');
+
+  $table_head = "<table><tr><th>Topic</th><th># of Q's</th><th>Accuracy</th><th>Current level</th>
+  <th>Time Spent</th><th>Global Percentile</th>";
+
+  //$table_left_head = "<table><tr><th>Topic</th><th></th></tr>";
+
+  $table_footer = "</table>";
+
+  $str = '';
+  $wea = '';
+  $output .="<h2 class='topic_tittle'>Choose a topic to begin practising <div class='link_expand'><span id='expand' class='exp'>Expand All</span><span id='collapse' class='exp'>Collapse All</span></div></h2>";
+  foreach ($topic_level as $level) {
+    $output .= "<div class='subject_report'><span class='lft'>" . 'Topics ' . $level . "</span>";
+
+    if (array_key_exists($level, $topic_group)) {
+      $output .= "<div class='row'>";
+       $table_output = '';
+      foreach ($topic_group[$level] as $key => $val) {
+
+        $table_output .= "<tr><td>" . $val[0] . "</td>";
+       if (is_numeric($val['level'])) {
+
+          if($val['level'] > 3) {
+            if($val['accuracy'] > 79) {
+                $str[] = $val;
+            }
+            elseif($val['accuracy'] < 51) {
+              $val['tid'] = $key;
+              $wea[] = $val;
+            }
+          }
+
+
+          $table_output .= "<td>" . $val['totalq'] . "</td>";
+          $table_output .= "<td>" . $val['accuracy'] . "%</td>";
+          $table_output .= "<td>" . $val['level'] ."</td>";
+          $table_output .= "<td>" . elapsed_time($val['totaltime']) . "</td>";
+          $table_output .= "<td>" . "-" . "</td>";
+          if(arg(0) == "report") {
+            $table_output .=  "<td>" . l("Click Here", "topic-progress-report/" . $key ) . "</td>";
+          }
+
+      //  $output .= "<span class='sp2 sp'>" . l("Start practice" , "assessments/take",
+       //     array('query' => array('tid' => $key, 'ptid' => $subject_tid))) . "</span>";
+        }
+        else {
+          $table_head = "<table><tr><th>Topic</th>";
+        }
+        if(arg(0) == "assessment") {
+          $url = l("Start practice" , "assessments/take",
+            array('query' => array('tid' => $key, 'ptid' => $subject_tid)));
+          $table_output .=  "<td>" . $url . "</td>";
+        }
+
+        $table_output .= "</tr>";
+      }
+      if(arg(0) == "report") {
+        $output .= $table_head . "<th>View Progress</th></tr>" . $table_output . $table_footer . "</div>";
+      }
+      else {
+        $output .= $table_head . "<th>Start practice</th></tr>" . $table_output . $table_footer . "</div>";
+      }
+    }
+    else {
+      $output .="<div class=row><div class='no_topic'>No topic $level yet</div></div>";
+    }
+    $output .= "</div>";
+  }
+
+  //echo "<pre>";print_r($str);
+  //echo "<pre>";print_r($wea);
+  //die();
+  $str_output = '';
+  if(arg(0) == "report") {
+      if($str != '') {
+        $str_output = '<div class="strengths"><h2>Strengths</h2>';
+        foreach ($str as $value) {
+          $str_output .= "<div class='strengths_row'>" . $value[0] . "</div>";
+        }
+        $str_output .= '</div>';
+      }
+      if($wea != '') {
+        $str_output .= '<div class="weaknesses"><h2>Weaknesses<span>Set Revision</span></h2>';
+        foreach ($wea as $value) {
+          $wea_link = l("link", "revision/home/student/". $value['tid']);
+          $str_output .= "<div class='Weaknesses_row'>" . $value[0] . "<span class=link>" . $wea_link . "</span></div>";
+        }
+      $str_output .= '</div>';
+      }
+  }
+
+  return $output . $str_output;
+
+}
+
+/**
+ * block for subject dashboard chart
+ */
+function subject_dashboard_subject_chart() {
+global $user;
+  if (in_array("Parent", $user->roles)) {
+    $uid = arg(4);
+  }
+  else {
+    $uid = $user->uid;
+  }
+  if (!is_numeric(arg(3))) {
+     return '';
+  }
+
+  $subject_tid = arg(3);
+  $results = db_query("SELECT
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+    END as lvl,
+    subject,
+      count(uid) as count
+    FROM eck_user_info WHERE uid=:uid and subject_tid=:subject_tid GROUP BY subject,lvl", array(':uid' => $uid, ':subject_tid' => $subject_tid));
+
+
+  //fetch subject name
+    $subject_name_query= db_select('taxonomy_term_data', 'td')
+      ->fields("td", array('name'))
+      ->condition('tid', $subject_tid, 'like')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAssoc();
+    $subject_name = $subject_name_query['name'];
+
+  $subject_stat = array();
+  foreach ($results as $result) {
+    if (!array_key_exists($result->lvl, $subject_stat)) {
+      $subject_stat[$result->lvl] = 0;
+    }
+    $subject_stat[$result->lvl] += $result->count;
+  }
+
+  //left count
+  $left_count = db_select('taxonomy_term_hierarchy', 'th')
+    ->fields('th')
+    ->condition('parent', $subject_tid)
+    ->execute();
+  $num_of_results = $left_count->rowCount();
+  $covered_count = array_sum($subject_stat);
+  $left_topic = $num_of_results - $covered_count;
+  $subject_chart = lw_report_subject_pie_chart($subject_name, $subject_stat, $left_topic);
+
+  //fetch total time spent and start time.
+  //SELECT sum(totaltime), min(endtime) FROM eck_user_assessment WHERE uid = 9
+  $subject_count_query = db_select('eck_user_assessment', 'ua');
+  $subject_count_query->addExpression('SUM(totaltime)', 'totaltime');
+  $subject_count_query->addExpression('min(endtime)', 'endtime');
+  $subject_count_result = $subject_count_query->condition('uid', $uid)->condition('subject_tid', $subject_tid)
+    ->execute()
+    ->fetchAssoc();
+
+  if (is_numeric($subject_count_result['totaltime'])) {
+$subject_chart .= "<div class='total-time'><span>Total Time spent on this subject</span>" . elapsed_time($subject_count_result['totaltime'], 6).'</div>' . "<div class='date-starting'><span>Date of starting</span>" . date("F d,Y", $subject_count_result['endtime']).'</div>';
+
+  }
+  else {
+    $subject_chart .= "No Assessment taken";
+  }
+
+  return $subject_chart;
+}
+
+
+/**
+ * block to show user subject chart on Parent dashboard.
+ * @global type $user
+ * @return string
+ */
+function parent_dashboard_subject_chart() {
+  global $user;
+  if (!in_array("Parent", $user->roles))  {
+    return '';
+  }
+
+
+  //else fetch user information
+  if (arg(2) == '') {
+        //@todo : now we have subject tid in user_info table.
+    $child_uid = db_select('field_data_field_child_id', 'ci')
+      ->fields("ci", array('field_child_id_uid'))
+      ->condition('entity_id', $user->uid)
+      ->orderBy('delta')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAssoc();
+    $uid = $child_uid['field_child_id_uid'];
+    if ($uid == '') {
+      return "<div class='no-subscribe'>No child available, Please go to your account and add child.</div>";
+    }
+  }
+  elseif (is_numeric(arg(2))) {
+    $uid = arg(2);
+  }
+  else {
+    return '';
+  }
+
+  //if no argument then fetch first user referenced
+  $query = db_select('field_data_field_subjects', 'fs');
+  $query->join("field_data_field_child_id", "ch", "ch.field_child_id_uid = ". $uid);
+  $query->join("profile", "p", "fs.entity_id=p.pid and p.uid = field_child_id_uid");
+  $query->fields("fs", array('field_subjects_tid'))
+    ->condition('fs.bundle', "student");
+  $result = $query->range(0,1)->execute()
+    ->fetchAll();
+
+  if(!array_key_exists(0, $result)) {
+    $paid_check = db_select('eck_expiry', 'ee');
+          $paid_check->fields("ee")
+          ->condition('uid', $user->uid)
+          ->condition('child_id', $uid)
+          ->condition('status', 0)
+          ->condition('purchase_type', 'paid');
+          $paid_count = $paid_check->execute()->rowCount();
+          if($paid_count > 0 ) {
+             return "<div class='no-subscribe'>Thanks for subscribing to our offer. As subscription period has expired, we would request you to click on the Subscription Link given below and select from amongst our various plans and let your child continue with our practice assessments to master concepts.</br> Go to <a href='/user/".$user->uid."'>your account</a> for susbcription</div>";
+          }
+          else {
+            $free_check = db_select('eck_expiry', 'ee');
+            $free_check->fields("ee")
+              ->condition('uid', $user->uid)
+              ->condition('child_id', $uid)
+              ->condition('status', 0)
+              ->condition('purchase_type', 'free');
+            $free_count = $free_check->execute()->rowCount();
+            if($free_count > 0 ) {
+              //display free text
+              return "<div class='no-subscribe'>Thanks for subscribing to our free trial offer. As your free trial period has expired, we would request you to click on the Subscription Link given below and select from amongst our various plans and let your child continue with our practice assessments to master concepts.</br> Go to <a href='/user/".$user->uid."'>your account</a> for susbcription</div>";
+            }
+
+          }
+       return "<div class='no-subscribe'>No child or subscription Found</br> Go to <a href='/user/".$user->uid."'>your account</a> for susbcription</div>";
+  }
+
+
+  //query for user's level in each level of subject
+  $results = db_query("SELECT
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+    END as lvl,
+    subject_tid,
+      count(uid) as count
+    FROM eck_user_info WHERE uid=:uid and subject != '' GROUP BY subject_tid,lvl", array(':uid' => $uid));
+
+  $subject_stat = array();
+  foreach ($results as $result) {
+    if (!array_key_exists($result->subject_tid, $subject_stat)) {
+      $subject_stat[$result->subject_tid] =array();
+    }
+    if (!array_key_exists($result->lvl, $subject_stat)) {
+      $subject_stat[$result->subject_tid][$result->lvl] = 0;
+    }
+    $subject_stat[$result->subject_tid][$result->lvl] += $result->count;
+  }
+
+   //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  //$subject_list->condition("fs.delta", 0, ">");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute();
+
+
+
+ //fetch users profile ID.
+    $pid_query = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','student')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+    $pid = $pid_query[0]->pid;
+
+  //Fetch User class
+  $user_class = db_select('field_data_field_class_user', 'c');
+  $user_class->fields('c', array("field_class_user_tid"))
+    ->condition('c.entity_id', $pid)
+    ->condition('c.delta', 0)
+    ->range(0, 1);
+  $user_class_result = $user_class->execute()
+    ->fetchAssoc();
+  $user_class_info = $user_class_result['field_class_user_tid'];
+
+
+
+  $subject_chart = '';
+  while ($subject_ref = $subject_list_result->fetchAssoc()) {
+    $subject_tid = $subject_ref['field_subjects_tid'];
+
+    //fetch subject name
+    $subject_name_query= db_select('taxonomy_term_data', 'td')
+      ->fields("td", array('name'))
+      ->condition('tid', $subject_tid)
+      ->range(0, 1)
+      ->execute()
+      ->fetchAssoc();
+      $subject_name= $subject_name_query['name'];
+
+    //count for remeining topic
+    $left_count = db_select('taxonomy_term_hierarchy', 'th')
+            ->fields('th')
+            ->condition('parent', $subject_tid)
+            ->execute();
+    $num_of_results = $left_count->rowCount();
+     if (array_key_exists($subject_tid, $subject_stat)) {
+      $covered_count = array_sum($subject_stat[$subject_tid]);
+    }
+    else {
+      $covered_count = 0;
+    }
+    $left_topic = $num_of_results - $covered_count;
+
+    if (!array_key_exists($subject_tid, $subject_stat)) {
+      $subject_stat[$subject_tid] = array();
+    }
+    $subject_chart .= '<div class="highchart_area">' . lw_report_subject_pie_chart_parent($subject_name, $subject_stat[$subject_tid], $left_topic);
+
+
+
+    $subject_count_query = db_select('eck_user_assessment', 'ua');
+      $subject_count_query->addExpression('SUM(totaltime)', 'totaltime');
+      $subject_count_query->addExpression('min(endtime)', 'endtime');
+      $subject_count_query->addExpression('SUM(correcta)', 'correct');
+      $subject_count_query->addExpression('ROUND(sum(correcta)*100/sum(totalq),2)', 'accuracy');
+      $subject_count_result = $subject_count_query->condition('uid', $uid)->condition('subject_tid', $subject_tid)
+      ->execute()
+      ->fetchAssoc();
+    $subject_chart .= '<div class="subject-name">'.$subject_name .'</div>';
+    if (is_numeric($subject_count_result['totaltime'])) {
+      $subject_chart .= '<div class="highchart-content">';
+      $subject_chart .= '<div class="highchart-content-left">';
+      $subject_chart .= '<div class="time">';
+      $subject_chart .= '<div class="spent-time">'."Total time spent : ".'<span>'. elapsed_time($subject_count_result['totaltime'], 4).'</span>' .'</div>'. "<div class='date-start'>Date of starting : " . date("F d,Y", $subject_count_result['endtime']).'</div>';
+      $subject_chart .= '</div>';
+      $subject_chart .= "<div class='started_top'>Total Topic Started :" . $covered_count .
+       "</div>";
+      $subject_chart .= "<div class='accurate'>Accuracy : " . $subject_count_result['accuracy'] . "% "."</div>";
+      $subject_chart .= '<div class="performance">'.l("View Performance", "report/performance/parent/" . $subject_tid . "/" . $uid).'</div>';
+      $subject_chart .= '</div>';
+      //fetching percentile
+      $perc_query = db_select('eck_user_info', 'ua');
+      $perc_query->leftJoin('field_data_field_class_user', 'uc', 'field_class_user_tid = ' . $user_class_info);
+      $perc_query->fields('ua', array('uid'));
+      //$perc_query->addExpression('correcta', 'correct');
+      $perc_query->condition('subject_tid', $subject_tid);
+      $perc_query->condition('correcta', $subject_count_result['correct'] , '<');
+      $perc_query->where('uid = uc.entity_id');
+      $perc_query->groupBy('uid');
+      //$perc_query->havingCondition('correcta', $subject_count_result['correct'] , '<');
+      $perc_result = $perc_query->execute()->rowCount();
+
+      $perc_query_total = db_select('eck_user_info', 'ua');
+      $perc_query_total->leftJoin('field_data_field_class_user', 'uc', 'field_class_user_tid = ' . $user_class_info);
+      $perc_query_total->fields('ua', array('uid'));
+      $perc_query_total->addExpression('correcta', 'correct');
+      $perc_query_total->condition('subject_tid', $subject_tid);
+      $perc_query_total->where('uid = uc.entity_id');
+      $perc_query_total->groupBy('uid');
+      $perc_result_total = $perc_query_total->execute()->rowCount();
+
+      $percentile = ($perc_result/$perc_result_total)*100;
+      $subject_chart .= '<div class="percentage">Global Percentile' .'<div class="per-text">'.'<span>'. $percentile .'</span>'.'</div>' ."</div>";
+      $subject_chart .= "</div>";
+    }
+    else {
+      $subject_chart .= '<div class="no-assesment"><div class="inner-no-assesment">'."No Assessment taken".'</div></div>';
+    }
+    $subject_chart .= "</div>";
+
+  }
+  if($subject_chart){
+    return $subject_chart;
+  }
+  return "<div class='no-subscribe'>Please susbcribe to at least one package for this child to view the dashboard.</br> Go to <a href='/user/".$user->uid."'>your account</a> for susbcription</div>";
+
+}
+
+
+/**
+ * block to show user subject chart on user dashboard.
+ * @global type $user
+ * @return string
+ */
+function user_dashboard_subject_chart() {
+  global $user;
+  $uid = $user->uid;
+
+  $results = db_query("SELECT
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+    END as lvl,
+    subject_tid,
+      count(uid) as count
+    FROM eck_user_info WHERE uid=:uid and subject != '' GROUP BY subject_tid,lvl", array(':uid' => $uid));
+
+  $subject_stat = array();
+  foreach ($results as $result) {
+    if (!array_key_exists($result->subject_tid, $subject_stat)) {
+      $subject_stat[$result->subject_tid] = array();
+    }
+    if (!array_key_exists($result->lvl, $subject_stat)) {
+      $subject_stat[$result->subject_tid][$result->lvl] = 0;
+    }
+    $subject_stat[$result->subject_tid][$result->lvl] += $result->count;
+  }
+  //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  //$subject_list->condition("fs.delta", 0, ">");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute();
+
+  $subject_chart = '';
+  while ($subject_ref = $subject_list_result->fetchAssoc()) {
+    $subject_tid = $subject_ref['field_subjects_tid'];
+    //fetch term name.
+   $subject_name_query= db_select('taxonomy_term_data', 'td')
+    ->fields("td", array('name'))
+    ->condition('tid', $subject_tid)
+    ->range(0, 1)
+    ->execute()
+    ->fetchAssoc();
+    $subject_name= $subject_name_query['name'] . "<span>" .l("View Results", "report/performance/student/" . $subject_tid ) . "</span>";
+
+  //count for remeining topic.
+    $left_count = db_select('taxonomy_term_hierarchy', 'th')
+    ->fields('th')
+    ->condition('parent', $subject_tid)
+    ->execute();
+    $num_of_results = $left_count->rowCount();
+
+    if (array_key_exists($subject_tid, $subject_stat)) {
+      $covered_count = array_sum($subject_stat[$subject_tid]);
+    }
+    else {
+      $covered_count = 0;
+    }
+    $left_topic = $num_of_results - $covered_count;
+
+    if (!array_key_exists($subject_tid, $subject_stat)) {
+      $subject_stat[$subject_tid] = array();
+    }
+    $subject_chart .= '<div class="highchart_area">' . lw_report_subject_pie_chart($subject_name, $subject_stat[$subject_tid], $left_topic);
+    $sinkect_chart .=
+    $subject_chart .= '<div class="go_practice">' . l("start practice", "assessment/home/student/" . $subject_tid ) . '</div></div>';
+  }
+ if($subject_chart){
+    return $subject_chart;
+  }else {
+       $paid_check = db_select('eck_expiry', 'ee');
+          $paid_check->fields("ee")
+          ->condition('child_id', $uid)
+          ->condition('status', 0)
+          ->condition('purchase_type', 'paid');
+          $paid_count = $paid_check->execute()->rowCount();
+          if($paid_count > 0 ) {
+             return "<div class='no-subscribe'>Your Subscription period has expired. Please ask your parents to take a
+            subscription, to enable you to do unlimited practice</div>";
+          }
+          else {
+            $free_check = db_select('eck_expiry', 'ee');
+            $free_check->fields("ee")
+              ->condition('child_id', $uid)
+              ->condition('status', 0)
+              ->condition('purchase_type', 'free');
+            $free_count = $free_check->execute()->rowCount();
+            if($free_count > 0 ) {
+              //display free text
+              return "<div class='no-subscribe'>Your trial period has expired. Please ask your parents to take a
+                subscription, to enable you to do unlimited practice</div>";
+            }
+          }
+    return "<div class='no-subscribe'>Please ask your parents to susbcribe you to at least one package to view the dashboard.</div>";
+  }
+}
+
+
+/**
+ * gets you the golive notifications at user-dashboard
+ * Show list of revision schedule
+ */
+function golive_req_notification_block() {
+  global $user;
+  $uid = $user->uid;
+  $count = 0;
+  //@todo : nitish make it db_select query
+  $count = db_query('SELECT COUNT(notify) FROM {eck_notifications} WHERE
+    uid = :uid AND notify LIKE :nd', array(':uid' => $uid, ':nd' => 'F'))->fetchField();
+
+  //@todo : nitish use l() instead a.
+  $output = "<div id = 'golive_count'><a href = '/golive-dash'> <span>$count</span>Play Off</a></div>";
+
+  $revision_query = DB_select('eck_revision', 'r');
+  $revision_query->fields("r", array("id"));
+  $revision_query->condition("uid", $uid);
+  $revision_query->condition("status", 1);
+  $revision_result = $revision_query->execute()->rowCount();
+  $revision_text = "<span>" . $revision_result . "</span>Revisions";
+  if($revision_result > 0) {
+    $revision_link = "revision/home/start/".$uid."";
+  }
+  else {
+    $revision_link = "revision/home/student";
+  }
+
+  $output .= "<div id = 'golive_count'>" . l($revision_text, $revision_link, array('html' => TRUE, )) ."</div>";
+
+
+  return $output;
+
+}
+
+/*
+ * function for progress report chart
+ */
+/**
+ * function to return piechart object
+ */
+function lw_report_topic_line_chart($level, $date_desc, $date_list, $topic_name) {
+
+  $options = new stdClass();
+  // Chart.
+  $options->chart = (object) array(
+        'renderTo' => 'container',
+        'type' => 'spline',
+        'marginRight' => 20,
+        'marginBottom' =>100,
+  );
+
+  $options->title = new stdClass();
+  $options->title->text = "Progress Report for " . $topic_name;
+
+  $options->xAxis = new stdClass();
+  $options->xAxis->title = new stdClass();
+  $options->xAxis->title->text = "# of Questions";
+  $options->xAxis->min = 0;
+  $options->xAxis->allowDecimals = false;
+  $options->xAxis->style = (object) array(
+     'color' => '#525151',
+     'font' => '12px Helvetica',
+    );
+
+  $options->yAxis = new stdClass();
+  $options->yAxis->title = new stdClass();
+  $options->yAxis->title->text = "Levels";
+  $options->yAxis->min = 0;
+  $options->yAxis->categories = array(0,1,2,3,4,5,6,7,8);
+  //$options->yAxis->max = 6;
+  $options->yAxis->allowDecimals = false;
+  $options->tooltip = new stdClass();
+  $options->tooltip->formatter = "function() {
+    " . $date_list . "
+    return 'level : ' + this.y;}";
+
+
+  $options->series = array();
+
+  $series = new stdClass();
+  $series->name = "Best Possible";
+  $series->data[] = array(0,1);
+  $series->data[] = array(15,2);
+  $series->data[] = array(30,3);
+  $series->data[] = array(45,4);
+  $series->data[] = array(60,5);
+  $series->data[] = array(75,6);
+
+  $options->series[] = $series;
+
+  $series = new stdClass();
+  $series->name = $topic_name;
+  $series->data[] = array(0,1);
+  foreach ($level as $chart_ar) {
+    //echo "<pre>";print_r($chart_ar);
+    $series->data[] = $chart_ar;
+  }
+  $options->series[] = $series;
+
+
+//echo "<pre>";print_r($options);die();
+  if (is_object($options)) {
+    // Define required and optional chart container attributes.
+    $attributes = array(
+      // Required chart id passed by reference.
+      'id' => $options->chart->renderTo,
+      // Optionally add styles or any other valid attribute.
+      'style' => 'height: 400px;'
+    );
+
+  }
+    // Return block definition.
+    return highcharts_render($options, $attributes);
+}
+
+
+
+/**
+ * function to return piechart object
+ */
+function lw_report_subject_pie_chart($subject, $val, $left_point) {
+
+
+  //echo $subject . "<br/>";
+  //echo "<pre>";print_r($val);
+  //echo "topic left " . $left_point;
+  $options = new stdClass();
+
+  // Chart.
+  $options->chart = (object) array(
+        'renderTo' => 'container',
+        'plotBackgroundColor' => '#ffffff',
+        'plotBorderWidth' => NULL,
+        'plotShadow' => FALSE,
+  );
+  $options->title =new stdClass();
+  $options->title->useHTML = true;
+  $options->title->text = "<div class='chart-title'>" . $subject . "</div>";
+  $options->tooltip = new stdClass();
+  $options->tooltip->formatter = "function() {return '<b>'+ this.point.name +'</b>: '}";
+
+ $options->plotOptions = new stdClass();
+ $options->plotOptions->pie = (object) array(
+  'allowPointSelect' => TRUE,
+  'cursor' => 'pointer',
+  'showInLegend' => TRUE,
+  'color'=> '#000000',
+  'connectorColor' => '#000000',
+  'dataLabels' => array(
+    'enabled' => false,
+   ),
+
+  );
+//echo "<pre>";print_r($options);die();
+ //$options->plotOptions->pie->dataLabels['formatter'] = "function() {return '<b>test</b>}";
+
+
+  $options->series = array();
+  $series = new StdClass();
+  $series->type = 'pie';
+
+  $series->name = 'Browser share';
+  $series->data = array();
+  $keys = array("mastered", "covered", "started");
+  foreach ($keys as $key) {
+    if ($val == NULL) {
+      $val = array();
+    }
+    if (!array_key_exists($key, $val)) {
+      $val[$key] = 0;
+    }
+
+    $series->data[] = array(ucfirst($key) ." : " .$val[$key]  , $val[$key]);
+  }
+
+  $series->data[] = array("Not started : ".$left_point , $left_point);
+
+    $options->series[] = $series;
+
+  // Diable credits.
+  $options->credits = new stdClass();
+  $options->credits->enabled = FALSE;
+
+  if (is_object($options)) {
+    // Define required and optional chart container attributes.
+    $attributes = array(
+      // Required chart id passed by reference.
+      'id' => $options->chart->renderTo,
+      // Optionally add styles or any other valid attribute.
+      'style' => 'height: 300px;width:250px;
+'    );
+
+  }
+    // Return block definition.
+    return highcharts_render($options, $attributes);
+}
+
+
+
+/**
+ * function to return piechart object
+ * creating duplicate piechart for changing hieght and labels and color changes
+ */
+function lw_report_subject_pie_chart_parent($subject, $val, $left_point) {
+
+
+  //echo $subject . "<br/>";
+  //echo "<pre>";print_r($val);
+  //echo "topic left " . $left_point;
+  $options = new stdClass();
+
+  //$options->color = (object) array(
+       // '#562F1E', '#AF7F24', '#263249', '#5F7F90', '#D9CDB6'
+ // );
+  // Chart.
+  $options->chart = (object) array(
+        'renderTo' => 'container',
+        'plotBackgroundColor' => '',
+        'plotBorderWidth' => NULL,
+        'plotShadow' => FALSE,
+  );
+  $options->title =new stdClass();
+  $options->title->useHTML = true;
+  $options->title->text = '';
+  $options->tooltip = new stdClass();
+  $options->tooltip->formatter = "function() {return '<b>'+ this.point.name +'</b>: '+ this.y}";
+
+ $options->plotOptions = new stdClass();
+ $options->plotOptions->pie = (object) array(
+  'allowPointSelect' => TRUE,
+  'cursor' => 'pointer',
+  'showInLegend' => TRUE,
+  'dataLabels' => array(
+    'enabled' => FALSE,
+   ),
+
+  );
+//echo "<pre>";print_r($options);die();
+ //$options->plotOptions->pie->dataLabels['formatter'] = "function() {return '<b>test</b>}";
+
+
+  $options->series = array();
+  $series = new StdClass();
+  $series->type = 'pie';
+
+
+  $series->name = 'Browser share';
+  $series->data = array();
+  $keys = array("mastered", "covered", "started");
+  foreach ($keys as $key) {
+    if ($val == NULL) {
+      $val = array();
+    }
+    if (!array_key_exists($key, $val)) {
+      $val[$key] = 0;
+    }
+
+   $series->data[] = array(ucfirst($key) ." : " .$val[$key]  , $val[$key]);
+  }
+
+  $series->data[] = array("Not started : ".$left_point , $left_point);
+
+
+    $options->series[] = $series;
+
+  // Diable credits.
+  $options->credits = new stdClass();
+  $options->credits->enabled = FALSE;
+
+  if (is_object($options)) {
+    // Define required and optional chart container attributes.
+    $attributes = array(
+      // Required chart id passed by reference.
+      'id' => $options->chart->renderTo,
+      // Optionally add styles or any other valid attribute.
+      'style' => 'height: 300px;width:200px;
+'    );
+
+  }
+    // Return block definition.
+    return highcharts_render($options, $attributes);
+}

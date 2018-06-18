@@ -1,0 +1,444 @@
+/****
+**** CSS for Assessment
+****/
+
+.drag-area ol {
+  list-style-type: none;
+}
+
+
+@font-face {
+	font-family: 'digital';
+	src: url('http://thecodeplayer.com/uploads/fonts/DS-DIGI.TTF');
+
+}
+
+.timer {
+  background: none repeat scroll 0 0 #F7F7F7;
+  border-radius: 0 0 40px 40px;
+  display: inline-block;
+  font-weight: bold;
+  left: 816px;
+  overflow: hidden;
+  padding: 2px 10px 10px;
+  position: absolute;
+  text-align: center;
+  top: 328px;
+  width: 80px;
+}
+
+.timer p {
+  color: #ADADAD;
+  font-size: 11px;
+  margin: 0;
+}
+
+.startstoptime {
+  color: #FF6604;
+  font-family: digital;
+  font-size: 17px;
+  text-shadow: 0 0 5px #FFFFFF;
+}
+
+.form-item-timer-value{
+	display:none;
+}
+
+.desc .ans_d {
+  color:blue;
+  padding:10px;
+  border:1px solid #000;
+}
+
+#option-list h3 {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.button-option.mcq,
+.button-option.true_and_false {
+  float: left;
+  margin: 0 31px 45px 0;
+  width: 215px;
+}
+
+.question_wrap,
+.keyarea{
+	float:left;
+}
+
+.fib_ext_blk {
+  float: left;
+  width: 72%;
+}
+
+.fib_ext_blk .question_wrap,
+.fib_ext_blk .keyarea{
+  float:left;
+  width:97%;
+}
+
+.desc_wrap {
+  background-color: #FAFAFA;
+  border: 1px solid #E9E9E9;
+  float: left;
+  height: 312px;
+  position: relative;
+  width: 186px;
+}
+
+.desc_wrap  .descs{
+	display:none;
+}
+
+#fib_expected, .desc_wrap.fib {
+  margin-top: 15px;
+}
+
+.keyarea #fib_expected {
+  border: 1px solid #FE8431;
+  border-radius: 4px 4px 4px 4px;
+}
+
+
+#assessments-form #edit-finish,
+#golive-form  #edit-finish{
+  background-color: #FE8431;
+  border: 0 none;
+  border-radius: 77px 77px 77px 77px;
+  top: 535px;
+  color: #FFFFFF;
+  height: 77px;
+  position: absolute;
+  right: 26px;
+  text-transform: uppercase;
+  width: 77px;
+}
+
+#lw-revision-form #edit-finish{
+  background-color: #FE8431;
+  border: 0 none;
+  border-radius: 77px 77px 77px 77px;
+  top: 470px;
+  color: #FFFFFF;
+  height: 77px;
+  position: absolute;
+  right: 26px;
+  text-transform: uppercase;
+  width: 77px;
+}
+
+.descs p.shwtxt {
+  cursor: pointer;
+  display: block;
+  margin-top: 50px;
+  text-align: center;
+  text-decoration: underline;
+}
+
+.answer_link.fib .descs p.shwtxt {
+  padding-top: 20px;
+  margin-top: 0px;
+}
+
+.descs .ans_desc {
+  background: none repeat scroll 0 0 #FFFFFF;
+  box-shadow: 0 0 50px 50px #999999;
+  left: 0;
+  padding:10px;
+  position: absolute;
+  top: -400px;
+  width: 135%;
+  z-index: 9999;
+}
+
+.answer_link.true_and_false .descs .ans_desc,
+.answer_link.mcq .descs .ans_desc,
+.answer_link.fib .descs .ans_desc  {
+  top: -298px;
+  width: 140%;
+}
+
+
+.answer_link.match .descs .ans_desc {
+  top: -400px;
+  width: 151%;
+}
+
+.ans_shw {
+  background: none repeat scroll 0 0 #EFEFEF;
+  color: #000000;
+  font-family: dinmd;
+  font-size: 11pt;
+  height: auto;s
+  padding: 10px;
+  position: relative;
+  width: 94.3%;
+  padding-left: 10px;
+}
+
+.ans_desc .cl {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 7px 7px 7px 7px;
+  color: #000000;
+  cursor: pointer;
+  font: 120% sans-serif;
+  padding: 0 6px 2px;
+  position: absolute;
+  right: 0;
+  top: 7px;
+  width: 20px;
+  z-index: 99999;
+}
+
+#assessments-form .btn-wrap,
+#lw-revision-form .btn-wrap,
+#golive-form .btn-wrap{
+  position: absolute;
+  right: 290px;
+  width: 120px;
+}
+
+#assessments-form .btn-wrap p.sure,
+#lw-revision-form  .btn-wrap p.sure,
+#golive-form  .btn-wrap p.sure{
+	text-align:left;
+}
+
+#assessments-form .btn-wrap #reset,
+#lw-revision-form .btn-wrap #reset,
+#golive-form .btn-wrap #reset{
+  display: block;
+  float: left;
+  margin-right: 10px;
+}
+
+h3.fib_question {
+  margin-bottom: 85px;
+}
+
+.mergeval,
+.correct_match{
+  display: none;
+}
+
+/*****************************css for fib *****************************/
+/*********************************************************************/
+
+.keyarea{
+  background: #f4f4f4; /* Old browsers */
+  /* IE9 SVG, needs conditional override of 'filter' to 'none'
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj4KICAgIDxzdG9wIG9mZnNldD0iMiUiIHN0b3AtY29sb3I9IiNmNGY0ZjQiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjOTI5MjkxIiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyZWN0IHg9Ii01MCIgeT0iLTUwIiB3aWR0aD0iMTAxIiBoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);*/
+  background: -moz-radial-gradient(center, ellipse cover,  #f4f4f4 2%, #929291 100%); /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(2%,#f4f4f4), color-stop(100%,#929291)); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover,  #f4f4f4 2%,#929291 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover,  #f4f4f4 2%,#929291 100%); /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover,  #f4f4f4 2%,#929291 100%); /* IE10+ */
+  background: radial-gradient(ellipse at center,  #f4f4f4 2%,#929291 100%); /* W3C */
+  font-size: 18px; text-transform: uppercase;
+  width: 92%;
+  /*-webkit-transform: perspective(300px) rotateX(-10deg);
+  -moz-transform: perspective(200px) rotateX(-12deg);
+  -0-transform: perspective(300px) rotateX(-10deg);
+  -ms-transform: perspective(300px) rotateX(-10deg);
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  /filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#929291',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
+  */
+
+}
+
+
+.keyarea #fib_expected {
+  font-size: 18px;
+  text-transform: uppercase;
+  border: solid 5px #212060;
+  margin: 13px;
+  min-height: 84px;
+  text-align: center;
+}
+
+#fib_expected .userenter {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background: none repeat scroll 0 0 transparent;
+  border-color: -moz-use-text-color -moz-use-text-color #212060;
+  border-image: none;
+  border-style: none none solid;
+  border-width: 0 0 2px;
+  color: #212060;
+  cursor: text !important;
+  font-size: 28pt;
+  margin-left: 10px;
+  position: relative;
+  text-align: center;
+  width: 32px;
+  z-index: 99;
+  font-family:arial;
+}
+
+.clrtxt,
+.jumbtxt,
+.mtfclear {
+  cursor: pointer;
+  font-family: dinmd;
+  font-size: 12px;
+  margin-right: 10px;
+  margin-top: 15px;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+#fib_expected{
+  padding: 25px 0 10px 0;
+}
+
+/************************css for jumble Question*********************/
+/*******************************************************************/
+.jumble_question_wrap li.ui-draggable {
+  cursor: pointer;
+
+}
+.jumble_question_wrap li.ui-draggable, .drag-area .box-area .j_word, .j_word{
+  float: left;
+  margin-bottom: 10px;
+  margin-right:0;
+}
+
+.jumble_question_wrap ul{
+  list-style-type: none;
+  margin-top: 20px;
+  padding: 50px 0 20px 0;
+}
+
+.drag-area.jumbd .extra-area ol.placeholder{
+  padding-top:20px;
+}
+
+.jumble_question_wrap li .extra {
+   background:url(images/jumb_rght.png) no-repeat right center;
+   height: 52px;
+   line-height: 52px;
+  }
+
+.jumble_question_wrap li .extra span{
+  background: url(images/jumb_rpt.png) no-repeat left top;
+  color: #fff;
+  margin-right: 30px;
+  float: left;
+  text-align: center;
+  padding-left: 25px;
+  font-weight: bold;
+}
+
+.jumble_question_wrap{
+  float: left;
+  min-height: 247px;
+  width: 100%;
+}
+
+ol.placeholder{
+  list-style-type: none;
+}
+
+ol.placeholder li .extra {
+   background:url(images/jumb_rght.png) no-repeat right center;
+   height: 52px;
+   line-height: 52px;
+  }
+
+ol.placeholder li .extra span{
+  background: url(images/jumb_rpt.png) no-repeat left top;
+  color: #fff;
+  margin-right: 30px;
+  float: left;
+  text-align: center;
+  padding-left: 25px;
+  font-weight: bold;
+}
+
+.jques h2{
+  font-size: 1em;
+}
+
+.jumble_div .jques h2{
+  margin-top:0;
+}
+
+.jumble_question_wrap .answer-option{
+  float: left;
+  width: 100%;
+}
+
+.jques span {
+  background: url("images/arrow.png") no-repeat scroll 0 -3px transparent;
+  color: #A8A8A8;
+  font-weight: normal;
+  margin: 0 0 3px;
+  padding: 0 0 0 50px;
+}
+
+.extra-area {
+  padding: 12px 12px 16px 12px;
+  background: none repeat scroll 0 0 #E9E9E9;
+  border: 1px solid #B4B4B4;
+  box-shadow: 0 0 38px 8px #ABABAB inset;
+  background: #E9E9E9;
+  box-shadow: inset 0px 0px 38px 8px rgba(171, 171, 171, 67);
+  -webkit-box-shadow: inset 0px 0px 38px 8px rgba(171, 171, 171, 67);
+  -moz-box-shadow: inset 0px 0px 38px 8px rgba(171, 171, 171, 67);
+}
+
+.extra-area ol.placeholder{
+  border: 1px dashed #808183;
+  margin:0;
+  padding: 0 10px;
+}
+
+.current_entry {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: 3px solid #E9E9E9;
+  border-radius: 8px 8px 8px 8px;
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: -4px;
+  padding: 8px 14px;
+  text-transform: uppercase;
+}
+
+.jumbd.drag-area {
+  float: left;
+  margin-right: 20px;
+  width: 67%;
+}
+
+.jques {
+  text-align: right;
+  width: 67%;
+}
+
+
+#option-list .placeholder{
+  min-height: 195px;
+}
+
+#assessments-form .jumb .btn-wrap-inner{
+  position: absolute;
+  top: -153px;
+  z-index: 1;
+}
+
+.drag-area.jumbd .placeholder.ui-droppable .j_word {
+  margin-right: -18px;
+}
+
+
+.ans_shw_img{
+background: none repeat scroll 0 0 #EFEFEF;
+width: 94.3%;
+padding-left:10px;
+padding-top: 10px;
+
+}

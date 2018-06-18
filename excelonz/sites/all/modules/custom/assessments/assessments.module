@@ -1,0 +1,114 @@
+<?php
+/**
+ * @file
+ * Provide a assessments to attract user.
+ */
+
+
+/**
+ *  Implementation of hook_menu()
+ */
+function assessments_menu() {
+  // Submit a form without a page reload.
+  $items['assessments/take'] = array(
+    'title' => 'Assessment',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('assessments_form'),
+    'access callback' => TRUE,
+    'file' => 'assessments.inc',
+  );
+  $items['assessments/topic'] = array(
+    'title' => 'Assessment',
+    'page callback' => 'assessment_get_topic',
+    'access callback' => TRUE,
+    'file' => 'assessments.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implementation of hook_block_info().
+ */
+function assessments_block_info() {
+  $blocks['course_page']['info'] = t('Course Page');
+  return $blocks;
+}
+
+
+/**
+ * Implementation of hook_block_view().
+ */
+function assessments_block_view($delta='') {
+  $block = array();
+  if ($delta == 'course_page') {
+    $content = get_course();
+    $block['subject'] = t('');
+    $block['content'] = $content;
+  }
+  return $block;
+}
+
+
+/**
+ * Block to display course for assessment
+ */
+function get_course() {
+  //Fetch user class and display only course that has. referenced by that class.
+  assessment_report_unset();
+  global $user;
+  $uid = $user->uid;
+
+  //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute()->fetchall();
+
+  $courses = array();
+  foreach ($subject_list_result as $row) {
+    $courses[] = $row->field_subjects_tid;
+  }
+
+  $vid = 7;
+  $lang = 'und';
+  $output = "<table><tr>";
+  $counter = 1;
+  foreach ($courses as $ctid) {
+      $course_term = taxonomy_term_load($ctid);
+      //echo '<pre>';print_r($course_term);
+
+      if($ctid == arg(3)) {
+        $subject_class = "active_subject";
+
+      }
+      else {
+        $subject_class = "other_subject";
+      }
+      $output .= "<td class='".$subject_class."'>";
+
+
+      if (($subject_class == 'active_subject') && (array_key_exists('und', $course_term->field_active_image))) {
+        $image =  $course_term->field_active_image['und']['0']['filename'];
+        $output .= "<span>" . l(theme_image_style(array('style_name' => 'course_thumb', 'path' => $image, 'width' => '', 'height' => '')), "assessment/home/student/".$ctid, array('html' => TRUE, )) . "</span>";
+      }
+      else {
+        if (array_key_exists('und', $course_term->field_image)) {
+        $image =  $course_term->field_image['und']['0']['filename'];
+        $output .= "<span>" . l(theme_image_style(array('style_name' => 'course_thumb', 'path' => $image, 'width' => '', 'height' => '')), "assessment/home/student/".$ctid, array('html' => TRUE, )) . "</span>";
+      }
+      }
+
+      $output .= "<span class='subject_name'>" . l($course_term->name, "assessment/home/student/".$ctid ) . "</span></td>";
+      if ($counter%5 == 0) {
+        $output .= "</tr><tr>";
+      }
+      $counter++;
+  }
+  $output .= "</tr></table>";
+  return $output;
+}
+
+function assessments_query_random_alter($query) {
+    $query->orderRandom();
+}

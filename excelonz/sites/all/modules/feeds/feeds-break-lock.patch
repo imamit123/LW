@@ -1,0 +1,132 @@
+diff --git feeds.module feeds.module
+index 39b180a..c17e122 100644
+--- feeds.module
++++ feeds.module
+@@ -219,6 +219,10 @@ function feeds_permission() {
+     $perms["clear $importer->id feeds"] = array(
+       'title' => t('Delete items from @name feeds', array('@name' => $importer->config['name'])),
+     );
++    $perms["unlock $importer->id feeds"] = array(
++      'title' => t('Unlock imports from @name feeds', array('@name' => $importer->config['name'])),
++      'description' => t('If a feed importation breaks for some reason, users with this permission can unlock them.')
++    );
+   }
+   return $perms;
+ }
+@@ -272,6 +276,15 @@ function feeds_menu() {
+     'file' => 'feeds.pages.inc',
+     'type' => MENU_LOCAL_TASK,
+   );
++  $items['import/%/unlock'] = array(
++    'title' => 'Unlock',
++    'page callback' => 'drupal_get_form',
++    'page arguments' => array('feeds_unlock_tab_form', 1),
++    'access callback' => 'feeds_access',
++    'access arguments' => array('unlock', 1),
++    'file' => 'feeds.pages.inc',
++    'type' => MENU_LOCAL_TASK,
++  );
+   $items['import/%/template'] = array(
+     'page callback' => 'feeds_importer_template',
+     'page arguments' => array(1),
+@@ -300,6 +313,16 @@ function feeds_menu() {
+     'type' => MENU_LOCAL_TASK,
+     'weight' => 11,
+   );
++  $items['node/%node/unlock'] = array(
++    'title' => 'Unlock',
++    'page callback' => 'drupal_get_form',
++    'page arguments' => array('feeds_unlock_tab_form', NULL, 1),
++    'access callback' => 'feeds_access',
++    'access arguments' => array('unlock', 1),
++    'file' => 'feeds.pages.inc',
++    'type' => MENU_LOCAL_TASK,
++    'weight' => 11,
++  );
+   // @todo Eliminate this step and thus eliminate clearing menu cache when
+   // manipulating importers.
+   foreach (feeds_importer_load_all() as $importer) {
+@@ -351,11 +374,12 @@ function feeds_theme() {
+  *   The action to be performed. Possible values are:
+  *   - import
+  *   - clear
++ *   - unlock
+  * @param $param
+  *   Node object or FeedsImporter id.
+  */
+ function feeds_access($action, $param) {
+-  if (!in_array($action, array('import', 'clear'))) {
++  if (!in_array($action, array('import', 'clear', 'unlock'))) {
+     // If $action is not one of the supported actions, we return access denied.
+     return FALSE;
+   }
+diff --git feeds.pages.inc feeds.pages.inc
+index 33310ec..238b0db 100644
+--- feeds.pages.inc
++++ feeds.pages.inc
+@@ -188,6 +188,65 @@ function feeds_delete_tab_form_submit($form, &$form_state) {
+ }
+ 
+ /**
++ * Render a feeds unlock form.
++ *
++ * Used on both node pages and configuration pages.
++ * Therefore $node may be missing.
++ */
++function feeds_unlock_tab_form($form, &$form_state, $importer_id, $node = NULL) {
++  if (empty($node)) {
++    $source = feeds_source($importer_id);
++    $form['#redirect'] = 'import/' . $source->id;
++  }
++  else {
++    $importer_id = feeds_get_importer_id($node->type);
++    $source = feeds_source($importer_id, $node->nid);
++    $form['#redirect'] = 'node/' . $source->feed_nid;
++  }
++  // Form cannot pass on source object.
++  $form['#importer_id'] = $source->id;
++  $form['#feed_nid'] = $source->feed_nid;
++  $form['source_status'] = array(
++    '#type' => 'fieldset',
++    '#title' => t('Status'),
++    '#tree' => TRUE,
++    '#value' => feeds_source_status($source),
++  );
++  $form = confirm_form($form, t('Unlock this importer?'), $form['#redirect'], '', t('Delete'), t('Cancel'), 'confirm feeds update');
++  $progress = $source->progressClearing();
++  if ($progress == FEEDS_BATCH_COMPLETE) {
++    $form['source_locked'] = array(
++      '#type' => 'markup',
++      '#title' => t('Not Locked'),
++      '#tree' => TRUE,
++      '#markup' => t('This Importer is not locked, therefor it cannot be unlocked.'),
++    );
++    $form['actions']['submit']['#disabled'] = TRUE;
++    $form['actions']['submit']['#value'] = t('Unlock (disabled)');
++  } else {
++    $form['actions']['submit']['#value'] = t('Unlock');
++  }
++  return $form;
++}
++
++/**
++ * Form submit handler. Resets all feeds state.
++ */
++function feeds_unlock_tab_form_submit($form, &$form_state) {
++  drupal_set_message('Import Unlocked');
++  $form_state['redirect'] = $form['#redirect'];
++  $feed_nid = empty($form['#feed_nid']) ? 0 : $form['#feed_nid'];
++  $importer_id = $form['#importer_id'];
++
++  //Is there a more API-friendly way to set the state?
++  db_update('feeds_source')
++   ->condition('id', $importer_id)
++   ->condition('feed_nid', $feed_nid)
++   ->fields(array('state' => FALSE))
++   ->execute();
++}
++
++/**
+  * Handle a fetcher callback.
+  */
+ function feeds_fetcher_callback($importer, $feed_nid = 0) {

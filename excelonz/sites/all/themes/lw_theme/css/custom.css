@@ -1,0 +1,345 @@
+/******* css for teachet assignment page ****/
+/******* css for teachet assignment page ****/
+.page-parent-assignment #main-content-header h1#page-title,
+.page-parent-assignments #main-content-header h1#page-title {
+  padding: 0px;
+  font-family: din,medium;
+  font-size: 16px;
+}
+
+.page-parent-assignment #main-content #content,
+.page-parent-assignments-view #main-content #content,
+.page-parent-assignments #main-content #content,
+.page-parent-view-assignment #main-content #content{
+  padding: 2em 2em 1em;
+  width: 100%;
+  background: none repeat scroll 0% 0% #D3D3D3;
+  box-sizing: border-box;
+}
+
+.page-parent-assignment #main-content-header,
+.page-parent-assignments #main-content-header {
+  padding: 0.6em 2em;
+  margin: 1em 0px;
+  border: mediumn one;
+  background-color: #23B8B8;
+  color: #FFF;
+}
+.page-parent-assignment .region-highlighted {
+	position: absolute;
+  width: 100%;
+  top: 5.4em;
+  z-index: 1;
+}
+
+.page-parent-assignment .content-inner {
+    position: relative;
+}
+
+.block-lw-parent-assignment {
+    position: relative;
+    margin: 0px;
+}
+
+
+.page-parent-assignment .block-lw-parent-assignment .block-inner {
+    padding: 2em 2em 0px;
+    margin: 0px;
+}
+
+
+#block-lw-parent-assignment-menu-tabs-parent-login .first_tab {
+    display: inline-block;
+    background: none repeat scroll 0% 0% transparent;
+    border-radius: 2px;
+    float: left;
+}
+
+#block-lw-parent-assignment-menu-tabs-parent-login .second_tab {
+    display: inline-block;
+    border-radius: 2px;
+}
+
+#block-lw-parent-assignment-menu-tabs-parent-login .blank_div {
+    height: 34px;
+    width: 100%;
+    background: none repeat scroll 0% 0% #23B8B8;
+    border-radius: 2px;
+}
+
+#block-lw-parent-assignment-menu-tabs-parent-login .first_tab a.active, #block-lw-parent-assignment-menu-tabs-parent-login .second_tab a.active {
+    background-color: #F0CE59;
+}
+
+#block-lw-parent-assignment-menu-tabs-parent-login .first_tab a {
+    background-image: none;
+}
+
+#block-lw-parent-assignment-menu-tabs-parent-login .first_tab a,
+#block-lw-parent-assignment-menu-tabs-parent-login .second_tab a {
+    font-family: din,medium;
+    font-size: 15px;
+    color: #737373;
+    background: url("../images/tab-shadow.png") no-repeat scroll -20px 0px #F8E9B6;
+    padding: 0.4em 1em;
+    display: inline-block;
+}
+
+.page-parent-assignment #main-content #content form {
+    background: none repeat scroll 0% 0% #FFF;
+    margin-top: 72px;
+}
+
+.page-parent-assignment #main-content #content form .form-item-select-subject {
+    background-color: #F2F2F2;
+}
+
+.page-parent-assignment #main-content #content form .form-item {
+    margin: 0px;
+    padding: 0.4em 2em;
+    border-bottom: 2px solid #E0E0E0;
+}
+
+
+.page-parent-assignment #main-content #content form .form-item label {
+    float: left;
+    width: 148px;
+    color: #344A53;
+    font-size: 12px;
+    font-weight:bold;
+}
+
+.page-parent-assignment form#generate-parent-assignment-code-form .form-item select {
+    width: 211px;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: none;
+    margin: 0px;
+    box-sizing: border-box;
+    outline: medium none;
+    background: linear-gradient(180deg, #EEE 0%, #FFF 100%) repeat scroll 0% 0% transparent;
+    border: 1px solid #BFBFBF;
+}
+
+.page-parent-assignment #main-content #content #topic_wrapper1 {
+	background-color: #FFF;
+}
+
+.page-parent-assignment #main-content #content form #topic_wrapper1.form-item .form-item {
+	border-bottom: medium none;
+}
+
+.page-parent-assignment #main-content #content form .form-item:nth-child(2n) {
+	background-color: transparent !important;
+}
+
+.page-parent-assignment #main-content #content form .form-item .form-item {
+    padding: 0px;
+    margin: 0px;
+    border-bottom: 0;
+}
+
+.page-parent-assignment #main-content #content form .form-item-assignment-created-date,
+.page-parent-assignment #main-content #content #edit-info-text,
+.page-parent-assignment #main-content #content #edit-level-header,
+.page-parent-assignment #main-content #content .form-item-very-easy,
+.page-parent-assignment #main-content #content .form-item-difficult,
+.page-parent-assignment #main-content #content .form-item-total {
+    background-color: #F2F2F2;
+}
+
+.page-parent-assignment #main-content #edit-info-text {
+    font-weight: bold;
+    color: #344A53;
+    font-size: 12px;
+}
+
+
+.page-parent-assignment form#generate-parent-assignment-code-form .form-item input[type="text"] {
+    width: 211px;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: none;
+    margin: 0px;
+    box-sizing: border-box;
+    outline: medium none;
+    background: linear-gradient(180deg, #EEE 0%, #FFF 100%) repeat scroll 0% 0% transparent;
+    border: 1px solid #BFBFBF;
+}
+
+.page-parent-assignment #main-content .container-inline-date .description {
+    display: none;
+}
+
+.page-parent-assignment #generate-parent-assignment-code-form #edit-assignment-due-date {
+  padding: 0;
+}
+
+
+.page-parent-assignment #main-content #content form .form-item.form-item-very-easy input,
+.page-parent-assignment #main-content #content form .form-item.form-item-easy input,
+.page-parent-assignment #main-content #content form .form-item.form-item-difficult input,
+.page-parent-assignment #main-content #content form .form-item.form-item-very-difficult input,
+.page-parent-assignment #main-content #content form .form-item.form-item-total input {
+    width: 86px;
+}
+
+.page-parent-assignment #main-content .form-item input[type="submit"] {
+    margin-left: 50%;
+    margin-bottom: 0.6em;
+    background-color: #F0CE59;
+    border: medium none;
+    color: #565244;
+    margin-top: 0.6em;
+    padding: 0.3em 1em 0.5em;
+    border-radius: 2px;
+}
+
+.page-parent-assignment #main-content #content form #edit-error-text.form-item {
+    padding: 0px;
+}
+
+.page-parent-assignment #main-content #content form #edit-error-text.form-item {
+    background-color: transparent;
+}
+
+.page-parent-assignment #main-content #content form #edit-error-text.form-item {
+    border-bottom: medium none;
+}
+
+
+/******** css for assignment submission *******/
+#block-lw-parent-assignment-parent-detail-assignment-view .header_wrap,
+#block-lw-parent-assignment-detail-assignment-worksheet .header_wrap {
+    background: none repeat scroll 0% 0% #F2F2F2;
+}
+
+#block-lw-parent-assignment-parent-detail-assignment-view .header_wrap .inner-wrap,
+#block-lw-parent-assignment-detail-assignment-worksheet .header_wrap .inner-wrap {
+    padding: 1.5em 2em;
+}
+
+
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .assin-no-wrap,
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .class-name-wrap,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .assin-no-wrap,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .class-name-wrap {
+    font-family: arial,regular;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+
+#block-lw-parent-assignment-parent-detail-assignment-view .header_wrap .inner-wrap .third-row,
+#block-lw-parent-assignment-detail-assignment-worksheet .header_wrap .inner-wrap .third-row{
+    font-family: arial,regular;
+    font-size: 14px;
+}
+
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .assin-no-wrap span,
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .class-name-wrap span,
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .third-row span,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .assin-no-wrap span,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .class-name-wrap span,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .third-row span{
+    width: 33%;
+    display: block;
+    float: left;
+    color: #737373;
+}
+
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .assin-no-wrap label,
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .class-name-wrap label,
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .third-row label,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .assin-no-wrap label,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .class-name-wrap label,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .third-row label{
+    float: left;
+    margin-right: 0.4em;
+    color: #737373;
+}
+
+
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .third-row span,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .third-row span{
+    width: 66%;
+}
+#block-lw-parent-assignment-parent-detail-assignment-view .inner-wrap .third-row span.q-level,
+#block-lw-parent-assignment-detail-assignment-worksheet .inner-wrap .third-row span.q-level{
+    width: 34%;
+    font-size: 12px;
+    text-decoration: underline;
+}
+
+#block-lw-parent-assignment-parent-detail-assignment-view .header_wrap .inner-wrap .third-row .q-level a {
+	color: #000;
+	text-decoration: underline;
+}
+
+
+.block-lw-parent-assignment .save,
+.block-lw-parent-assignment .create-worksheet-now,
+.block-lw-parent-assignment .detail-asg-btns,
+.block-lw-parent-assignment .detail-asg-btns,
+.page-parent-view.page-parent-view-assignment .block-lw-parent-assignment table + a {
+    color: #4B4942;
+    background: none repeat scroll 0% 0% #F0CE59;
+    padding: 0.6em 3em;
+    border-radius: 3px;
+    position: absolute;
+    left: 3em;
+    bottom: 2.5em;
+}
+
+.block-lw-parent-assignment .create-worksheet-now {
+    left: 12em;
+}
+
+.block-lw-parent-assignment .detail-asg-btns {
+    left: 30em;
+}
+
+.block-lw-parent-assignment #discard-asgn {
+    left: 44em;
+}
+
+.page-parent-view.page-parent-view-assignment .block-lw-parent-assignment table + a {
+	left: 40%;
+}
+/****** css for view assignment *****/
+
+
+div#block-lw-parent-assignment-view-parent-assignment {
+  width: 100%;
+}
+
+.block-lw-parent-assignment table#assignment_sort {
+  margin: 0px 0px 2.5em;
+  border: medium none;
+}
+.block-lw-parent-assignment table tr {
+  border-top: 1px solid #DCDCDC;
+  background-color: #FFF;
+}
+
+.block-lw-parent-assignment .tablesorter tbody tr:nth-child(2n+1) {
+    background-color: #F2F2F2;
+    border-bottom: 1px solid #E9E9E9;
+    border-top: 1px solid #E9E9E9;
+    color: #344A53;
+}
+
+.block-lw-parent-assignment .tablesorter tbody tr td {
+    font-size: 12px;
+    color: #344A53;
+}
+
+#block-lw-parent-assignment-view-parent-assignment table tbody tr td a {
+    color: #000;
+    font-family: arial,regular;
+}
+.block-lw-parent-assignment .tablesorter tbody tr td a {
+    text-decoration: underline !important;
+}

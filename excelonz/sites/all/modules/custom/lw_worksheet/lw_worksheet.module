@@ -1,0 +1,1021 @@
+<?php
+/**
+ * @file
+ * Enables Create free worksheet and download worksheet.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function lw_worksheet_block_info() {
+  $block = array();
+  $blocks['inner_page_header_menu'] = array(
+    'info' => t('Inner Page Header Menu'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['try_question_and_worksheet'] = array(
+    'info' => t('Try Question and Free Worksheet Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['homepage_subject_practice'] = array(
+    'info' => t('Home Page Subject Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['explore_subject_topic_for_class'] = array(
+    'info' => t('Explore Subject And Topic Block'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+
+function lw_worksheet_block_view($block_name = '') {
+  $block=array();
+   switch ($block_name) {
+     case 'inner_page_header_menu':
+       $block['subject'] = '';
+       $block['content'] = inner_page_header_menu_block();
+     break;
+     case 'try_question_and_worksheet':
+       $block['subject'] = '';
+       $block['content'] = try_question_and_worksheet_block();
+     break;
+     case 'homepage_subject_practice':
+       $block['subject'] = '';
+       $block['content'] = homepage_subject_practice_block();
+     break;
+     case 'explore_subject_topic_for_class':
+       $block['subject'] = '';
+       $block['content'] = explore_subject_topic_for_class_block();
+     break;
+ }
+  return ($block);
+}
+
+/**
+ * Implements Inner page header menu(Class menu)().
+ */
+
+function inner_page_header_menu_block(){
+ $vid = 7;
+ $terms = taxonomy_get_tree($vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
+    foreach($terms as $term) {  
+            $options_class1[$term->tid] = $term->name;
+     }
+    asort($options_class1);
+    $output .= '<ul>';
+foreach($options_class1 as $key => $value) {
+     $output .= '<li>'. l($value,'class/'.$key) .'</li>';
+}
+  $output .= '</ul>';
+  return $output;
+}
+
+/**
+ * All Page Try Some question and free worksheet link block use ctool popup window().
+ */
+
+function try_question_and_worksheet_block(){
+  ctools_include('modal');
+  ctools_modal_add_js();
+  ctools_include('ajax');
+  ctools_include('modal');
+  
+   // Create our own javascript that will be used to theme a modal.
+  $worksheet_style = array(
+    'ctools-lw-style' => array(
+      'modalSize' => array(
+        'type' => 'fixed',
+        'width' => 825,
+        'height' => 480,
+        'addWidth' => 20,
+        'addHeight' => 15,
+      ),
+      'modalOptions' => array(
+        'opacity' => .5,
+        'background-color' => '#000',
+      ),
+      'animation' => 'fadeIn',
+      'modalTheme' => 'CToolsSampleModal',
+      'throbber' => theme('image', array('path' => ctools_image_path('ajax-loader.gif', 'lw_worksheet'), 'alt' => t('Loading...'), 'title' => t('Loading'))),
+    ),
+  );
+
+  drupal_add_js($worksheet_style, 'setting');
+
+  // Since we have our js, css and images in well-known named directories,
+  // CTools makes it easy for us to just use them without worrying about
+  // using drupal_get_path() and all that ugliness.
+  ctools_add_js('ctools-ajax-lw', 'lw_worksheet');
+  ctools_add_css('ctools-ajax-lw', 'lw_worksheet');
+
+
+   //$links[] = l('Get Free Worksheet', 'choose/topic');
+   $links[] = l('Try Some Questions', 'modalq/nojs', array('attributes' => array('class' => 'ctools-use-modal'))) ;
+   $links[] = l('Get Free Worksheet', 'modal/nojs', array('attributes' => array('class' => 'ctools-use-modal'))) ;
+   //$links[] = ctools_modal_text_button(t('Get a free Worksheet'), 'modal/nojs', t('Pick an animal'),  'ctools-modal-ctools-lw-style');
+   //$links[] = l('Get a free Worksheet', 'modalsubject/nojs', array('attributes' => array('class' => 'ctools-use-modal'))) ;
+  return  array('#theme' => 'item_list', '#items' => $links);
+}
+
+/**
+ * Implement Hook_menu.
+ */
+
+function lw_worksheet_menu() {
+  $items = array();
+  $items['choose/topic'] = array( 
+    'title' => 'Class Subject And Topic', 
+    'description' => 'Select Class Subject And Topic.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('class_subject_topic_form'), 
+    'access callback' => TRUE
+  );
+
+  $items['download/worksheet'] = array( 
+    'title' => 'Class Subject And Topic', 
+    'description' => 'Select Class Subject And Topic.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('downlod_worksheet_home_page'), 
+    'access callback' => TRUE
+  );
+
+  $items['modal/%ctools_js'] = array(
+    'page callback' => 'lw_workshop_callback',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['modalq/%ctools_js'] = array(
+    'page callback' => 'lw_tryquestion_callback',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['modalsubject/%ctools_js'] = array(
+    'page callback' => 'lw_subject_topic_callback',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  $items['modalexplore/%ctools_js'] = array(
+    'page callback' => 'explore_subject_topic_callback',
+    'page arguments' => array(1),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+$items['choose/subject'] = array( 
+    'title' => 'Subject Topic', 
+    'description' => 'Select Subject And Get Topic.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('subject_topic_first_model_form'), 
+    'access callback' => TRUE
+  );
+
+$items['explore/download_worksheet'] = array( 
+    'title' => 'Subject Topic', 
+    'description' => 'Select Subject And Get Topic.',
+    'page callback' => 'explore_subject_topic_worksheet', 
+    'access callback' => TRUE
+  );
+    return $items;
+}
+
+/**
+ * Ajax menu callback - Ctool Popup display in link.
+ */
+
+function lw_workshop_callback($ajax) {
+  if ($ajax) {
+    ctools_include('ajax');
+    ctools_include('modal');
+ 
+    $form_state = array(
+      'ajax' => TRUE,
+      'title' => t('MyModule Modal Form'),
+    );
+     $output = ctools_modal_form_wrapper('class_subject_topic_form', $form_state);
+    
+  print ajax_render($output);
+  drupal_exit();
+  }
+}
+
+/**
+ * Function to add class subject and topic list field for select worksheet related topic.
+ *
+* @see lw_question_class_ajax_callback()
+* @see lw_question_subject_ajax_callback()
+* @see lw_question_subject_second_dropdown_options()
+* @see lw_question_topic_third_dropdown_options()
+* @see class_subject_topic_form_validate()
+* @see class_subject_topic_form_submit()
+ */
+
+function class_subject_topic_form($form, &$form_state) {
+$home_page_subject = $_GET['subject'];
+drupal_add_js( drupal_get_path('module', 'lw_worksheet') . '/worksheet.js');
+ $options_second = lw_question_topic_third_dropdown_options();
+ //class-topic VOCABULARY ID
+ $vid = 7;
+ $terms = taxonomy_get_tree($vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
+    foreach($terms as $term) {  
+            $options_class1[$term->tid] = $term->name;
+     }
+    asort($options_class1);
+    $options_worksheet_class=array('-Select Class-')+$options_class1; 
+
+    $cl_id = taxonomy_get_parents($selected_subject_id);
+    $clas_id = key($cl_id);
+    $cl_tid = taxonomy_get_parents($selected_topic_id);
+    $clas_tid = key($cl_tid);
+    $value_dropdown_first = isset($form_state['values']['select_class']) ? $form_state['values']['select_class'] : (isset($clas_id)?$clas_id:key($options_class1));
+    $value_dropdown_second = isset($form_state['values']['select_subject']) ? $form_state['values']['select_subject'] :key($options_second);
+
+$form['#prefix'] = '<div id="worksheet-ajax">';
+$form['#suffix'] = '</div>';
+$form['description'] = array('#markup' => '<div class="worksheet">' . t('').'</div>');
+$form['description1'] = array('#markup' => '<div class="font28 fontgotham aligncenter">' . t('Download your').'</div>');
+$form['description2'] = array('#markup' => '<div class="font28 fontgotham aligncenter">' . t('FREE Excelonz Worksheet here').'</div>');
+$form['description3'] = array('#markup' => '<div class="font20 fontgotham aligncenter">' . t('To begin, choose the following').'</div>');
+
+
+$form['select_class'] = array(
+        '#type' => 'select',
+        //'value'=>'137',
+        '#title' => 'Select Class',
+        '#options' => $options_worksheet_class,
+        '#ajax' => array(
+            'event'=>'change',
+            'callback' =>'lw_question_class_ajax_callback',
+            'wrapper' => 'topic_wrapper',
+            'progress' => array(
+               'message' => '',
+           ),
+        ),
+      );
+if(isset($form_state['values']['select_class'])){
+    $option = lw_question_subject_second_dropdown_options($value_dropdown_first);
+} else if($home_page_subject){
+    $option = array($home_page_subject); // 0 is default value
+}else {
+    $option = array('-Select Subject-'); // 0 is default value
+}
+$form['select_subject'] = array(
+        '#type' => 'select',
+        '#title' => 'Select subject',
+        '#options' => $option,
+        '#prefix' => '<div class="form-item" id="topic_wrapper">',
+        '#suffix' => '</div>',
+        '#default_value' => 158,
+        '#ajax' => array(
+             'event'=>'change',
+             'callback' => 'lw_question_subject_ajax_callback',
+             'wrapper' => 'dropdown_third_replace',
+             'progress' => array(
+               'message' => '',
+           ),
+)
+);
+if(isset($form_state['values']['select_class'])){
+    $option = lw_question_topic_third_dropdown_options($value_dropdown_second);
+} else {
+    $option = array('-Select Topic-'); // 0 is default value
+}
+$form['select_topic'] = array(
+    '#type' => 'select',
+    '#title' => 'Select Topic',
+    '#options' => $option,
+    '#prefix' => '<div id="dropdown_third_replace">',
+    '#suffix' => '</div>',
+  );
+
+   $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Download Worksheet'),
+    '#ajax' => array(
+    'callback' => 'subject_form_ajax_submit',
+    'wrapper' => 'worksheet-ajax',
+    'method' => 'replace',
+    'effect' => 'fade',
+    'progress' => array(
+               'message' => '',
+           ),
+         ),
+  );
+  return $form;
+}
+
+/**
+ * Selects just the Class Dropdown  to be returned for re-rendering subject.
+ */
+
+function lw_question_class_ajax_callback($form, &$form_state) {
+     $commands = array();
+    $commands[] = ajax_command_replace("#topic_wrapper", render($form['select_subject']));
+    $commands[] = ajax_command_replace("#dropdown_third_replace", render($form['select_topic']));
+    return array('#type' => 'ajax', '#commands' => $commands);
+  //return $form['state_of_residence'];
+}
+
+
+/**
+ * Selects just the Subject Dropdown  to be returned for re-rendering Topic.
+ */
+
+function lw_question_subject_ajax_callback($form, &$form_state) {
+ return $form['select_topic'];
+}
+
+/**
+ * Fetch subjectdropdown option.
+ */
+
+function lw_question_subject_second_dropdown_options($key = '') {
+  $second_dropdown =  taxonomy_get_children($key, $vid = 7);
+   foreach($second_dropdown as $termss) {  
+       $options_Class[$termss->tid] = $termss->name;
+        $topic_list = array('-Select Subject-')+$options_Class;
+   }
+  if(isset($topic_list)){
+     return $topic_list;
+    }else{
+      return $option = array('-Select Subject-');
+    }
+}
+
+/**
+ * Fetch Topic dropdown option.
+ */
+
+function lw_question_topic_third_dropdown_options($key = '') {
+  $option = array();
+  $third_dropdown =  taxonomy_get_children($key, $vid = 7);
+   foreach($third_dropdown as $termss) {  
+       $options_class_third[$termss->tid] = $termss->name;
+        $topic_list = array(0=>'-Select Topic-')+$options_class_third;
+   }
+  
+  if(isset($topic_list)){
+     return $topic_list;
+    }else{
+      return $option = array('-Select Topic-');
+    }
+}
+function class_subject_topic_form_validate($form, &$form_state) {
+    $select_class = $form_state['values']['select_class'];
+    $select_subject = $form_state['values']['select_subject'];
+    $select_topic = $form_state['values']['select_topic'];
+    if($select_class == 0){
+        form_set_error('question', t('First select class'));
+    }else if($select_subject == 0){
+        form_set_error('question', t('First select subject'));
+    }else if($select_topic == 0){
+        form_set_error('question', t('First select topic'));
+    }else{
+  form_set_error('question', t('First select topic'));
+
+    }
+}
+
+/**
+ * Submit handlar for subject topic dropdown.
+ */
+function class_subject_topic_form_submit($form, &$form_state) {
+  //all value store in session
+    $select_class = $form_state['values']['select_class'];
+    $select_subject = $form_state['values']['select_subject'];
+    $select_topic = $form_state['values']['select_topic'];
+    $_SESSION['worksheet_class_id'] =  $select_class; 
+    $_SESSION['worksheet_subject_id'] =  $select_subject; 
+    $_SESSION['worksheet_topic_id'] =  $select_topic; 
+}
+
+/**
+ * This function use to fetch all nid related to Subject and topic.
+ *
+ * @param $topic_id
+ *     form field valuse fill with user - 
+ *   - topic id is term id of topic field.
+ * @param $subject_id
+ *     subject field valuse fill with user - 
+ *   - subject id is term id of subject field.
+ * @param $class_id
+ *     Class field valuse fill with user - 
+ *   - Class id is term id of Class field. 
+ * 
+ */
+
+function generate_worksheet_question_nids($topic_id,$subject_id,$class_id) {  
+    global $user;
+    /*fecth all nids for easy level starts*/
+    $easy_nid = db_select('node', 'n');
+    $easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+     $easy_nid->rightJoin('field_data_field_mcq_for_anonymous', 'mcq', 'mcq.entity_id = n.nid');
+    $easy_nids = $easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->orderRandom()
+        ->range(0, 5)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for easy level ends*/
+    /*fecth all nids for very easy level starts*/
+    $v_easy_nid = db_select('node', 'n');
+    $v_easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $v_easy_nid->rightJoin('field_data_field_fib_for_anonymous', 'fib', 'fib.entity_id = n.nid');
+    $v_easy_nids = $v_easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->orderRandom()
+        ->range(0, 5)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for very easy level ends*/
+   /*fecth all nids for difficult level starts*/
+    $d_nid = db_select('node', 'n');
+    $d_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $d_nid->rightJoin('field_data_field_true_and_false_for_anonymo', 'taf', 'taf.entity_id = n.nid');
+    $d_nids = $d_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->orderRandom()
+        ->range(0, 5)
+        ->execute()
+        ->fetchAll();
+   
+  /*fecth all nids for very difficult level ends*/
+    $result1 = array_merge($easy_nids,$v_easy_nids);
+    $result2  = $d_nids;
+    $result = array_merge($result1,$result2);
+ foreach($result as $values) {
+       $nids[] = $values->nid;
+  }
+    $final_nids = serialize($nids);
+    return $final_nids;
+}
+
+/**
+ * create this function for create new pdf for.
+ *
+ * create headre and genrate HTML all related type of question.
+ * All question html and header send in pdf creation.
+ * ClassID,SubjectID and TopicID fetch from session and pass in 
+ * generate_worksheet_question_nids().
+ *
+ * @param $get_all_nids
+ *    An array who have all nid related with class subject and topic .
+ * @return
+ *   create worksheet in pdf formate.
+ * @see fib_generate_worksheet_html()
+ * @see mcq_generate_worksheet_html()
+ * @see match_the_following_generate_worksheet_html()
+ * @see true_and_false_generate_worksheet_html()
+ * @see jumble_generate_worksheet_html()
+ * All Function create html for all type of question 
+ * All Function in lw_teacher_assignment MODULE.
+ */
+
+function downlod_worksheet($get_all_nids,$className,$subjectName,$topicName){
+  /*  $class_id =  $_SESSION['worksheet_class_id'];
+    $subject_id = $_SESSION['worksheet_subject_id'] ;
+    $topic_id = $_SESSION['worksheet_topic_id'];
+    $class = taxonomy_term_load($class_id);
+    $class_name = $class->name;
+    $subject = taxonomy_term_load($subject_id);
+    $subject_name = $subject->name;
+
+    $topic = taxonomy_term_load($topic_id);
+    $topic_name = $topic->name;
+    $get_all_nids = generate_worksheet_question_nids($topic_id,$subject_id,$class_id);*/
+    //downlod_worksheet($get_all_nids,$className,$subjectName,$topicName);
+ global $base_url;
+ global $user;
+/*header code start*/
+     $header .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+        <head>
+        <link rel="stylesheet" type="text/css" href=' . $base_url .'/sites/all/themes/lw_theme/css/pdf.css media="all" />
+        <title></title>
+        </head> ';
+
+  //  $header .= '<div class="header_wrap"><div class="pdf-logo-wrap"><span><img src=' . $base_url .'/sites/all/themes/lw_theme/logo.png /></span></div>';
+   
+    $header .= '<div class="header_wrap"><div class="inner-wrap"><div class="class-name-wrap"><span class="subject">Class:' .$className. '</span>';
+    $header .= '<span class="topic">Subject:&nbsp;'.$subjectName.'</span><span class="assig-no">Topic:' .$topicName. '</span></div></div></div><br/>';
+    $ids = array();
+    foreach($get_all_nids as $values) {
+        $ids[]=$values;
+
+    }
+    $nids_serialized = $get_all_nids;
+    $nids_serialized = unserialize($nids_serialized);
+
+    $html = '';
+    $html .= '<table class="teacher_assignment no-level-table"><tr class="trhead">
+              <th>S.No</th>
+              <th>Question</th>
+              <th colspan="2">Answer Options</th>
+
+             </tr>';
+    $i =1;
+    foreach($nids_serialized as $value) {
+        $node = node_load($value);
+        $type = $node->type;
+
+        $html .= '<tr>';
+        $html .= '<td>'.$i.'</td>';
+        if($type == 'fib') {
+            $htm = fib_generate_worksheet_html($node);
+            $html .= $htm['qtext'];
+            $html .= $htm['answer'];
+            $c_ans .= '<div>'.$i.'.&nbsp;Correct Answer is&nbsp;'.$htm['c_ans'].'</div>';
+        }
+        if($type == 'mcq') {
+            $htm = mcq_generate_worksheet_html($node);
+            $html .= $htm['qtext'];
+            $html .= $htm['html'];
+            if(empty($htm['c_ans'])) {
+                $c_ans .= '<div class="mcq-image-ans">'.$i.'.&nbsp;Correct Ans Image is&nbsp;'.$htm['correct_img'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="mcq-ans">'.$i.'.&nbsp;Correct Ans option is&nbsp;'.$htm['c_ans'].'</div>';
+            }
+
+}
+        if($type == 'match_the_following') {
+
+            $htm = match_the_following_generate_worksheet_html($node);
+            $html .= $htm['qtext'];
+
+                $html .= $htm['g_words'];
+                $html .= $htm['c_matches'];
+                $html .= $htm['img_match'];
+                $html .= $htm['img_suff_match'];
+               $g_word_ans =  $htm['g_word'];
+            if(empty($htm['g_word'])) {
+                $c_ans .= '<div class="image-ans-mtf">'.$i.'.&nbsp;MTF Answer is&nbsp;'.$htm['img_pdf'].$htm['img_pdf_correct'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="mtf-text-ques">'.$i.'.&nbsp;MTF Answer is&nbsp;'.$htm['c_matches1'].$htm['g_word_pdf'].'</div>';
+            }
+        }
+        if($type == 'true_and_false') {
+            $htm = true_and_false_generate_worksheet_html($node);
+            if(empty($htm['qimage'])) {
+                $html .= $htm['qtext'];
+            }
+            else {
+                $html .= $htm['qimage'];
+            }
+            $html .= $htm['html'];
+            if(empty($htm['c_answer'])) {
+                $c_ans .= '<div class="true-and-false-image-ans">'.$i.'.&nbsp;Correct Ans Image is&nbsp;'.$htm['correct_img'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="true-and-false-ans">'.$i.'.&nbsp;Correct Ans option is&nbsp;'.$htm['c_answer'].'</div>';
+            }
+        }
+        if($type == 'jumble') {
+            $htm = jumble_generate_worksheet_html($node);
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['jumbled'];
+            $html .= $htm['janswer'];
+            $c_ans .= '<div class="jumble-ans">'.$i.'.&nbsp;Correct answer is&nbsp;'.$htm['c_ans'].'</div>';
+        }
+        $html .= '</tr>';
+        $html .= '<tr class="pdf-bottom-border"><td></td><td></td><td></td><td></td></tr>';
+        $i++;
+    }
+    $html .= '</table>';
+    $query_str = $_GET['q'];
+    $query_str = $base_url.'/'.$query_str;
+    $buttons = l(t('Download'),$query_str ,array('query' => array('print' =>'print' ,'attributes' => array('target'=>'_blank'))));
+    $class_name = $_GET['class'];
+    $subject_name = $_GET['subject'];
+        require_once("sites/all/modules/print/lib/dompdf/dompdf_config.inc.php");
+        $dompdf = new DOMPDF;
+        $ans = '<div style="page-break-before: always;margin-top:30px;">'.'Correct Answer is'.$c_ans.'</div>';
+         $html = stripslashes($html); 
+        $header .= $html.$ans;
+        $html = mb_convert_encoding($header, 'HTML-ENTITIES', 'UTF-8');
+
+        $dompdf->load_html(utf8_decode($html));
+
+        $dompdf->render();
+
+        $font = Font_Metrics::get_font("din", "regular");
+        $canvas = $dompdf->get_canvas();
+        
+        $canvas->page_script('$image = "' . $base_url .'/sites/all/themes/lw_theme/logo-pdf.png";$pdf->image($image, 45, 10, 100, 35);');
+        $canvas->page_text(300, 700,"{PAGE_NUM}", $font, 6, array(0,0,0));
+        $canvas->page_text(72, 750, "© 2015 Learning World Education Solutions Pvt. Ltd ( LWES). Excelonz is a brand of LWES. All Rights Reserved. This content may not be used, altered, copied,re-used or redistributed without prior consent from LWES.", $font, 6, array(0,0,0));
+        $dompdf->stream($class_name.$subject_name."Assignment.pdf");
+    return $header.$html;//.$buttons;
+}
+
+/**
+ * secand step form when select all field (subject,class and topic) and going to download pdf
+ * and move to other form .
+ */
+
+function worksheet_conform_download_form($form, &$form_state) {  
+  global $base_url;
+   drupal_add_js( drupal_get_path('module', 'lw_worksheet') . '/worksheet.js');
+   $form['#prefix'] = '<div id="try-other-topic-ajax">';
+  $form['#suffix'] = '</div>';
+   $form['description'] = array('#markup' => '<div class="font28 fontgotham aligncenter">' . t('Excellent').'</div>');
+   $form['description1'] = array('#markup' => '<div class="font20 fontgotham aligncenter">' . t('Register now to get 5 free Excelonz Genius sheets for topic of your choice ').'</div>');
+   $form['description2'] = array('#markup' => '<div class="div-ajax-form font20 fontgotham aligncenter">' . t('Get a customised worksheet for your child every time ').'</div>');
+   $form['download_link']=array(
+                '#type'=>'markup',
+                '#markup'=>'<div class="pull-left"><a id="download-worksheet-pdf" href="'.$base_url.'/download/worksheet"></a></div><script>
+                setTimeout(
+    function() {
+      console.log("test121");
+   document.getElementById("download-worksheet-pdf").click();   
+    }, 1000);
+   </script>'
+                );
+   $form['goto_login_page_link']=array(
+                '#type'=>'markup',
+                '#markup'=>'<div class="pull-left"><a class="download-worksheet-pdf" href="'.$base_url.'/pricingplans">Sign Up</a></div>');
+  
+$form['submit_button_qwq'] = array(
+    '#type' => 'submit',
+      '#value' => t('Download Another Free Worksheet'),
+      '#ajax' => array(
+          'callback' => 'try_some_other_topic',
+          'wrapper' => 'try-other-topic-ajax',
+          'method' => 'replace',
+          'effect' => 'fade',
+          'progress' => array(
+               'message' => '',
+           ),
+      ),
+  ); 
+  return $form;
+
+}
+
+/**
+ * Ajax Submit handlar
+ * function use when form submit call function 
+ *
+ *fetch all values from session and replace existing form to worksheet_conform_download_form form.
+ * @see ajax_command_replace()
+ * @see drupal_get_form()
+ *
+ */
+function subject_form_ajax_submit($form, $form_state) {
+    $select_class = $form_state['input']['select_class'];
+    $select_subject = $form_state['input']['select_subject'];
+    $select_topic = $form_state['input']['select_topic'];
+    $_SESSION['worksheet_class_id'] =  $select_class; 
+    $_SESSION['worksheet_subject_id'] =  $select_subject; 
+    $_SESSION['worksheet_topic_id'] =  $select_topic; 
+ 
+if ($form_state['input']['select_class'] && $select_topic && $select_subject) {
+  $form_test  = "<div id='test-ajax'>".drupal_render(drupal_get_form('worksheet_conform_download_form'))."</div>";
+  $commands = array();
+  $commands[] = ajax_command_replace('#worksheet-ajax',render($form_test));
+return array('#type' => 'ajax', '#commands' => $commands);
+}
+  else {
+    return $form;
+  } 
+}
+
+/**
+ * Home page subject spacific block form
+ *five subject different small block who is related to class subject ctool popup form.
+ * @return An html box.
+ */
+
+function  homepage_subject_practice_block(){
+global $base_url;
+  ctools_include('modal');
+  ctools_modal_add_js();
+  $output = '';
+  //$key is static - value on class one subject.
+    $key = '137';
+    $value =  taxonomy_get_children($key, $vid = 7);
+   foreach($value as $termss) {  
+    $subject_term_tid[$termss->tid] = $termss->name;
+   }
+$new_array = array();
+foreach ($subject_term_tid as $key => $value) {
+  if($value == 'Maths') {
+    $new_array[0][$key] = 'Maths';  
+  }
+  if($value == 'General Knowledge') {
+    $new_array[4][$key] = 'General Knowledge';  
+  }
+  if($value == 'English') {
+    $new_array[2][$key] = 'English';  
+  }
+  if($value == 'Science') {
+    $new_array[1][$key] = 'Science';  
+  }
+  if($value == 'SST') {
+    $new_array[3][$key] = 'SST';  
+  }
+}
+ksort($new_array);
+$subject_term_tid_new = array();
+foreach ($new_array as $value) {
+  foreach ($value as $k => $v) {
+    $subject_term_tid_new[$k] = $v;
+  }
+}
+foreach ($subject_term_tid_new as $subjectkey => $subject_value) {
+if($subject_value == 'Maths'){
+  $img = '<img src=' . $base_url .'/sites/all/themes/lw_theme/images/insect.png />';
+}elseif($subject_value == 'English'){
+  $img = '<img src=' . $base_url .'/sites/all/themes/lw_theme/images/cat.png />';
+}elseif($subject_value == 'Science'){
+  $img = '<img src=' . $base_url .'/sites/all/themes/lw_theme/images/fish.png />';
+}elseif($subject_value == 'SST'){
+  $img = '<img src=' . $base_url .'/sites/all/themes/lw_theme/images/owl.png />';
+}
+if($subject_value != 'General Knowledge')
+$output .= '<div class="block-wrapper" style="display:inline-block;border:1px solid;padding:1em 2em;width:30%">
+      <div class="heading" style="display:inline-block;width:100%;text-align:center">
+        '.$subject_value.'
+      </div>
+      <div class="icon" style="display:inline-block;float:left;margin-right:7em">
+         '.$img.'
+      </div>
+      <div class="links" style="display:inline-block;float:left">
+      <div class="third-link">
+                 '. $links[] = l('View Topics', 'modalsubject/nojs',array('query' => array('subject' => $subject_value),'attributes' => array('class' => 'ctools-use-modal'))).'
+        </div>
+        <div class="link" style="border:1px solid;padding:0.3em;margin-bottom:0.5em;width:120%">
+        '. $links[] = l('Try Some Questions', 'modalq/nojs',array('query' => array('subject' => $subject_value),'attributes' => array('class' => 'ctools-use-modal'))).'
+        </div>
+        <div class="link" style="border:1px solid;padding:0.3em;margin-bottom:0.5em;width:120%">
+          '. $links[] = l('Get Free Worksheet', 'modal/nojs',array('query' => array('subject' => $subject_value),'attributes' => array('class' => 'ctools-use-modal'))).'
+        </div>
+      </div>
+    </div>';
+
+   }
+   return $output;
+}
+
+function subject_topic_first_model_form($form, &$form_state) { 
+ $subject = $_GET['subject'];
+ $vid = 7;
+ $terms = taxonomy_get_tree($vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
+    foreach($terms as $term) {  
+            $options_class1[$term->tid] = $term->name;
+     }
+    asort($options_class1);
+ $subject_topic_class=array('-Select Class-')+$options_class1; 
+
+$form['#prefix'] = '<div id="subject_topic-ajax">';
+$form['#suffix'] = '</div>';
+$form['description'] = array('#markup' => '<div class="font20 fontgotham aligncenter">' . t("Check out the <Subject> topic for your child's class").'</div>');
+
+$form['select_class_topic'] = array(
+        '#type' => 'select',
+      //  '#value' =>'137';
+        '#title' => 'Select Class',
+        '#options' => $subject_topic_class,
+      );
+$form['select_class_topic_hidden_subject'] = array(
+        '#type' => 'hidden',
+      //  '#value' =>'137';
+        '#title' => 'Hidden Subject',
+        '#value' => $subject,
+      );
+
+$form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Go'),
+    '#ajax' => array(
+       'callback' => 'subject_topic_first_model_form_submit_ajax_callback',
+       'wrapper' => 'subject_topic-ajax',
+       'method' => 'replace',
+       'effect' => 'fade',
+         ),
+  );
+  return $form;
+}
+
+function subject_topic_first_model_form_validate($form, &$form_state) { 
+ $class = $form_state['values']['select_class_topic'];
+if($class == '0'){
+    form_set_error('select_class_topic', t('First select class'));
+}
+}
+
+
+function subject_topic_first_model_form_submit_ajax_callback($form, &$form_state){
+  ctools_include('modal');
+  ctools_modal_add_js();
+  ctools_include('ajax');
+  ctools_include('modal');
+  $class_id = $form_state['input']['select_class_topic'];
+  $hidden_subject = $form_state['input']['select_class_topic_hidden_subject'];
+  $table_head = "<table><tr><th>Topic</th><th>Practice</th><th>Worksheet</th>";
+  $table_footer = "</table>";
+  $output .="<h2 class='topic_tittle'>Choose a topic to begin practising <div class='link_expand'><span id='expand' class='exp'>Expand All</span><span id='collapse' class='exp'>Collapse All</span></div></h2>";
+//$class_id = '137';//$form_state['values']['select_class'];
+$classId = taxonomy_term_load($class_id);
+$className = $classId->name;
+$subject_term_id =  taxonomy_get_children($class_id, $vid = 7);
+   foreach($subject_term_id as $terms) {
+   //print_r($terms);  
+        $subject_term_tid[$terms->tid] = $terms->name;
+   }
+foreach ($subject_term_tid as $subjectkey => $level) {
+ if($level == $hidden_subject)  {
+    $output .= "<div class='subject_report'><span class='lft'>" . $className .':'. $level  . "</span>";
+$output .= "<div class='row'>";
+$topic_term_id =  taxonomy_get_children($subjectkey, $vid = 7);
+ foreach($topic_term_id as $topicterms) { 
+      $free_workhheet = l("Download Worksheets" , "explore/download_worksheet",
+        array('query' => array('classId'=>$class_id,'subjectId'=>$subjectkey,'topicId' => $topicterms->tid)));
+
+       $free_practise = l("Practice online" , "modalexplore/nojs",array('attributes' => array('class' => 'ctools-use-modal'),'query' => array('classId'=>$class_id,'subjectId'=>$subjectkey,'topicId' => $topicterms->tid)));
+
+       //$topic_term_tid[$topicterms->tid] = $topicterms->name;
+  // $output .= '<div class="no_topic">' . $topicterms->name  . "</div>";
+          $table_output .= "<tr><td>" . $topicterms->name . "</td>";
+          $table_output .= "<td>" . $free_practise . "</td>";
+          $table_output .= "<td>" . $free_workhheet . "</td></tr>";
+}
+      $output .= $table_head . "" . $table_output . $table_footer . "</div>";
+      $table_output = '';
+  // $output .= '</div>';
+ }
+}
+   
+if($class_id != 0){
+  return $output;
+}else {
+    return $form;
+  } 
+
+}
+
+
+
+function lw_subject_topic_callback($ajax) {
+  if ($ajax) {
+    ctools_include('ajax');
+    ctools_include('modal');
+ 
+    $form_state = array(
+      'ajax' => TRUE,
+      'title' => t('View Subject Topic'),
+    );
+     $output = ctools_modal_form_wrapper('subject_topic_first_model_form', $form_state);
+    
+  print ajax_render($output);
+  drupal_exit();
+  }
+}
+
+function explore_subject_topic_for_class_block(){
+  ctools_include('modal');
+  ctools_modal_add_js();
+  ctools_include('ajax');
+  ctools_include('modal');
+$class_id = arg(1);
+   $classId = taxonomy_term_load($class_id);
+   $className = $classId->name;
+   $table_head = "<table>";
+   $table_footer = "</table>";
+   $output .="<h2 class='topic_tittle'>Explore the Subjects & Topics for ".$className."</h2>";
+   $subject_term_id =  taxonomy_get_children($class_id, $vid = 7);
+foreach($subject_term_id as $terms) {  
+        $subject_term_tid[$terms->tid] = $terms->name;
+   }
+ $new_array = array();
+foreach ($subject_term_tid as $key => $value) {
+  if($value == 'Maths') {
+    $new_array[0][$key] = 'Maths';  
+  }
+  if($value == 'General Knowledge') {
+    $new_array[4][$key] = 'General Knowledge';  
+  }
+  if($value == 'English') {
+    $new_array[2][$key] = 'English';  
+  }
+  if($value == 'Science') {
+    $new_array[1][$key] = 'Science';  
+  }
+  if($value == 'SST') {
+    $new_array[3][$key] = 'SST';  
+  }
+}
+ksort($new_array);
+$subject_term_tid_new = array();
+foreach ($new_array as $value) {
+  foreach ($value as $k => $v) {
+    $subject_term_tid_new[$k] = $v;
+  }
+}
+foreach ($subject_term_tid_new as $subjectkey => $subject_value) {
+  if($subject_value == 'SST')
+    $subject_value = 'SOCIAL STUDIES';
+if($subject_value !='General Knowledge' ) {   
+    $output .= "<div class='subject_report'><span class='lft'>". $subject_value  . "</span>";
+       $output .= "<div class='row'>";
+       $topic_term_id =  taxonomy_get_children($subjectkey, $vid = 7);
+foreach($topic_term_id as $topicterms) { 
+       $topic_term_tid[$topicterms->tid] = $topicterms->name;
+       $free_workhheet = l("Get Free Worksheet" , "explore/download_worksheet",
+        array('query' => array('classId'=>$class_id,'subjectId'=>$subjectkey,'topicId' => $topicterms->tid)));
+
+       $free_practise = l("Try Some Questions" , "modalexplore/nojs",array('attributes' => array('class' => 'ctools-use-modal'),'query' => array('classId'=>$class_id,'subjectId'=>$subjectkey,'topicId' => $topicterms->tid)));
+
+          $table_output .= "<tr><td>" . $topicterms->name . "</td>";
+          $table_output .= "<td>" . $free_practise . "</td>";
+          $table_output .= "<td>" . $free_workhheet . "</td></tr>";
+}
+      $output .= $table_head . "" . $table_output . $table_footer . "</div>";
+      $table_output = '';
+}
+}
+     return $output;
+}
+
+function explore_subject_topic_worksheet(){
+$topic_id   =  $_GET['topicId'];
+$class_id   = $_GET['classId'];
+$subject_id = $_GET['subjectId'];
+$class = taxonomy_term_load($class_id);
+    $className = $class->name;
+    $subject = taxonomy_term_load($subject_id);
+    $subjectName = $subject->name;
+    $topic = taxonomy_term_load($topic_id);
+    $topicName = $topic->name;
+    $get_all_nids = generate_worksheet_question_nids($topic_id,$subject_id,$class_id);
+    $download  = downlod_worksheet($get_all_nids,$className,$subjectName,$topicName);
+}
+
+function explore_subject_topic_callback($ajax) {
+$_SESSION['try_question_topic_id']   =  $_GET['topicId'];
+$_SESSION['try_question_subject_id'] = $_GET['subjectId'];
+  if ($ajax) {
+    ctools_include('ajax');
+    ctools_include('modal');
+ 
+    $form_state = array(
+      'ajax' => TRUE,
+      'title' => t('Try Some Question Form'),
+    );
+     $output = ctools_modal_form_wrapper('tryquestion_form', $form_state);
+    print ajax_render($output);
+  drupal_exit();
+  }
+}
+
+
+function downlod_worksheet_home_page(){
+    $class_id =  $_SESSION['worksheet_class_id'];
+    $subject_id = $_SESSION['worksheet_subject_id'] ;
+    $topic_id = $_SESSION['worksheet_topic_id'];
+    $class = taxonomy_term_load($class_id);
+    $className = $class->name;
+    $subject = taxonomy_term_load($subject_id);
+    $subjectName = $subject->name;
+    $topic = taxonomy_term_load($topic_id);
+    $topicName = $topic->name;
+    $get_all_nids = generate_worksheet_question_nids($topic_id,$subject_id,$class_id);
+    $download  = downlod_worksheet($get_all_nids,$className,$subjectName,$topicName);
+    
+}
+
+function tryquestion_session_value(){
+    unset($_SESSION['start_time']);
+    unset($_SESSION['correct_ans']);
+    unset($_SESSION['wrong_ans']);
+    unset($_SESSION['timer_value']);
+    unset($_SESSION['user_orig_exc']);
+   
+}
+
+/*
+*when Clck Some Other Topic Reach Again subject select page.
+**/
+function try_some_other_topic($form, &$form_state){
+  $form_action = $form_state['rebuild_info']['copy']['#action'];
+ if($form_action == 1);
+  $form_test  = "<div id='test-ajax'>".drupal_render(drupal_get_form('class_subject_topic_form'))."</div>";
+  $commands = array();
+  $commands[] = ajax_command_replace('#try-other-topic-ajax',render($form_test));
+ return array('#type' => 'ajax', '#commands' => $commands);
+
+}

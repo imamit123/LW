@@ -1,0 +1,2867 @@
+<?php
+
+
+
+/**
+ * Add global css
+ */
+
+drupal_add_css( drupal_get_path('module', 'lw_custom') . '/admin_lw.css');
+//drupal_add_js( drupal_get_path('module', 'lw_custom') . '/table2CSV.js');
+
+
+/**
+ * Implements hook_block_info().
+ */
+function lw_custom_block_info() {
+  $block = array();
+  $blocks['logged_user_detail_block'] = array(
+    'info' => t('Logged In User Detail'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lw_custom_teacher_school_block'] = array(
+    'info' => t('Teacher Student School Detail'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lw_teacher_dash_block'] = array(
+    'info' => t('Teacher Dashboard'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lw_teacher_form_filter'] = array(
+    'info' => t('Teacher Form Filter'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lw_teacher_topic_form_filter'] = array(
+    'info' => t('Teacher topic Form Filter'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['lw_custom_report'] = array(
+    'info' => t('Custom CSV Report'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['user_detail'] = array(
+    'info' => t('user detail'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['user_details_password'] = array(
+    'info' => t('user detail password'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['parent_dash_skill'] = array(
+    'info' => t('Parent Dashboad Skillmap Link'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['subs_expiration'] = array(
+    'info' => t("User'sSubcription"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['parent_menu'] = array(
+    'info' => t("Parent Tab"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['Update_second_parent'] = array(
+    'info' => t("Update Button for second parent"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['Parent_child_profile_tab'] = array(
+    'info' => t("Child Profile Edit Tab for Parents"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['teacher_my_account_class_subject'] = array(
+    'info' => t("teacher my account class subject"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['excelonz_free_trial_block'] = array(
+    'info' => t("Excelonz Free Trial Form Block"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  $blocks['excelonz_footer_sec_block'] = array(
+    'info' => t("Excelonz Footer Sec Block"),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+
+function lw_custom_block_view($block_name = '') {
+  //global $user;
+ //$user_fields = user_load($user->uid);
+ // $name =$user_fields->field_first_name['und'][0]['value'];
+  $block=array();
+   switch ($block_name) {
+     case 'logged_user_detail_block':
+       $block['subject'] = '';
+       $block['content'] = logged_in_user_detail_block();
+     break;
+     case 'lw_custom_teacher_school_block':
+       $block['subject'] = '';
+       $block['content'] = lw_custom_teacher_school();
+     break;
+     case 'lw_teacher_dash_block':
+       $block['subject'] = '';
+       $block['content'] = lw_teacher_dash_block();
+     break;
+    case 'lw_teacher_form_filter':
+       $block['subject'] = '';
+       $block['content'] = drupal_get_form(teacher_filter_form);
+     break;
+    case 'lw_teacher_topic_form_filter':
+       $block['subject'] = '';
+       $block['content'] = drupal_get_form(teacher_topic_filter_form);
+     break;
+     case 'lw_custom_report':
+       $block['subject'] = '';
+       $block['content'] = drupal_get_form(lw_custom_csv_report);
+     break;
+     case 'user_detail':
+       $block['subject'] = '';
+       $block['content'] = user_detail_block();
+     break;
+     case 'user_details_password':
+       $block['subject'] = 'Your Details';
+       $block['content'] = user_detail_password_block();
+     break;
+     case 'parent_dash_skill':
+      $block['subject'] = 'Parent Dashboad Skillmap Link';
+      $block['content'] = parent_skillmap_link();
+     break;
+     case 'subs_expiration':
+      $block['subject'] = '';
+      $block['content'] = subs_expiration();
+     break;
+     case 'parent_menu':
+      $block['subject'] = '';
+      $block['content'] = parent_menu();
+     break;
+     case 'Update_second_parent':
+      $block['subject'] = '';
+      $block['content'] = update_second_parent();
+     break;
+     case 'Parent_child_profile_tab':
+      $block['subject'] = '';
+      $block['content'] = child_user_tab();
+     break;
+    case 'teacher_my_account_class_subject':
+      $block['subject'] = '';
+      $block['content'] = teacher_my_account_class_subject();
+      break;
+    case 'excelonz_free_trial_block':
+      $block['subject'] = '';
+      $block['content'] = drupal_get_form('excelonz_free_trial_block_form');;
+      break;
+    case 'excelonz_footer_sec_block':
+      $block['subject'] = '';
+      $block['content'] = excelonz_footer_display_sec_block();
+      break;  
+
+  }
+  return ($block);
+}
+
+
+function teacher_my_account_class_subject() {
+  global $user;
+  $uid = $user->uid;
+  if(arg(0) != 'user' || arg(1) != $uid  ){
+    return '';
+  }
+$user_info = profile2_load_by_user($user->uid,  'teacher_profile');
+/*
+*
+*Change query by amit - change in class field 
+*/ 
+$result = db_select('profile', 'p')
+        ->fields('p',array('pid'))
+        ->condition('uid',$uid)
+        ->condition('type','teacher_profile')
+        ->range(0, 1)
+        ->execute()
+        ->fetchAll();
+    $pid = $result[0]->pid;
+$class_query_fetch = db_query("SELECT coc.field_collection_of_class_tid,field_collection_class_subject_value
+                         FROM field_data_field_collection_class_subject ccs
+                         JOIN field_data_field_collection_of_class coc 
+                         ON coc.entity_id = ccs.field_collection_class_subject_value 
+                         WHERE ccs.entity_id = :pid", array(':pid'=> $pid));
+  $sec_tids = array();
+  $child_str = '(';
+  foreach ($class_query_fetch as $value) {
+      $sec_tids[] = $value->field_collection_of_class_tid;
+      $child_str .= $value->field_collection_of_class_tid . ",";
+      $classes[$value->field_collection_class_subject_value]['tid'][] = $value->field_collection_of_class_tid;
+
+  }
+  $child_str .= '0)';
+//End by amit
+  //fetch section and class name
+  $sec_query = db_query("SELECT td.tid,td.name, th.parent FROM taxonomy_term_data td
+    JOIN taxonomy_term_hierarchy th ON (td.tid = th.tid or td.tid = th.parent)
+    WHERE
+      th.tid IN " . $child_str . " order by th.parent ASC");
+  $term_tids = array();
+  //$classes = array();
+  $class_str = "(";
+  foreach ($sec_query as $value) {
+    if($value->parent == 0) {
+      //$classes[$value->tid] = array();
+      $class_str .= $value->tid . ",";
+      $term_tids[] = $value->tid;
+    }
+    elseif($value->parent != $value->tid) {
+      //$classes[$value->parent]['sec'][] = $value->tid;
+      $term_tids[] = $value->tid;
+    }
+  }
+  $class_str .= "0)";
+/**
+*Change by amit  field_data_field_collection_of_subject 
+*/
+$subject_query_fetch = db_query("SELECT cos.field_collection_of_subject_tid, field_collection_class_subject_value
+                         FROM field_data_field_collection_class_subject ccs
+                         JOIN field_data_field_collection_of_subject cos 
+                         ON cos.entity_id = ccs.field_collection_class_subject_value 
+                         WHERE ccs.entity_id = :pid", array(':pid'=> $pid));
+
+
+  $subject_array = array();
+  foreach ($subject_query_fetch as $value) {
+    $subject_array[] = $value->field_collection_of_subject_tid;
+    $classes[$value->field_collection_class_subject_value]['subjects'][] = $value->field_collection_of_subject_tid;
+    $term_tids[] = $value->field_collection_of_subject_tid;
+  }
+  
+//End
+  $subject_query = db_select('taxonomy_term_hierarchy', 'th');
+  $subject_query->join("field_data_field_subject", "fs", "fs.bundle = 'class' AND fs.entity_id in" . $child_str);
+  $subject_query->fields("fs", array("entity_id"));
+  $subject_query->fields("th", array("tid"));
+  $subject_query->where("th.parent = fs.field_subject_tid");
+  $subject_result = $subject_query->execute()->fetchall();
+
+  $term_name = db_select('taxonomy_term_data', 'td')
+  ->fields("td", array("tid", "name"))
+  ->condition("tid", $term_tids, "IN")
+  ->execute()->fetchAll();
+
+  $name = array();
+  foreach ($term_name as $value) {
+    $name[$value->tid] = $value->name;
+  }
+
+  $output = '';
+  foreach ($classes as $key => $value) {
+    $output .= "<div class='class_div'><table><tr><th class='one'>Class</th><th>Subject</th></tr>";
+
+
+      $i = 0;
+      $ctid = $classes[$key]['tid'][0];
+      $stid = $classes[$key]['tid'][1];
+
+      $output_1 = '<span>' .$name[$ctid] . $name[$stid] . "</span></td>";
+      foreach ($classes[$key]['subjects'] as $value1) {
+        $i++;
+        $output_1 .= "<td class='one-lft'><span>" .$name[$value1] . "</span></td></tr>";
+      }
+      $output_0 = "<tr><td rowspan='".$i."'><span>" . $name[$key]. "</span>";
+      $output .= $output_0 . $output_1;
+      $output .= "</tr></table></div>";
+  }
+  if(arg(0) == 'user' && arg(1) == $uid  ){
+    return $output;
+  }
+  else {
+    return '';
+  }
+}
+
+
+function update_second_parent(){
+  global $user;
+  global $base_path;
+  $uid = '';
+  $uid = $user->uid;
+  $output ='<div class="update_second_parent">
+            <a href="'. $base_path .'profile-second_parent/'.$uid.'/edit">Add/Update Profile</a>
+            <div>';
+  if(arg(0) == 'profile-second_parent' && arg(1) == $uid  ){
+    return $output;
+  }
+}
+
+function child_user_tab() {
+  global $user;
+  $uid = $user->uid;
+  $output = '';
+  if($uid != arg(1) && arg(2) == "edit") {
+    $output = '<div id="tasks">
+              <ul>
+                <li class="li_one"><a href="/user/'.arg(1).'/edit">Login & Profile Details</a></li>
+                <li class="li_two"><a href="/user/'.arg(1).'/edit/student">School & Child\'s Interests</span></a></li>
+              </ul></div>';
+  }
+ return $output;
+}
+
+
+function parent_menu() {
+  global $user;
+  global $base_path;
+  $uid = '';
+  $uid = $user->uid;
+  $output ='<div id="tasks" class="parent_detail">
+              <ul class="tabs primary clearfix">
+                <li class="one">
+                  <a  href="' . $base_path . 'user/'.$uid.'">First Parent Detail</a>
+                </li>
+                <li class="two">
+                   <a href="'. $base_path .'profile-second_parent/'.$uid.'">Second Parent Detail</a>
+                </li>
+                <li class="order_tab">
+                  <a href="' .  $base_path . 'user/'. $uid . '/orders' . '">View my orders</a>
+                  </li>
+              </ul>
+            </div>';
+  if((arg(0) == 'user' && arg(1) == $uid && arg(2) == '') || (arg(0) == 'profile-second_parent' && arg(1) == $uid) || (arg(0) == 'user' && arg(1) == $uid && arg(2) == 'orders') ){
+
+    return $output;
+  }
+}
+
+function parent_skillmap_link() {
+  global $user;
+  $parent_uid = $user->uid;
+  $uid = '';
+  $output ='';
+
+  if(!is_numeric(arg(2))) {
+    $uid = $_SESSION['first_child'];
+  }
+  else {
+    $uid = arg(2);
+  }
+
+   $child_list = db_select('field_data_field_child_id', 'cl')
+      ->fields("cl", array('field_child_id_uid'))
+      ->condition('entity_id', $parent_uid)
+      ->orderBy('delta')
+      ->execute()
+      ->fetchAll();
+    $count = 'first';
+    $child_array = array();
+    foreach($child_list as $child ) {
+      $child_array[$child->field_child_id_uid] = $child->field_child_id_uid;
+    }
+  $query = db_select('field_data_field_first_name', 'fn');
+  $result = $query->fields('fn', array("field_first_name_value", "entity_id"))
+        ->condition('fn.entity_id', $child_array, "IN")
+        ->execute()
+        ->fetchAll();
+
+  foreach($result as $r) {
+    $uid = $r->entity_id;
+    $name = $r->field_first_name_value;
+    $output .= '<div class="skillmap_div"><a href="'.$base_url.'/skillmap/'.$uid.'">SKILL MAP
+       FOR '.$name .'</a></div>';
+  }
+
+  //echo "<pre>";print_r($result);die();
+  //$output .= '<div class="skillmap_div"><a href="'.$base_url.'/skillmap/'.$uid.'">Skillmap</a></div>';
+  return $output;
+}
+
+// Custom Form Filter for Teacher topic report page
+function teacher_topic_filter_form($form, &$form_state) {
+  global $user;
+  $uid = '';
+  $uid_detail = '';
+  $names = '';
+  $uid = $user->uid;
+
+  $result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  $pid = $result[0]->pid;
+
+
+//@todo : Need to improve query or other solution
+  $subject_query = db_query("SELECT th.*  FROM `taxonomy_term_hierarchy` th
+JOIN taxonomy_term_data td ON th.tid = td.tid AND td.vid = 7
+WHERE th.tid IN (SELECT a.tid from taxonomy_term_hierarchy a, taxonomy_term_hierarchy b WHERE a.parent = b.tid and b.parent = 0) AND th.parent != 0");
+  $subject_in = "(";
+  foreach($subject_query as $subject_row) {
+    $subject_in .= $subject_row->tid . ",";
+  }
+  $subject_in .= "-1)";
+
+  //Query to fetch user class subject section detail.
+  $re = db_query("SELECT field_schools_tid, parent, field_class1_tid, field_branch_tid, field_subjects_tid
+      FROM field_data_field_schools s, field_data_field_class1 cl, field_data_field_branch b, field_data_field_subjects sb, taxonomy_term_hierarchy th
+    WHERE s.entity_id = :pid
+    AND field_subjects_tid IN $subject_in
+    AND s.entity_id = cl.entity_id
+    AND s.entity_id = b.entity_id
+    AND s.entity_id = sb.entity_id
+    AND s.bundle =  'teacher_profile'
+    AND th.tid = cl.field_class_user_tid", array(':pid'=> $pid));
+
+  $user_sub_tid = array();
+
+  $user_class_tid = array();
+  $query_string = array();
+  foreach($re as $classname) {
+    $user_sub_tid[] = $classname->field_subjects_tid;
+
+    if($classname->parent == 0) {
+      $user_class_tid[$classname->parent][$classname->field_class1_tid] = $classname->field_class1_tid;
+    }
+
+    $query_string[] =$classname->field_class1_tid;
+
+  }
+
+  $class_name = db_select('taxonomy_term_data', 'td')
+    ->fields("td", array('tid', 'name'))
+    ->condition('tid', $query_string, 'IN')
+    ->orderBy('tid')
+    ->execute()
+    ->fetchAll();
+
+    $term_name_array = array();
+    foreach($class_name as $row) {
+      $term_name_array[$row->tid] = $row->name;
+    }
+
+  //@todo : prateek do not user term_multiple load. DO db_query . :)
+  $ts = taxonomy_term_load_multiple($user_sub_tid);
+
+  //class option array
+  $options_class = array();
+  foreach($user_class_tid as $key => $parent) {
+    foreach($parent as $c_key => $child) {
+      $options_class[$c_key] =$term_name_array[$key] . $term_name_array[$c_key];
+    }
+
+  }
+
+  //subject option array
+  $options_class1 = array();
+  foreach ($ts as $key=>$term) {
+    $options_class1[$term->name] = $term->name;
+  }
+
+  $form['#method'] = 'get';
+  $form['Section'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose Section'),
+    '#options' => $options_class,
+    '#required' =>true,
+  );
+  $form['subject'] = array(
+    '#type' => 'select',
+    '#title' => t('Choose Subject'),
+    '#options' => $options_class1,
+   '#required' => TRUE, //make this field required
+  );
+  $format = 'd-m-Y';
+  $form['Start date'] = array(
+    '#type' => 'date_popup',
+    '#title' => 'Start Date',
+    '#default_value' => date('c'), //check that out: date in ISO format
+      '#date_format' => $format,
+      '#date_label_position' => 'within',
+      '#date_timezone' => 'Europe/Rome',
+      '#date_increment' => 15,
+      '#date_year_range' => '-2:+2',
+      '#datepicker_options' => array(
+        'maxDate' => 0,
+      ),
+  );
+  $form['End date'] = array(
+    '#type' => 'date_popup',
+    '#title' => 'End Date',
+    '#default_value' => date('c'), //check that out: date in ISO format
+      '#date_format' => $format,
+      '#date_label_position' => 'within',
+      '#date_timezone' => 'Europe/Rome',
+      '#date_increment' => 15,
+      '#date_year_range' => '-2:+2',
+      '#datepicker_options' => array(
+        'maxDate' => 0,
+      ),
+  );
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create Report'),
+  );
+
+  return $form;
+}
+
+// Custom Form Filter for Teacher Dashboard
+function teacher_filter_form($form, &$form_state) {
+  global $user;
+  $uid_detail = '';
+  $names = '';
+  $uid = $user->uid;
+
+  $result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  $pid = $result[0]->pid;
+
+
+
+
+  //@todo : Need to improve query or other solution
+  $subject_query = db_query("SELECT th.*  FROM `taxonomy_term_hierarchy` th
+    JOIN taxonomy_term_data td ON th.tid = td.tid AND td.vid = 7
+    WHERE th.tid IN (SELECT a.tid from taxonomy_term_hierarchy a, taxonomy_term_hierarchy b WHERE a.parent = b.tid and b.parent = 0) AND th.parent != 0");
+  $subject_in = "(";
+  foreach($subject_query as $subject_row) {
+    $subject_in .= $subject_row->tid . ",";
+  }
+  $subject_in .= "-1)";
+
+//field_class_user_tid
+//field_data_field_class_user
+
+  //Query to fetch user class subject section detail.
+  $re = db_query("SELECT field_schools_tid, parent, field_branch_tid, field_collection_class_subject_value,field_collection_of_class_tid,field_collection_of_subject_tid
+                  FROM field_data_field_schools s, field_data_field_branch b,  field_data_field_collection_of_subject sb, taxonomy_term_hierarchy th ,field_data_field_collection_class_subject ccs,field_data_field_collection_of_class coc
+    WHERE s.entity_id = :pid
+    AND field_collection_of_subject_tid IN $subject_in
+    AND s.entity_id = b.entity_id
+    AND sb.entity_id = ccs.field_collection_class_subject_value
+    AND s.entity_id = ccs.entity_id
+    AND coc.entity_id = ccs.field_collection_class_subject_value
+    AND s.bundle =  'teacher_profile'
+    AND th.tid = coc.field_collection_of_class_tid", array(':pid'=> $pid));
+
+  $user_sub_tid = array();
+
+  $user_class_tid = array();
+  $query_string = array();
+  foreach($re as $classname) {
+  //echo "<pre>";print_r($classname);
+    $user_sub_tid[] = $classname->field_subjects_tid;
+
+    if($classname->parent != 0) {
+      $user_class_tid[$classname->parent][$classname->field_collection_of_class_tid] = $classname->field_collection_of_class_tid;
+    }
+
+    $query_string[] =$classname->field_collection_of_class_tid;
+
+  }
+//echo "<pre>";print_r($user_class_tid);die();
+
+  $class_name = db_select('taxonomy_term_data', 'td')
+    ->fields("td", array('tid', 'name'))
+    ->condition('tid', $query_string, 'IN')
+    ->orderBy('tid')
+    ->execute()
+    ->fetchAll();
+
+    $term_name_array = array();
+    foreach($class_name as $row) {
+      $term_name_array[$row->tid] = $row->name;
+    }
+
+  //class option array
+  $options_class = array();
+  foreach($user_class_tid as $key => $parent) {
+    foreach($parent as $c_key => $child) {
+      $options_class[$c_key] =$term_name_array[$key] . $term_name_array[$c_key];
+    }
+
+  }
+/*
+*Change By Amit(23 Sept -2014)
+*Add code for - change section and subject relation
+**/
+$options_class1 = array('-Select-')+$options_class;
+$selected = isset($form_state['values']['Section']) ? $form_state['values']['Section'] : key($options_class1);
+$form['static_div'] = array(
+      '#type' => 'markup',
+      '#markup' =>  '<div class="form_div">',
+    );
+  $form['#method'] = 'get';
+  $Section = $_GET['Section'];
+  $form['Section'] = array(
+    '#type' => 'select',
+  //  '#value'=>  $Section,
+     '#title' => t('Choose Section'),
+    '#options' => $options_class1,
+    '#default_value' => $selected,
+   // '#multiple' => $stat,
+    '#required' => TRUE,
+    '#ajax' => array(
+      'callback' => 'ajax_example_dependent_dropdown_callback',
+      'wrapper' => 'dropdown-second-replace',
+    ),
+  );
+
+if(isset($form_state['values']['Section'])){
+    $option = lw_teacher_subject_second_dropdown_options($selected);
+} else {
+    $option = array('-Select-'); // 0 is default value
+}
+
+  $subject = $_GET['subject'];
+  $form['subject'] = array(
+    '#type' => 'select',
+   // '#value'=>  $subject,
+    '#title' => t('Choose Subject'),
+    '#prefix' => '<div id="dropdown-second-replace">',
+    '#suffix' => '</div>',
+    '#required' => TRUE,
+    '#options' => $option,//lw_teacher_subject_second_dropdown_options($selected),
+    '#default_value' => isset($form_state['values']['subject']) ? $form_state['values']['subject'] : '',
+  );
+ 
+if(arg(2) == "student") {
+   unset($form['subject']);
+   unset($form['Section']);
+    $form['Section'] = array(
+    '#type' => 'select',
+     '#title' => t('Choose Section'),
+    '#options' => $options_class,
+    '#default_value' => $selected,
+    '#multiple' => multiple,
+    '#required' => TRUE,
+     );
+  }
+  //End Code By @amit
+  $format = 'd-m-Y';
+  $form['Start date'] = array(
+    '#type' => 'date_popup',
+    '#title' => 'Start Date',
+    '#default_value' => date('c'), //check that out: date in ISO format
+      '#date_format' => $format,
+      '#date_label_position' => 'within',
+      '#date_timezone' => 'Europe/Rome',
+      '#date_increment' => 15,
+      '#date_year_range' => '-2:+2',
+      '#datepicker_options' => array(
+        'maxDate' => 0,
+      ),
+  );
+  $form['End date'] = array(
+    '#type' => 'date_popup',
+    '#title' => 'End Date',
+    '#default_value' => date('c'), //check that out: date in ISO format
+     '#date_format' => $format,
+     '#date_label_position' => 'within',
+     '#date_timezone' => 'Europe/Rome',
+     '#date_increment' => 15,
+     '#date_year_range' => '-2:+2',
+      '#datepicker_options' => array(
+        'maxDate' => 0,
+      ),
+  );
+
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create Report'),
+  );
+
+  if(array_key_exists('Section', $_GET)) {
+    //echo "<pre>";print_r($_GET);die();
+    //fetch class name with parent;
+    $section_tid =$_GET['Section'];
+    $sec_query = "(";
+    $sec_in = array();
+    foreach ($section_tid as $row) {
+      $sec_query .= $row . ",";
+      $sec_in[] =$row;
+    }
+    $sec_query .= "-1)";
+
+    //fetch sec name with parent name join.
+    $sec_joinname = db_query("SELECT th.tid, th.parent, td.name
+      FROM taxonomy_term_data td,
+      taxonomy_term_hierarchy th
+      WHERE
+        th.tid IN $sec_query
+      AND
+        (td.tid = th.tid or td.tid = th.parent)"
+    );
+
+    //$chose = "<h2>Your Selection </h2>";
+    $chose .= "<ul><li>Class ";
+    foreach($sec_joinname as $subject_nm_row) {
+      $sec_array[$subject_nm_row->tid] .=$subject_nm_row->name;
+    }
+    foreach ($sec_array as $key => $value) {
+      $sec_name .= $value . ",";
+    }
+
+    $sec_name = trim($sec_name, ",");
+    $chose .= $sec_name;
+
+    if(arg(2) == "topic") {
+      $section_tid =$_GET['Section'];
+      $section_ti = "(".$section_tid.",-1)";
+       //fetch sec name with parent name join.
+    $sec_joinname = db_query("SELECT th.tid, th.parent, td.name
+      FROM taxonomy_term_data td,
+      taxonomy_term_hierarchy th
+      WHERE
+        th.tid IN  $section_ti
+      AND
+        (td.tid = th.tid or td.tid = th.parent)"
+    );
+      $class_nm = '';
+      foreach ($sec_joinname as $key => $value) {
+        $class_nm .= $value->name;
+      }
+        $chose .= $class_nm;
+
+
+      $chose .="</li>";
+      $chose .= "<li>". $_GET['subject']."'s report";
+      $chose .="</li>";
+    }
+
+    if($_GET['Start_date']['date'] != '') {
+      $chose .="<li class='your_date'>For the period ";
+      $chose .=$_GET['Start_date']['date'] . ' - ' .$_GET['End_date']['date'];
+      $chose .="</li>";
+    }
+    $form['chose'] = array(
+      '#type' => 'markup',
+      '#prefix' => '</div><div class="your_selection">',
+      '#markup' =>  $chose,
+      '#suffix' => '</ul></div>'
+    );
+    if(arg(2) == "topic") {
+      $form['chose'] = array(
+        '#type' => 'markup',
+        '#prefix' => '</div><div class="your_selection">',
+        '#markup' =>  $chose,
+        '#suffix' => '</ul></div>'
+      );
+    }
+
+
+  }
+
+
+  return $form;
+}
+
+
+/**
+ * Teacher dashboard Block
+ */
+function lw_teacher_dash_block() {
+  global $user;
+  $uid = $user->uid;
+  $pid = '';
+  //@todo: user id is static
+  $result = db_select('profile', 'p')
+    ->fields('p', array('pid'))
+    ->condition('uid',88)
+    ->condition('type','teacher_profile')
+  ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+  //echo '<pre>';print_r($result);die();
+  $pid = $result[0]->pid;
+  //@todo : pid add.
+  $re = db_query("SELECT field_schools_tid, field_class_user_tid, field_branch_tid
+FROM field_data_field_schools s, field_data_field_class_user cl, field_data_field_branch b, taxonomy_term_hierarchy th
+WHERE s.entity_id = :pid
+AND s.entity_id = cl.entity_id
+AND s.entity_id = b.entity_id
+AND s.bundle =  'teacher_profile'
+AND th.parent !=0
+AND th.tid = cl.field_class_user_tid", array(':pid'=> $pid));
+  $user_class_tid = '(';
+  foreach($re as $name) {
+    $user_class_tid .= $name->field_class_user_tid . ',';
+  }
+  $user_class_tid .= '0)';
+  $school_tid = $name->field_schools_tid;
+  $branch_tid = $name->field_branch_tid;
+
+  //@todo : make it into db_select
+  $subject = db_query("select
+  field_subjects_tid
+FROM
+ field_data_field_subjects sb
+WHERE
+ sb.entity_id = 14
+AND
+ sb.bundle = 'teacher_profile'");
+ $subject_tid = '(';
+ foreach($subject as $sub) {
+  $subject_tid .= $sub->field_subjects_tid . ',';
+ }
+ $subject_tid .= '-1)';
+  $list = db_query("select
+     count(DISTINCT(s.entity_id)) as total,p.uid, field_class_user_tid, field_subjects_tid
+    FROM
+     field_data_field_schools s,
+     field_data_field_class_user cl,
+     field_data_field_branch b,
+     field_data_field_subjects sb,
+     profile p
+    WHERE
+     field_schools_tid = :sid
+    ANd
+     field_class_user_tid in ".$user_class_tid."
+    AND
+     field_branch_tid = :bid
+    AND
+     s.entity_id = cl.entity_id
+    AND
+     s.entity_id = b.entity_id
+    AND
+     sb.entity_id = s.entity_id
+    AND
+     s.bundle = 'student'
+    AND
+    sb.field_subjects_tid in ".$subject_tid."
+    AND
+    sb.bundle = 'student'
+    AND
+     p.pid = s.entity_id GROUP BY field_class_user_tid, field_subjects_tid ", array(":sid"=> $school_tid,  ":bid"=> $branch_tid));
+
+
+  $ouput= array();
+  $term_name = '(';
+  foreach($list as $l) {
+    $output[$l->field_class_user_tid][$l->field_subjects_tid] = $l->total;
+    $term_name .= $l->field_class_user_tid . ',';
+    $term_name .= $l->field_subjects_tid . ',';
+  }
+
+  $term_name .= '-1)';
+  $term_name_query = db_query("select name,tid from taxonomy_term_data where tid in " . $term_name);
+
+  $term_name_array = array();
+  foreach($term_name_query as $term_result) {
+    $term_name_array[$term_result->tid] = $term_result->name;
+  }
+  $final_output = '';
+  foreach($output as $key=>$row) {
+    foreach($row as $k=>$r) {
+      $final_output .= $term_name_array[$key] . "-" . $term_name_array[$k] . "--" . $r . "<br/>";
+    }
+  }
+  return $final_output;;
+
+}
+
+function logged_in_user_detail_block() {
+  global $user;
+  global $base_url;
+  $user_detail = '';
+  $user_fields = user_load($user->uid);
+  //echo '<pre>';print_r($user_fields);die();
+  $name =$user_fields->field_first_name['und'][0]['value'];
+  $path =$user_fields->picture->uri;
+  //$output .= theme('user_picture', array('account' => $user_inf));
+  if ($user_fields->picture) {
+    //$picture = theme('user_picture', array('account' => $user_fields));
+    $picture .= theme('image_style', array('path' => $user_fields->picture->uri, 'style_name' => 'participant_31'));
+  }
+  else {
+    $picture ='<img src ='.$base_url.'/sites/all/themes/lw_theme/images/user_dashboardsmall.png>';
+  }
+  //$picture = theme('imagecache','user_30x30', $picture);
+  //$picture = theme('image_style', array('style_name' => 'user_30x30', 'path' => 'image path', 'alt' => 'image alt', 'title' => 'image title', 'width' => 'some width', 'height' => 'some height'));
+  $user_detail = '<div class="user_detail"><div class="user_row">
+  <span class="pic">'.$picture.'</span><span class="name">'.$name.'</span></div>
+  <ul class="user_menu"><li><a href="'.$base_url.'/user/'. $user->uid. '">My account</a></li><li ><a href="'.$base_url.'/user/logout">Log out</a></li></ul></div>';
+  if ($user->uid) {
+    return $user_detail;
+  }
+  //return $user_detail;
+}
+
+// Parent child relation
+function lw_custom_user_insert(&$edit, $account, $category) {
+
+  global $user; // loged user information - needed for id
+  $uid_parent = '';
+  $uid_child = '';
+  // in the bulk import adding child in the parents account
+
+  if(array_key_exists(6, $edit['roles']) && in_array("Content Owner", $user->roles)) {
+    echo "here";die();
+    $mail_user = $edit[mail];
+    $query = db_select('users', 'u');
+    $query->join('users_roles', 'r', 'u.uid = r.uid');
+    $result = $query->fields('u', array("uid"))
+      ->condition("u.init", $mail_user) // taking mail to get parent
+      ->condition("r.rid", 5)
+      ->range(0,1)
+      ->execute()->fetchAll();
+      $uid_parent = $result[0]->uid;
+      $uid_child = $account->uid;
+    $existing = user_load($uid_parent);
+    unset($existing->pass);
+    $edit = (array) $existing;
+    $edit['field_child_id']['und'][]['uid'] =  $uid_child;
+    user_save($existing, $edit);
+  }
+    //@todo : check why this condition is used two times.
+
+  elseif(in_array("Parent", $user->roles) && $user->uid != $account->uid) {
+    //echo "in loop";
+    $uid_parent = $user->uid;
+    $uid_child = $account->uid;
+    $existing = user_load($uid_parent);
+    //echo "<pre>";print_r($existing);die();
+    unset($existing->pass);
+    $edit1 = (array) $existing;
+    $edit1['field_child_id']['und'][]['uid'] =  $uid_child;
+    user_save($existing, $edit1);
+  }
+
+}
+
+function lw_custom_teacher_school() {
+  global $user;
+  $uid_teacher = '';
+  $teacher_detail = '';
+  $teacher_school = '';
+  $teacher_class = '';
+  $teacher_section = '';
+  $uid_teacher = $user->uid;
+  $teacher_detail = user_load($uid_teacher);
+  //echo '<pre>';print_r($teacher_detail);die();
+  $viewarg = $teacher_detail->field_school[und][0][value];
+  //$teacher_class = $teacher_detail->field_user_class[und][0][value];
+  //$teacher_section = $teacher_detail->field_section[und][0][value];
+
+  //print $teacher_section;die();
+  $view_name = 'student_performance_profile';
+  $view_block_id = 'block_1';
+  $block = views_page($view_name, $view_block_id, $viewarg);
+  if($block != ''){
+    return $block['content'];
+  }
+  else {
+      $view_block_id = 'block_1';
+    $block = views_page($view_name, $view_block_id);
+    return $block['content'];
+  }
+}
+
+/*
+function lw_custom_user_presave(&$edit, $account){
+  global $user;
+  $uid_parent = '';
+  $uid_child = '';
+  if($edit['roles'][6] == 6){
+    $f_name = $edit['field_first_name']['und'][0]['value']. ".";
+    $l_name = substr($edit['field_last_name']['und'][0]['value'], 0, 1);
+    $dob = substr($edit['field_date_of_birth']['und'][0]['value'], 2, -15 );
+    //$edit['name']  = $f_name . $l_name . $dob;
+  }
+s
+
+}
+*/
+function user_form_cancel() {
+  if(arg(0) == 'profile-second_parent') {
+    drupal_goto("profile-second_parent/" . arg(1));
+  }
+  else {
+//    drupal_goto("user/" . arg(1));
+  }
+}
+
+function lw_custom_redirect_cancel() {
+  global $user, $base_url;
+  $result = db_select('field_data_field_child_id', 'fd')
+    ->fields("fd", array("field_child_id_uid"))
+    ->condition("entity_id", $user->uid)
+    ->range(0, 1)
+    ->execute()->fetchAssoc();
+
+  drupal_goto($base_url . "/pricingplans/form/" . $result['field_child_id_uid']);
+}
+
+function lw_custom_form_alter(&$form, $form_state, $form_id)  {
+
+  global $user; // loged user information - needed for id
+ 
+  //
+ //$form['#submit'][] = 'lw_parent_change_message_child';
+  //echo '<pre>';print_r($form);die();
+  //echo "<pre>";print_r($form['actions']);die();
+  if($form_id == 'user_profile_form' || $form_id == 'profile2_edit_second_parent_form') {
+    //unset($form['actions']['cancel']);
+    //echo "<pre>";print_r($form);die();
+
+    $form['actions']['cancel'] = array (
+      '#type' => 'submit',
+      '#access' => TRUE,
+      '#value' => 'Cancel',
+      '#weight' => -200,
+      '#submit' => array('user_form_cancel'), //This is the name of a function reproduced below
+      '#access' => 1,
+    );
+
+  }
+  if($form_id == "user_pass") {
+    $form['name']['#description'] .= "If you are a Student logging in, please ask your parents to change the password for you";
+  }
+  elseif($form_id == "commerce_checkout_form_checkout") {
+    $form['buttons']['cancel']['#submit'][0] = "lw_custom_redirect_cancel";
+
+  }
+  elseif($form['#id'] == 'user-login'){
+    if (strpos($_SERVER['HTTP_REFERER'],'password') !== false) {
+        drupal_goto("forgotpassword");
+    }
+    $form['name']['#title'] = 'User ID ( for students) / Email Id ( for Parents)';
+
+  }
+  elseif($form['#id'] == 'user-login-form'){
+
+    $form['name']['#title'] = 'User ID ( for students) / Email Id ( for Parents)';
+  }
+
+  //@todo : need to improve this code.
+  elseif($form_id == "go_live_node_form") {
+
+//j2r($form['field_go_live_subject']['und']['#config']['params']['exclude_tid']);
+    $uid = user_load($user->uid);
+
+    $form['title']['#title'] ='Give your Play Off a name';
+    //$form['title']['#description'] ='This is what your friends will see';
+
+    $form['actions']['submit']['#value'] ='CREATE MY PLAY OFF!';
+
+    //echo "<pre>";print_r($form);die();
+    $uid = $user->uid;
+    //fetch all class
+    //exclude users class
+    //remove all other
+      $result = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array("tid"))
+        ->condition("vid", 7)
+        ->condition("name", "%class%", "like")
+        ->execute()->fetchAll();
+
+      $tids = array();
+      foreach ($result as $tid) {
+        $tids[] =$tid->tid;
+      }
+
+    //fetch users subject
+      $subject_list = db_select("field_data_field_subjects", "fs");
+      $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+      $subject_list->condition("p.uid", $uid);
+      $subject_list->condition("fs.bundle", "student");
+      $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute()->fetchall();
+
+      $child_tids = array();
+      foreach($subject_list_result as $row) {
+        $child_tids[] = $row->field_subjects_tid;
+      }
+
+      $parent_tid = db_select('taxonomy_term_hierarchy', 'th')
+        ->fields("th", array("parent"))
+        ->condition("tid", $child_tids, "IN")
+        ->execute()->fetchAll();
+        $p_tid = array();
+
+        foreach ($parent_tid as $value) {
+          $p_tid[$value->parent] =$value->parent;
+          $selected = $value->parent;
+        }
+
+      $rs = array_diff($tids, $p_tid);
+
+      $other_tid = array();
+      $result = db_select('taxonomy_term_hierarchy', 'th')
+        ->fields("th", array("tid"))
+        ->condition('parent', $p_tid, "IN")
+        ->execute()->fetchAll();
+        foreach ($result as $key => $value) {
+          $other_tid[] = $value->tid;
+        }
+
+        $rs1 = array_diff($other_tid, $child_tids);
+        $rs3 = array_merge($rs,$rs1);
+      $form['field_go_live_subject']['und']['#config']['params']['exclude_tid'] = $rs3;
+
+    }
+
+   //$profile2 = profile2_load_by_user($user->uid);
+  //echo "<pre>";print_r($form);die();
+  elseif(preg_match('#^user/reset/(.+)#', $_GET['q'], $matches)) {
+
+    if(arg(5) == "first") {
+      $form['message'] = array('#markup' => t("<div class='head-title'>
+        Congratulations and Welcome back!Your account is now verified.
+        </div>
+        <p>Get in now to add your children's accounts and get started.</p><p>You can subscribe package for each child</p><p>If you aren't sure yet? Why not go for 7 days free trial for as many subjects as you want?</p>"));
+
+      $form['actions']['submit']['#value'] = "Get in now";
+      $form['help']['#markup'] = '';
+
+    }
+    else{
+      $form['message'] = array('#markup' => t("<div class='head-title'>Reset your password</div><p>This is a one time login to help you re-set your password.</p><p>For your account security, we recommend you update and save your new password before you proceed to other areas of Excelonz</p>"));
+
+        //echo "<pre>";print_r($form);die();
+    }
+  }
+
+
+  elseif ($form_id == 'user_register_form' && $user->roles[1] == 'anonymous user') {
+
+    /*$form['some_text1'] = array(
+      '#type' => 'item',
+      '#markup' => "<p>Your Login Details</p>",
+      '#weight'  => '12',
+      );*/
+    $form['account']['mail']['#description'] = "All communication including details of user id's and password would be mailed to you at your registered email";
+//      $form['account']['mail']['#description'] = '';  
+    $form['account']['pass']['#description'] = '';
+    $form['account']['mail']['#title'] = 'Email Address';
+      /*****/
+
+   //  $form['account']['some-child-registration'] = array(
+   //    '#type' => 'markup',
+   //    '#prefix' => '<div id="child-registration-form-registration-page">',
+   //    );
+
+   $form['some_text1'] = array(
+      '#type' => 'item',
+      '#markup' => "<p>CHILD'S DETAILS</p>",
+      '#weight' => 17,
+    );
+    $form['child_first_name'] = array(
+      '#prefix' => '<div id="child-first-row">
+                    <div id="child-first-name">',
+      '#type' => 'textfield',
+      '#title' => "Child's First Name",
+      '#type' => 'textfield',
+      '#required' => TRUE,
+      '#suffix' => '</div>',
+      '#weight' => 18,
+  );
+  // echo '<pre>';print_r($form);die();
+   
+  $form['child_last_name'] = array(
+    '#prefix' => '<div id="child-last-name">',
+    '#type' => 'textfield',
+    '#title' => "Child's Last Name",
+    '#type' => 'textfield',
+    '#required' => TRUE,
+    '#suffix' => '</div></div>',
+    '#weight' => 19,
+  );
+
+ $date = '1992-03-01 00:00:00';
+ $format = 'd/m/Y';
+
+$form['Childs_date_of_Birth'] = array(
+      '#prefix' => '<div id="child-second-row">
+                    <div id="child-dob">',
+       '#type' => 'date_popup',
+       '#date_format' => 'j F Y',
+       '#date_year_range' => '-20:+0',
+       '#title' => "Date of Birth",
+       '#required' => TRUE,
+       '#suffix' => '</div>',
+      // '#default_value' => $date, 
+       '#date_format' => $format,
+       '#weight' => 20,
+);
+
+// Load includes/common.inc from the hierarchical select module.
+  module_load_include('inc', 'hierarchical_select', 'includes/common');
+  // Load category based in vocabulary machine name
+  $voc = 'subject-topic';
+  $vocabulary = taxonomy_vocabulary_machine_name_load('Class');
+  //$vocabulary = taxonomy_vocabulary_machine_name_load($voc);
+$form['class_and_section'] =  array(
+    '#title' => t('Class and Section'),
+    '#type'          => 'hierarchical_select',
+     '#required' => TRUE,
+    '#config'        => array(
+      'module' => 'hs_taxonomy',
+      'params' => array(
+        'vid'                        => (int) $vocabulary->vid,
+        'exclude_tid'                => NULL,
+        'root_term'                  => NULL,
+        'entity_count_for_node_type' => NULL,
+      ),
+    ),
+    '#default_value' => $tids,
+    '#prefix' => '<div id="child-class-and-section">',
+    '#suffix' => '</div></div>',
+    '#weight' => 21,
+  );
+
+  hierarchical_select_common_config_apply( $form['class_and_section'], "taxonomy-$vocabulary->vid");
+  
+  $element_info = element_info('hierarchical_select');
+  $form['class_and_section']['#process'] = array_merge($element_info['#process'], array('hs_taxonomy_widget_process'));
+
+ $form['child_conf_password'] = array(
+    '#prefix' => '<div id="child-third-row">
+                  <div id="child-password">',
+    '#type' => 'password_confirm',
+   // '#title' => "Select your Child's Password",
+    '#required' => TRUE,
+    '#suffix' => '</div></div>',
+    '#weight' => 22,
+);
+
+ $form['child_name_of_school'] = array(
+    '#prefix' => '<div id="child-fourth-row">
+                  <div id="child-form-school-name">',
+    '#title' => 'School Name',
+    '#type' => 'textfield',
+    '#autocomplete_path' => 'child_school/autocomplete',
+     '#suffix' => '</div>',
+     '#weight' => 23,
+  );
+
+  $form['child_school_city'] = array(
+    '#prefix' => '<div id="child-form-school-city">',
+    '#type' => 'textfield',
+    '#title' => 'School Location',
+    '#autocomplete_path' => 'child_school_location/autocomplete',
+    '#suffix' => '</div></div>',
+    '#weight' => 24,
+  );
+ $form['termandcondetion'] = array(
+  '#prefix' => '<div id="child-fifth-row">
+                <div id="child-termandcondetion">',
+  '#type' => 'checkbox',
+  '#title' => t('T & C'),
+  '#required' => TRUE,
+  '#description' => '<div class="tc"><p>I have read the <a href="http://excelonz.com/terms-conditions" target="_blank">Terms &amp; Conditions</a> of using excelonz.com and I hereby agree to abide by them.</p></div>',
+  '#suffix' => '</div></div></div>',
+  '#weight' => 25,
+);
+/****/
+    $form['actions']['submit']['#value'] = 'Create My Account';
+    $form['#submit'][] = 'lw_parent_child_registration';
+    $form['#validate'][] = 'lw_parent_child_registration_validate';
+}
+
+
+  elseif ($form_id == 'user_register_form' && $user->roles[5] == 'Parent' ) {
+    unset($_SESSION['secondchilc']);
+    $form['field_date_of_birth']['und'][0]['#title'] = $form['field_date_of_birth']['und'][0]['#title'] . ' <span class="form-required" title="This field is required.">*</span>';
+    global $user;
+    $uid = user_load($user->uid);
+    $form['#submit'][] = 'second_child_submit_handler';
+    //echo '<pre>';print_r($_SESSION);die();
+    $child_no = $uid->field_child_id['und'][2]['uid'];
+    $form['some_text'] = array(
+      '#type' => 'item',
+      '#markup' => "<p>Your Child's Details</p>",
+     // 'weight' => '0',
+    );
+
+    //echo '<pre>';print_r($form['field_date_of_birth']);die();
+    $form['actions']['submit'] ['#value'] = "Add Child and Subscribe";
+    $form['account']['mail']['#title'] = "Parent's email";
+    $form['account']['mail']['#type'] = 'hidden';
+    $form['account']['mail']['#default_value'] = $user->mail;
+    $form['field_first_name'][und][0]['value']['#title'] = "Child's First Name";
+    $form['field_last_name'][und][0]['value']['#title'] = "Child's Last Name";
+    $form['lw_account'] = $form['actions'];
+    //echo "<pre>";print_r($form['lw_account']);die();
+    array_unshift($form['#validate'], 'class_check_validation');
+    $form['field_date_of_birth']['#weight']  = 8 ;
+    $form['lw_account']['submit']['#weight'] = 200;
+    unset($form['lw_account']['submit']);
+    }
+  //print $user->uid;die();
+  // ASk Prateek why was this loaded
+
+  if ($form_id == 'user_register_form' ) {
+    unset($form['account']['status']); // unset the status field in reg. form
+    unset($form['account']['notify']); // notify field
+    //echo"<pre>";print_r($form);die();
+
+    array_unshift($form['#validate'], 'dob_check_validation');
+
+  }
+  if ($form_id == 'user_profile_form' ) {
+    unset($form['account']['status']); // unset the status field in reg. form
+   // unset($form['account']['notify']); // notify field
+    //echo"<pre>";print_r($form);die();
+    }
+
+  if($form_id == 'user_profile_form' && $user->roles[5] == 'Parent' && $user->uid == arg(1) && arg(2) == 'edit') {
+    $form['some_text'] = array(
+      '#markup' => '<h2 class="edit_page">Update Your Details</h2>'
+    );
+  }
+
+
+}
+
+function dob_check_validation ($form, $form_state)  {
+
+  $fname = $form_state['input']['field_first_name']['und'][0]['value'];
+  $fname = trim($fname);
+  $lname = $form_state['input']['field_last_name']['und'][0]['value'];
+
+  $allowed = array("'"); // you can add here more value, you want to allow.
+  if(!ctype_alpha(str_replace($allowed, '', $fname))) {
+    form_set_error('fielld_first_name', t('First name must contain characters.'));
+  }
+  if(!ctype_alpha(str_replace($allowed, '', $lname))) {
+    form_set_error('last_name', t('Last name must contain characters.'));
+  }
+
+
+  $dob = $form_state['input']['field_date_of_birth']['und'][0]['value']['date'];
+
+  if(strtotime($dob) > time()) {
+    form_set_error('date_of_birth', t('Date of Birth should be past date.'));
+  }
+}
+
+
+
+
+function lw_custom_email_registration_name($edit, $account){
+  global $user;
+  $uid_parent = '';
+  $uid_child = '';
+  if($edit['roles'][6] == student){
+    $f_name = $edit['field_first_name']['und'][0]['value']. ".";
+    $l_name = substr($edit['field_last_name']['und'][0]['value'], 0, 1);
+    $dob = substr($edit['field_date_of_birth']['und'][0]['value'], 2, -15 );
+    $abc = $f_name . $l_name . $dob;
+   /*Code to match if user name already exist or not if exists then append underscore(_) and a sequetial number with that*/    
+    $abc = strtolower($abc);
+    $query = db_select('users', 'u');
+    $query->fields('u', array('name'));
+    $result = $query->execute()->fetchAll();
+    $new_user = array();
+      foreach($result as $key) {
+        $name = strtolower($key->name);
+        $new_user[] = $name;
+
+      }
+    if(in_array($abc,$new_user)) {
+       $n  = username_last_part($abc);
+       $underscore = explode('_',$n);
+       $count = $underscore[1];
+         if(!empty($underscore[1])) {
+           $count = $count+1;
+           return $abc.'_'.$count ;
+         }
+         else {
+           return $abc.'_'.'1';
+         }
+    }
+   else {
+      return $abc;
+   }
+ }
+}
+/*To get the last part(after dot operator) of the matched username*/
+function username_last_part($name) {
+  $last = array();
+  $result = db_query('SELECT name
+                      FROM {users} u
+                      WHERE u.name like :name'
+                      ,array(':name' => $name."%"))
+                      ->fetchAll();
+  foreach($result as $value) {
+    $last[] = $value->name;
+  }
+  return end($last);
+}
+
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function lw_custom_ctools_plugin_directory($owner, $plugin) {
+  if ($owner == 'feeds_tamper') {
+    return 'plugins';
+  }
+}
+
+function user_detail_block() {
+  global $user;
+
+  $sql = db_query("SELECT field_child_id_uid FROM field_data_field_child_id WHERE entity_id =".$user->uid);
+  $count = 0;
+  $child_sub = '';
+ foreach($sql as $row){
+   $output .="<div id =child_table>";
+   $child_ids = $row->field_child_id_uid;
+   //print '<pre>';print_r($child_ids);
+   $user_load_ids = user_load($child_ids);
+   //print '<pre>';print_r($user_load_ids);
+   $profile_id =  profile2_load_by_user($child_ids, 'student');
+  //print '<pre>';print_r($profile_id);
+   $child_sub = $profile_id->field_subjects['und'][0]['tid'];
+   $child_first_name =$user_load_ids->field_first_name['und'][0]['value'];
+   $child_last_name =$user_load_ids->field_last_name['und'][0]['value'];
+   $output .= "<div class =child_name>" .$child_first_name .' '. $child_last_name."</div>";
+   $output .="<div class=child-info>";
+   $child_date_of_birth =new DateTime($user_load_ids->field_date_of_birth['und'][0]['value']);
+   $child_date_of_birth = $child_date_of_birth->format('d-m-Y');
+   $output .= "<div class =child_dob><label>date of birth</label>" .'<span>'.$child_date_of_birth.'</span>'."</div>";
+  $dashboard = '<div id = "buy_subs-link">'.l(t('Click Here To View Reports'), 'dashboard/parent/'.$child_ids). '</div>';
+  $output .= "<div class =child_dob><label>Dashboard</label>" .'<span>'.$dashboard.'</span>'."</div>";
+
+
+    $output .= assignment_link_in_parent_profile($child_ids);
+    $child_school_id = $profile_id->field_schools['und'][0]['tid'];
+    if(!empty($child_school_id)) {
+    $sql1 = db_query("SELECT name FROM taxonomy_term_data WHERE tid=" .$child_school_id);
+    foreach($sql1 as $child_school_name) {
+      $child_schoolname = $child_school_name->name;
+    }
+  }
+    $output .="<div class =child_school><label>School</label>".'<span>'.$child_schoolname.'</span>'."</div>";
+
+    $child_branch_id = $profile_id->field_branch['und'][0]['tid'];
+    if(!empty($child_branch_id)) {
+    $sql_branch = db_query("SELECT name FROM taxonomy_term_data WHERE tid=".$child_branch_id);
+    foreach($sql_branch as $child_branch_name) {
+      $child_branchname = $child_branch_name->name;
+    }
+  }
+    $output .="<div class =child_branch><label>Branch</label>".'<span>'.$child_branchname.'</span>'."</div>";
+
+
+    $child_class_id = $profile_id->field_class_user['und'][0]['tid'];
+    //print $child_section_id;
+    if(!empty($child_class_id)) {
+    $sql_class_name = db_query("SELECT name FROM taxonomy_term_data WHERE tid=".$child_class_id);
+    foreach($sql_class_name as $class_name){
+      $classname = $class_name->name;
+    }
+  }
+    $output .="<div class =child_class><label>Class</label>".'<span>'.$classname.'</span>'."</div>";
+
+    $child_section_id = $profile_id->field_class_user['und'][1]['tid'];
+    if(!empty($child_section_id)) {
+    $sql_section_name = db_query("SELECT name FROM taxonomy_term_data WHERE tid=".$child_section_id);
+    foreach($sql_section_name as $class_name){
+      $sectionname = $class_name->name;
+    }
+  }
+
+  $output .="<div class =child_class><label>Section</label>".'<span>'.$sectionname.'</span>'."</div>";
+
+
+  $out = subs_expiration_func($child_ids);
+    $sub_type = "";
+   $output .= download_paid_worksheet_link_in_parent_profile($child_ids); 
+    foreach ($out as $key => $value) {
+      if($sub_type != $value->paid) {
+      if($value->paid == 'free'){
+        $output .= "<div class='child_class child_leftpad'><label>Subscription Type</label>".'<span>'.$value->paid.' Online Practice'.'</span></div>';
+      }else{
+       $output .= "<div class='child_class child_leftpad'><label>Subscription Type</label>".'<span>'.'Excelonz Genius'.'</span></div>'; 
+      }
+        $output .= "<div class='child_class'><label><b>Subjects</b></label>".'<span><b>Expiry date</b></span></div>';
+        $sub_type = $value->paid;
+      }
+      $term = taxonomy_term_load($value->subject_tid);
+      $name = $term->name;
+      if($value->exp_str != '') {
+        $time = $value->exp_str;
+      }
+      else {
+        $time_final = $value->expiry_date;
+        $time = date('Y-m-d',$time_final);
+      }
+      $output .= "<div class='child_class'><label>" .$name."</label>";
+      $output .= "<span>".$time."</span></div>";
+
+    }
+  $output .=l('<span>'.t('view profile') .'</span>', 'user/'.$child_ids, array('html' => TRUE));
+  $count++;
+  if($child_sub != '') {
+    $output .= '<div id = "buy_subs">'.l(t('Buy/Renew Subscription'), 'pricingplans/form/' . $child_ids). '</div>';
+  }
+  else {
+    $output .= '<div id = "buy_subs">'.l(t('Buy/Renew Subscription'), 'pricingplans/form/' . $child_ids). '</div>';
+  }
+
+
+
+  $output .="</div>";
+  $output .="</div>";
+ }
+ parent_dashboard_child_list();
+ return $output;
+}
+
+function user_detail_password_block() {
+  global $user;
+  $user_fields = user_load($user->uid);
+  $profile1 = user_load((arg(1)));
+  //print '<pre>';print_r($profile1);die();
+  if($profile1->roles[6]){
+    $user_name = $profile1->name;
+  }
+  else {
+    $user_name = $user->name;
+  }
+  $output .="<div class='user-picture userpic'><label>User Picture</label><span>".theme('user_picture', array('account' =>$user_fields))."</span></div>";
+  $output .="<div class='user-right'>";
+  $output .="<div class='user-uid'>" .'<label>User Id</label>'.'<span>'. $user_name.'</span>'."</div>";
+  $output .="<div class='user-helptext'>To change your child's password, click on \"Edit Child's details\"</div>";
+  //$output .= "<div class=user-username>".drupal_render(drupal_get_form('lw_custom_change_uname'))."</div>";
+  //$output .= "<div class=user-password>". drupal_render(drupal_get_form('lw_custom_change_password'))."</div>";
+  $output .="</div>";
+  if (arg(3) == 'student'){
+   return '<h2 class="extra_title">More Information</h2>';
+ }
+ else {
+  return $output;
+ }
+}
+
+function lw_custom_change_uname($form, &$form_state) {
+  global $user;
+  $uid = user_load($user->uid);
+  $profile1=profile2_load_by_user($uid, 'student');
+  $profile = $profile1->field_alias['und'][0][value];
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Choose a User Name'),
+    '#size' => 60,
+    '#maxlength' => USERNAME_MAX_LENGTH,
+    '#default_value' => $profile,
+  );
+  $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Edit'),
+  );
+  $form['#action'] = url('user/'.$user->uid.'/edit');
+  return $form;
+}
+
+function lw_custom_change_password($form, &$form_state) {
+  global $user;
+  $form['password'] = array(
+    '#type' => 'password',
+    '#title' => t('Select Your Password'),
+    '#size' => 60,
+  );
+  $form['re_password'] = array(
+    '#type' => 'password',
+    '#title' => t('Re-Enter Password'),
+    '#size' => 60,
+  );
+  $form['submit_button_pass'] = array(
+    '#type' => 'submit',
+    '#value' => t('Edit'),
+  );
+  $form['#action'] = url('user/'.$user->uid.'/edit');
+  return $form;
+}
+
+/*
+function lw_custom_change_uname_submit($form, &$form_state) {
+  global $user;
+  print '<pre>';print_r($form_state);exit;
+  $name = $form_state['values']['name'];
+  //print '<pre>';print_r($name);exit;
+  $output .= db_update('users')
+             ->fields(array('name' => $name))
+             ->condition('uid', $user->uid)
+             ->execute();
+  return $output;
+}
+
+function lw_custom_change_password_submit ($form, &$form_state) {
+  //print '<pre>';print_r($form_state);exit;
+}
+
+function lw_custom_change_uname_validation($form, &$form_state) {
+  global $user;
+  print '<pre>';print_r($form_state);exit;
+  $query .= db_select("SELECT count(*) FROM users where name =$user->name");
+  if (count > 0){
+    drupal_set_error("username already exits");
+  }
+  else {
+    drupal_set_message("username has been update");
+  }
+
+}
+*/
+
+
+function lw_custom_menu_alter(&$items) {
+  $items['user/%user']['type'] = MENU_CALLBACK;
+  $items['user/%user/edit']['type'] = MENU_CALLBACK;
+  $items['user/%user/orders']['type'] = MENU_CALLBACK;
+ /* $items['user/reset/%/%/%'] = array(
+    'title' => 'Congratulations and Welcome back! Your account is now active.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_validate'),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    //'file' => 'user.pages.inc',
+  );*/
+
+  return ($items);
+
+}
+
+
+function customs_user_customs_redirect() {
+  global $user;
+  $uid = $user->uid;
+  drupal_goto("profile-second_parent/".$uid."/edit");
+}
+
+function lw_custom_get_badges(){
+  $arg_tid  = arg(2);
+  //print $arg_tid;die();
+  $tid_child = taxonomy_get_children(165);
+ // echo "<pre>"; print_r($tid_child);die();
+  foreach ($tid_child as $key) {
+   $tid_children[] =  $key->tid;
+
+  }
+  $child_separated = implode('+', $tid_children);
+
+  return $child_separated;
+}
+
+function lw_custom_preprocess_html (&$variables) {
+  global $user;
+  foreach ( $user->roles as $role_id => $role ) {
+    $variables['classes_array'][] = "role-id-".$role_id;
+    $variables['classes_array'][] = "role-".strtolower(drupal_clean_css_identifier($role));
+  }
+  if($user->roles[5] == 'Parent' && $user->uid != arg(1) && arg(2) == 'edit') {
+    $variables['classes_array'][] = "child_edit";
+   //$ud = user_load(arg(1));
+   //echo "<pre>";print_r($ud);die();
+
+  }
+
+  $variables['classes_array'][] = "user-uid-".$user->uid;
+
+}
+
+function subject_tid (){
+  global $user; // loged user information - needed for id
+  static $pid; // define pid(profile id) variable
+  $result = db_query('select pid from profile where uid = '.$user->uid); // query to get pid
+  foreach ($result as $record) $pid = $record->pid; // get pid
+  $profile = profile2_load($pid); // load profile fields
+  $sub_tid = $profile->field_subjects[und][0][tid];
+  $arg_url = arg(2);
+  //print $arg_url;die();
+  //if($arg_url) {
+    $tid_child = taxonomy_get_children(165);
+    foreach ($tid_child as $key) {
+      $tid_children[] =  $key->tid;
+    }
+    $child_separated = implode('+', $tid_children);
+
+  //}
+ // print_r($child_separated);die();
+    return $child_separated;
+}
+
+function user_pro() {
+  global $user, $$base_url;
+ // echo "test";
+   global $user;
+  $uid = $user->uid;
+  drupal_goto("user/".$uid);
+
+}
+
+function subs_expiration_func($child_id) {
+global $user;
+
+   $query = db_query("SELECT * FROM eck_expiry WHERE uid = $user->uid AND child_id = $child_id AND purchase_type != 'exp'")->fetchAll();
+
+
+   $out = array();
+   $s_tids = array();
+   foreach ($query as $key => $value) {
+      $value->paid = $value->purchase_type;
+
+      $s_tids[] = $value->subject_tid;
+
+      $offerid = $value->offercodeid;
+
+
+      $time = date('Y-m-d',$value->expiry_date);
+      $value->exp_str = $time;
+      $out[] = $value;
+   }
+
+    foreach ($query_free as $key => $value) {
+      $value->paid = "Free";
+      $out[$value->subject_tid] = $value;
+    }
+
+
+    if(!isset($out)) {
+      return '';
+    }
+    else {
+      return $out;
+    }
+}
+
+function subs_expiration(){
+  /*
+$child_id = arg(1);
+$out = subs_expiration_func($child_id);
+
+    $output .= "<div class='list-head'>Susbcription Information</div><table class='list-subjects'><tr class='head-subjects'><td>" . 'Subjects' . "</td><td>" . 'Duration' . "</td><td> Susbcription Type </td><td>" . 'Expiry Date' . "</td></tr>";
+
+  //print_r($name);
+  foreach ($out as $key => $value) {
+    //print_r($value->subject_tid);die();
+    $term = taxonomy_term_load($value->subject_tid);
+
+    /*
+
+    $name = $term->name;
+    $duration = 30 *$value->qty;
+    if($value->qty ==  '') {
+      $duration = 1;
+    }
+
+    if ($value->qty == '3') {
+      $time_final = strtotime('+90 days',$value->created);
+      $time = date('Y-m-d',$time_final);
+    }
+    elseif ($value->qty == '6') {
+      $time_final = strtotime('+180 days',$value->created);
+      $time = date('Y-m-d',$time_final);
+    }
+    elseif ($value->qty == '9') {
+      $time_final = strtotime('+270 days',$value->created);
+      $time = date('Y-m-d ',$time_final);
+    }
+    elseif ($value->qty == '12') {
+      $time_final = strtotime('+365 days',$value->created);
+      $time = date('Y-m-d',$time_final);
+    }
+    */
+   /*
+    if($value->exp_str != '') {
+        $time = $value->exp_str;
+    }j
+    else {
+      $time_final = $value->expiry_date;
+      $time = date('Y-m-d',$time_final);
+    }
+    //$time = date('Y-m-d h:i:s',$value->created);
+
+  $output .= "<tr><td>" . $name . "</td><td>" . $duration . "</div></td><td> ".$value->paid." </td><td>" . $time . "</td></tr>";
+  }// print_r($time);die();
+
+  $output .= "</table>";
+  return($output);
+  */
+}
+
+/*function lw_custom_node_view($node, $view_mode, $langcode) {
+   if ($node->type == 'page' && $view_mode == 'full' && $node->nid == '9393') {
+    global  $user;
+    if(arg(1) == '9393' && $user->roles[5] == 'Parent' && $user->roles[1] != "admin"){
+    //drupal_goto('thankyou');
+    //echo "HEREE1";die();
+
+    global $user;
+    $tmp = NULL;
+    session_destroy();
+    user_module_invoke('logout', $tmp, $user);
+    $user = drupal_anonymous_user();
+
+    }
+  }
+
+}*/
+
+
+/*function user_validate ($form, &$form_state, $uid, $timestamp, $hashed_pass, $action = NULL){
+          $form['message'] = array('#markup' => t('<p>one-time login for %user_name and will expire on %expiration_date.</p><p>Click on this button to log in to the site and change your password.</p>', array('%user_name' => $account->name, '%expiration_date' => format_date($timestamp + $timeout))));
+          $form['help'] = array('#markup' => '<p>' . t('This login can be used only once.') . '</p>');
+          $form['actions'] = array('#type' => 'actions');
+          $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Log in'));
+          $form['#action'] = url("user/reset/$uid/$timestamp/$hashed_pass/login");
+          return $form;
+
+}*/
+
+
+function lw_custom_cronapi($op, $job = NULL) {
+
+  $items['lw_custom_remove_subjects_cron'] = array(
+    'description' => 'remove subjects',
+    'rule' => '*/2 * * *', // Every 2 hours
+    // Note: i don't need to define a callback, i'll use "example_sendmail_cron"
+    // function
+  );
+  $items['lw_custom_coupon_expry_cron'] = array(
+    'description' => 'coupon expire',
+    'rule' => '*/12 * * *', // Every 12 hours
+    // Note: i don't need to define a callback, i'll use "example_sendmail_cron"
+    // function
+  );
+  $items['example_news_cron'] = array(
+    'description' => 'Send mail with news',
+    'rule' => '*/5 * * * *', // Every 5 minutes
+    // i must call: example_news_fetch('all')
+    'callback' => 'example_news_fetch',
+    'arguments' => array('all'),
+  );
+  return $items;
+}
+function lw_custom_coupon_expry_cron(){
+  $today = time();
+  //scenario 1 -- check for offercode whose date is expire and still active
+  //Action -- change status to 0
+  $offer_results = db_select('eck_offer_code', 'eo')
+    ->fields("eo")
+    ->condition('offer_code_end_date', $today, '<')
+    ->condition('status', 1)
+     ->condition('use_one_time', 0)
+     ->execute()->fetchAll();
+
+    $ids = array();
+    foreach ($offer_results as $offer_result) {
+      $ids[] = $offer_result->id;
+    }
+    if(array_key_exists(0, $ids)) {
+      db_update('eck_offer_code')
+          ->fields(array(
+            'status' => 0,
+          ))
+          ->condition('id', $ids, "IN")
+          ->execute();
+    }
+  //scenario 2 -- check  for offercode whose date is started and not active.
+  //Action -- change status to 1
+  $offer_results1 = db_select('eck_offer_code', 'eo')
+    ->fields("eo")
+    ->condition('offer_code_from_date', $today, '<')
+    ->condition('offer_code_end_date', $today, '>')
+    ->condition('status', 0)
+    ->execute()->fetchAll();
+    $ids1 = array();
+    foreach ($offer_results1 as $offer_result1) {
+      $ids1[] = $offer_result1->id;
+    }
+    if(array_key_exists(0, $ids1)) {
+      db_update('eck_offer_code')
+        ->fields(array(
+          'status' => 1,
+        ))
+        ->condition('id', $ids1, "IN")
+        ->execute();
+    }
+
+}
+
+function lw_custom_mail($key, &$message, $params){
+
+  // Set the mail content type to html to send an html e-mail (optional).
+ // $message['headers']['Content-Type'] = 'text/plain; charset=UTF-8; format=flowed';
+  // Grab the subject and body from params and add it to the message.
+  //
+  $url_send = "http://www.excelonz.com/user/" . $params['uid'];
+  $message['subject'] = $params['subject'];
+  $message['body'][] = t("Dear !username
+
+Greetings from Team Excelonz. We thank you once again for subscribing to our free trial offer. We trust !childname enjoyed our practice sessions and has gained from the same.
+
+As your free trial period has expired, we would request you to click on the Subscription Link given below and select from amongst our various plans and let your child continue with our practice assessments to master concepts.\n
+Subscription Link : !uid
+
+Warm Regards
+The Excelonz Team
+      ", array('!username' => ucfirst($params['username']), '!uid' => $url_send, '!childname' => ucfirst($params['childname'])),array('!uid' =>$params['uid']));
+
+}
+
+
+function lw_custom_remove_subjects_cron() {
+  // update status with db_update
+  // check for latest one scenario
+
+  $time_final = time();
+  $query = db_select('eck_expiry', 'ex')
+    ->fields('ex')
+    ->condition('ex.status', '1')
+    ->condition('ex.expiry_date', $time_final, "<")
+    ->execute()
+    ->fetchAll();
+
+
+
+  foreach ($query as $value) {
+    $parent_id[$value->child_id] = $value->uid;
+
+
+    $prof_load = profile2_load_by_user($value->child_id);
+    $subjects = $prof_load['student']->field_subjects;
+
+    foreach($subjects['und'] as $key => $val) {
+      if($val['tid'] == $value->subject_tid) {
+        unset($subjects['und'][$key]);
+      }
+    }
+    if(array_key_exists('student', $prof_load)) {
+      $prof_load['student']->field_subjects = $subjects;
+      profile2_save($prof_load['student']);
+    }
+  }
+
+  foreach ($parent_id as $key => $value) {
+
+    $child_info = user_load($key);
+    $child_name = $child_info->field_first_name['und'][0]['value'];
+
+    $parent_info = user_load($value);
+    $parent_mail = $parent_info->mail;
+    $parent_uid = $value;
+    $params = array(
+      'username' => $parent_info->name,
+      'uid' => $parent_uid,
+      'childname' =>$child_name,
+      'subject' => "Excelonz.com Subscription notification",
+    );
+
+    drupal_mail('lw_custom', 'lw_custom_mail', $parent_mail, "en", $params);
+
+  }
+
+
+  $ex_update = db_update('eck_expiry')
+                ->fields(array('status' => '0'))
+                ->condition('expiry_date', $time_final, "<")
+                ->execute();
+
+}
+
+function lw_custom_user_view($account, $view_mode, $langcode) {
+
+  if (strpos($_SERVER['HTTP_REFERER'],'second') !== false ) {
+    if (strpos($_SERVER['HTTP_REFERER'],'profile-second') !== false ) {
+      return;
+    }
+    global $user;
+    drupal_set_message(t("Please enter your password."), 'status');
+    drupal_goto('user/' . $user->uid . '/edit');
+
+  }
+
+}
+
+/*
+ * Implements hook_views_query_alter()
+
+function lw_custom_views_query_alter(&$view, &$query) {
+
+
+//simple example: change the order of the master display
+  //if you want to do it only  on a certain display add something
+  // like  "&&$view->current_display == 'panel_page_1'"
+  if ($view->name == 'badges2' &&$view->current_display == 'block') {
+
+
+//to find out what the fieldname ist: use devel and add your desired field as
+    //first filter ( =>orderby[0]). install devel and uncomment the next line
+    //dpm($view->query->orderby)
+
+
+$view->query->orderby[0]['field'] = "CASE FIELD_NAME WHEN 'apple' THEN 1 WHEN 'zebra' THEN 2 WHEN 'banna' THEN 3 ELSE 4 END";
+  }
+}
+*/
+
+function lw_custom_permission() {
+  return array(
+    'Bulk upload permission' => array(
+      'title' => t('Bulk upload files '),
+    ),
+  );
+}
+
+/*
+function lw_custom_permission(){
+  return array(
+    'administer import' => array(
+    'title' => t('Administer files import'),
+    'description' => t('Import files.'),
+    ),
+  );
+}
+*/
+
+function lw_custom_menu(){
+$items = array();
+  $items['bulk_upload_csv'] = array(
+    'title' => 'Bulk Upload for User',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_bulkupload_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('Bulk upload permission'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['check-oderID'] = array(
+    'page callback' => 'child_autologin_checkout_complete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+   
+  $items['check-user'] = array(
+    'page callback' => 'child_check_user',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+$items['child_school/autocomplete'] = array(
+    'page callback' => 'child_school_name_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+$items['child_school_location/autocomplete'] = array(
+    'page callback' => 'child_school_location_autocomplete',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function user_bulkupload_form($form, &$form_state) {
+    $form = array();
+    $form['student_file'] = array(
+        '#type' => 'file',
+        '#title' => t('Upload Student CSV'),
+        '#description' => t('Upload Student CSV file, allowed extensions: csv'),
+    );
+    $form['teacher_file'] = array(
+        '#type' => 'file',
+        '#title' => t('Upload Teacher CSV'),
+        '#description' => t('Upload teacher CSV file, allowed extensions: csv'),
+    );
+
+    $form['parent_file'] = array(
+        '#type' => 'file',
+        '#title' => t('Upload Parent CSV'),
+        '#description' => t('Upload Parent CSV file, allowed extensions: csv'),
+    );
+
+    $form['html'] = array(
+        '#type' => 'markup',
+        '#markup' => '<strong>Go To Migration Link     </strong><span>'.l('click here', 'admin/content/migrate').'</span><br/><br/>',
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+    return $form;
+}
+function user_bulkupload_form_validate($form, &$form_state) {
+    //$first_var = variable_get('migration_student_csv_file');
+    $today = date("Y-m-d-H-i-s");
+    $student_file = $_FILES['files']['name']['student_file'];
+    $teacher_file = $_FILES['files']['name']['teacher_file'];
+    $parent_file =  $_FILES['files']['name']['parent_file'];
+
+//File Rename for Student
+    if($student_file){
+        $student_file_pieces = explode(".", $student_file);
+        $student_file_new_name = $student_file_pieces[0].'_'.$today.'.'.$student_file_pieces[1] ;
+        variable_set('migration_student_csv_file',$student_file_new_name);
+        $_FILES['files']['name']['student_file'] = $student_file_new_name;
+        $file = $student_file;
+        $name = 'Student';
+     }
+    //File Rename for Teacher
+    if($teacher_file){
+        $teacher_file_pieces = explode(".", $teacher_file);
+        $teacher_file_new_name = $teacher_file_pieces[0].'_'.$today.'.'.$teacher_file_pieces[1] ;
+        variable_set('migration_teacher_csv_file',$teacher_file_new_name);
+        $_FILES['files']['name']['teacher_file'] = $teacher_file_new_name;
+        $file = $teacher_file;
+        $name = 'Teacher';
+
+    }
+    //File Rename for Parent
+    if($parent_file){
+        $parent_file_pieces = explode(".", $parent_file);
+        $parent_file_new_name = $parent_file_pieces[0].'_'.$today.'.'.$parent_file_pieces[1] ;
+        variable_set('migration_parent_csv_file',$parent_file_new_name);
+        $_FILES['files']['name']['parent_file'] = $parent_file_new_name;
+        $file = $parent_file;
+        $name = 'Parent';
+}
+    $student_file1 = file_save_upload('student_file', array('file_validate_extensions' => array('csv')), 'public://student_csv', FILE_EXISTS_REPLACE);
+    $teacher_file1 = file_save_upload('teacher_file', array('file_validate_extensions' => array('csv')), 'public://teacher_csv', FILE_EXISTS_REPLACE);
+    $parent_file1 = file_save_upload('parent_file', array('file_validate_extensions' => array('csv')), 'public://parent_csv', FILE_EXISTS_REPLACE);
+
+if(!$file){
+        form_set_error('file', t('No file was uploaded.'));
+
+     }else{
+        drupal_set_message(t('The form has been submitted and '.$name.' CSV has been saved, filename: @filename.', array('@filename' => $file)));
+
+
+    }
+}
+
+/*
+*subject return when section fill
+**/
+
+function ajax_example_dependent_dropdown_callback($form, $form_state) {
+  return $form['subject'];
+}
+
+/*
+*ajax callback when section fill subject value return
+*
+*@perm - $key - section value 
+* @return subject return
+*/
+
+function lw_teacher_subject_second_dropdown_options($key = '') {
+global $user;
+$uid = $user->uid;
+$result = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','teacher_profile')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+$pid = $result[0]->pid;
+$class_query_fetch = db_query("SELECT cos.field_collection_of_subject_tid
+                         FROM field_data_field_collection_class_subject ccs
+                         JOIN field_data_field_collection_of_class coc 
+                         ON coc.entity_id = ccs.field_collection_class_subject_value 
+                         JOIN field_data_field_collection_of_subject cos
+                         ON cos.entity_id = ccs.field_collection_class_subject_value 
+                         WHERE ccs.entity_id = :pid AND coc.field_collection_of_class_tid = :key", 
+                         array(':pid'=> $pid,':key'=> $key));
+  $sec_tids = array();
+  $child_str = '(';
+  foreach ($class_query_fetch as $value) {
+      $child_str .= $value->field_collection_of_subject_tid . ",";
+  }
+  $child_str .= '0)';
+ $class_name = db_query("SELECT name FROM taxonomy_term_data WHERE tid IN " . $child_str . " order by tid ASC");
+   foreach($class_name as $val){
+       $subject_name[$val->name] = $val->name;
+        $subject_name_array = array('-Select-')+$subject_name;
+}
+ if(isset($subject_name_array)){
+     return $subject_name_array;
+    }else{
+      return $option = array('-Select-');
+    }
+}
+
+function assignment_link_in_parent_profile($cid){
+    //for subject
+   $out = subs_expiration_func($cid);
+  foreach ($out as $key => $value) {
+               $sub_type = $value->paid;
+               $expiry_date = $value->expiry_date;
+    }
+    //for worksheet
+ $work_out = work_expiration_func($cid);
+ foreach ($work_out as $key => $value) {
+          $work_type = $value->paid;
+    }
+
+  $today = date("y.m.d");
+  $time_final = strtotime($today);
+
+  $result = db_select('eck_parent_assignment', 'eck_pa')
+            ->fields('eck_pa',array('uid'))
+            ->condition('uid',$cid)
+            ->execute();
+  $num_of_results = $result->rowCount();
+  $tot_worksheet = 5 - $num_of_results;
+ $assignment = '<div id = "buy_subs-link">'.l(t('Click & download worksheets'), 'parent/assignment/'.$cid.'/free'). '</div>';
+   //if(($sub_type != 'paid' || $work_type !='paid') && (!isset($work_type))) {
+if($sub_type == 'free' && $work_type != 'paid') {
+      if(($expiry_date > $time_final) && ($num_of_results < 5)){
+       $Assignment ="<div class =child_dob><label>Worksheets(".$tot_worksheet.")</label>" .''.$assignment.''."</div>";
+    }
+  }
+return $Assignment;
+}
+
+/*
+*
+*Excelonz Free Trial Form form all user
+**/
+function excelonz_free_trial_block_form($form, &$form_state) {
+/*
+*if User Already Perchage Free Subscription
+**/
+global $user;
+ $userid = $user->uid;
+  $cur_id = user_load($userid);// loading the parents id
+  $childid = array();
+  $r_child =arg(2); //get child id from url
+  $child_arr = $cur_id->field_child_id['und'];
+if(is_numeric($r_child) && isset($r_child)){
+ $out = subs_expiration_func($r_child);
+ foreach ($out as $key => $value) {
+          $sub_type = $value->paid;
+    }
+}
+if(is_numeric($r_child) && isset($r_child)){
+$work_out = work_expiration_func($r_child);
+ foreach ($work_out as $key => $value) {
+          $work_type = $value->paid;
+    }
+}
+  $form = array();
+  $form['description1'] = array('#markup' => '<div class="excelonz_free_taial">' . t('Excelonz Free Trial').'</div>');
+  $form['description2'] = array('#markup' => '<div class="get_online_practise ">' . t('Get Online Practice Session and 5 worksheets for').'</div>');
+  $form['description3'] = array('#markup' => '<div class="subject_mathtext">' . t('Maths + Science + English + SST + GK').'</div>');
+  $form['description4'] = array('#markup' => '<div class="for-class-all">' . t('FREE for 7 Days').'</div>');
+if(!isset($sub_type) && !isset($work_type)){
+ $form['submit'] = array('#type' => 'submit', '#value' => t('Sign up for FREE Practice'),);
+}
+return $form;
+}
+
+function excelonz_free_trial_block_form_submit($form, &$form_state) {
+global $user;
+if($user->uid == 0){
+  $_SESSION['duration_free'] = 1;
+      drupal_set_message(t("Your Free Trial will be activated once you register yourself and your child."), 'status', FALSE);
+      drupal_goto("user/register");
+    }
+    else{
+    static_page_free_product_add();
+    second_child_free_subscription();
+    }
+
+}
+
+function work_expiration_func($child_id) {
+global $user;
+
+   $query = db_query("SELECT * FROM eck_worksheet_expiry WHERE uid = $user->uid AND child_id = $child_id AND purchase_type != 'exp' AND status != '0'")->fetchAll();
+   $out = array();
+   $s_tids = array();
+   foreach ($query as $key => $value) {
+      $value->paid = $value->purchase_type;
+
+      $s_tids[] = $value->subject_tid;
+
+      $offerid = $value->offercodeid;
+      $time = date('Y-m-d',$value->expiry_date);
+      $value->exp_str = $time;
+      $out[] = $value;
+   }
+   foreach ($query_free as $key => $value) {
+      $value->paid = "Free";
+      $out[$value->subject_tid] = $value;
+    }
+    if(!isset($out)) {
+      return '';
+    }
+    else {
+      return $out;
+    }
+}
+
+function download_paid_worksheet_link_in_parent_profile($cid){
+$out = work_expiration_func($cid);
+$today = date("y.m.d");
+$time_exit = strtotime($today);
+ $sub_type = "";
+    foreach ($out as $key => $value) {
+      $term = taxonomy_term_load($value->subject_tid);
+      $name = $term->name;
+      if($value->exp_str != '') {
+        $time = $value->exp_str;
+      }
+      else {
+        $time_final = $value->expiry_date;
+        $time = date('Y-m-d',$time_final);
+      }
+$num_of_download_worksheet = paid_user_worksheet_count($cid,$name);
+$tot_worksheet = 25 - $num_of_download_worksheet;
+if(($value->expiry_date > $time_exit) && ($num_of_download_worksheet < 25)){
+    if($sub_type != $value->paid) {
+        $output .= "<div class='child_class child_leftpad'><label>Subscription Type</label>".'<span>'.' Excelonz Worksheets'.'</span></div>';
+        $output .= "<div class='child_class'><label><b>Subjects</b></label>".'<span><b>Expiry date</b></span></div>';
+        $sub_type = $value->paid;
+      }
+  $assignment = '<div id = "buy_subs-link">'.l(t('Download Here'), 'parent/assignment/'.$cid.'/'.$value->subject_tid). '</div>';
+  $output .= "<div class='child_class'><label>" .$name.' Worksheets('.$tot_worksheet.')'."</label>";
+  $output .= "<span>".$time."</span>" .$assignment."</div>";
+  }else{
+ db_update('eck_worksheet_expiry')
+             ->fields(array('status' => '0'))
+             ->condition('child_id', $cid)
+             ->condition('subject_tid', $value->subject_tid)
+             ->execute();
+
+  }
+}
+   return $output;
+}
+ 
+ function paid_user_worksheet_count($cid,$name){
+  global $user;
+  $uid = $user->uid;
+  $subject_query = db_select('eck_parent_assignment', 'eck_pa');
+  $subject_query->join('eck_worksheet_expiry','eck_we','eck_we.child_id=eck_pa.uid');
+  $subject_query->fields('eck_pa',array('id'));
+ // $subject_query->fields("th", array("tid"));
+  $subject_query->condition('eck_pa.uid',$cid);
+  $subject_query->condition('eck_pa.subject',$name);
+  $subject_query->condition('eck_pa.worksheet_type','paid');
+  $subject_query->condition('eck_we.status','1');
+  $subject_query->where('eck_we.id=eck_pa.worksheet_exp_tid');
+  $subject_result = $subject_query->execute()->fetchall();
+  //print_r($subject_result);
+ $count_download_worksheet = count($subject_result);
+return $count_download_worksheet;
+ }
+
+
+function lw_parent_child_registration(&$form, $form_state, $form_id){
+  //Parent Form Details
+    $parent_mail =  $form_state['values']['mail'];
+  //Child Form Detail
+    $child_first_name =  $form_state['values']['child_first_name'];
+    $child_last_name = $form_state['values']['child_last_name'];
+    $gender = $form_state['values']['gender'];
+    $Childs_date_of_Birth = $form_state['values']['Childs_date_of_Birth'];
+    $child_name_of_school = $form_state['values']['child_name_of_school'];
+    $child_branch = $form_state['values']['child_branch'];
+    $child_school_city = $form_state['values']['child_school_city']; 
+    $class_and_section_class = $form_state['values']['class_and_section'][0]['tid'];
+    $class_and_section_section = $form_state['values']['class_and_section'][1]['tid'];
+    $child_password = $form_state['values']['child_conf_password'];
+    $child_termandcondetion = $form_state['values']['termandcondetion'];
+    $_SESSION['reg_child_pass'] = $child_password;
+    $roles = 6;
+   
+//Child form school, branch and city TID
+$field_schools_term = taxonomy_get_term_by_name($child_name_of_school);
+$field_branch_term = taxonomy_get_term_by_name($child_branch);
+ $field_school_city_term = taxonomy_get_term_by_name($child_school_city);
+if (!empty($field_schools_term)) {
+    $field_schools_term = array_values($field_schools_term);
+     $field_schools_term_tid = $field_schools_term[0]->tid;
+  }
+if (!empty($field_branch_term)) {
+    $field_branch_term = array_values($field_branch_term);
+     $field_branch_term_tid = $field_branch_term[0]->tid;
+  }
+if (!empty($field_school_city_term)) {
+    $field_school_city_term = array_values($field_school_city_term);
+     $field_school_city_term_tid = $field_school_city_term[0]->tid;
+  }
+  
+//Create Child
+  //  $newUser = entity_create('user', array());
+    $newUser->is_new = TRUE;
+    $newUser->status = TRUE;
+    $newUser->name = 'pppppp';
+    $newUser->pass = user_hash_password($child_password);
+    $newUser->mail = 'sharedemail2_'.$parent_mail;
+    $newUser->init = 'sharedemail2_'.$parent_mail;
+    $newUser->roles[6] = 1;
+   // $newUser->data = array('regpass' => $child_password);
+    $newUser->field_first_name[LANGUAGE_NONE][0]['value'] = $child_first_name ;
+    $newUser->field_last_name[LANGUAGE_NONE][0]['value'] = $child_last_name;
+    $newUser->field_date_of_birth[LANGUAGE_NONE][0]['value'] = $Childs_date_of_Birth;
+   // entity_save('user', $newUser);
+    user_save($newUser, array('regpass' => $child_password));
+    $userUid = $newUser->uid;
+    $child_pass = user_hash_password($child_password);
+  //Create Child Profile form
+    $main_profile = entity_create('profile2', array('type' => 'student'));
+    $main_profile->uid = $newUser->uid;
+    $main_profile->field_schools[LANGUAGE_NONE][0]['tid'] = $field_schools_term_tid;
+    $main_profile->field_branch[LANGUAGE_NONE][0]['tid'] = $field_branch_term_tid;
+    $main_profile->field_school_city[LANGUAGE_NONE][0]['tid'] = $field_school_city_term_tid;
+    $main_profile->field_child_gender[LANGUAGE_NONE][0]['value'] = $gender;
+    $main_profile->field_class_user[LANGUAGE_NONE][0]['tid'] = $class_and_section_class;
+    $main_profile->field_class_user[LANGUAGE_NONE][1]['tid'] =  $class_and_section_section;
+    $main_profile->field_term_and_condetion[LANGUAGE_NONE][0]['value'] =  $child_termandcondetion;
+    $main_profile->save();
+    $newUser->profiles['student'] = $main_profile;
+    update_child_username($newUser->uid,$child_first_name,$child_last_name,$Childs_date_of_Birth);
+    $query = db_select('users', 'u');
+    $query->fields('u', array('name','pass'));
+    $query->condition('uid', $newUser->uid);
+    $result = $query->execute()->fetchAll();
+    $uname = $result[0]->name;
+    $pass =  $result[0]->pass;
+ global $user,$base_url;
+   if(array_key_exists('duration_free', $_SESSION) && $_SESSION['duration_free'] == 1) {
+       static_page_free_product_add();
+       unset($_SESSION['duration_free']);
+      child_auto_login_handelar($uname,$child_password);
+   }elseif(array_key_exists('anonymous_coupon_code_one_time', $_SESSION)) {
+           activate_one_time_coupon_code_for_anonymous();
+           unset($_SESSION['anonymous_coupon_code_one_time_conform']);
+           unset($_SESSION['anonymous_coupon_code_one_time']);
+           child_auto_login_handelar($uname,$child_password);
+  }else{
+           drupal_goto('pricingplans/form/'.$newUser->uid);
+   }
+ return $newUser;
+//    global $user;
+//   $_SESSION['messages']['status']= '';
+//   unset($_SESSION['messages']['status']);
+//  $parent_uid = $user->uid;
+//  $parent_uname = $user->name;
+//   drupal_set_message("Welcome '".$parent_uname."' and thank you for registering yourself with us. Once you register your child, you will receive an email from Excelonz giving you details of your and your child's account on your registered email id. In case the same is visible in spam/ junk, please mark it as safe. 
+// Kindly proceed to register your child");
+//   drupal_goto('admin/people/p2rp-create/student');
+}
+
+//update Child User name
+
+function update_child_username($userUid,$child_first_name,$child_last_name,$Childs_date_of_Birth){
+    $f_name = $child_first_name. ".";
+    $l_name = substr($child_last_name, 0, 1);
+    $dob = substr($Childs_date_of_Birth, 2, -6 );
+    $abc = $f_name . $l_name . $dob;
+   /*Code to match if user name already exist or not if exists then append underscore(_) and a sequetial number with that*/    
+    $abc = strtolower($abc);
+    $query = db_select('users', 'u');
+    $query->fields('u', array('name'));
+    $result = $query->execute()->fetchAll();
+    $new_user = array();
+      foreach($result as $key) {
+        $name = strtolower($key->name);
+        $new_user[] = $name;
+
+      }
+    if(in_array($abc,$new_user)) {
+       $n  = username_last_part($abc);
+       $underscore = explode('_',$n);
+       $count = $underscore[1];
+         if(!empty($underscore[1])) {
+           $count = $count+1;
+           $user_name =  $abc.'_'.$count ;
+         }
+         else {
+           $user_name =  $abc.'_'.'1';
+         }
+    }
+   else {
+     $user_name =  $abc;
+   }
+     db_update('users')
+          ->fields(array(
+            'name' => $user_name,
+          ))
+          ->condition('uid', $userUid)
+          ->execute();
+}
+/**
+ * Implements hook_form_FORM_ID_alter() 
+ */
+function lw_custom_form_profile2_edit_student_form_alter(&$form, &$form_state) {
+  $form['profile_student']['field_term_and_condetion']['und']['#title'] = "Please accept Terms and Conditions. This";
+$form['profile_student']['field_term_and_condetion']['und']['#default_value'][0] = "";
+$form['profile_student']['field_term_and_condetion']['#weight'] = 200;
+$form['profile_student']['field_class_user']['#weight'] = 2;
+
+}
+
+
+function excelonz_footer_display_sec_block(){
+ global $user,$base_url;
+//fetch first child
+$sql = db_query("SELECT field_child_id_uid FROM field_data_field_child_id WHERE entity_id =".$user->uid);
+ foreach($sql as $row){
+  
+      $first_child = $row->field_child_id_uid;
+ }
+$output = '';
+$output  .= '<div id="footer-sec-block"><ul>';
+if($user->uid == 0){
+   $output .= '<li><a href="'.$base_url.'/pricingplans" title="">Pricing</a></li>';
+   $output .= '<li><a href="'.$base_url.'/pricingplans" title="">Sign Up</a></li>';
+   $output .= '<li><a href="'.$base_url.'/user/login" title="">Member Login</a></li>';
+}elseif(isset($first_child)){
+  $output .= '<li><a href="'.$base_url.'/pricingplans/form/'.$first_child .'" title="">Pricing</a></li>';
+}else{
+  $output .= '<li><a href="#" title="">Pricing</a></li>';
+}
+ $output .= '</ul></div>';
+return $output;
+}
+
+
+function class_check_validation($form, $form_state)  {
+$one_time_offercode = $_SESSION['anonymous_coupon_code_one_time_conform'];
+$offer_code = str_split($one_time_offercode);
+$offer_code_child_class = $offer_code[7];//echo '<br/>';
+$parent_select_class =$form_state['values']['profile_student']['field_class_user']['und'][0]['tid']; 
+$child_class_term = taxonomy_term_load($parent_select_class);//echo '<br/>';
+$child_class_term_name = $child_class_term->name;
+
+if($offer_code_child_class != $child_class_term_name && $offer_code_child_class != 0){
+         form_set_error($parent_select_class,'This Offer Code is valid for Class '.$offer_code_child_class. '. Please Select Class '.$offer_code_child_class.'.');
+   }
+}
+
+function child_autologin_checkout_complete($order_id,$status){
+
+  global $base_url,$user;
+  $subject_query = db_select('eck_subscription', 'eck_sub');
+  $subject_query->join('commerce_order','co','co.order_id = eck_sub.order_id');
+  $subject_query->fields('eck_sub',array('child_uid'));
+  $subject_query->condition('eck_sub.worksheet_tid','0','=');
+  $subject_query->condition('co.order_id',$order_id);
+  $subject_query->condition('co.status',$status);
+  $subject_result = $subject_query->execute()->fetchall();
+
+
+ if(array_key_exists('0', $subject_result)) {
+        $child_Uid = $subject_result[0]->child_uid;
+        $childLoad = user_load($child_Uid);
+        $user_name =  $childLoad->name;
+        $pass =  $childLoad->data['regpass']['regpass'];
+        $child_detail = array('uname'=> $user_name,'pass'=>$pass);
+        $child_Uname = $child_detail['uname'];
+        $ChildPass = $child_detail['pass'];
+        child_auto_login_handelar($child_Uname,$ChildPass);
+}else{
+  drupal_goto($base_url.'/user/'.$user->uid);
+}
+
+
+//return $child_detail;
+}
+
+function second_child_submit_handler($form, $form_state){
+     $_SESSION['reg_child_pass'] = $form_state['values']['pass'];
+}
+
+function second_child_free_subscription(){
+    $child_Uid = arg(2);
+    $childLoad = user_load($child_Uid);
+    $user_name =  $childLoad->name;
+    $pass =  $childLoad->data['regpass']['regpass'];
+    child_auto_login_handelar($user_name,$pass);
+}
+
+function child_auto_login_handelar($child_Uname,$ChildPass){
+  global $base_url;
+if(user_authenticate($child_Uname, $ChildPass)) {
+         $user_obj = user_load_by_name($child_Uname);
+         $form_state = array();
+         $form_state['uid'] = $user_obj->uid;
+         user_login_submit(array(), $form_state);
+         drupal_goto($base_url.'/student/dashboard');
+     }
+}
+
+
+function child_check_user(){
+ 
+$uid = '24903';
+ $childLoad = user_load($uid);
+ echo '<pre>';
+ print_r($childLoad);
+
+
+
+}
+
+
+function lw_custom_user_presave(&$edit, $account){
+     global $user;
+     $pass = $account->pass;
+if($_SESSION['reg_child_pass'] != ''){
+     $edit['data']['regpass'] = array('regpass' =>  $_SESSION['reg_child_pass']);
+   }
+   unset($_SESSION['reg_child_pass']);
+}
+
+function lw_parent_child_registration_validate($form, $form_state){
+$one_time_offercode = $_SESSION['anonymous_coupon_code_one_time'];
+$offer_code = str_split($one_time_offercode);
+$offer_code_child_class = $offer_code[7];//echo '<br/>';
+$parent_select_class =$form_state['values']['class_and_section'][0]['tid']; 
+$child_class_term = taxonomy_term_load($parent_select_class);//echo '<br/>';
+$child_class_term_name = $child_class_term->name;
+if($offer_code_child_class != $child_class_term_name && $offer_code_child_class != 0){
+         form_set_error($parent_select_class,'This Offer Code is valid for Class '.$offer_code_child_class. '. Please Select Class '.$offer_code_child_class.'.');
+   }
+
+}
+
+
+function lw_custom_mail_alter(&$message) {
+  if ($message['id'] == 'user_register_no_approval_required') {
+     global $user;
+  $mess = $message['params']['account'];
+  $paret_mail =  $mess->mail;
+  $parent_password =  $mess->password;
+  $parent_first_name =  $mess->field_first_name['und'][0]['value'];
+  $child_first_name =  $mess->child_first_name;
+  $child_last_name =  $mess->child_last_name;
+  $Childs_date_of_Birth =  $mess->Childs_date_of_Birth;
+  $child_conf_password =  $mess->child_conf_password;
+  $child_user_name = return_updates_child_username($child_first_name,$child_last_name,$Childs_date_of_Birth);
+   $message['body'][0] = parent_child_detail_mail($paret_mail,$parent_password,$child_user_name,$child_conf_password);
+  }
+ 
+}
+
+function parent_child_detail_mail($paret_mail,$parent_password,$child_user_name,$child_conf_password){
+  $output = '  <html>
+  <head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="width=320, target-densitydpi=device-dpi" name="viewport">
+  <body>
+    <table id="background-table"  cellspacing="0" cellpadding="0" border="0" align="left" style="background:#F7F7F7">
+      <tbody>
+        <tr>
+          <td>
+
+            <table class="w640" width="640" cellspacing="0" cellpadding="0" border="0" style="margin:0 10px;background:#F7F7F7">
+              <tbody>
+
+                <tr>
+                  <td class="w640" width="640">
+                    <table id="top-bar" class="w640" width="640" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff">
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="header" class="w640" width="640" bgcolor="#ffffff" align="center">
+                  <div align="center" style="text-align: center;background:#F7F7F7">
+                  <a href="http://excelonz.com/">
+                  <img id="customHeaderImage" class="w640" width="140" border="0" align="top" style="display: inline" src="http://www.excelonz.com/sites/all/themes/lw_theme/images/html_mail_image/excelonzlogo.png" editable="true" label="Header Image">
+                  </a>
+                  </div></td>
+                </tr>
+
+               <tr id="simple-content-row">
+                  <td class="w640" width="640" bgcolor="##F7F7F7"></td></tr></tbody></table>
+                    <table class="w640" width="640" cellspacing="0" cellpadding="0" border="0">
+                      <tbody>
+                        <tr style="display: inline-table;">
+                          <td class="w30" width="27"></td>
+                          <td class="w580 tot" width="580" style="border: 1px solid #EFCF61;border-radius: 4px;padding-left: 9px;background:white;font-family:arial;font-size: 14px;font-weight: normal;width:614px;">
+                          <repeater>
+                          <layout label="Text with right-aligned image">
+                              <div class="article-content" align="left">
+                              <multiline label="Description"> Hello '.$parent_first_name.',
+                              <div style="margin-top:10px;margin-bottom:10px;">
+                              Welcome to the world of Excelonz. 
+                              </div>
+                               <div style="margin-top:10px;margin-bottom:10px;">
+                              We just can’t wait to get your child started. So here are your child’s login details:
+                              </div>
+                              <div class="credentials" style="margin-top:10px;margin-bottom:10px;">
+                             Login ID: '.$child_user_name.'
+                             Password: '.$child_conf_password.'
+                              </div>
+
+                              <div style="margin-top:10px;margin-bottom:10px;">
+                              Your child needs to use the above ID for practicing at Excelonz.:
+                              </div>
+                              <div style="margin-top:10px;margin-bottom:10px;">
+                              As a parent, you have a different ID from your child. Your login ID is:
+                              </div>
+                              <div class="credentials" style="margin-top:10px;margin-bottom:10px;">
+                             Login ID: '.$paret_mail.'
+                             Password: '.$parent_password.'
+                              </div>
+
+                              <div style="margin-top:10px;margin-bottom:10px;">
+                              When you login using your id and password you will be directed to “My Account” page. You can use this to view your child’s performance reports, inherent skills and weaknesses, create worksheets for your child if you would like her/him to focus on any particular topic(s) or subject(s), add another child, buy or renew your subscription. 
+                              </div>
+                              <div style="margin-top:10px;margin-bottom:10px;">Get your child to login with their very own Excelonz id. You can also change your password directly from your sign in link.</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">Important information:</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">1. Your child needs to close the practice session by clicking “Finish” button before selecting other topics or logging out. This is to ensure our system capture and shows correct report of the practice session.</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">2. To cross a level your child needs to get 15 correct answers of the topic he selected for practice.</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">3. Revisions and Tests only get activated once your child reaches level 4</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">4. Your child earns one Excelonz reward point for every correct answer</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">5. Your child earns bonus Excelonz reward points when they cross each level</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">6. Your child wins a Learners Badge when they cross level 3</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">7. Your child wins a Masters Trophy when they cross level 5</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">In case we can be of any assistance, please feel free to write to us at support@excelonz.com.</div>
+                              <div style="margin-top:10px;margin-bottom:10px;">
+                              Thank You!
+                              </div>
+                              <div style="margin-top:10px;margin-bottom:10px;"> Team Excelonz</div>
+                              </multiline>
+                              </div>
+                            
+                            
+                        </td>
+                        </tr>
+              </tbody>
+            </table>
+
+                        <table class="w580" width="580" cellspacing="0" cellpadding="0" border="0">
+                          <tbody>
+                            <tr>
+                              <td class="imageset" width="28" style="margin-left:30px;margin-top:25px;display:block;">
+                              <img class="whdf" width="100" border="0" editable="true" label="Image" align="left" src="http://www.excelonz.com/sites/all/themes/lw_theme/images/html_mail_image/logo2.png" style="display: block;height: 152px;margin-left: 19px;width: 146px;"></td>
+                              <td style="font-family:arial;font-size: 10px;font-weight: normal;" width="380"><p>Kindly Note: System requirements for using Excelonz</p>
+                              <ul>
+                              <li>Excelonz is best used on a Computer or Laptop.</li>
+                              <li>We recommend the following versions of browsers for the best experience:
+                              <ul>
+                              <li> Firefox version 18 & above</li>
+                              <li> Google Chrome version 26 and above</li>
+                              <li>Safari version 6 and above</li>
+                              <li>Internet Explorer version 9 and above</li>
+                              </ul>
+                              </li>
+                              <li>Other/ Older browsers may NOT display pages properly.</li>
+                              <li>Please update your browser to the most recent version to avoid any
+                              problems.</li>
+                              <li> Broadband/ High speed Internet is recommended for optimal experience.</li>
+                              </ul>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+              </tbody>
+            </table>
+          </td>
+          </tr>
+          </tbody>
+          </table>
+</body>
+</html>';
+
+  return $output;
+}
+
+
+//update Child User name
+
+function return_updates_child_username($child_first_name,$child_last_name,$Childs_date_of_Birth){
+    $f_name = $child_first_name. ".";
+    $l_name = substr($child_last_name, 0, 1);
+    $dob = substr($Childs_date_of_Birth, 2, -6 );
+    $abc = $f_name . $l_name . $dob;
+   /*Code to match if user name already exist or not if exists then append underscore(_) and a sequetial number with that*/    
+    $abc = strtolower($abc);
+    $query = db_select('users', 'u');
+    $query->fields('u', array('name'));
+    $result = $query->execute()->fetchAll();
+    $new_user = array();
+      foreach($result as $key) {
+        $name = strtolower($key->name);
+        $new_user[] = $name;
+
+      }
+    if(in_array($abc,$new_user)) {
+       $n  = username_last_part($abc);
+       $underscore = explode('_',$n);
+       $count = $underscore[1];
+         if(!empty($underscore[1])) {
+           $count = $count+1;
+           $user_name =  $abc.'_'.$count ;
+         }
+         else {
+           $user_name =  $abc.'_'.'1';
+         }
+    }
+   else {
+     $user_name =  $abc;
+   }
+     return $user_name;
+}
+
+/**
+ * Implements hook_user_login
+ */
+
+function lw_custom_user_login(&$edit, $account) {
+//Redirect a parent user when he/she  login using login block - STARTS
+  global $base_url;
+  $http_referrer = '/user/register';
+  $path = $base_url.$http_referrer;
+  $text = $edit['input']['op'];
+  $form_id = $edit['input']['form_id'];
+  $role = $account->roles['5'];
+  $uid = $edit['uid'];
+  if($role == 'Parent') {
+    if($_SERVER['HTTP_REFERER'] != $path && $text == 'Log in' && $form_id == 'user_login_block') {
+      $_GET['destination'] = 'user/'.$uid;
+    }
+  }
+   if($role == 'Parent') {
+    if($_SERVER['HTTP_REFERER'] == $path && $text == 'Log in' && $form_id == 'user_login_block') {
+      $_GET['destination'] = 'user/'.$uid;
+    }
+  }
+//Redirect a parent user when he/she  login using login block - ENDS
+}
+
+function child_school_name_autocomplete($string) {
+  $matches = array();
+  $subject_query = db_select('taxonomy_term_data', 'td');
+  $subject_query->join("field_data_field_schools", "fs",'td.tid = fs.field_schools_tid');
+  $subject_query->fields("td", array("name"));
+  $subject_query->condition('td.name', '%' . db_like($string) . '%', 'LIKE');
+  $subject_query->range(0, 10);
+  $subject_result = $subject_query->execute()->fetchall();
+  // add matches to $matches  
+  foreach ($subject_result as $row) {
+    $matches[$row->name] = check_plain($row->name);
+  }
+    // return for JS
+  drupal_json_output($matches);
+}
+
+function child_school_location_autocomplete($string) {
+  $matches = array();
+  $subject_query = db_select('taxonomy_term_data', 'td');
+  $subject_query->join("field_data_field_school_city", "fs",'td.tid = fs.field_school_city_tid');
+  $subject_query->fields("td", array("name"));
+  $subject_query->condition('td.name', '%' . db_like($string) . '%', 'LIKE');
+  $subject_query->range(0, 10);
+  $subject_result = $subject_query->execute()->fetchall();
+  // add matches to $matches  
+  foreach ($subject_result as $row) {
+    $matches[$row->name] = check_plain($row->name);
+  }
+    // return for JS
+  drupal_json_output($matches);
+}

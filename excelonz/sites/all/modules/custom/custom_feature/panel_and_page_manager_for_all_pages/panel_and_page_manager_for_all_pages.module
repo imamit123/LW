@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Panel and page manager for all pages feature.
+ */
+
+include_once 'panel_and_page_manager_for_all_pages.features.inc';

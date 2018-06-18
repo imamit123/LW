@@ -1,0 +1,991 @@
+<?php
+/*custom block for menu tabs on Parent assignment page */
+
+function lw_parent_assignment_block_info() {
+    $block = array();
+    $blocks['create_parent_assignment'] = array(
+        'info' => t('Create Parent Assignment'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['view_parent_assignment'] = array(
+        'info' => t('View Parent Assignment'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['parent_detail_assignment_view'] = array(
+        'info' => t('Parent Detail Assignment View'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['menu_tabs_parent_login'] = array(
+        'info' => t('Parent Menu Tabs'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['sort_by'] = array(
+        'info' => t('Parent Sort By'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    $blocks['detail_assignment_worksheet'] = array(
+        'info' => t('Detail Parent Assignment Worksheet'),
+        'cache' => DRUPAL_NO_CACHE,
+    );
+    return $blocks;
+}
+
+function lw_parent_assignment_block_view($block_name = '') {
+    $block=array();
+    switch ($block_name) {
+        case 'create_parent_assignment':
+            $block['subject'] = '';
+            $block['content'] = generate_parent_assignment_code_form();
+            break;
+        case 'view_parent_assignment':
+            $block['subject'] = '';
+            $block['content'] = view_parent_assignment_list_form();
+            break;
+        case 'parent_detail_assignment_view':
+            $block['subject'] = '';
+            $block['content'] = parent_detail_assignment_view();
+            break;
+        case 'menu_tabs_parent_login':
+            $block['subject'] = '';
+            $block['content'] = menu_tabs_parent_login_tabs();
+            break;
+        case 'sort_by':
+            $block['subject'] = '';
+            $block['content'] = sort_by();
+            break;
+        case 'detail_assignment_worksheet':
+            $block['subject'] = '';
+            $block['content'] = detail_parent_assignment_worksheet_view();
+            break;
+    }
+    return ($block);
+}
+
+/*
+* Implement hook_menu for parent Assignment menu
+*
+*/
+
+
+function lw_parent_assignment_menu($form, $form_state) {
+
+    $items['parent/assignment/%/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Create your own customised assignment for your Child or go back to view your older assignments when you need to.',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('generate_parent_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['parent/assignment/%/%/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Edit Assignment',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('generate_parent_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['parent/assignments/list/view/%/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Create your own customised assignment for your Child or go back to view your older assignments when you need to.',
+        'page callback' => 'drupal_get_form',
+        //'page arguments' => array('generate_parent_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['parent/assignments/view/%/%/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        //'title' => 'Detail Assignment',
+        'page callback' => 'drupal_get_form',
+      //  'page arguments' => 'generate_parent',
+        'access callback' => TRUE,
+    );
+    $items['parent/view/assignment/worksheet/%/%'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        //'title' => 'Worksheet',
+        'page callback' => 'drupal_get_form',
+        // 'page arguments' => array('generate_parent_assignment_code_form'),
+        'access callback' => TRUE,
+    );
+    $items['parent/change/question'] = array(
+        //'type' => MENU_DEFAULT_LOCAL_TASK,
+        'title' => 'Change Question',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('change_question'),
+        'access callback' => TRUE,
+    );
+
+    return $items;
+
+}
+
+
+
+/*code for detail worksheet page four start*/
+
+function detail_parent_assignment_worksheet_view() {
+    $f_output = generate_detail_parent_assignment_worksheet_layout();
+    return $header.$f_output;
+}
+
+/*code for detail worksheet page four start*/
+/*code for sort by filter start*/
+// function sort_by($form, &$form_state) {
+
+//     $form['sort_by'] = array(
+//         '#type' => 'select',
+//         '#title' => 'Sort By',
+//         '#maxlength' => 127,
+//         '#options' => array(1=>'class',2=>'topic',3=>'date'),
+//         //'#required' => TRUE,
+//         '#default_value' => 'class',
+//     );
+//     return $form;
+// }
+/* ment tabs satrt*/
+
+function menu_tabs_parent_login_tabs() {
+    $child_id = arg(2);
+    $work_id = arg(3);
+    $arg1 = arg(1);
+    $arg2 = arg(2);
+    $arg3 = arg(3);
+    $arg4 = arg(4);
+if($arg2 == 'list' && $arg3 == 'view'){
+    $child_id = arg(4);
+    $work_id = arg(5);
+}
+    global $base_url;
+    $tab1= l('Create New Assignment','parent/assignment/'.$child_id.'/'.$work_id);
+    $tab2= l('View My Assignment','parent/assignments/list/view/'.$child_id.'/'.$work_id);
+
+    $output = '<div class="first_tab">'.$tab1.'</div>';
+    $output .= '<div class="second_tab">'.$tab2.'</div>';
+    $output .= '<div class="blank_div">'.'</div>';
+    return $output;
+}
+
+
+/* detail assignment view start*/
+function parent_detail_assignment_view() {
+    global $base_url;
+    $final_output = generate_detail_parent_assignment_layout();
+
+    $curnt_url = $_GET['q'];
+    $assig_no = $_GET['number'];
+    $g_again_url = $base_url .'/parent/view/assignment/worksheet';
+    $curnt_str_expld = explode('/', $curnt_url);
+    $child_id = $curnt_str_expld[3];
+    $c_a_id = $curnt_str_expld[4];
+    $sub_type_id = $curnt_str_expld[5];
+     $q_str = $_GET['number'];
+    $buttons .= l(t('Save'), 'parent/assignments/list/view/'.$child_id.'/'.$sub_type_id, array('attributes' => array('class' => array('save')))). '&nbsp;';
+    $buttons .= l(t('Create Worksheet Now'),$g_again_url.'/'. $child_id.'/'.$c_a_id.'/'.$sub_type_id, array('query' => array('id' => $assig_no),'attributes' => array('id' => 'my-id',
+        'class' => 'create-worksheet-now')));
+   // $buttons .= l(t('Generate again'), $base_url.'/'.$curnt_url,array('attributes' => array('id' => 'generate-again', 'class' => 'detail-asg-btns'),'query' => array('number' => $q_str,'gagain' =>'gagain' ))). '&nbsp;';
+   // $buttons .= l(t('Discard'), $base_url.'/'.$curnt_url,array('attributes' => array('id' => 'discard-asgn', 'class' => 'detail-asg-btns'),'query' => array('number' => $q_str,'discard' =>'discard' ))). '&nbsp;';
+
+
+    /*Generate again code starts*/
+    if(isset($_GET['gagain']) && ($_GET['gagain'] == 'gagain')) {
+        $q_str = $_GET['q'];
+        $s_no = $_GET['number'];
+
+
+        $q_str_expld = explode('/', $q_str);
+        $a_id = $q_str_expld[4];
+        $query = db_query("SELECT * FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $a_id));
+        $records = array();
+        foreach($query as $values) {
+            $records[]=$values;
+        }
+        $child_id = $records[0]->child_id;
+        $topic_id = $records[0]->topic_id;
+        $easy = $records[0]->easy;
+        $very_easy = $records[0]->very_easy;
+        $difficult = $records[0]->difficult;
+        $very_difficult = $records[0]->very_difficult;
+        $fetched_nids = $records[0]->nids;
+        $nids  = generate_assignment_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult);
+        $q = db_query("UPDATE {eck_parent_assignment} SET nids = :nids WHERE id = :id", array(':nids'=>$nids,':id' => $a_id));
+        // drupal_goto('parent/assignments/view/' . $a_id ,array('query'=>array('number'=>$s_no)));
+
+
+
+
+    }
+
+    global $user;
+    $profile = profile2_load_by_user($user->uid,'student');
+    $school_id = $profile->field_schools['und'][0]['tid'];
+    $school_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $school_id, '=')
+        //->orderBy('tid')
+        ->execute()
+        ->fetchAll();
+    $school_name = $school_object[0]->name;
+    $assignment_no = $_GET['number'];
+    $subject_a = $records[0]->subject;
+    $explod = explode('-',$subject_a);
+    $class = $explod[0];
+    $subject = $explod[1];
+    $class_array = array();
+    $class_array = str_split($class);
+    $class_name = $class_array[6];
+    $due_date =$records[0]->due_date;
+    $due_date = date('d-m-Y',strtotime($due_date));
+    $created_date =$records[0]->created_date;
+    $created_date = date('d-m-Y',strtotime($created_date));
+    $easy =$records[0]->easy;
+    $very_easy =$records[0]->very_easy;
+    $difficult =$records[0]->difficult;
+    $very_difficult =$records[0]->very_difficult;
+    $topic =$records[0]->topic;
+    /*header code start*/
+    $header .= '<div class="header_wrap"><div class="school-name"><span>School:' .$school_name. '</span></div>';
+    $header .= '<div class="inner-wrap"><div class="assin-no-wrap"><span class="assig-no">Assignment no:' .$assignment_no. '</span>';
+    $header .= '<span class="created-date">Date Created:' .$created_date. '</span></div>';
+  //  $header .= '<span class"due-date">Due Date :' .$due_date. '</span></div>';
+    $header .= '<div class="class-name-wrap"><span class="class-name">Class:' .$class_name. '</span>';
+    $header .= '<span class="subject">Subject:' .$subject. '</span>';
+    $header .= '<span class="topic">Topic:&nbsp;'.$topic.'</span></div>';
+    $header .= '<div class="third-row"><span class="record">Level Key: VE = Very Easy, E = Easy, D = Difficult, VD = Very Difficult</span>';
+    //$header .= '<span class="q-level">'.l('Edit Criteria',$base_url.'/parent/assignment/' . $records[0]->id,array('fragment'=>'very_easy_textbox')).'</span></div><br/></div></div>';
+    /*Assignment Discard code starts*/
+    if(isset($_GET['discard']) && ($_GET['discard'] == 'discard')) {
+        $q_str = $_GET['q'];
+        $q_str_expld = explode('/', $q_str);
+        $assign_id = $q_str_expld[4];
+        $query = db_query("DELETE FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $assign_id));
+        drupal_goto('report/parent/assignment');
+
+
+    }
+
+    return $final_output.$buttons;
+}
+
+
+  
+/*view assignment listing block start*/
+function view_parent_assignment_list_form(){
+   $child_id  = arg(4);
+   $sub_id  = arg(5);
+    $sub_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $sub_id, '=')
+        ->execute()
+        ->fetchAll();
+  $sub_name = $sub_object[0]->name; 
+  if($sub_id == 'free'){
+    $r = db_select('eck_parent_assignment', 'pa')
+        ->fields("pa")
+        ->condition('uid', $child_id)
+        ->execute();
+
+}else{
+  $r = db_select('eck_parent_assignment', 'pa')
+        ->fields("pa")
+        ->condition('uid', $child_id)
+        ->condition('subject', $sub_name)
+        ->execute();
+}
+    $serial_number = $r->rowCount();
+    $records = array();
+  
+    foreach($r as $values) {
+        $records[]=$values;
+
+
+    }
+    for($i=0;$i<count($records);$i++){
+        global $base_url;
+        $due_date = date('d-m-Y',strtotime($records[$i]->due_date));
+        //$created_date = date('d-m-Y',strtotime($records[$i]->created_date));
+        $created_date = $records[$i]->created_date;
+        $created_date = explode('/', $created_date);
+        $created_date = implode('-', $created_date);
+        $count = 1;
+        $count = $count + $i;
+        $output .= '<tr><td>'.$count. '</td>';
+        $output .= '<td>'. $records[$i]->subject. '</td>';
+        $output .= '<td>'. $records[$i]->topic. '</td>';
+        $output .= '<td>'. $created_date. '</td>';
+        $output .= '<td>'. $due_date. '</td>';
+        // $output .= '<td>'.'<a href='.$base_url .'/report/teacher/assignment/'.$records[$i]->id.'>' . 'Edit'.'</a></td>';
+        $output .= '<td>'.l('View','parent/assignments/view/'.$child_id.'/' . $records[$i]->id.'/'. $sub_id,array('query'=>array('number'=>$count))).'</td>';
+       // $output .= '<td>'.l(t('X'),'parent/assignments/view/',array('query' => array('id'=>$records[$i]->id,'number' => $count,'d' =>'del' ))). '</td></tr>';
+
+
+    }
+    /*Click (X) link code start*/
+    if(isset($_GET['d']) && ($_GET['d'] == 'del')) {
+        $assign_id = $_GET['id'];
+        $query = db_query("DELETE FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $assign_id));
+        drupal_goto('report/parent/assignments/view');
+    }
+    /*Click (X) link code ends*/
+
+    $table_head = "<table id='assignment_sort' class = 'tablesorter'><thead>
+      <tr>
+      <th>No.</th>
+      <th>Class & Subject</th>
+      <th>Topic</th>
+      <th>Created</th>
+      <th>Due</th>
+      <th class = 'view-tab'></th>
+      </tr></thead>";
+    return $table_head .$output . '</table>';
+
+    /* code for filter assignments start */
+
+
+
+    /* code for filter assignments end */
+
+}
+
+/*view assignment listing block ends*/
+
+
+
+function generate_parent_assignment_code_form($form, &$form_state) {
+  $Child_id = arg(2);
+  $worksheet_id = arg(3);
+   $profile = profile2_load_by_user($Child_id,'student');
+  // $subject_tid = $profile-> field_subjects['und'][0]['tid'];
+    $subject = $profile->field_subjects['und'];
+if(is_numeric($worksheet_id) && $worksheet_id !='free' ){
+     $subject_name[$worksheet_id] = taxonomy_get_term_name_by_id($worksheet_id);
+}else{
+   $subject_id = array();
+    foreach($subject as $value){
+        $subject_name[$value['tid']] = taxonomy_get_term_name_by_id($value['tid']);
+        $subject_id[] = $value['tid'];
+    }
+  $_SESSION['subject'] =  $subject_name;
+     asort($subject_name);
+ }
+       $cl_id = taxonomy_get_parents($selected_topic_id);
+       $clas_id = key($cl_id);
+    $value_dropdown_first = isset($form_state['values']['select_subject']) ? $form_state['values']['select_subject'] : (isset($clas_id)?$clas_id:key($subject_name));
+if(!isset($subject_name)){
+     $subject_name =  $_SESSION['subject'];
+}
+
+    $form['select_subject'] = array(
+        '#type' => 'select',
+        '#title' => 'Select Subject',
+        '#options' => $subject_name,
+        '#ajax' => array(
+            'event'=>'change',
+            'callback' =>'lw_parent_assignment_ajax_callback',
+            'wrapper' => 'topic_wrapper1',
+            'progress' => array(
+               'message' => '',
+           ),
+        ),
+    );
+
+    $form['select_topic'] = array(
+        '#type' => 'select',
+        '#title' => 'Select Topic',
+        '#required' => TRUE,
+        '#options' => lw_parent_assignment_second_dropdown_options($value_dropdown_first),
+        '#prefix' => '<div class="form-item" id="topic_wrapper1">',
+        '#suffix' => '</div>',
+        //'#default_value' => $selected_topic_id,
+       );
+    $form['assignment_created_date'] = array(
+        '#type' => 'textfield',
+        //'#type' => 'hidden',
+        '#title' => 'current_date',
+        //'#element_validate' => array('_headbar_is_empty'),
+        //'#required' => TRUE,
+        //'#access' => FALSE,
+        '#default_value' => date('d/m/Y'),
+    );
+
+
+    $form['#attributes'] = array('class' => 'form-item');
+
+    $form['assignment_due_date'] = array(
+        '#type' => 'date_popup',
+        '#date_format' => 'j F Y',
+        //'#date_year_range' => '0:+2',
+        '#datepicker_options' => array(
+        'minDate' => 0,
+        ),
+        '#title' => 'Date Created',
+        //'#attributes' =>array('placeholder' => t('Calender Section')),
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#required' => TRUE,
+        '#default_value' => !empty($due_date) ? $due_date : '',
+    );
+    $form['info_text'] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div>'.'<span class="first-description">'.'You may select upto a maximum of 20 questions per assignment'.'</span>'.'<br/>'.'<span class="second-description">'.'Choose the number of questions required at each level of difficulty'.'</span>'.'</div>'),
+    );
+
+    $form['level_header'] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<div class="question-header">'.'<span class="level">'.'Difficulty level'.'</span>'.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.'<span class="no-question">'.'No. of Questions '.'</span>'.'</div>'),
+    );
+
+    $form['very_easy'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Very Easy',
+        '#size'=>'5',
+        '#id'=>'very_easy_textbox',
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#default_value' => !empty($very_easy) ? $very_easy : '',
+    );
+    $form['easy'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Easy',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($easy) ? $easy : '',
+    );
+    $form['difficult'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Difficult',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($difficult) ? $difficult : '',
+    );
+    $form['very_difficult'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Very Difficult',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('#input')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($very_difficult) ? $very_difficult : '',
+    );
+    $form['total'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Total',
+        '#size'=>'5',
+        //'#attributes' =>array('placeholder' => t('Auto Sum of 4 above')),
+        '#required' => TRUE,
+        //'#element_validate' => array('_headbar_is_empty'),
+        '#default_value' => !empty($total) ? $total : '',
+    );
+    $form['error_text'] = array(
+        '#type'=> 'item',
+        '#markup'=> ('<span id="error_msg"></span>'),
+    );
+  $worksheet_count  = count_download_worksheet($Child_id,$worksheet_id);
+  $worksheet_count.'..'.$worksheet_id;
+ if(is_numeric($worksheet_id) && $worksheet_count < 25){
+    $workdisabled = FALSE;
+ }elseif($worksheet_id == 'free' && $worksheet_count < 5){
+    $workdisabled = FALSE;
+}else{
+    $workdisabled = TRUE;
+}   
+$form['submit'] = array(
+        '#type' => 'submit',
+        '#disabled' => $workdisabled,
+        '#value' => isset($assignment_id)?t('Update'):t('Create Worksheet'),
+    );
+ 
+ 
+
+    return $form;
+
+}
+
+
+/*ajax for topic dropdown */
+
+
+function lw_parent_assignment_ajax_callback($form, &$form_state) {
+    return $form['select_topic'];
+}
+
+function lw_parent_assignment_second_dropdown_options($key = '') {
+ $get_parent_child_ids = db_select('taxonomy_term_hierarchy', 'th')
+        ->fields("th", array('tid','parent'))
+        ->condition('parent', $key, '=')
+        //->orderBy('parent')
+        ->execute()
+        ->fetchAll();
+    $a = array();
+    foreach($get_parent_child_ids as $value) {
+
+
+        $a[$value->parent][] = $value->tid ;
+    }
+    $final_topics = array();
+    foreach($a as $key=>$value){
+
+        $final_topics[] = taxonomy_get_children($key);
+    }
+    // print_r($final_topics);
+    $topic_options_list = array();
+    foreach($final_topics as $topic_list) {
+
+        foreach($topic_list as $topic_names) {
+            $topic_options_list[$topic_names->tid] = $topic_names->name;
+        }
+        asort($topic_options_list);
+    }
+    return $topic_options_list;
+}
+/*
+*Fetch term Name from term id.
+*/
+function taxonomy_get_term_name_by_id($tid) {
+  return db_query('SELECT name FROM {taxonomy_term_data} WHERE tid = :tid', array(':tid' => $tid))->fetchField();
+}
+
+function generate_parent_assignment_code_form_submit($form, &$form_state) {
+    global $user;
+	$Child_id = arg(2);
+    $sub_id = arg(3);
+    $topic_id = $form_state['values']['select_topic'];
+    $class_id  = taxonomy_get_parents($topic_id);
+    $c_id = key($class_id);
+    $subject_id = $form_state['values']['select_subject'];
+    $res = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('name'))
+        ->condition('tid', $subject_id, '=')
+        ->execute()
+        ->fetchAssoc();
+    $subject_name =  $res['name'];
+    $due_date = $form_state['values']['assignment_due_date'];
+    $created_date = $form_state['values']['assignment_created_date'];
+    $subject = $form_state['complete form']['select_subject']['#options'][$subject_id];
+    $topic = $form_state['complete form']['select_topic']['#options'][$topic_id];
+    $very_easy = $form_state['values']['very_easy'];
+    $easy = $form_state['values']['easy'];
+    $difficult = $form_state['values']['difficult'];
+    $very_difficult = $form_state['values']['very_difficult'];
+    $total = $form_state['values']['total'];
+    $arg3 = arg(3);
+    $profile = profile2_load_by_user($Child_id,'student');
+  //  echo $sub_id;
+   if(is_numeric($sub_id)){
+     $worksheet_type = 'paid';
+     $worksheet_exp_id = db_select('eck_worksheet_expiry', 'td')
+        ->fields("td", array('id'))
+        ->condition('uid', $user->uid, '=')
+        ->condition('child_id', $Child_id, '=')
+        ->condition('subject_tid', $sub_id, '=')
+        ->condition('status','1')
+        ->execute()
+        ->fetchAssoc();
+       $worksheet_exp_ids =  $worksheet_exp_id['id'];
+   }elseif($sub_id == 'free'){
+    $worksheet_type = 'free';
+   }
+    $final_nids =  get_all_nids($topic_id,$easy,$very_easy,$difficult,$very_difficult);
+    $entity = entity_create('parent_assignment',
+        array(
+            'uid' => $Child_id,
+            'type' => 'user',
+            'due_date' => $due_date,
+            'created_date' => $created_date,
+            'subject' => $subject_name,
+            'topic' => $topic,
+            'topic_id' => $topic_id,
+            'very_easy' => $very_easy,
+            'easy' => $easy,
+            'difficult' => $difficult,
+            'very_difficult' => $very_difficult,
+            'total' => $total,
+            'nids'=> $final_nids,
+            'worksheet_type'=> $worksheet_type,
+            'worksheet_exp_tid'=> $worksheet_exp_ids,
+        )
+    );
+    $en = entity_save('parent_assignment', $entity);
+    $results = db_query("SELECT * FROM {eck_parent_assignment} WHERE uid = :uid ORDER BY id DESC LIMIT 1", array(':uid' => $Child_id));
+    $res_arr = array();
+    foreach($results as $r_values) {
+        $res_arr[]=$r_values;
+    }
+
+    $ass_id = $res_arr[0]->id;
+
+    $r = db_query("SELECT * FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $ass_id));
+    $user_assignments = db_query("SELECT * FROM {eck_parent_assignment} WHERE uid = :uid", array(':uid' => $Child_id));
+    $serial_number =  $user_assignments->rowCount();
+    drupal_goto('parent/assignments/view/' . $Child_id.'/'. $ass_id.'/'.$sub_id ,array('query'=>array('number'=>$serial_number)));
+}
+
+
+/*Function to generate layout for detail assignment view(starts)*/
+
+function generate_detail_parent_assignment_layout() {
+    global $base_url;
+    $assign_id = arg(4);
+    $child_id = arg(3);
+    $get_all_nids = db_query("SELECT nids FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $assign_id));
+    $r = db_query("SELECT * FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $assign_id));
+
+    $records = array();
+    foreach($r as $values) {
+        $records[]=$values;
+}
+    $profile = profile2_load_by_user($child_id,'student');
+    $child_class = $profile->field_class_user['und'][0]['tid'];
+    $school_id = $profile->field_schools['und'][0]['tid'];
+    $school_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $school_id, '=')
+        ->execute()
+        ->fetchAll();
+    $class_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $child_class, '=')
+        ->execute()
+        ->fetchAll();
+    $school_name = $school_object[0]->name;
+    $class_name = $class_object[0]->name;
+    $assignment_no = $_GET['number'];
+    $subject_a = $records[0]->subject;
+    $class_array = array();
+    $due_date =$records[0]->due_date;
+    $due_date = date('d-m-Y',strtotime($due_date));
+    $created_date =$records[0]->created_date;
+    $created_date = explode('/', $created_date);
+    $created_date = implode('-', $created_date);
+    $easy =$records[0]->easy;
+    $very_easy =$records[0]->very_easy;
+    $difficult =$records[0]->difficult;
+    $very_difficult =$records[0]->very_difficult;
+    $topic =$records[0]->topic;
+    /*header code start*/
+    //$header .= '<div class="header_wrap"><div class="school-name"><span>School:' .$school_name. '</span></div>';
+    $header .= '<div class="inner-wrap"><div class="assin-no-wrap"><span class="assig-no"><label>Assignment no:</label>' .$assignment_no. '</span>';
+    $header .= '<span class="created-date"><label>Date Created:</label>' .$created_date. '</span></div>';
+    //$header .= '<span class"due-date"><label>Due Date:</label>' .$due_date. '</span></div>';
+    $header .= '<div class="class-name-wrap"><span class="class-name"><label>Class:</label>' .$class_name. '</span>';
+    $header .= '<span class="subject"><label>Subject:</label>' .$subject_a. '</span>';
+    $header .= '<span class="topic"><label>Topic:</label>'.$topic.'</span></div>';
+    $header .= '<div class="third-row"><span class="record"><label>Level Key:</label>VE = Very Easy, E = Easy, D = Difficult, VD = Very Difficult</span>';
+   //$header .= '<span class="q-level">'.l('Edit Criteria',$base_url.'/parent/assignment/' . $records[0]->id,array('fragment'=>'very_easy_textbox')).'</span></div><br/></div></div>';
+    
+    /*header code ends*/
+
+    $ids = array();
+    foreach($get_all_nids as $values) {
+        $ids[]=$values;
+
+    }
+    $nids_serialized = $ids[0]->nids;
+    $nids_serialized = unserialize($nids_serialized);
+
+    $html = '';
+    $html .= '<table class="teacher_assignment"><tr class="trhead">
+              <th>S.No111</th>
+              <th>Level</th>
+              <th>Question</th>
+              <th>Answer Options</th>
+             </tr>';
+    $i =1;
+    foreach($nids_serialized as $value) {
+
+
+        $node = node_load($value);
+        $type = $node->type;
+        $html .= '<tr>';
+        $html .= '<td>'.$i.'</td>';
+        //echo '<pre>';print_r($nids_serialized);die();
+
+        if($type == 'fib') {
+            $html .= fib_generate_html($node);
+
+        }
+        if($type == 'mcq') {
+            $html .= mcq_generate_html($node);
+
+
+        }
+        if($type == 'match_the_following') {
+
+            $html .= match_the_following_generate_html($node);
+        }
+        if($type == 'true_and_false') {
+            $html .= true_and_false_generate_html($node);
+        }
+        if($type == 'jumble') {
+            $html .= jumble_generate_html($node);
+        }
+        $html .= '</tr>';
+        $i = ++$i;
+    }
+
+
+    $html .= '</table>';
+    // echo '<pre>';print_r(array($html));die();
+    return $header.$html;
+}
+
+
+
+/*function for generating html for worksheet page four  end*/
+
+
+
+
+function generate_detail_parent_assignment_worksheet_layout() {
+    global $base_url;
+    $q_string  = $_GET['q'];
+    $q_string_expl = explode('/',$q_string);
+    $assign_id = $q_string_expl[5];
+    $child_id = $q_string_expl[4];
+    $get_all_nids = db_query("SELECT nids FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $assign_id));
+    $r = db_query("SELECT * FROM {eck_parent_assignment} WHERE id = :id", array(':id' => $assign_id));
+
+    $records = array();
+    foreach($r as $values) {
+        $records[]=$values;
+
+
+    }
+    global $user;
+    $profile = profile2_load_by_user($child_id,'student');
+    $school_id = $profile->field_schools['und'][0]['tid'];
+    $child = user_load($child_id);
+    $first_name = $child->field_first_name['und'][0]['value'];
+    $last_name = $child->field_last_name['und'][0]['value'];
+    $child_name = $first_name .' ' . $last_name;
+    $child_class = $profile->field_class_user['und'][0]['tid'];
+    $roll_numbers = $profile->field_roll_numbers['und'][0]['value'];
+    $school_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $school_id, '=')
+        ->execute()
+        ->fetchAll();
+    $class_object = db_select('taxonomy_term_data', 'td')
+        ->fields("td", array('tid', 'name'))
+        ->condition('tid', $child_class, '=')
+        ->execute()
+        ->fetchAll();
+    $class_name = $class_object[0]->name;
+    $school_name = $school_object[0]->name;
+    $assignment_no = $_GET['id'];
+    $subject_a = $records[0]->subject;
+    $due_date =$records[0]->due_date;
+    $due_date = date('d-m-Y',strtotime($due_date));
+    $created_date =$records[0]->created_date;
+    //$created_date = date('d-m-Y',strtotime($created_date));
+    //echo '<pre>';print_r($created_date);die();
+    $easy =$records[0]->easy;
+    $very_easy =$records[0]->very_easy;
+    $difficult =$records[0]->difficult;
+    $very_difficult =$records[0]->very_difficult;
+    $topic =$records[0]->topic;
+    /*header code start*/
+    if(isset($_GET['print']) && ($_GET['print'] == 'print')) {
+        $header .= '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+        <head>
+        <link rel="stylesheet" type="text/css" href=' . $base_url .'/sites/all/themes/lw_theme/css/pdf.css media="all" />
+        <title></title>
+        </head> ';
+    }
+
+   // $header .= '<div class="header_wrap"><div class="pdf-logo-wrap"><span><img src=' . $base_url .'/sites/all/themes/lw_theme/logo.png /></span></div>';
+    $header .= '<div class="header_wrap">';
+    $header .= '<div class="inner-wrap"><div class="assin-no-wrap"><span class="assig-no">Student Name : '.$child_name.'</span>';
+   $header .= '<span class="subject">Subject : ' .$subject_a. '</span>';
+  //  $header .= '<span class"due">School :</span></div>';
+    $header .= '<span class="class-name">Class : ' .$class_name. '</span></div>';
+    //$header .= '';
+    $header .= '<div class="class-name-wrap">';
+     $header .= '<span class="created-date">Date Created : ' .$created_date. '</span>';
+    $header .= '<span class="topic">Topic : &nbsp; '.$topic.'</span><span class="assig-no">Assignment no : ' .$assignment_no. '</span></div>';
+    $header .= '<div class="assin-no-wrap"></div>';
+   // $header .= '<span class"due">Due Date : ' .$due_date. '</span></div>';
+    $header .= '<br/></div></div><br/>';
+    //$header .= '<span class="q-level">'.l('Edit Criteria','/report/teacher/assignment/' . $records[0]->id,array('fragment'=>'very_easy_textbox')).'</div><br/></div></div>';
+    /*header code ends*/
+    $ids = array();
+    foreach($get_all_nids as $values) {
+        $ids[]=$values;
+
+    }
+    $nids_serialized = $ids[0]->nids;
+    $nids_serialized = unserialize($nids_serialized);
+
+    $html = '';
+    $html .= '<table class="teacher_assignment no-level-table"><tr class="trhead">
+              <th>S.No</th>
+              <th>Question</th>
+              <th colspan="2">Answer Options</th>
+
+             </tr>';
+    $i =1;
+    foreach($nids_serialized as $value) {
+
+
+        $node = node_load($value);
+        $type = $node->type;
+        $html .= '<tr>';
+        $html .= '<td>'.$i.'</td>';
+        if($type == 'fib') {
+            $htm = fib_generate_worksheet_html($node);
+            //echo '<pre>';print_r($htm);die();
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['answer'];
+            $c_ans .= '<div>'.$i.'.&nbsp;FIB Answer is&nbsp;'.$htm['c_ans'].'</div>';
+
+
+        }
+        if($type == 'mcq') {
+            $htm = mcq_generate_worksheet_html($node);
+           //echo '<pre>';print_r($htm);die();
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['html'];
+            if(empty($htm['c_ans'])) {
+                $c_ans .= '<div class="mcq-image-ans">'.$i.'.&nbsp;Correct Ans Image is&nbsp;'.$htm['correct_img'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="mcq-ans">'.$i.'.&nbsp;Correct Ans option is&nbsp;'.$htm['c_ans'].'</div>';
+            }
+
+
+
+        }
+        if($type == 'match_the_following') {
+
+            $htm = match_the_following_generate_worksheet_html($node);
+           //echo '<pre>';print_r($htm['img_pdf_correct']);die();
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+
+                $html .= $htm['g_words'];
+                $html .= $htm['c_matches'];
+
+
+            $html .= $htm['img_match'];
+            $html .= $htm['img_suff_match'];
+            $g_word_ans =  $htm['g_word'];
+            //print_r($g_word_ans);die();
+
+            //$html .= $htm['img_match_correct'];
+           // $html .= $htm['g_words'];
+            //$html .= $htm['c_matches'];
+
+
+
+               // $html .= $htm['img_match'];
+                //$html .= $htm['img_suff_match'];
+
+           // $html .= $htm['c_matches'];
+            //$html .= $htm['g_words'];
+            //$g_word_ans =  $htm['g_word'];
+            //print_r($g_word_ans);
+           // var_dump(empty($g_word_ans));die();
+
+            if(empty($htm['g_word'])) {
+                    //die('image');
+               // $c_ans .= '<div>'.$i.'.&nbsp;MTF is&nbsp;'.$htm['img_match'].$htm['img_match_correct'].'</div>';
+              //  $c_ans .= $htm['img_match'].$htm['img_match_correct'];
+                $c_ans .= '<div class="image-ans-mtf">'.$i.'.&nbsp;MTF Answer is&nbsp;'.$htm['img_pdf'].$htm['img_pdf_correct'].'</div>';
+            }
+            else {
+               // die('text');
+                $c_ans .= '<div class="mtf-text-ques">'.$i.'.&nbsp;MTF Answer is&nbsp;'.$htm['c_matches1'].$htm['g_word_pdf'].'</div>';
+
+            }
+
+        }
+
+        if($type == 'true_and_false') {
+            $htm = true_and_false_generate_worksheet_html($node);
+            // $html .= $htm['qlevel'];
+            //$html .= $htm['qtext'];
+            //$html .= $htm['html'];
+            //$html .= $htm['qimage'];
+            //echo '<pre>';print_r($htm);//die();
+            if(empty($htm['qimage'])) {
+                $html .= $htm['qtext'];
+            }
+            else {
+                $html .= $htm['qimage'];
+            }
+            $html .= $htm['html'];
+            if(empty($htm['c_answer'])) {
+                $c_ans .= '<div class="true-and-false-image-ans">'.$i.'.&nbsp;Correct Ans Image is&nbsp;'.$htm['correct_img'].'</div>';
+            }
+            else {
+                $c_ans .= '<div class="true-and-false-ans">'.$i.'.&nbsp;Correct Ans option is&nbsp;'.$htm['c_answer'].'</div>';
+            }
+
+
+        }
+        if($type == 'jumble') {
+            $htm = jumble_generate_worksheet_html($node);
+            // $html .= $htm['qlevel'];
+            $html .= $htm['qtext'];
+            $html .= $htm['jumbled'];
+            $html .= $htm['janswer'];
+            $c_ans .= '<div class="jumble-ans">'.$i.'.&nbsp;Unjumble answer is&nbsp;'.$htm['c_ans'].'</div>';
+
+        }
+        $html .= '</tr>';
+        $html .= '<tr class="pdf-bottom-border"><td></td><td></td><td></td><td></td></tr>';
+        $i++;
+    }
+    //$html .= '<tr><td class="copy-write" colspan="4">© 2013 Learning World Education Solutions Pvt. Ltd ( LWES). Excelonz is a brand of LWES. All Rights Reserved. This content may not be used, altered, copied,re-used or redistributed without prior consent from LWES.</td></tr>';
+    //echo '<pre>';print_r($c_ans);die();
+    //$html .= '<tr><td>'.$c_ans.'</td></tr>';
+    $html .= '</table>';
+    $query_str = $_GET['q'];
+    $query_str = $base_url.'/'.$query_str;
+    $buttons = l(t('Download'),$query_str ,array('query' => array('print' =>'print','id'=>$assignment_no,'class'=>'class'.$class_name,'subject'=>$subject),'attributes' => array('target'=>'_blank')));
+    $class_name = $_GET['class'];
+    $subject_name = $_GET['subject'];
+    if(isset($_GET['print']) && ($_GET['print'] == 'print')) {
+        require_once("sites/all/modules/print/lib/dompdf/dompdf_config.inc.php");
+        $dompdf = new DOMPDF;
+        $ans = '<div style="page-break-before: always;">'.'Correct Answer is'.$c_ans.'</div>';
+        $header .= $html.$ans;
+        $html = mb_convert_encoding($header, 'HTML-ENTITIES', 'UTF-8');
+
+        $dompdf->load_html($html);
+ //print_r( $dompdf->output_html() ).die();
+        $dompdf->render();
+
+        $font = Font_Metrics::get_font("din", "regular");
+        $canvas = $dompdf->get_canvas();
+        $canvas->page_script('$image = "' . $base_url .'/sites/all/themes/lw_theme/logo-pdf.png";$pdf->image($image, 45, 10, 100, 35);');
+        
+        $canvas->page_text(300, 700,"{PAGE_NUM}", $font, 6, array(0,0,0));
+        $canvas->page_text(72, 750, "© 2015 Learning World Education Solutions Pvt. Ltd ( LWES). Excelonz is a brand of LWES. All Rights Reserved. This content may not be used, altered, copied,re-used or redistributed without prior consent from LWES.", $font, 6, array(0,0,0));
+       // print_r( $canvas).die();
+        $dompdf->stream($class_name.$subject_name."Assignment.pdf");
+    }
+
+    return $header.$html.$buttons;
+}
+
+function count_download_worksheet($cid,$sub){
+    $term = taxonomy_term_load($sub);
+    $name = $term->name;
+if(is_numeric($sub)){
+    $num_of_results =  paid_user_worksheet_count($cid,$name);
+}else{
+    $result = db_select('eck_parent_assignment', 'eck_pa')
+                ->fields('eck_pa',array('id'))
+                ->condition('uid',$cid)
+                ->condition('worksheet_type','free')
+                ->execute();
+        $num_of_results = $result->rowCount();
+
+}
+ $count_worksheet = $num_of_results;
+return $count_worksheet;
+}

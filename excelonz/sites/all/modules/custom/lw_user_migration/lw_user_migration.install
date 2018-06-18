@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_disable().
+ *
+ * the migration module should deregister its migrations
+ */
+function lw_user_migration_disable() {
+  // based on: drupal.org/node/1418350#comment-5557772
+  Migration::deregisterMigration('lw_Step1_User');
+  Migration::deregisterMigration('lw_Step2_Memberlist');
+  Migration::deregisterMigration('lw_ParentTerm');
+  Migration::deregisterMigration('lw_ParentBranch');
+
+}
+?>

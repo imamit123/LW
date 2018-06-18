@@ -1,0 +1,19 @@
+/****
+******* CSS for Admin Theme
+****/
+
+
+#field-question-options-values tbody tr {
+    background: none repeat scroll 0 0 #F3F4EE;
+    border-bottom: 1px solid #BEBFB9;
+    border-right: 1px solid #BEBFB9;
+    float: left;
+    width: 558px;
+	}
+	
+	
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ #field-question-options-values tbody tr {
+    width: 543px;
+	}
+}

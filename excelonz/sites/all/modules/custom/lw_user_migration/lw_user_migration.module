@@ -1,0 +1,21 @@
+<?php
+/**
+ * @file
+ * Implements hook_migrate_api()
+ *
+ * Returns 'api' => 2 for the 7.x-2.x branch of Migrate
+ * Registers the migration classes for the 7.x-2.5 branch of Migrate (7.x-2.5-rc1+6-dev) as reported in: drupal.org/node/1824884 on 10/29/2012
+ */
+function lw_user_migration_migrate_api() {
+  return array(
+    'api' => 2,
+    'migrations' => array(
+      'lw_Step1_User' => array('class_name' => 'lw_Step1_UserMigration'),
+      'lw_Step2_Memberlist' => array('class_name' => 'lw_Step2_MemberlistMigration'),
+      'lw_ParentTerm' => array('class_name' => 'lw_ParentTermMigration'),
+      'lw_ParentBranch' => array('class_name' => 'lw_ParentBranchMigration'),
+
+    ),
+  );
+}
+?>

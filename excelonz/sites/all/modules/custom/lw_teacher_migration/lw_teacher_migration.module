@@ -1,0 +1,40 @@
+<?php
+/**
+ * @file
+ * Implements hook_migrate_api()
+ *
+ * Returns 'api' => 2 for the 7.x-2.x branch of Migrate
+ * Registers the migration classes for the 7.x-2.5 branch of Migrate (7.x-2.5-rc1+6-dev) as reported in: drupal.org/node/1824884 on 10/29/2012
+ */
+function lw_teacher_migration_migrate_api() {
+  return array(
+    'api' => 2,
+    'migrations' => array(
+      'lw_Step1_Teacher' => array('class_name' => 'lw_Step1_TeacherMigration'),
+      'lw_Step2_Teacher' => array('class_name' => 'lw_Step2_TeacherMigration'),
+       'lw_TeacherTerm' => array('class_name' => 'lw_TeacherTermMigration'),
+      'lw_TeacherBranch' => array('class_name' => 'lw_TeacherBranchMigration'),
+    ),
+  );
+}
+
+/**
+ * Get file name from image path
+ * @param type $main - array collect all class subject and topic
+ * @peram $uid - user id for csv user 
+ */
+
+function content_migrate_unt_save_teacher_class_field_collection($main,$uid) {
+  $profile_entity = profile2_load_by_user($uid,'teacher_profile');
+  $field_collection_item = entity_create('field_collection_item', array('field_name' => 'field_collection_class_subject'));
+  $field_collection_item->setHostEntity('profile2', $profile_entity);
+  $field_collection_item->field_collection_of_class[LANGUAGE_NONE]['0']['tid'] = $main['class_tid'];
+  $field_collection_item->field_collection_of_class[LANGUAGE_NONE]['1']['tid'] = $main['class_sec'];
+  foreach($main['subjects'] as $key=>$value){
+       $field_collection_item->field_collection_of_subject[LANGUAGE_NONE][$key]['tid'] = $value;
+	}
+  $field_collection_item->save();
+}
+
+
+?>

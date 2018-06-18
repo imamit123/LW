@@ -1,0 +1,3 @@
+name = lw_custom
+description = "Contain all function which will change some functionality in all over the sites."
+core = 7.x

@@ -1,0 +1,11 @@
+name = All Rules
+core = 7.x
+package = Features
+dependencies[] = entity
+dependencies[] = php
+dependencies[] = rules
+features[features_api][] = api:2
+features[rules_config][] = rules_new_mssage_when_parent_create_student
+features[rules_config][] = rules_parent_redirect
+features[rules_config][] = rules_payment_subject_allocation
+features[rules_config][] = rules_payment_worksheet_allocation

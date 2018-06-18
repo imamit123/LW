@@ -1,0 +1,44 @@
+<?php
+
+
+function lw_user_flow_menu() {
+$items['user_delete_oldclass_data'] = array(
+    'title' => 'Student Update Class Form',
+     'page callback' => 'user_delete_oldclass_data',
+   // 'page arguments' => array('user_delete_oldclass_data'),
+    'access callback' => TRUE,
+  );
+
+  return $items;
+
+}
+
+function user_delete_oldclass_data(){
+/*
+$school_name = 'MPS';
+$school_ID = 230908;
+$class = '6';
+$time_final1 = 1431648000;
+  $school_query = db_select('field_data_field_student_school_identifier', 'si');
+  $school_query->join('profile','p','p.pid = si.entity_id');
+  $school_query->join('field_revision_field_class_user','cu','cu.entity_id = p.pid');
+  $school_query->join('taxonomy_term_data','ttd','ttd.tid = cu.field_class_user_tid');
+  $school_query->fields('si',array('entity_id'));
+  $school_query->fields('p',array('uid'));
+  $school_query->fields('cu',array('field_class_user_tid'));
+  $school_query->fields('ttd',array('tid','name'));
+  $school_query->condition('si.field_student_school_identifier_nid',$school_ID);
+  $school_query->condition('cu.delta',0);
+  $school_query->condition('ttd.name',$class);
+  $school_result = $school_query->execute()->fetchall(); 
+  foreach ($school_result as $key => $value) {
+       $profile_uid[] = $value->uid;
+  }*/
+
+$user_id = 21987;
+$val = 154;
+   $fullUser = user_load($user_id);
+   $fullUser->field_excellone[LANGUAGE_NONE][0]['value'] = $val;
+  $as =  field_attach_update('user', $fullUser);
+
+}

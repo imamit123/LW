@@ -1,0 +1,3 @@
+name = lw_parent_assignment
+description = "Contain all function related to Parent assignment creation."
+core = 7.x

@@ -1,0 +1,23 @@
+diff --git a/sites/all/modules/migrate/includes/migration.inc b/sites/all/modules/migrate/includes/migration.inc
+index 55ce387..2ea3aca 100644
+--- a/sites/all/modules/migrate/includes/migration.inc
++++ b/sites/all/modules/migrate/includes/migration.inc
+@@ -1308,7 +1308,17 @@ abstract class Migration extends MigrationBase {
+       // We already have the candidate value. Find a non-existing value.
+       $i++;
+       // @TODO: support custom replacement pattern instead of just append.
+-      $candidate = $original . '_' . $i;
++      
++//      echo '<pre></pre>';
++  //    print_r($original);
++      $exp_original = explode(".", $original);
++      //print_r($exp_original);
++      $candidate = $exp_original[0].'.'.$exp_original[1].$i.'.'.$exp_original[2];
++      
++    //  die();
++      
++      
++      //$candidate = $original . '_' . $i;
+     }
+     if ($i > 1) {
+       $message = t('Replacing !column !original with !candidate',

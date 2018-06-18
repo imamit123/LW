@@ -1,0 +1,2087 @@
+<?php
+/*
+ * @file
+ * basic subscription form
+ */
+
+/**
+ * @todo : nitish cooment
+ * @return type
+ */
+function subscription_block_info() {
+
+  // set up an empty array which will contain the block contents
+  $block = array();
+
+  $blocks['subscription_static_block'] = array(
+    'info' => t('Subscription static page Block'),
+  );
+ return $blocks;
+
+}
+function subscription_block_view($block_name = '') {
+  $block = array();
+  switch ($block_name) {
+    case 'subscription_static_block':
+      $block['subject'] = '';
+      $block['content'] = subscription_static_page_block();
+      break;
+  }
+
+  return ($block);
+}
+
+function subscription_static_page_block() {
+  global $user;
+
+  if($user->uid == 0 || $_SESSION['secondchilc'] == 1) {
+    return drupal_get_form("subscription_static_get_form");
+  }
+  else {
+    if (in_array('Parent', array_values($user->roles))) {
+      return '';
+    }
+  }
+}
+function subscription_static_get_form_submit($form, $form_state) {
+
+  global $user;
+
+  $duration = array();
+  foreach($form_state['input']['duration'] as $i => $j) {
+    //echo "<pre>";print_r($j);
+    if($j[7] == 7) {
+      $duration[$i] = 7;
+    }
+    elseif(is_numeric($j[0])) {
+      $duration[$i] = 0;
+    }
+    else {
+      $duration[$i] = '';
+    }
+
+  }
+  $form_state['input']['duration'] = array();
+  $form_state['input']['duration'] = $duration;
+
+  if($form_state['input']['op'] == "Add to Cart" || $form_state['input']['op'] == "Update Cart") {
+    $form_state['input']['duration'][0] = 0;
+     
+    if(in_array("0", $form_state['input']['duration'])) {
+      $_SESSION['duration_free'] = 1;
+      unset($_SESSION['duration']);
+      drupal_set_message(t("The free trial will be activated once you add your child."), 'status', FALSE);
+      drupal_goto("user/register");
+    }
+    else {
+      //die('there');
+
+      $_SESSION['duration'] = $form_state['input']['duration'];
+      $_SESSION['duration_free'] = 2;
+
+    }
+  }
+  elseif($form_state['input']['op'] == 'Continue to Register & Purchase' ) {
+    drupal_set_message(t("The subjects are added to your cart. Please register."), 'status', FALSE);
+    drupal_goto("user/register");
+  }
+  elseif($form_state['input']['op'] == 'Continue to Register your child and Purchase') {
+    drupal_goto("admin/people/p2rp-create/student");
+  }
+  else {
+    if(array_key_exists(7, $form_state['input'])) {
+      unset_session_key(7);
+    }
+    elseif(array_key_exists(8, $form_state['input'])) {
+      unset_session_key(8);
+    }
+    elseif(array_key_exists(9, $form_state['input'])) {
+      unset_session_key(9);
+    }
+  }
+
+  if(array_key_exists('duration', $_SESSION)) {
+    $_SESSION['cart'] = array();
+    foreach ($_SESSION['duration'] as $key => $value) {
+      if($value != '') {
+        $_SESSION['cart'][$value]++;
+      }
+    }
+  }
+  else {
+    unset($_SESSION['cart']);
+  }
+
+//echo '<pre>';print_r($_SESSION);die();
+}
+
+function unset_session_key ($val) {
+  foreach ($_SESSION['duration'] as $key => $value) {
+    if($value == $val) {
+      $_SESSION['duration'][$key] = '';
+    }
+  }
+}
+function subscription_static_get_form($form, &$form_state) {
+  global $user;
+
+  $months = array();
+  //$months[9] = array(1250, 1750, 2500, 3250, 4000);
+  //$months[8] = array(2000, 2750, 3750, 4750, 5250);
+  $months[7] = array(800, 1500, 2000, 2400, 2400);
+
+  //$terms_sub = array("English", "Maths", "Science", "SST", "General Knowledge");
+  $terms_sub = array("English", "Maths", "Science", "Social Studies", "General Knowledge");
+  $price = array(0 => 0, 7 => 7);
+
+  $form['#tree'] = TRUE;
+
+
+  $form['title-txt'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="title-cust-text"><h2>Select the subjects you wish to subscribe and proceed for registration</h2></div>',
+  );
+
+
+$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+  if (stristr($agent, 'chrome') !== FALSE) {
+    $classes1 = 'chrome';
+  }
+  elseif (stristr($agent, 'crios') !== FALSE) {
+    $classes1 = 'chrome';
+  }
+  elseif (stristr($agent, 'safari') !== FALSE) {
+    $classes1 = 'safari';
+  }
+
+  $form['class'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="subs_child_class"></div><div class="other-wrapper browser-' . $classes1 . '">',
+  );
+
+
+  $default_check = array();
+  foreach ($_SESSION['duration'] as $k => $check_def) {
+      if($check_def != ''){
+        $default_check[] = $k;
+      }
+  }
+
+ $static_html = '<div class="form-item form-type-checkboxes1 form-item-subject">
+  <label for="edit-subject">Subject </label>
+ <div id="edit-subject" class="form-checkboxes"><div class="form-item form-type-checkbox form-item-subject-0">
+   <label class="option" for="edit-subject-0">English </label>
+
+</div>
+<div class="form-item form-type-checkbox form-item-subject-1">
+   <label class="option" for="edit-subject-1">Maths </label>
+
+</div>
+<div class="form-item form-type-checkbox form-item-subject-2">
+   <label class="option" for="edit-subject-2">Science </label>
+
+</div>
+<div class="form-item form-type-checkbox form-item-subject-3">
+   <label class="option" for="edit-subject-3">Social Studies </label>
+
+</div>
+<div class="form-item form-type-checkbox form-item-subject-3">
+   <label class="option" for="edit-subject-3">General Knowledge </label>
+</div>
+</div>
+</div>';
+
+  $form['subject'] = array(
+    '#markup' => $static_html,
+    //'#title' => t('Subject'),
+    //'#type' => 'checkboxes',
+    //'#type' => 'radios',
+    //'#required' => 'false',
+    //'#options' => $terms_sub,
+    //'#default_value' => $default_check,
+  );
+
+
+
+
+  for($i=0; $i<5; $i++) {
+
+    //echo "<pre>";print_r($_SESSION['duration']);die();
+    $form['duration'][$i] = array(
+
+      '#title' => "<div><span>Free Trial</span><span>Annual Subscription</span></div>",
+      '#type' =>'checkboxes',
+        //'#default_value' => $def,
+        //'#required' => 'false',
+      '#description' => 'Select your students duration',
+      '#options' => $price,
+      '#attributes' => array('onclick' => 'select_all_stat(this)'),
+
+    );
+    if(is_numeric($_SESSION['duration'][$i])) {
+      $form['duration'][$i]['#default_value'] = array($_SESSION['duration'][$i]);
+    }
+
+  }
+
+
+ $form['class_wrap_start'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="btn_subs_wrap">',
+  );
+  $form['addcart_submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Get Free Trial'),
+  );
+
+  $form['add_to_cart'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add to Cart'),
+  );
+  $form['class_wrap'] = array(
+    '#type' => 'markup',
+    '#markup' => '</div></div>',
+  );
+
+
+  $subject_sel = array();
+  $sub_cnt = 0;
+  $gk_checked = FALSE;
+  foreach($_SESSION['duration'] as $key =>$value1) {
+    if($key == 4 && $value1 == 7) {
+      $gk_checked = TRUE;
+    }
+    if($value1 == 7) {
+      $sub_cnt++;
+    }
+  }
+
+  $gk_exclude = TRUE;
+  if($gk_checked && $sub_cnt < 3) {
+    $gk_exclude = false;
+  }
+  elseif ($gk_checked) {
+    $sub_cnt--;
+  }
+
+  // sub_cnt == 1 do not exclude GK
+  // sub_cnt == 2 and that 2 include GK do not exlude GK
+  // sub_cnt > 1 and Gk is not included exlude GK
+
+  //echo $sub_cnt;
+  foreach($_SESSION['duration'] as $k => $value) {
+    if($value == 7 ) {
+      if($gk_exclude && $terms_sub[$k] != "General Knowledge") {
+        $subject_str[] = $terms_sub[$k];
+      }
+      elseif ($gk_exclude == FALSE) {
+        $subject_str[] = $terms_sub[$k];
+      }
+    }
+  }
+ // echo "<pre>";print_r($subject_str);die();
+  $subj_str = implode(",", $subject_str);
+  if(array_key_exists('cart', $_SESSION)) {
+    $total_cost = 0;
+    $output  = "<div class='mycart'><h2 class='block-title'>My Cart</h2></div>";
+    $output .= "<table class='custom-cart-table-info'>";
+
+    $_SESSION['totalcost'] = array();
+    foreach ($_SESSION['cart'] as $key => $value) {
+      /*
+        if($key == 9) {
+          $key1 = 3;
+        }
+        elseif($key == 8) {
+          $key1 = 6;
+        }
+        else
+      */
+      if($value > 1)
+        $value--;
+        if($key == 7) {
+          $key1 = 12;
+        }
+        $output .= "<tr><td> Subscription for " . $sub_cnt . " Subjects - $subj_str ";
+
+        if($sub_cnt > 1 && $gk_exclude) {
+            $output .= "<br/>+ Free General Knowledge pack";
+        }
+        $output .= "</td>";
+        $output .="<td><span class='rpsymbol'>&#8377;</span> " . $months[$key][$sub_cnt-1] . "</td>";
+        $output .= '<td><input type="submit" class="form-submit btn_custom_thm" value="Delete" name='.$key.' id="delete"' . $i .' style="display: inline;"></td>';
+        $output .= "</tr>";
+        $_SESSION['totalcost'][$key1] +=$months[$key][$sub_cnt-1];
+        $total_cost += $months[$key][$sub_cnt-1];
+    }
+
+    $output .= "</table>";
+
+    $output .= '<div class="line-item-total">
+      <span class="line-item-total-label">Total Cost : </span>
+      <span class="line-item-total-raw"><span><span class="rpsymbol">&#8377;</span></span> '.$total_cost.' </span></div>';
+    $form['cart'] = array(
+      '#type' => 'markup',
+      '#markup' => $output,
+    );
+    $numcheck = "test";
+    foreach ($_SESSION['cart'] as $chk => $value) {
+      $numcheck = $chk;
+    }
+
+    $form['coupon'] = coupon_code_form_cust();
+
+
+    if(is_numeric($numcheck)) {
+      if($user->uid == 0 ) {
+        $form['continue'] = array(
+           '#type' => 'submit',
+          '#value' => t('Continue to Register & Purchase'),
+          '#attributes' => array("class" => array("btn_custom_thm continue-btn")),
+        );
+      }
+      else {
+      $form['continue'] = array(
+          '#type' => 'submit',
+          '#value' => t('Continue to Register your child and Purchase'),
+          '#attributes' => array("class" => array("btn_custom_thm continue-btn")),
+        );
+      }
+    }
+
+  }
+
+
+ return $form;
+}
+/*
+ * Implementation of hook_menu().
+ */
+
+function subscription_menu() {
+  $items['subscription/form/%'] = array(
+    'title' => 'Choose a Subscription Package',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('subscription_form'),
+    'access callback' => TRUE,
+  );
+  $items['subremove/%/%/%/%'] = array(
+    'title' => 'Ajax remove child cart data',
+    'page callback' => 'subscription_remove_from_cart',
+    'access callback' => TRUE,
+  );
+$items['subremove/%/%/%/%/%'] = array(
+    'title' => 'Ajax remove child cart data',
+    'page callback' => 'subscription_remove_from_cart',
+    'access callback' => TRUE,
+  );
+  return $items;
+
+}
+
+
+/**
+ * Report for subscription for admin user
+ */
+function subscription_report_all(){
+  return '';
+  $output = array();
+  $user_ids = array();
+
+  $subscription_query = db_select('commerce_order', 'co');
+    $subscription_query->join('eck_subscription', 'es','co.order_id=es.order_id');
+  $sub_result = $subscription_query->fields('co')
+    ->fields('es')
+    ->range(0, 10)
+    ->orderBy('co.order_id', 'DESC')
+    ->execute()
+    ->fetchAll();
+
+//echo "<pre>";print_r($sub_result);die();
+
+//fetch all promo code and agent detail if attached with promo code.
+//make array of user id's from parent list
+//make array of user id's from child list.
+
+  foreach ($sub_result as $key => $value) {
+    $row = array();
+    $row['order_id'] = $value->order_id;
+    $row['uid'] = $value->uid;
+    $row['status'] = $value->status;
+
+    $users_ids[$value->uid] = $value->uid;
+
+    $output[]  = $row;
+  }
+
+  // OUTPUT
+  $out = "<table>";
+  $out .= "<tr>
+    <th>Order ID</th>
+    <th>User Name</th>
+    <th>Order Status</th>
+    </tr>";
+  foreach ($output as $key => $value) {
+    $out .= "<tr>";
+    $out .= "<td>" . $value['order_id'] . "</td>";
+    $out .= "<td>" . get_name($value['uid']) . "</td>";
+    $out .= "<td>" . $value['status'] . "</td>";
+    $out .= "<td>" . l("More Info." , "subscription-moreinfo/" .$value['order_id'] ) . "</td>";
+    $out .= "</tr>";
+  }
+  $out .= "</table>";
+  //echo "<pre>";print_r($output);die();
+  return $out;
+
+}
+
+/**
+ * page call to remove itesm from child cart
+ *
+ * URL : subremove/parentid/childid/month
+ */
+function subscription_remove_from_cart() {
+  global $user;
+  $parent_uid = arg(1);
+  $child_uid = arg(2);
+  $months = arg(3);
+  $tid = arg(4);
+  $del_worksht = arg(5);
+  if ($parent_uid != $user->uid) {
+    drupal_set_message(t("You are not authorised to do this action"), 'error');
+    return "";
+  }
+  $commerce_cart_user = commerce_cart_order_load($user->uid);
+  $order_no = $commerce_cart_user->order_number;
+  
+ $term_obj = db_select('taxonomy_term_data','t')
+    ->fields('t', array('name'))
+    ->condition('tid', $tid)
+    ->execute()
+    ->fetchAssoc();
+    $sub_name = $term_obj['name'];
+    if($sub_name == 'Maths') {
+        $sub_name = 'math';
+    }
+    if($sub_name == 'Science') {
+        $sub_name = 'science';
+    }
+    if($sub_name == 'English') {
+        $sub_name = 'english';
+    }
+    if($sub_name == 'SST') {
+        $sub_name = 'sst';
+    }
+    if(isset($del_worksht) && $del_worksht == 'del') {
+      $line_item_work = db_select('eck_subscription', 's');
+      $line_item_work->fields('s');
+      $line_item_work->condition("uid", $parent_uid);
+      $line_item_work->condition("child_uid", $child_uid);
+      $line_item_work->condition("qty", $months);
+      $line_item_work->condition("subject_tid", $tid);
+      $line_item_work->condition("worksheet_tid", $tid);
+      $line_item_work_res = $line_item_work->execute()->fetchAll();
+      $line_item_work_res_id = $line_item_work_res[0]->line_item_id;
+      db_delete('commerce_line_item')
+        ->condition('line_item_id', $line_item_work_res_id)
+        ->execute();
+      db_delete('eck_subscription')
+          ->condition('line_item_id', $line_item_work_res_id)
+          ->condition('worksheet_tid', $tid)
+          ->execute();
+      unset($_SESSION['worksheet'][$child_uid][$tid]);
+      unset($_SESSION['worksheet_duration'][$child_uid][$tid]);
+      unset($_SESSION['add_cart'][$child_uid][$sub_name]['work']);
+
+  }
+  else {
+
+      $line_item_sub = db_select('eck_subscription', 's');
+      $line_item_sub->fields('s');
+      $line_item_sub->condition("uid", $parent_uid);
+      $line_item_sub->condition("child_uid", $child_uid);
+      $line_item_sub->condition("qty", $months);
+      $line_item_sub->condition("subject_tid", $tid);
+      $line_item_sub->condition("worksheet_tid", '0');
+      $line_item_sub_res = $line_item_sub->execute()->fetchAll();
+      $line_item_sub_res_id = $line_item_sub_res[0]->line_item_id;
+      db_delete('commerce_line_item')
+        ->condition('line_item_id', $line_item_sub_res_id)
+        ->execute();
+
+        db_delete('eck_subscription')
+          ->condition('line_item_id', $line_item_sub_res_id)
+          ->condition('worksheet_tid', '0')
+          ->execute();
+
+        unset($_SESSION['add_cart'][$child_uid][$sub_name]['sub']);
+        //unset($_SESSION['add_cart'][$child_uid][$sub_name]['tid']);
+        unset($_SESSION['subject'][$child_uid][$tid]);
+        unset($_SESSION['duration'][$child_uid][$tid]);
+        unset($_SESSION['sub_count'][$child_uid][$tid]);
+
+}
+  
+      $gk_count = db_select('eck_subscription','e')
+        ->fields('e', array('order_id'))
+        ->condition('line_item_id', '0','<>')
+        ->condition('worksheet_tid', '0','=')
+        ->condition('order_id', $order_no)
+        ->execute();
+    
+      $no_of_res = $gk_count->rowCount();
+      if($no_of_res < 2) {
+        db_delete('eck_subscription')
+          ->condition('line_item_id', '0')
+          ->condition('worksheet_tid', '0')
+          ->condition('order_id', $order_no)
+          ->execute();
+      } 
+/*Code to update single subject and worksheet prices - starts*/
+   $sub_count_query = db_select('commerce_line_item', 'li');
+    $sub_count_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $sub_count_query->fields('li');
+    $sub_count_query->fields('es');
+    $sub_count_query->condition("es.uid", $parent_uid);
+    $sub_count_query->condition("es.child_uid", $child_uid);
+    $sub_count_query->condition("es.order_id", $order_no);
+    $sub_count_query->condition("es.worksheet_tid", '0');
+    $res = $sub_count_query->execute()->fetchAll();
+    $count = count($res);
+    update_commerce_line_item_price($count,$res,$order_no);
+/*Code to update single subject and worksheet prices - end*/
+//$url = urlencode('#generate-maths-block-form--10');
+    drupal_goto('pricingplans/form/'.$child_uid,array('fragment' => 'generate-maths-block-form--10'));
+}
+
+/**
+ * form static table
+ */
+function get_static_table () {
+
+  $output = '
+  <div class="subhead_txt">
+  <div class="subject_block" style="background: none repeat scroll 0% 0% transparent; width: 100%; height: 100%;" align="left">
+    <h2>Pricing
+      <span data-mce-mark="1"> *</span>
+    </h2>
+
+    <div class="subtxt-table" style="text-align: left;">
+      <table class="pricing plans" border="0">
+        <tbody>
+          <tr>
+            <th>Subjects</th>
+            <th>Annual Subscription (<span class="rpsymbol" style="color: white; font-size: 16px;">₹</span>)</th>
+          </tr>
+          <tr>
+            <td>1 subject</td>
+            
+            <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;800</td>
+          </tr>
+          <tr>
+            <td>2 subjects</td>
+            
+            <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1500</td>
+          </tr>
+          <tr>
+            <td>3 subjects</td>
+          
+            <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2000</td>
+          </tr>
+          <tr>
+            <td>4 subjects</td>
+            
+            <td>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2400</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two_text">
+    <div class="twe-month_text">
+    Avail General Knowledge for free with purchase of any 2 other subjects or more.
+    </div>
+    <div class="subnewtxtadded" style="color: #000000 !important; clear: both;">At Excelonz, the annual subscription is for 12 months. The subscribed student can practice for his current grade until 31st March. The practice for the next grade starts on 1st April and continues till the end of the subscribed period. If you wish to alter this schedule, kindly write to us at support@excelonz.com.
+ We will gladly customise the schedule to optimise your child &#x27;s performance.</div>
+
+    </div> <div class="subhead_txt1">
+      <div class="subtxt-other" style="text-align: left; width:100%;">*All prices are inclusive of taxes</div>
+    </div>
+  </div>
+</div>';
+
+  return $output;
+
+}
+
+
+/**
+ * [static_page_cart_product_add description]
+ * function call when user add product on pricing page and add child after that.
+ */
+function static_page_cart_product_add() {
+
+  $months = array();
+  //$months[3] = array(1250, 1750, 2500, 3250, 4000);
+  //$months[6] = array(2500, 3500, 5000, 6500, 8000);
+  $months[12] = array(800, 1500, 2000, 2400);
+
+  $months_dis = array();
+  $months_dis[12] = array(0, 0, 0, 0, 0);
+  //$months_dis[6] = array(20, 21.428571429, 25, 26.923076923, 34.375);
+  //$months_dis[12] = array(20, 28.571428571, 40, 46.153846154, 53.125);
+
+  global $user;
+  $ch_id = arg(2);
+  $profile2 = profile2_load_by_user($ch_id);
+  $user_class =$profile2['student']->field_class_user['und'][0]['tid'];
+
+
+  ksort($_SESSION['duration']);
+  foreach ($_SESSION['duration'] as $key => $value) {  //delete this or not
+    $term_duration[] = $value;
+  }
+
+  $pid_query = db_select('profile', 'p')
+      ->fields('p',array('pid'))
+      ->condition('uid', $ch_id)
+      ->condition('type','student')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+      $pid = $pid_query[0]->pid;
+
+      //fetch user class name.
+      $query = db_select('field_data_field_class_user', 'c');
+      $query->join("taxonomy_term_data", "uc", "c.field_class_user_tid=uc.tid");
+      $query->fields('uc')
+        ->condition('c.entity_id', $pid)
+        ->condition('c.delta', 0);
+      $result = $query->execute()
+        ->fetchAssoc();
+
+      $taxo_get = $result['tid'];
+
+    //  echo "<pre>";print_r($taxo_get);die();
+      $taxo_load = taxonomy_term_load($taxo_get);
+      $class_name = $taxo_load->name;
+      $class_tid = $taxo_load->tid;
+
+      $sub_id = $taxo_load->field_subject['und'][0]['tid']; // gets the referenced sub
+      $sub_term1 = taxonomy_get_children($sub_id);
+      $ordered_arr = array("English","Maths","Mathematics","Science","SST","Social Studies","General Knowledge");
+    foreach ($ordered_arr as $value) {
+      foreach ($sub_term1 as $k => $item) {
+        if($item->name == $value)
+          $sub_term[] = $item;
+      }
+    }
+
+
+
+    $i = 0;
+    $dur_arr = array();
+    foreach ($sub_term as $key => $value) {
+      $dur_arr[$value->tid] =$_SESSION['duration'][$i];
+      $i++;
+      if($value->name == "General Knowledge") {
+        $gk = $value->tid;
+      }
+    }
+
+
+  $prod_arry = array();
+  foreach ($dur_arr as $key => $value) {
+   // print_r($subject1);die();
+    $subject1=$key;
+    $term_duration = $value;
+    $term = taxonomy_term_load($term_duration);
+    $name = $term->name;
+    if ($subject1 == 0)
+      continue 1;
+    // print_r($subject1);print_r($class2);print_r($class1);
+    //fetch class term id
+    $prod_id = db_query('SELECT p.field_product_product_id
+      FROM field_data_field_product p,
+      field_data_field_class_user a,
+           field_data_field_subject b
+      WHERE
+      p.field_product_product_id = a.entity_id
+      AND p.field_product_product_id = b.entity_id
+      AND a.field_class_user_tid = :class1
+      AND b.field_subject_tid = :subject1', array(':class1' => $user_class, ':subject1' => $subject1))->fetchField();
+
+    //$terms_dur = taxonomy_get_tree(4);
+    //echo "<pre>";print_r($terms_dur);die();
+    $term_load = taxonomy_term_load($term_duration);
+    $get_term_price = $term_load->field_price_of_duration ['und'][0]['value'];
+    if($term_load->name != '') {
+      $prod_arry[$term_load->name][] = array("id" => $prod_id, "subject" => $subject1);
+    }
+
+  }
+
+  $gk_checked = FALSE;
+    $sub_cnt = 0;
+    foreach ($prod_arry[12] as $gkkey => $gkval) {
+      if($gkval['subject'] == $gk) {
+        $gk_checked = TRUE;
+      }
+      $sub_cnt++;
+    }
+    $gk_cart_exclude = TRUE;
+    if($gk_checked && $sub_cnt < 3) {
+      $gk_cart_exclude = FALSE;
+    }
+    elseif($gk_checked) {
+      $sub_cnt--;
+    }
+
+
+$temp = 0;
+  /*
+    -- Loop to add updated item in the user cart
+  */
+  foreach ($prod_arry as $key => $product_sub_arry) {
+    $prod_count = count($product_sub_arry);
+    if($prod_count >5) {
+      $prod_count = 5;
+    }
+    $orig_amount = $months[$key][$prod_count-1];
+    $discount_perc = $months_dis[$key][$prod_count-1];
+    $final_price = $orig_amount - (($orig_amount * $discount_perc) /100);
+
+//COUPONCODE
+
+    $subsc_entry = false;
+        if(array_key_exists('coupon', $_SESSION)) {
+          if(in_array($key, $_SESSION['coupon']['month'])) {
+            if($_SESSION['coupon']['type'] == '%') {
+              $subsc_entry = true;
+              $final_price = $final_price - (($final_price * $_SESSION['coupon']['perce']) / 100);
+            }
+            elseif($_SESSION['coupon']['type'] == "Rs") {
+              $subsc_entry = true;
+              $final_price = $final_price - $_SESSION['coupon']['perce'];
+            }
+            elseif($_SESSION['coupon']['type'] == "month" || $_SESSION['coupon']['type'] == "fixdate") {
+              $subsc_entry = true;
+            }
+          }
+        }
+//END COUPONCODE
+
+    $single_price = $final_price / $prod_count;
+
+       /*
+      Price adjust
+    */
+    $i = 0;
+    $single_prices = array();
+    $single_total = 0;
+    foreach($product_sub_arry as $pric) {
+      $single_total += round($single_price);
+      $single_prices[$i] = round($single_price);
+      $i++;
+    }
+    if($final_price > $single_total) {
+      $single_prices[$i-1] = $single_prices[$i-1] - ($final_price - $single_total);
+    }
+    elseif($final_price < $single_total) {
+      $single_prices[$i-1] = $single_prices[$i-1] - ($single_total - $final_price);
+    }
+    $j = 0;
+    /* price adjust over */
+
+
+    $total_subject_count = 0;
+    foreach ($product_sub_arry as $key1 => $prod_single) {
+        if($prod_single['subject'] == $gk && $gk_cart_exclude) {
+        continue 1;
+      }
+
+      $product_output = commerce_cart_product_add_by_id($prod_single['id'], $single_prices[$j],  $combine = FALSE);
+      $uid = $user->uid;
+      $line_item_id = $product_output->line_item_id;
+      $order_id = $product_output->order_id;
+
+//COUPONCODE
+      if($subsc_entry) {
+        $entity = entity_create("subscription",    //adds the entity
+          array(
+            'uid' => $uid,
+            'type' => 'user',
+            'child_uid' => $ch_id,
+            'line_item_id' => $line_item_id,
+            'order_id' => $order_id,
+            'qty' => $key,
+            'subject_tid' => $prod_single['subject'],
+            'offercodeid' => $_SESSION['coupon']['id'],
+          )
+        );
+      }
+      else {
+        $entity = entity_create("subscription",    //adds the entity
+          array(
+            'uid' => $uid,
+            'type' => 'user',
+            'child_uid' => $ch_id,
+            'line_item_id' => $line_item_id,
+            'order_id' => $order_id,
+            'qty' => $key,
+            'subject_tid' => $prod_single['subject'],
+          )
+        );
+
+      }
+//END COUPONCODE
+      $en = entity_save('subscription', $entity);
+      $total_subject_count++;
+      $j++;
+    }
+
+  }
+
+
+  //if more then 1 subject add GK in subscription table.
+if($total_subject_count > 1 && $gk_cart_exclude) {
+  if(is_numeric($_SESSION['coupon']['id']) && $_SESSION['coupon']['id'] != 0) {
+    $offer_id = $_SESSION['coupon']['id'];
+  }
+  else {
+    $offer_id = 0;
+  }
+      $entity = entity_create("subscription",    //adds the entity
+        array(
+          'uid' => $uid,
+          'type' => 'user',
+          'child_uid' => $ch_id,
+          'line_item_id' => 0,
+          'order_id' => $order_id,
+          'qty' => 12,
+          'subject_tid' => $gk,
+          'offercodeid' => $offer_id,
+        )
+      );
+  $en = entity_save('subscription', $entity);
+  }
+
+}
+
+function static_page_free_product_add() {
+ global $user, $base_url;
+  $uid = $user->uid;
+  $subject1 = $form_state['values']['subject'];
+  $prof_load = profile2_load_by_user(arg(2));
+      $sql = db_query("SELECT field_child_id_uid FROM field_data_field_child_id WHERE entity_id =".$user->uid);
+foreach($sql as $row){
+   $child_ids = $row->field_child_id_uid;
+}
+if(arg(2)){
+  $child_id = arg(2);
+    $prof_load = profile2_load_by_user($child_id);
+}else{
+  $child_id = $child_ids;
+   $prof_load = profile2_load_by_user($child_ids);
+}
+
+  $today = date("y.m.d");
+  $time_final = strtotime($today);
+  $days = 7;
+  $time_final1 = strtotime('+'.$days.' days',$time_final);
+
+  $ch_id = $child_id;
+  $user_class =$prof_load['student']->field_class_user['und'][0]['tid'];
+  $pid_query = db_select('profile', 'p')
+      ->fields('p',array('pid'))
+      ->condition('uid', $ch_id)
+      ->condition('type','student')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+      $pid = $pid_query[0]->pid;
+
+      //fetch user class name.
+      $query = db_select('field_data_field_class_user', 'c');
+      $query->join("taxonomy_term_data", "uc", "c.field_class_user_tid=uc.tid");
+      $query->fields('uc')
+        ->condition('c.entity_id', $pid)
+        ->condition('c.delta', 0);
+      $result = $query->execute()
+        ->fetchAssoc();
+
+      $taxo_get = $result['tid'];
+
+    //  echo "<pre>";print_r($taxo_get);die();
+      $taxo_load = taxonomy_term_load($taxo_get);
+      $class_name = $taxo_load->name;
+      $class_tid = $taxo_load->tid;
+
+      $sub_id = $taxo_load->field_subject['und'][0]['tid']; // gets the referenced sub
+      $sub_term1 = taxonomy_get_children($sub_id);
+      $ordered_arr = array("English","Maths","Mathematics","Science","SST","Social Studies","General Knowledge");
+    foreach ($ordered_arr as $value) {
+      foreach ($sub_term1 as $k => $item) {
+        if($item->name == $value)
+          $sub_term[] = $item;
+      }
+    }
+
+    foreach ($sub_term as $value) {
+
+      $key = $value->tid;
+      if(!recursive_array_search($key, $prof_load['student']->field_subjects)) {
+            $prof_load['student']->field_subjects['und'][]['tid'] = $key;
+      }
+
+
+        $entity = entity_create("expiry",    //adds the entity
+          array(
+            'uid' => $uid,
+            'type' => 'user',
+            'child_id' => $child_id,
+            'expiry_date' => $time_final1,
+            'subject_tid' => $key,
+            'status'=> 1,
+            'purchase_type' => 'free',
+          )
+        );
+        $en = entity_save('expiry', $entity);
+  }
+  profile2_save($prof_load['student']);
+
+  $my_settings = array(
+    'free' => "free"
+  );
+  drupal_add_js(array('subscription' => $my_settings), 'setting');
+  drupal_set_message("Your free trial subscription is now active. We have sent a confirmation mail to your registered email id giving your details of your subscription along with user ids and passwords. Start experiencing what Excelonz has to offer - right away");
+
+
+}
+
+/*
+ * steps
+ * - array to uid -done
+ * - sql query to bring usernames-done
+ * - put username in form-done
+ * - bring classes attached with username
+ */
+function subscription_form($form, $form_state) {
+ //echo '<pre>';print_r($_SESSION);die();
+  if(array_key_exists("duration", $_SESSION)) {
+
+
+      $total_cnt = 0;
+      foreach($_SESSION['duration'] as $no => $dur) {
+        if($dur == 7) {
+          $total_cnt++;
+        }
+        if($no == 4 && $dur== 7) {
+          $gk_ch = TRUE;
+        }
+      }
+      if($gk_ch && $total_cnt > 2) {
+        $_SESSION['duration'][4] = 0;
+        $_SESSION['cart'][7]--;
+      }
+
+    //echo "<pre>";print_r($_SESSION);die();
+    static_page_cart_product_add();
+
+    unset($_SESSION['duration']);
+    unset($_SESSION['cart']);
+    unset($_SESSION['coupon']);
+
+
+    if($_SESSION['secondchilc'] == 1) {
+      //unset($_SESSION['secondchilc']);
+      drupal_goto("pricingplans");
+    }
+    else {
+      drupal_goto("checkout");
+    }
+  }
+  if(array_key_exists('duration_free', $_SESSION) && $_SESSION['duration_free'] == 1) {
+    static_page_free_product_add();
+    unset($_SESSION['duration_free']);
+  }
+  if($_SESSION['secondchilc'] == 1) {
+      //unset($_SESSION['secondchilc']);
+      drupal_goto("pricingplans");
+  }
+
+  $_SESSION['cart_detail'] = array();
+  $_SESSION['cart_detail1'] = array();
+  $months = array();
+//  $months[3] = array(1250, 1750, 2500, 3250, 4000);
+//  $months[6] = array(2500, 3500, 5000, 6500, 8000);
+  $months[12] = array(800, 1500, 2000, 2400);
+
+
+  global $base_url;
+  $form['#tree'] = TRUE;
+  if (empty($form_state['num_names'])) {
+    $form_state['num_names'] = 1;
+  }
+  //@todo : nit code cleanup.
+  global $user;
+  $userid = $user->uid;
+  $cur_id = user_load($userid);// loading the parents id
+  $childid = array();
+  $r_child =arg(2); //get child id from url
+  //echo $r_child;
+  $child_arr = $cur_id->field_child_id['und'];
+
+  //check if free trial is over for this user
+  $free_check = db_select('eck_expiry', 'ee');
+  $free_check->fields("ee")
+    ->condition('uid', $user->uid)
+    ->condition('child_id', $r_child)
+    ->condition('purchase_type', 'free');
+  $free_count = $free_check->execute()->rowCount();
+
+//echo $free_count;die();
+  //fetch all preselected value;
+  $order3 = commerce_cart_order_load($user->uid);
+  $order_nos = $order3->order_number;
+  //echo "here" . $order_nos . "--" . $r_child;die();
+  if($order_nos != '') {
+    $subject_query = db_query("SELECT es.* FROM eck_subscription es JOIN commerce_line_item cl ON cl.line_item_id = es.line_item_id
+      WHERE es.order_id =".$order_nos."
+      AND child_uid =" . $r_child);
+
+
+
+//echo $subject_query;
+    $default_cart = array();
+    foreach ($subject_query as $cart_subject) {
+
+      $default_cart[$cart_subject->subject_tid] = $cart_subject->qty;
+    }
+  }
+//echo "<pre>";print_r($default_cart);die();
+
+  if($child_arr == ''){
+    drupal_set_message(t('Please enter a child'), 'status', TRUE);
+  }
+  else {
+    foreach ($child_arr as $key => $value) {
+
+      $childid[] = $value['uid'];
+
+      //fetch users profile ID.
+      $pid_query = db_select('profile', 'p')
+      ->fields('p',array('pid'))
+      ->condition('uid', $r_child)
+      ->condition('type','student')
+      ->range(0, 1)
+      ->execute()
+      ->fetchAll();
+      $pid = $pid_query[0]->pid;
+
+      //fetch user class name.
+      $query = db_select('field_data_field_class_user', 'c');
+      $query->join("taxonomy_term_data", "uc", "c.field_class_user_tid=uc.tid");
+      $query->fields('uc')
+        ->condition('c.entity_id', $pid)
+        ->condition('c.delta', 0);
+      $result = $query->execute()
+        ->fetchAssoc();
+
+      $taxo_get = $result['tid'];
+
+    //  echo "<pre>";print_r($taxo_get);die();
+      $taxo_load = taxonomy_term_load($taxo_get);
+      $class_name = $taxo_load->name;
+      $class_tid = $taxo_load->tid;
+
+      $sub_id = $taxo_load->field_subject['und'][0]['tid']; // gets the referenced sub
+      $sub_term1 = taxonomy_get_children($sub_id);
+      // /  echo "<pre>";print_r($sub_term);die();
+    }
+
+    //Used a loop to order a subject as mensioned in static pages.
+    $ordered_arr = array("English","Maths","Mathematics","Science","SST","Social Studies", "General Knowledge");
+    foreach ($ordered_arr as $value) {
+      foreach ($sub_term1 as $k => $item) {
+        if($item->name == $value)
+          $sub_term[] = $item;
+      }
+    }
+    $gk_key = '';
+    foreach ($sub_term1 as $key => $value) {
+      if($value->name == "General Knowledge") {
+        $gk = $key;
+      }
+    }
+
+
+
+      $terms_sub= array();
+          //echo "<pre>";print_r($sub_term);die();
+          //unset($terms_sub[array_search("General Knowledge", $terms_sub)]);
+      foreach ($sub_term as $item) {
+        $key = $item->tid;
+        $value = $item->name;
+        //if($value == "SST")
+          //$value = "Social Studies";
+          $terms_sub[$key] = $value;
+       // print_r($terms_sub);die();
+      }
+
+//echo "<pre>";print_r($terms_sub);die();
+
+
+
+
+
+      $query1 = db_select('users', 'u');
+      $query1->join("field_data_field_first_name", "fn", "u.uid = fn.entity_id AND bundle = 'user'");
+      $query1->fields('u',  array('uid'));
+      $query1->fields('fn',  array('field_first_name_value'));
+      $query1->condition('uid', array($childid), 'IN');
+      $query = $query1->execute()->fetchAll();
+
+      //echo "<pre>";print_r($query);die();
+
+    $childname = array();
+    $ch_name = array();
+    foreach ($query as $key => $value) {
+      $ch_name = $value->field_first_name_value;
+      $childname[$value->uid] = $value->field_first_name_value;
+      $c_uid .=  '<li id="'.$value->uid.'"><a href="'.$base_url.'/subscription/form/'.$value->uid.'">'.$value->field_first_name_value.'</a></li>';
+    }
+  }
+
+  $terms = taxonomy_get_tree(2,$parent = 0, $max_depth = 1, $load_entities = FALSE);
+  foreach ($terms as $item) {
+    $key = $item->tid;
+    $value = $item->name;
+    $terms_array[$key] = $value;
+  }
+
+  $terms_dur = taxonomy_get_tree(4);
+
+   foreach ($terms_dur as $item) {
+
+    $key = $item->tid;
+    $term_load = taxonomy_term_load($key);
+    $term_price = $term_load->field_price_of_duration ['und'][0]['value'];
+    $value_dur = $item->name;
+    $terms_array_dur[$key] = $value_dur;//loads the terms
+    //print_r($value);die();
+  }
+
+  foreach ($terms_dur as $item) {
+
+    $key = $item->tid;
+    $term_load = taxonomy_term_load($key);
+    $term_price = $term_load->field_price_of_duration ['und'][0]['value'];// gets the price of the term
+    //print_r($term_price);die();
+    $value = $term_price;
+    $term_price_array[$key] = $value;
+    //print_r($term_price_array);die();
+  }
+
+  $form['static_table'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="static_table">'.get_static_table().'</div>',
+  );
+
+
+  $form['Children1'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="subs_child_classa"><ul>'.$c_uid.'</ul></div>',
+  );
+
+
+$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+  if (stristr($agent, 'chrome') !== FALSE) {
+    $classes1 = 'chrome';
+  }
+  elseif (stristr($agent, 'crios') !== FALSE) {
+    $classes1 = 'chrome';
+  }
+  elseif (stristr($agent, 'safari') !== FALSE) {
+    $classes1 = 'safari';
+  }
+
+  $form['class'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="subs_child_class">Class '.$class_name.'</div><div class="other-wrapper browser-'.$classes1.'">',
+  );
+
+//echo "<pre>";print_r($terms_sub);die();
+
+
+  $form['subject'] = array(
+    '#prefix' => '<div class="form-type-checkboxes1">',
+    '#suffix' => '</div>',
+    //'#markup' => $static_html,
+    '#title' => t('Subject'),
+    '#type' => 'checkboxes',
+    //'#type' => 'radios',
+    //'#required' => 'false',
+    '#description' => 'Select your students subject',
+    '#options' => $terms_sub,
+
+  );
+
+
+
+    $checkbox_checked = array();
+   foreach ($sub_term as $key => $value){
+
+    //echo "<pre>";print_r($sub_term[$key]->tid);//die();
+    $prod_id = db_query('SELECT p.field_product_product_id
+      FROM field_data_field_product p,
+      field_data_field_class_user a,
+           field_data_field_subject b
+      WHERE
+      p.field_product_product_id = a.entity_id
+      AND p.field_product_product_id = b.entity_id
+      AND a.field_class_user_tid = :class1
+      AND b.field_subject_tid = :subject1', array(':class1' => $class_tid, ':subject1' => $sub_term[$key]->tid))->fetchField();
+
+    $s_tid = $sub_term[$key]->tid;
+      //echo $prod_id;
+    //$price = commerce_product_calculate_sell_price($prod_id);
+    if ($prod_id == ""){
+
+    drupal_set_message(t('Please enter all the Products'), 'status', TRUE);
+    }
+    else{
+
+      $price_display_array = array();
+
+     if($free_count == 0)
+        $price_display_array[] = "Free";
+      $count = 0;
+      foreach ($terms_dur as $item) {
+        $gr = $item->tid;
+
+      //  print_r($gr);//die();
+        $term_load = taxonomy_term_load($gr);
+        $term_name[$gr] = $term_load->name;
+
+        //@oldcode -- next one line comment and one added
+        //$term_price = $term_load->field_price_of_duration ['und'][0]['value'];// gets the price of the term
+        $term_price = $months[$term_load->name][0];                                                                    //
+
+        $product = commerce_product_load($prod_id);
+        $price = commerce_product_calculate_sell_price($product);
+        $price_amt = $price['amount'] *  $term_price;
+        $price_display1 = commerce_currency_format($price['amount'], $price['currency_code'], $product);
+        $price_display = commerce_currency_format($price_amt, $price['currency_code'], $product);
+        $key = $item->tid;
+        $price_display_array[$gr] = $price_display;
+
+
+        $count++;
+        if($count == 3) {
+          $title_nm = "<div>";
+          if($free_count == 0)
+            $title_nm .= "<span>Free Trial</span>";
+
+          foreach ($term_name as $key => $value) {
+            $title_nm .= "<span>" . $value . " Months</span>";
+          }
+          $title_nm .= "</div>";
+
+        }
+        else {
+          $title_nm = '';
+        }
+//echo "<pre>";print_r($default_cart);die();
+        $default_val =  0;
+        if(array_key_exists($s_tid, $default_cart)) {
+          $checkbox_checked[] = $s_tid;
+          if($default_cart[$s_tid] == 12) {
+            $default_val = 7;
+          }
+          else {
+            $default_val = -1;
+          }
+        }
+        //echo $default_val. "<br/>";
+
+$title_nm = "<div>";
+if($free_count == 0 )
+$title_nm .= "<span>Free Trial</span>";
+$title_nm .= "<span>Annual Subscription</span></div>";
+      $form['duration'][$s_tid] = array(
+           '#prefix' => '<div class="sub-checkbox">',
+          '#suffix' => '</div>',
+        '#title' => $title_nm,
+        '#type' =>'checkboxes',
+        '#default_value' => array($default_val),
+        //'#required' => 'false',
+        '#description' => 'Select your students duration',
+        '#options' => $price_display_array,
+        '#attributes' => array('onclick' => 'select_all(this)'),
+        );
+
+      }
+    //echo "<pre>";print_r($price_display_array);die();
+    // print_r($term_name);die();
+    }
+
+  }
+
+  $form['subject']['#default_value'] = $checkbox_checked;
+
+    $form['gk_key'] = array(
+    '#type' => 'textfield',
+    '#size' => 10,
+    '#maxlength' => 10,
+    '#default_value' => $gk,
+    '#prefix' => '<div style="display:none">',
+    '#suffix' => '</div>',
+  );
+
+
+ /* Comment Start here*/
+  $form['class_wrap_start'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="btn_subs_wrap">',
+  );
+
+  $form['addcart_submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Get Free Trial'),
+    );
+
+ $form['add_to_cart'] = array(
+      '#type' => 'submit',
+      '#value' => t('Add to Cart'),
+      '#submit' => array('subscription_form_add_cart'),
+    );
+ $form['add_to_cart1'] = array(
+      '#type' => 'submit',
+      '#prefix' => '<div style="display:none;">',
+      '#value' => t('Update Cart'),
+      '#submit' => array('subscription_form_add_cart'),
+      '#suffix' => '</div>',
+    );
+
+  $form['class_msg'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="msg-st" style="display:none">Free Trial activated for this child! Login details have been sent to your registered email ID.</br> In case you have not received any mail from us please check your spam mail. If mail is reflecting in spam, direct it to inbox and declare it safe for future communication.
+      </div>',
+  );
+
+   $form['class_msg1'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="msg-st1" style="display:none">12 months subscription covers the current class along with the next class for the balance subscription period.
+      </div>',
+  );
+  //Proceed to your <a href="/dashboard/parent" style="color:#fff;text-decoration:underline !important">dashboard</a> once you\'ve subscribed for all your children or subscribe other children using the tabs above!!
+  $form['class_wrap'] = array(
+    '#type' => 'markup',
+    '#markup' => '</div></div>',
+  );
+
+  return $form;
+}
+
+/*@todo: take class from user mapp the class taxonomy to the suject taxonomy
+ * 2. make class field pre filled from selecting of child
+ */
+function commerce_product_add($form, $form_state) {
+    
+
+  $returned_session = get_subject_counts_and_price($form,$form_state);
+  $returned_session = get_subject_counts_and_price_for_all_subject($form,$form_state);
+  
+
+
+  //echo '<pre>';print_r($returned_session);die();
+  //echo ''
+  $months = array();
+  $months[12] = array(800, 1500, 2000, 2400, 2400);
+  $worksheet_months[12] = array(199, 398, 597, 796);
+
+  $months_dis = array();
+  $worksheet_months_dis = array();
+  $months_dis[12] = array(0, 0, 0, 0,0);
+  $worksheet_months_dis[12] = array(0, 0, 0, 0);
+
+
+  global $user;
+   
+  
+  $class1 = $form_state['values']['class_name_hidden'];
+  $class1 = 'Class '.$class1;
+  $ch_id = arg(2);
+  $profile2 = profile2_load_by_user($ch_id);
+  $user_class =$profile2['student']->field_class_user['und'][0]['tid'];
+  $class2 = substr($class1, 2);
+
+  $sub_ject = $returned_session['subject'][$ch_id];
+  $d_tion = $returned_session['duration'][$ch_id];
+  $work_sheet = $returned_session['worksheet'][$ch_id];
+  $wd_tion = $returned_session['worksheet_duration'][$ch_id];
+  $gk = $form_state['values']['gk_tid_hidden'];
+  //print $gk;die();
+  $_SESSION['gk_tid'] = $gk;
+
+  /*For subject*/
+  foreach ($d_tion as $key => $value) {  //delete this or not
+      $term_duration[] = $value;
+  }
+
+  /*For worksheet*/
+  foreach ($wd_tion as $key => $value) {  //delete this or not
+      $wterm_duration[] = $value;
+  }
+  
+  //$childn = $form_state['values']['Children'];
+  
+
+
+
+  $prod_arry = array();
+foreach ($d_tion as $key => $value) {
+    $subject1=$key;
+
+    $term_duration = $value;
+    //print $term_duration;die();
+    $term = taxonomy_term_load($term_duration);
+    //echo '<pre>';print_r($term);die();
+    $name = $term->name;
+
+    if ($subject1 == 0)
+      continue 1;
+    
+    //fetch class term id
+    $prod_id = db_query('SELECT p.field_product_product_id
+      FROM field_data_field_product p,
+      field_data_field_class_user a,
+           field_data_field_subject b
+      WHERE
+      p.field_product_product_id = a.entity_id
+      AND p.field_product_product_id = b.entity_id
+      AND a.field_class_user_tid = :class1
+      AND b.field_subject_tid = :subject1', array(':class1' => $user_class, ':subject1' => $subject1))->fetchField();
+     //print $term_duration;die();
+    //$terms_dur = taxonomy_get_tree(4);
+    //print $term_duration;die();
+    $term_load = taxonomy_term_load($term_duration);
+    $get_term_price = $term_load->field_price_of_duration ['und'][0]['value'];
+    $prod_arry[$term_load->name][] = array("id" => $prod_id, "subject" => $subject1);
+    
+ }
+ //echo '<pre>';print_r($prod_arry);
+ $work_array = array();
+
+ foreach ($wd_tion as $key => $value) {
+    $worksheet1=$key;
+    $wterm_duration = '7';
+    $wterm = taxonomy_term_load($wterm_duration);
+    $wname = $wterm->name;
+    if ($worksheet1 == 0)
+      continue 1;
+    
+    //fetch class term id
+    $prod_id = db_query('SELECT p.field_product_product_id
+      FROM field_data_field_product p,
+      field_data_field_class_user a,
+           field_data_field_subject b
+      WHERE
+      p.field_product_product_id = a.entity_id
+      AND p.field_product_product_id = b.entity_id
+      AND a.field_class_user_tid = :class1
+      AND b.field_subject_tid = :subject1', array(':class1' => $user_class, ':subject1' => $worksheet1))->fetchField();
+
+    $wterm_load = taxonomy_term_load($wterm_duration);
+    $wget_term_price = $wterm_load->field_price_of_duration ['und'][0]['value'];
+
+
+    $work_array[$wterm_load->name][] = array("id" => $prod_id, "subject" => $worksheet1);
+    
+ }
+
+
+
+  $gk_checked = FALSE;
+
+  $cnt = count($returned_session['sub_count'][$ch_id]);
+  //echo '<pre>';print_r($cnt);
+  //  print $cnt;die();
+    if($cnt >= 2) {
+      $gk_checked = TRUE;
+      $cnt++;
+    }
+
+  $wcnt = count($work_array[12]);
+   
+    
+  
+  /*
+    - old cart load
+    - line item load
+    - line item month and subject load
+    - Add in array
+    - delete all old line item
+  */
+  $already_cart = commerce_cart_order_load($user->uid);
+  foreach ($already_cart->commerce_line_items['und'] as $line_item) {
+      $line_i = $line_item['line_item_id'];
+      $line_itm_query = db_select('eck_subscription', 's');
+      $line_itm_query->fields('s');
+      $line_itm_query->condition("line_item_id", $line_i);
+      $line_itm_query->condition("child_uid", $ch_id);
+      $line_itm_query->range(0, 1);
+      $line_itm_res = $line_itm_query->execute()->fetchAssoc();
+      
+
+      if(array_key_exists("subject_tid", $line_itm_res)) {
+        $prod_id_arr = commerce_line_item_load($line_i);
+        $prod_id = $prod_id_arr->commerce_product['und'][0]['product_id'];
+
+        $line_qty = $line_itm_res['qty'];
+      db_delete('commerce_line_item')
+          ->condition('line_item_id', $line_i)
+          ->condition('order_id', $already_cart->order_id)
+          ->execute();
+        db_delete('eck_subscription')
+          ->condition('line_item_id', $line_i)
+          ->condition('order_id', $already_cart->order_id)
+          ->execute();
+          $o_id = $already_cart->order_id;
+      }
+  }
+
+
+  
+  /*
+    -- Loop to add updated item in the user cart
+   */
+  $total_subject_count = 0;
+  //echo '<pre>';print_r($prod_arry);die();  
+  foreach ($prod_arry as $key => $product_sub_arry) {
+    $prod_count = $cnt;
+    if($prod_count != 1) {
+      if($gk != '' || '0') {
+       $prod_count--; 
+     }
+    }
+    if($prod_count > 4) {
+      $prod_count = 4;
+    }
+
+    
+
+    
+    $orig_amount = $months[$key][$prod_count-1];
+    $discount_perc = $months_dis[$key][$prod_count-1];
+    $final_price = $orig_amount - (($orig_amount * $discount_perc) /100);
+    $single_price = $final_price / $prod_count;
+    
+
+    
+
+
+
+    /*
+      Price adjust
+    */
+    $i = 0;
+    $single_prices = array();
+    $single_total = 0;
+    foreach($product_sub_arry as $pric) {
+      $single_total += round($single_price);
+      $single_prices[$i] = round($single_price);
+      $i++;
+    }
+
+    if($final_price > $single_total) {
+      $single_prices[$i-1] = $single_prices[$i-1] - ($final_price - $single_total);
+    
+    }
+    elseif($final_price < $single_total) {
+      $single_prices[$i-1] = $single_prices[$i-1] - ($single_total - $final_price);
+    }
+    
+    $j = 0;
+    /* price adjust over */
+     
+    foreach ($product_sub_arry as $key1 => $prod_single) {
+       if($prod_single['subject'] == $gk && $gk_cart_exclude) {
+        continue 1;
+      }
+
+      $gk_exist_query = db_select('eck_subscription', 's');
+      $gk_exist_query->fields('s',array('order_id','subject_tid'));
+      $gk_exist_query->condition("line_item_id", '0');
+      $gk_exist_query->condition("subject_tid", $gk);
+      $gk_exist_query_res = $gk_exist_query->execute()->fetchAssoc();
+      if($gk_exist_query_res != 0) {
+            db_delete('eck_subscription')
+              ->condition('subject_tid', $gk_exist_query_res['subject_tid'])
+              ->condition('order_id', $gk_exist_query_res['order_id'])
+              ->execute();
+      }
+       
+       //echo '<pre>';print_r($single_prices);die();
+      //$test_price = array(600,600);
+      $product_output = commerce_cart_product_add_by_id($prod_single['id'], $single_prices[$j],  $combine = FALSE);
+      $uid = $user->uid;
+      $line_item_id = $product_output->line_item_id;
+      $order_id = $product_output->order_id;
+
+      $entity = entity_create("subscription",    //adds the entity
+        array(
+          'uid' => $uid,
+          'type' => 'user',
+          'child_uid' => $ch_id,
+          'line_item_id' => $line_item_id,
+          'order_id' => $order_id,
+          'qty' => $key,
+          'subject_tid' => $prod_single['subject'],
+        )
+      );
+      $en = entity_save('subscription', $entity);
+      $total_subject_count++;
+      $j++;
+    }
+
+  }
+
+
+$total_worksheet_count = 0;
+ //echo '<pre>';print_r($prod_arry);die();  
+  foreach ($work_array as $key => $wproduct_sub_arry) {
+    $wprod_count = $wcnt;
+    
+    
+    if($wprod_count > 4) {
+      $wprod_count = 4;
+    }
+
+    
+    $worig_amount = $worksheet_months[$key][$wprod_count-1];
+    $wdiscount_perc = $worksheet_months_dis[$key][$prod_count-1];
+    $wfinal_price = $worig_amount - (($worig_amount * $wdiscount_perc) /100);
+    $wsingle_price = $wfinal_price / $wprod_count;
+    
+   
+
+    /*
+      Price adjust
+    */
+    $i = 0;
+    $wsingle_prices = array();
+    $wsingle_total = 0;
+    foreach($wproduct_sub_arry as $wpric) {
+      $wsingle_total += round($wsingle_price);
+      $wsingle_prices[$i] = round($wsingle_price);
+      $i++;
+    }
+
+    if($wfinal_price > $wsingle_total) {
+      $wsingle_prices[$i-1] = $wsingle_prices[$i-1] - ($wfinal_price - $wsingle_total);
+    }
+    elseif($wfinal_price < $wsingle_total) {
+      $wsingle_prices[$i-1] = $wsingle_prices[$i-1] - ($wsingle_total - $wfinal_price);
+    }
+    $j = 0;
+    /* price adjust over */
+
+    foreach ($wproduct_sub_arry as $key1 => $wprod_single) {
+      /*if($prod_single['subject'] == $gk && $gk_cart_exclude) {
+        continue 1;
+      }*/
+
+       
+      //$test_price = array(600,600);
+      $wproduct_output = commerce_cart_product_add_by_id($wprod_single['id'], $wsingle_prices[$j],  $combine = FALSE);
+      $uid = $user->uid;
+      $line_item_id = $wproduct_output->line_item_id;
+      $order_id = $wproduct_output->order_id;
+      $entity = entity_create("subscription",    //adds the entity
+        array(
+          'uid' => $uid,
+          'type' => 'user',
+          'child_uid' => $ch_id,
+          'line_item_id' => $line_item_id,
+          'order_id' => $order_id,
+          'qty' => $key,
+          'subject_tid' => $wprod_single['subject'],
+          'worksheet_tid' => $wprod_single['subject'],
+        )
+      );
+      $en = entity_save('subscription', $entity);
+      $total_worksheet_count++;
+      $j++;
+    }
+
+  }
+
+  
+
+   //echo '<pre>';print_r($form_state);die();
+  
+  
+  if($total_subject_count > 1) {
+
+      $entity = entity_create("subscription",    //adds the entity
+        array(
+          'uid' => $uid,
+          'type' => 'user',
+          'child_uid' => $ch_id,
+          'line_item_id' => 0,
+          'order_id' => $order_id,
+          'qty' => 12,
+          'subject_tid' => $gk,
+        )
+      );
+      $en = entity_save('subscription', $entity);
+  }
+
+
+}
+
+/**
+ * Add subject to user profile.
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function subject_add_subs($form, $form_state){
+  //echo "test";
+  $class1 = $form['class']['#markup'];
+  $subject1 = $form_state['values']['subject'];
+  $childn = $form_state['values']['Children'];
+  $usr_ld = user_load($childn);
+  $taxo_load = taxonomy_term_load($class1);
+  $class_name = $taxo_load->name;
+  $sub_id = $taxo_load->field_subject[und][0][tid];
+
+  $prof_load = profile2_load_by_user($childn);
+    //echo "<pre>";print_r($prof_load['student']->field_subjects);//die();
+  $prof_load['student']->field_subjects['und'][]['tid'] = $subject1;
+  profile2_save($prof_load['student']);
+}
+
+function subscription_form_add_cart($form, $form_state) {
+  //drupal_goto('cart');
+   $duration = array();
+  foreach($form_state['input']['duration'] as $i => $j) {
+    if($j[7] == 7) {
+      $duration[$i] = 7;
+    }
+    elseif(is_numeric($j[0])) {
+      $duration[$i] = 0;
+    }
+    else {
+      $duration[$i] = '';
+    }
+
+  }
+  $form_state['input']['duration'] = array();
+  $form_state['input']['duration'] = $duration;
+  $form_state['values']['duration'] = $duration;
+
+  $free_status = TRUE;
+  foreach ($form_state['values']['duration'] as $free_check) {
+    if($free_check != 0 )
+      $free_status = FALSE;
+  }
+   print $free_status;die();
+  if($free_status){
+    subscription_form_submit($form, $form_state);
+
+  }
+  else{
+
+    commerce_product_add($form, $form_state);
+  }
+  //subject_add_subs($form, $form_state);
+  //drupal_set_message(t('YOur order has been added to cart. !cart', array('!cart' => l(t('Go to cart'), 'cart/'))));
+
+}
+
+function recursive_array_search($needle,$haystack) {
+    foreach($haystack as $key=>$value) {
+        $current_key=$key;
+        if($needle==$value OR (is_array($value) && recursive_array_search($needle,$value) !== false)) {
+            return true;
+        }
+    }
+    return false;
+  }
+
+//:@todo: change db_queries to db_select -->nit
+function subscription_form_submit($form, $form_state) {
+  //die('123');
+  global $user, $base_url;
+  $uid = $user->uid;
+  $parent_mail = $user->mail;
+  $firstname = db_query("SELECT field_first_name_value  
+                        FROM {field_data_field_first_name}
+                        where entity_id= :uid", array(':uid' =>$user->uid))->fetchField();
+  $subject1 = $form_state['values']['subject'];
+  $prof_load = profile2_load_by_user(arg(2));
+
+  $today = date("y.m.d");
+  $time_final = strtotime($today);
+  $days = 7;
+  $time_final1 = strtotime('+'.$days.' days',$time_final);
+
+  foreach ($subject1 as $key => $value) {
+    if(!recursive_array_search($key, $prof_load['student']->field_subjects)) {
+            $prof_load['student']->field_subjects['und'][]['tid'] = $key;
+      }
+
+
+        $entity = entity_create("expiry",    //adds the entity
+          array(
+            'uid' => $uid,
+            'type' => 'user',
+            'child_id' => arg(2),
+            'expiry_date' => $time_final1,
+            'subject_tid' => $key,
+            'status'=> 1,
+            'purchase_type' => 'free',
+          )
+        );
+        $en = entity_save('expiry', $entity);
+  }
+  profile2_save($prof_load['student']);
+
+  $my_settings = array(
+    'free' => "free"
+  );
+  $Childuser = user_load(arg(2));
+   $params = array(
+          'child_username' => $Childuser->name,
+          'parent_username' => $user->name,
+          'parent_f_name' => $firstname,
+          'mail' => $parent_mail,
+          'day'=> $days,
+          'startdate'=> date("d/m/Y"),//DD/MM/YYYY
+          'enddate'=> date("d/m/Y",$time_final1),
+          'subject' => "Thank you for registering with www.excelonz.com",
+    );
+  drupal_add_js(array('subscription' => $my_settings),  array('type' => 'setting'));
+  drupal_set_message('Thankyou for free Subscription');
+  drupal_mail('lw_subscription', 'lw_subscription_mail', $parent_mail, "en", $params);
+  //drupal_goto('subscription/form/'.arg(2).'');
+}
+
+function subscription_form_alter(&$form, &$form_state, $form_id) {
+  if($form_id == "commerce_checkout_form_checkout") {
+    global $user;
+    $user_info = user_load($user->uid);
+
+    $form['customer_profile_billing']['commerce_customer_address']['und'][0]['#address']['name_line'] = $user_info->field_first_name['und'][0]['value'] .' '. $user_info->field_last_name['und'][0]['value'];
+    $form['customer_profile_billing']['commerce_customer_address']['und'][0]['#address']['locality'] = term_get_name($user_info->field_city['und'][0]['tid']);
+    $form['customer_profile_billing']['commerce_customer_address']['und'][0]['#address']['administrative_area'] = term_get_name($user_info->field_state['und'][0]['tid']);
+  }
+}
+
+
+function subscription_commerce_cart_product_remove($order, $product, $quantity, $line_item) {
+global $user;
+$uid = $user->uid;
+$months = array();
+$months[12] = array(800, 1500, 2000, 2400);
+$months_dis = array();
+$months_dis[3] = array(0, 0, 0, 0, 0);
+$months_dis[6] = array(20, 21.429, 25, 26.923, 34.375);
+$months_dis[12] = array(0, 0, 0, 0, 0);
+  //refresh the other product with updated discount rate.
+    $line_i = $line_item->line_item_id;
+
+      $line_itm_query = db_select('eck_subscription', 's');
+      $line_itm_query->fields('s');
+      $line_itm_query->condition("line_item_id", $line_i);
+      $line_itm_query->range(0, 1);
+      $line_itm_res = $line_itm_query->execute()->fetchAssoc();
+
+      $order_id = $line_itm_res['order_id'];
+      $child_id = $line_itm_res['child_uid'];
+
+      $line_itm_query1 = db_select('eck_subscription', 's');
+      $line_itm_query1->fields('s');
+      $line_itm_query1->condition("order_id", $order_id);
+      $line_itm_query1->condition("child_uid", $child_id);
+      $line_itm_query1->condition("line_item_id", $line_i, "!=");
+      $line_itm_res1 = $line_itm_query1->execute()->fetchAll();
+
+
+      if(array_key_exists(0, $line_itm_res1)) {
+        $prod_arry = array();
+        $already_cart = commerce_cart_order_load($user->uid);
+
+        foreach ($line_itm_res1 as $key => $value) {
+          $prod_id_arr = commerce_line_item_load($value->line_item_id);
+          $prod_id = $prod_id_arr->commerce_product['und'][0]['product_id'];
+
+          if($prod_id != '' && $value->subject_tid != 0) {
+            $prod_arry[$value->qty][] = array("id" => $prod_id, 'subject' => $value->subject_tid);
+            //commerce_cart_order_product_line_item_delete($already_cart, $value->line_item_id);
+              db_delete('commerce_line_item')
+              ->condition('line_item_id', $value->line_item_id)
+              ->condition('order_id', $already_cart->order_id)
+              ->execute();
+              db_delete('eck_subscription')
+              ->condition('line_item_id', $value->line_item_id)
+              ->condition('order_id', $already_cart->order_id)
+              ->execute();
+          }
+
+
+
+        }
+
+        foreach ($prod_arry as $key => $product_sub_arry) {
+          $prod_count = count($product_sub_arry);
+          if($prod_count >5) {
+            $prod_count = 5;
+          }
+          $orig_amount = $months[$key][$prod_count-1];
+
+          $discount_perc = $months_dis[$key][$prod_count-1];
+          $final_price = $orig_amount - (($orig_amount * $discount_perc) /100);
+
+
+          $single_price = $final_price / $prod_count;
+           /*
+      Price adjust
+    */
+    $i = 0;
+    $single_prices = array();
+    $single_total = 0;
+    foreach($product_sub_arry as $pric) {
+      $single_total += round($single_price);
+      $single_prices[$i] = round($single_price);
+      $i++;
+    }
+    if($final_price > $single_total) {
+      $single_prices[$i-1] = $single_prices[$i-1] - ($final_price - $single_total);
+    }
+    elseif($final_price < $single_total) {
+      $single_prices[$i-1] = $single_prices[$i-1] - ($single_total - $final_price);
+    }
+    $j = 0;
+    /* price adjust over */
+
+
+            foreach ($product_sub_arry as $key1 => $prod_single) {
+              $product_output = commerce_cart_product_add_by_id($prod_single['id'], $single_prices[$j],  $combine = FALSE);
+              $uid = $user->uid;
+              $line_item_id = $product_output->line_item_id;
+              $order_id = $product_output->order_id;
+              $entity = entity_create("subscription",    //adds the entity
+                array(
+                  'uid' => $uid,
+                  'type' => 'user',
+                  'child_uid' => $child_id,
+                  'line_item_id' => $line_item_id,
+                  'order_id' => $order_id,
+                  'qty' => $key,
+                  'subject_tid' => $prod_single['subject'],
+                )
+              );
+              $en = entity_save('subscription', $entity);
+              $j++;
+            }
+
+        }
+
+
+      }
+
+  //refresh the discount for other
+}
+
+
+/**
+ *  Hook to alter commerce checkout page
+ */
+function subscription_commerce_checkout_page_info_alter(&$pages) {
+  $pages['checkout']['title'] = "Billing & Order summary";
+}
+
+function lw_subscription_mail($keys, &$message, $params){
+  $message['subject'] = $params['subject'];
+  $message['body'][] .= t("Dear ".ucfirst($params['parent_f_name'])."
+Welcome to the world of Excelonz.
+
+At Excelonz, there are two ids - one for the child to use for practising online and the second for the parent to check how the child is progressing. Once your child starts practicing, you can login with your parent ID to view your child’s assessment reports, schedule revisions & tests and do lots more.
+
+Your parent id is
+
+Login ID: ".ucfirst($params['parent_username'])."
+
+Your child's login id is
+
+Login ID: ".ucfirst($params['child_username'])."
+
+Your subscription details are as follows:
+
+Type: Free
+Tenure: ".$params['day']." Days
+Subjects opted: English, Math, Science, SST, General Knowledge;
+Session start date: ".$params['startdate']."
+Subscription stop date:".$params['enddate'])."
+
+In case of any queries, do call us at +919717543111 or simply write to us at support@excelonz.com.
+
+Thank You!
+Team Excelonz
+";
+}
+
+
+
+function update_commerce_line_item_price($count,$res,$order_no) {
+  $single_prices = array(800,1500,2000,2400);
+  $price = 0;
+
+  if($count == 1) {
+    $price = $single_prices[0];
+      db_update('commerce_line_item')
+      ->fields(array('quantity' =>$price))
+      ->condition('order_id', $order_no)
+      ->condition('line_item_id',$res[0]->line_item_id)
+      ->execute();
+   }
+  
+  if($count == 2) {
+    $price = ($single_prices[1]/$count);
+    foreach($res as $key=>$value) {
+    db_update('commerce_line_item')
+      ->fields(array('quantity' =>$price))
+      ->condition('order_id', $order_no)
+      ->condition('line_item_id',$res[$key]->line_item_id)
+      ->execute();
+    }
+  }
+
+  if($count == 3) {
+    $price = ($single_prices[2]/$count);
+    
+    foreach($res as $key=>$value) {
+      db_update('commerce_line_item')
+      ->fields(array('quantity' =>$price))
+      ->condition('order_id', $order_no)
+      ->condition('line_item_id',$res[$key]->line_item_id)
+      ->execute();
+    }
+    
+  }
+
+   if($count == 4) {
+    $price = ($single_prices[3]/$count);
+    foreach($res as $key=>$value) {
+      db_update('commerce_line_item')
+      ->fields(array('quantity' =>$price))
+      ->condition('order_id', $order_no)
+      ->condition('line_item_id',$res[$key]->line_item_id)
+      ->execute();
+    }
+  }
+
+}

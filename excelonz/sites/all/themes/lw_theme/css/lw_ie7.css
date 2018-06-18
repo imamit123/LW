@@ -1,0 +1,14 @@
+/******
+CSS for IE7
+******/
+
+#assessments-form .btn-wrap, #golive-form .btn-wrap, #lw-revision-form .btn-wrap{
+	position:absolute;
+	left:525px;
+	top:225px;
+}
+
+.right_exl_block .exc-box{
+	background:url("../images/exc-bg.png") no-repeat scroll center center;
+	-ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/exc-bot-bg.png', sizingMethod='crop')";
+}

@@ -1,0 +1,9 @@
+name = Add field for all cck
+core = 7.x
+package = Features
+dependencies[] = features
+dependencies[] = list
+features[features_api][] = api:2
+features[field_base][] = field_fib_for_anonymous
+features[field_base][] = field_mcq_for_anonymous
+features[field_base][] = field_true_and_false_for_anonymo

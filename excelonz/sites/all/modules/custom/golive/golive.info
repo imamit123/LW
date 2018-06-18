@@ -1,0 +1,3 @@
+name = Go Live
+description = "Contain all the logic and code related to Go Live"
+core = 7.x

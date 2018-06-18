@@ -1,0 +1,17 @@
+name = Panel and page manager for all pages
+description = Panel and page manager for all pages
+core = 7.x
+package = Features
+dependencies[] = ctools
+dependencies[] = page_manager
+dependencies[] = panels
+dependencies[] = panels_mini
+features[ctools][] = page_manager:pages_default:1
+features[ctools][] = panels:layouts:1
+features[ctools][] = panels_mini:panels_default:1
+features[features_api][] = api:2
+features[page_manager_pages][] = home_page
+features[page_manager_pages][] = why_excelonz
+features[panels_layout][] = home_page_new_layout
+features[panels_layout][] = tour_page_layout
+features[panels_mini][] = inner_class_page

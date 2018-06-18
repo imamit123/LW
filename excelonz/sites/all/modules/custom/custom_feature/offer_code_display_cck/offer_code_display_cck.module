@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Offer Code Display CCK feature.
+ */
+
+include_once 'offer_code_display_cck.features.inc';

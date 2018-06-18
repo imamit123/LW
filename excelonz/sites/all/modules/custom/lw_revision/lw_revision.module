@@ -1,0 +1,691 @@
+<?php
+/**
+ * @file
+ * Provide a assessments to attract user.
+ */
+
+
+/**
+ *  Implementation of hook_menu()
+ */
+function lw_revision_menu() {
+  // Submit a form without a page reload.
+  $items['revision/take'] = array(
+    'title' => 'Revision',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('lw_revision_form'),
+    'access callback' => TRUE,
+    'file' => 'lw_revision.inc',
+  );
+  //revision-report
+  // Submit a form without a page reload.
+  $items['revision-report'] = array(
+    'title' => 'Revision Report',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('lw_revision_report_form'),
+    'access callback' => TRUE,
+  );
+  return $items;
+
+}
+
+
+/**
+ * Function will be called for revision report page.
+ */
+function lw_revision_report_form($form, $form_state) {
+  global $user;
+
+  //check for refresh scenario so load the DB entry.
+  if (array_key_exists('report_id', $_SESSION)) {
+    //Need to store revision report.
+  }
+  else {
+    //save Excelonz
+    if(array_key_exists("user_orig_exc", $_SESSION)) {
+      //@todo : not user user_load, update sinle table
+      $account = user_load($user->uid);
+      $edit = array(
+        'field_excellone' => array(
+        'und' => array(
+          0 => array(
+            'value' => $_SESSION['user_orig_exc'],
+            ),
+          ),
+        ),
+      );
+      user_save($account, $edit);
+    }
+
+    $set_time =$_SESSION['set_time'] * 60;
+    $rem_time = $_SESSION['timer_value'];
+
+    if($rem_time < 0 ) {
+      $spent_time =$set_time;
+    }
+    else {
+      $spent_time =$set_time -$rem_time;
+    }
+    if($set_time == 36000) {
+      $final_duration = elapsed_time($rem_time, 6) . '<br/>';
+    }
+    else {
+      $final_duration = elapsed_time($spent_time, 6) . '<br/>';
+    }
+
+
+    $total = $_SESSION['correct_ans'] + $_SESSION['wrong_ans'];
+    $accuracy = round(($_SESSION['correct_ans'] *100) / $total, 2);
+    $correcta = $_SESSION['correct_ans'];
+    $wronga = $_SESSION['wrong_ans'];
+
+    //@todo : Load topic name with query not term_load
+    $topic = taxonomy_term_load($_SESSION['topic_tid']);
+    $parents = taxonomy_get_parents($_SESSION['topic_tid']);
+
+
+    $topic_name = $topic->name;
+    foreach ($parents as $parent) {
+      $subject = $parent->name;
+    }
+    $excellone = $_SESSION['user_session_exc'];
+
+    //store it in some revision table
+
+    //save in revision table
+
+    //@todo : optimize and minimize the session variable
+   revision_session_unset();
+
+    $_SESSION['correct_ans'] = 0;
+    $_SESSION['wrong_ans'] = 0;
+
+  }
+
+  global $user;
+  $uid = $user->uid;
+  $name = user_load($user->uid);
+  $name = $name->field_first_name['und'][0]['value'];
+  $name = ucfirst($name);
+  $result = '<div class="ass_report"><h2>Dear ' . $name . ',</h2>';
+  $result .= '<h3> Here is the detail of your current Revision </h3>';
+
+  $result .= '<table><tr><td rowspan="2" class="val_top">';
+  $result .= '<div class="ass_left_box"><table><tr><td><span>Subject</span></td><td> ' . $subject . '</td></tr>';
+  $result .= '<tr><td><span>Topic</span></td><td>' . $topic_name . '</td></tr>';
+  $result .= '<tr><td><span>Total Question</span></td><td>' . $total . '</td></tr>';
+  $result .= '<tr><td><span>Time spent</span></td><td>' . $final_duration . '</td></tr></table></div></td>';
+
+
+  $result .= '<td class="val_top"><div class="ass_rigth_box"><div class="ass_rigth_top_box"><div class="ass_accuracy"><span>Accuracy</span><h1> ' . $accuracy . '%</h1></div>';
+  $result .= '<div class="ass_reached"><span>Session Level</span><div class="levels-change levels-'.$_SESSION['user_current_level'].'">levels</div> <b>level ' . $_SESSION['user_current_level'] . ' </b> </div></div>';
+  $result .= '</td></tr><tr><td class="val_bot">';
+  //$result .= 'Skills earn : ' . '(static)<bruser_current_level>';
+
+  $result .= '<div class="ass_rigth_box"><div class="ass_rigth_bot_box"><div class="ass_correct"><h3>Total Correct Answer</h3><span>' . $correcta . '</span></div>';
+  $result .= '<div class="ass_wrong"><h3>Total Wrong Answer</h3><span> ' . $wronga . '</span></div></div></div>';
+  $result .= '</td></tr></table>';
+
+  $result .= '<div class="ass_excellonz"><h2>Your rewards this session</h2><div class="excellonz-star-bg"><h3>Total Excelonz</h3><div class="excellonz-bg"><span> ' . $_SESSION['user_orig_exc'] . '<b>Excelonz</b></span></div></div><div class="exc_title_bg">&nbsp;</div><div class="excellonz-bot-bg">excelonz</div></div></div>';
+  //$result .= 'Session Excellonz: ' . $excellone . '<br/><br/>';
+
+  $form['result'] = array(
+    '#type' => 'markup',
+    '#markup' => $result,
+  );
+
+  return $form;
+}
+
+
+/**
+ * Implementation of hook_block_info().
+ */
+function lw_revision_block_info() {
+  $blocks = array();
+  $blocks['revision_page']['info'] = t('Revision Page');
+  $blocks['revision_start']['info'] = t('Revision start');
+  $blocks['revision_pending']['info'] = t('Revision pending');
+  return $blocks;
+}
+
+
+/**
+ * Implementation of hook_block_view().
+ */
+function lw_revision_block_view($delta='') {
+  $block = array();
+  if ($delta == 'revision_page') {
+    $content = revision_get_courses();
+    $block['subject'] = t('');
+    $block['content'] = $content;
+  }
+  elseif ($delta == 'revision_start') {
+    $content = revision_start_view();
+    $block['subject'] = t('');
+    $block['content'] = $content;
+  }
+  elseif ($delta == 'revision_pending') {
+    $content = revision_pending_view();
+    $block['subject'] = t('');
+    $block['content'] = $content;
+  }
+  return $block;
+}
+
+
+/**
+ * Block to display course for Revision
+ */
+function revision_get_courses() {
+
+
+  //Fetch user class and display only course that has. referenced by that class.
+  global $user, $base_url;
+  $uid = $user->uid;
+
+  //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  //$subject_list->condition("fs.delta", 0, ">");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute()->fetchall();
+
+ $courses = array();
+  foreach ($subject_list_result as $row) {
+    $courses[] = $row->field_subjects_tid;
+  }
+
+  $title_link_first =l("Schedule", $base_url ."/".current_path());
+  $title_link_second = l("Start/View Revision","revision/home/start");
+  $output .= "<div class='revision-head'><span class='title active'>$title_link_first</span><span class='title second'>$title_link_second</span></div>";
+  $output .="<div class=revision-drop><span class=revision-drop1></span><span class=revision-drop2></span></div>";
+  $output .="<div class=subject-start>";
+
+  $vid = 7;
+  $lang = 'und';
+  $counter = 1;
+  foreach ($courses as $ctid) {
+    $course_term = taxonomy_term_load($ctid);
+     $output .= "<div class=subject>";
+    $output .= "<div class=subject-main>";
+    $output .= "<span class=subject-title>" . $course_term->name . "</span>";
+    $output .= "<span class=subject-complete>Completed By</span>";
+    $output .= "<span class=duration> Duration</span>";
+    $subject_tid = $ctid;
+    $output .= "</div>";
+    //@todo : user query instead of get children.
+    $current_child = taxonomy_get_children($subject_tid, 7);
+
+    $topic_tids = array();
+    foreach ($current_child as $tid => $value) {
+      $topic_tids[] = $tid;
+    }
+    $topic_query = db_select('eck_revision', 'r')
+        ->fields("r")
+        ->condition('uid', $uid)
+        ->condition('tid', $topic_tids, "IN")
+        ->condition('status', 1)
+        ->condition('current_status', 0)
+        ->orderBy('id')
+        ->execute()
+        ->fetchAll();
+    $topic_output = '';
+    foreach ($topic_query as $row) {
+        //echo "<pre>";print_r($row);die();
+        $topic_output.="<div class=subject-topic>";
+        $topic_output .="<span class=subject-name>".term_get_name($row->tid)."</span>";
+        $topic_output .="<span class=subject-date>". date("d-m-Y", $row->completedby)."</span>";
+        $form = drupal_get_form(revision_schedule_form);
+        $form['markup'] = array(
+              '#markup' => "<input type = 'text' style = 'display:none' name='tid' value = '$row->tid'>",
+        );
+        $topic_output .= drupal_render($form);
+$topic_output.="</div>";
+    }
+
+    if($topic_output == '') {
+      $topic_output = "<div class=subject-topic>".'No topic available for revision.'."</div>";
+    }
+    $output .= $topic_output;
+$output .= "</div>";
+  }
+  $output .="</div>";
+  return $output;
+}
+
+/**
+ * form will come on revision schedule page.
+ */
+function revision_schedule_form($form, &$form_state) {
+ $form = array();
+$form['duration'] = array(
+    '#type' => 'select',
+    '#title' => t(''),
+    '#options' => array(
+        10 => t('10 mins, 15 Qs'),
+        15 => t('15 mins, 20 Qs'),
+        20 => t('20 mins, 30 Qs'),
+        30 => t('30 mins, 40 Qs'),
+       ),
+  );
+ $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Start Test'),
+  );
+ $form['click_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Revise Now'),
+  );
+
+
+
+  return $form;
+}
+
+function revision_schedule_form_submit($form_state) {
+revision_session_unset();
+
+  if($_POST['op'] == "Revise Now") {
+    $dur = 600;
+  }
+  else {
+    $dur = $_POST['duration'];
+  }
+  global $user, $base_url;
+  $tid = $_POST['tid'];
+
+
+ $query1 = new EntityFieldQuery();
+    $query1->entityCondition('entity_type', 'revision')
+      ->propertyCondition('uid', $user->uid)
+      ->propertyCondition('tid', $tid)
+      ->propertyCondition('status', 1)
+      ->range(0, 1);
+    $result1 = $query1->execute();
+    $en_id1 =array_keys($result1['revision']);
+
+    $en_id  = $en_id1[0];
+
+    $revision_en = entity_load_single("revision", $en_id);
+
+    $revision_en->current_status = 1;
+    $revision_en->duration = $dur;
+    $en = entity_save('revision', $revision_en);
+
+
+    $subject_query = db_select('taxonomy_term_hierarchy', 'th')
+      ->fields('th')
+      ->condition('tid', $tid)
+      ->execute()->fetchAssoc();
+    $path = $base_url ."/revision/take?tid=" . $tid ."&ptid=" . $subject_query['parent'];
+    drupal_goto($path, array(), 301);
+}
+
+
+
+// Custom Form Filter for Teacher Dashboard
+function revision_completedby_form($form, &$form_state) {
+  $form = array();
+  $format = 'd-m-Y';
+  $form['start date'] = array(
+    '#type' => 'date_popup',
+    '#title' => t(''),//Completion Date
+    '#default_value' => date('c'), //check that out: date in ISO format
+    '#date_format' => $format,
+    '#date_label_position' => 'within',
+    '#date_timezone' => 'Europe/Rome',
+    '#date_increment' => 15,
+    '#attributes' => array('autocomplete' =>'off','minDate' => '0'),
+    '#date_year_range' => '0:+2',
+    '#datepicker_options' => array(
+        'minDate' => 0,
+      ),
+  );
+
+
+
+
+  global $user;
+
+  if(array_search("Parent", $user->roles)) {
+    $uid = arg(4);
+  }
+  else {
+    $uid = $user->uid;
+  }
+  $form['uid'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $uid,
+    '#size' => 8,
+    '#maxlength' => 8,
+  );
+
+
+ $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Schedule revision'),
+  );
+
+  return $form;
+}
+
+function revision_completedby_form_submit($form_state) {
+  global $user;
+
+  $tid = $_POST['tid'];
+  $date = $_POST['start_date']['date'];
+  $uid = $_POST['uid'];
+
+  $stamp = strtotime($date) . "<br />"; // outputs 1307708880
+  $entity = entity_create("revision",
+    array('completedby' => $stamp,
+      'uid' => $uid,
+      'type' => 'user',
+      'current_status' => 0,
+      'status' => 1,
+      'tid' => $tid,
+      'duration' => 0,
+    ));
+    $en = entity_save('revision', $entity);
+}
+
+
+
+
+/**
+ * [revision_start_view description]
+ * Block to display list of topic to start revision with.
+ */
+function revision_start_view() {
+
+  global $user;
+  if(array_search("Parent", $user->roles)) {
+    $parent = TRUE;
+    $uid = arg(3);
+  }
+  else {
+    $PARENT = FALSE;
+    $uid = $user->uid;
+  }
+
+  //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  //$subject_list->condition("fs.delta", 0, ">");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute()->fetchall();
+
+  $output = '';
+
+  $title_link_first =l("Set a New Revision", 'revision/home/student/0/' . $uid);
+  $title_link_second = l("Start My Revision","revision/home/start/" . $uid);
+  $output .= "<div class='revision-head'><span class='title active'>$title_link_first</span><span class='title second'>$title_link_second</span></div>";
+  $output .="<div class=revision-drop><span class=revision-drop1></span><span class=revision-drop2></span></div>";
+  $tab_link_first = l("Active", "revision/home/start");
+  $tab_link_second = l("Pending", "revision/home/pending");
+  //$output .= "<div class='revision-tabs'><span class='tab1 active'>$tab_link_first</span><span class='tab2'>$tab_link_second</span></div>";
+  $output .="<div class=active-revision>My Active Revisions</div>";
+   $output .="<div class='link_expand'><span id='expand' class='exp'>Expand All</span><span id='collapse' class='exp'>Collapse All</span></div><div class=subject-start>";
+
+  foreach ($subject_list_result as $row) {
+    $stid =$row->field_subjects_tid;
+    $query = db_select('taxonomy_term_data', 't');
+    $query->join('taxonomy_term_hierarchy', 'h', 'h.tid = t.tid');
+    $query->addField('t', 'tid');
+    $query->condition('h.parent',  $stid);
+    if ($vid) {
+      $query->condition('t.vid', $vid);
+    }
+    $query->addTag('term_access');
+    $query->orderBy('t.weight');
+    $query->orderBy('t.name');
+    $tids = $query->execute()->fetchCol();
+
+    $topic_query = db_select('eck_revision', 'r')
+      ->fields("r")
+      ->condition('uid', $uid)
+      ->condition('tid', $tids, "IN")
+      ->condition('status', 1)
+      ->orderBy('id')
+      ->execute()
+      ->fetchAll();
+    $output .="<div class=test>";
+    $output .= "<div id=main_class>"."<span class=sub_class1>" . term_get_name($stid) ."</span>";
+    $output .= "<span class = sub_class2>Completed By</span>";
+    $output .="<span class='sub_class3'>Take a Test</span>";
+    $output .="<span class='sub_class4'>Just Revise</span>";
+    $output .="</div>";
+    $output_topic = '';
+    foreach ($topic_query as $row) {
+    $output_topic .="<div class='sub_main sub_main_open'>";
+
+      $tid =$row->tid;
+      $output_topic .= "<span class = sub_topic1>" . term_get_name($tid) . "</span>";
+      //$output .= $tid. "<br/>";
+      $output_topic .= "<span class = sub_topic2>" . date("d-m-Y", $row->completedby) . "</span>";
+      /**$output .= "<span class='sub_topic3'>" . l("Start Revision" , "revision/take",
+            array('query' => array('tid' => $tid, 'ptid' => $stid))) . "</span>";**/
+
+      if(!$parent) {
+        $form1 = drupal_get_form(revision_schedule_form);
+        $form1['markup'] = array(
+                '#markup' => "<input type = 'text' style = 'display:none' name='tid' value = '$tid'>",
+          );
+        $output_topic .= drupal_render($form1);
+      }
+      $form = drupal_get_form(revision_close_form);
+      $form['markup'] = array(
+            '#markup' => "<input type = 'text' style = 'display:none' name='tid' value = '$tid'>",
+      );
+      $output_topic .= drupal_render($form);
+      $output_topic .= "</div>";
+    }
+    if($output_topic == '') {
+      $output_topic = "<div class=subject-topic>".'No topic available for revision.'."</div>";
+    }
+    $output .= '<div class="row">'.$output_topic.'</div>';
+$output .="</div>";
+
+  }
+  $output .="</div>";
+  return $output;
+}
+
+function revision_close_form($form, &$form_state) {
+ $form = array();
+  global $user;
+
+  if(array_search("Parent", $user->roles)) {
+    $uid = arg(3);
+  }
+  else {
+    $uid = $user->uid;
+  }
+  $form['uid'] = array(
+    '#type' => 'textfield',
+    '#default_value' => $uid,
+    '#size' => 8,
+    '#maxlength' => 8,
+  );
+ $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Close this Revision'),
+  );
+
+  return $form;
+}
+
+function revision_close_form_submit($form_state) {
+  //global $user;
+  $tid = $_POST['tid'];
+  $uid = $_POST['uid'];
+
+ $query1 = new EntityFieldQuery();
+    $query1->entityCondition('entity_type', 'revision')
+      ->propertyCondition('uid', $uid)
+      ->propertyCondition('tid', $tid)
+      ->propertyCondition('status', 1)
+      ->range(0, 1);
+    $result1 = $query1->execute();
+    $en_id1 =array_keys($result1['revision']);
+
+    $en_id  = $en_id1[0];
+
+    $revision_en = entity_load_single("revision", $en_id);
+
+    $revision_en->status = 0;
+    $en = entity_save('revision', $revision_en);
+}
+
+function term_get_name($tid) {
+  $term_name = db_select("taxonomy_term_data", "td")
+    ->fields("td", array("name"))
+    ->condition("tid", $tid)
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+
+  return $term_name[0]->name;
+}
+
+/**
+ * block to show pending revision list.
+ */
+function revision_pending_view() {
+//Fetch user class and display only course that has. referenced by that class.
+  global $user;
+
+  if(array_search("Parent", $user->roles)) {
+    $uid = arg(4);
+  }
+  else {
+    $uid = $user->uid;
+  }
+
+  //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  //$subject_list->condition("fs.delta", 0, ">");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute()->fetchall();
+
+ $courses = array();
+
+
+  $output = '';
+  $title_link_first =l("Set a New Revision", 'revision/home/student/0/' . $uid);
+  $title_link_second = l("Start My Revision","revision/home/start/" . $uid);
+  $output .= "<div class='revision-head'><span class='title active'>$title_link_first</span><span class='title second'>$title_link_second</span></div>";
+ $output .="<div class=revision-drop><span class=revision-drop1></span><span class=revision-drop2></span></div>";
+  $tab_link_first = l("Active", "revision/home/start");
+  $tab_link_second = l("Pending", "revision/home/pending");
+  //$output .= "<div class='revision-tabs'><span class='tab1 active'>$tab_link_first</span><span class='tab2'>$tab_link_second</span></div>";
+  $output .= "<div class=avail-revise>List of Topics available to Revise</div>";
+  $output .= '<div class=avail-revise-schedule>Go to "Start My Revision" to view all scheduled revisions.</div>';
+
+  $output .= "<div class=avail-revisens>You need to cross level 3 in a Topic to activate Revision</div>";
+
+  $output .="<div class='link_expand'><span id='expand' class='exp'>Expand All</span><span id='collapse' class='exp'>Collapse All</span></div><div class=subject-start>";
+
+  foreach ($subject_list_result as $row) {
+    $stid = $row->field_subjects_tid;
+
+    $output .= "<div class=subject>";
+    $output .= "<div class=subject-main>";
+    $output .= "<span class=subject-title>" . term_get_name($stid) . "</span>";
+    $output .= "<span class=subject-complete>Complete by</span>";
+    $output .= "</div>";
+    $topic_query = db_select('eck_revision', 'r')
+      ->fields("r")
+      ->condition('uid', $uid)
+      ->condition('status', 1)
+      ->orderBy('id')
+      ->execute()
+      ->fetchAll();
+
+
+    $exclude_tids = "(";
+    foreach($topic_query as $topic_ids) {
+      $exclude_tids .= $topic_ids->tid . ",";
+    }
+    $exclude_tids .= "0)";
+//echo $exclude_tids;die();
+
+$result = db_query("select td.name, td.tid,
+    case
+      WHEN level=1 THEN 'started'
+      WHEN level=2 THEN 'started'
+      WHEN level=3 THEN 'started'
+      WHEN level=4 THEN 'covered'
+      WHEN level=5 THEN 'covered'
+      WHEN level=6 THEN 'mastered'
+      ELSE 'not started'
+    END as lvl,
+    completedby,
+    level
+    FROM taxonomy_term_data td, taxonomy_term_hierarchy th
+    JOIN eck_user_info ui
+    ON th.tid = topic_id and ui.uid = :uid and ui.level > 3
+    LEFT JOIN eck_revision r
+    ON r.tid = topic_id and r.uid = :uid and r.status = 1
+    WHERE
+    th.tid NOT IN ". $exclude_tids."
+    and
+      th.tid=td.tid
+      and
+      th.parent = :subject_tid
+    order by level desc",  array(':uid' => $uid, ':subject_tid' => $stid));
+
+
+  $topic_output = '';
+    foreach ($result as $value) {
+      $tid = $value->tid;
+      $topic_output .="<div class=subject-topic id=$tid>";
+      $topic_output .="<span class=subject-name>" .$value->name."</span>";
+      $form = drupal_get_form(revision_completedby_form);
+          $form['markup'] = array(
+            '#markup' => "<input type = 'text' name='tid' style = 'display:none' value = '$tid'>",
+          );
+          $topic_output .= drupal_render($form);
+
+      $topic_output .="</div>";
+      }
+    if($topic_output == '') {
+      //$topic_output = "<div class=subject-topic>".'You have already scheduled revisions for all topics in this subject which are currently available for revision.'."</div>";
+      $topic_output = "<div class=subject-topic>".'No new topic(s) to be scheduled for revision right now.'."</div>";
+    }
+    $output .= '<div class="row">'.$topic_output.'</div>';
+$output .="</div>";
+
+  }
+//die();
+$output .="</div>";
+  return $output;
+}
+
+function revision_session_unset() {
+ //unset all session variable of current session
+    unset($_SESSION['question_level']);
+    unset($_SESSION['class']);
+    unset($_SESSION['question_asked']);
+    unset($_SESSION['question_lod']);
+    unset($_SESSION['level_name']);
+    unset($_SESSION['start_time']);
+    unset($_SESSION['qid']);
+    unset($_SESSION['topic_tid']);
+    unset($_SESSION['subject_tid']);
+    unset($_SESSION['correct_ans']);
+    unset($_SESSION['level_correct_ans']);
+    unset($_SESSION['level_wrong_ans']);
+    unset($_SESSION['user_session_exc']);
+    unset($_SESSION['wrong_ans']);
+    unset($_SESSION['timer_value']);
+    unset($_SESSION['user_class_value']);
+    unset($_SESSION['current']);
+    unset($_SESSION['max']);
+
+}

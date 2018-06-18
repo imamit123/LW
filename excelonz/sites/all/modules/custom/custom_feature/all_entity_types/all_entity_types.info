@@ -1,0 +1,12 @@
+name = All Entity Types
+core = 7.x
+package = Features
+dependencies[] = eck
+dependencies[] = eck
+dependencies[] = features
+features[eck_bundle][] = parent_assignment_parent_assignment
+features[eck_bundle][] = worksheet_expiry_worksheet_expiry
+features[eck_entity_type][] = expiry
+features[eck_entity_type][] = offer_code
+features[eck_entity_type][] = subscription
+features[features_api][] = api:2

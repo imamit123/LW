@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the All Entity Types feature.
+ */
+
+include_once 'all_entity_types.features.inc';

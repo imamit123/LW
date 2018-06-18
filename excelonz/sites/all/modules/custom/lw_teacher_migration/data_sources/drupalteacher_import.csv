@@ -1,0 +1,31 @@
+MID,mail,username,field_first_name,field_last_name,password,field_class1,field_subjects,field_schools,field_branch
+1,Archana.Talwar@abc.com,Archana.Talwar,Archana,Talwar,thsteacher01,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-GK",Tender Hearts School,Kursi Road
+2,Geeta.Negi@abc.com,Geeta.Negi,Geeta,Negi,thsteacher02,7-Oth,"Class 7-English,Class 7-Maths,Class 7-Science,Class 7-SST,Class 7-GK",Tender Hearts School,Mahanagar
+3,Iti.Jhingman@abc.com,Iti.Jhingman,Iti,Jhingman,thsteacher03,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-GK",Tender Hearts School,Kursi Road
+4,Manisha.Ghildiyal@abc.com,Manisha.Ghildiyal,Manisha,Ghildiyal,thsteacher04,8-Oth,"Class 8-English,Class 8-Maths,Class 8-Science,Class 8-SST,Class 8-GK",Tender Hearts School,Mahanagar
+5,Manpreet.Kohli@abc.com,Manpreet.Kohli,Manpreet,Kohli,thsteacher05,1-B,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-GK",Tender Hearts School,Mahanagar
+6,Anju.Gupta@abc.com,Anju.Gupta,Anju,Gupta,thsteacher06,5-B,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-GK",Tender Hearts School,Mahanagar
+7,Dimple.Devyani@abc.com,Dimple.Devyani,Dimple,Devyani,thsteacher07,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-GK",Tender Hearts School,Mahanagar
+8,Mikki.Rastogi@abc.com,Mikki.Rastogi,Mikki,Rastogi,thsteacher08,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-GK",Tender Hearts School,Mahanagar
+9,Amina.Sania@abc.com,Amina.Sania,Amina,Sania,thsteacher09,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-GK",Tender Hearts School,Mahanagar
+10,Anuragini.Pandey@abc.com,Anuragini.Pandey,Anuragini,Pandey,thsteacher10,2-B,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-GK",Tender Hearts School,Mahanagar
+11,Falak.Khan@abc.com,Falak.Khan,Falak,Khan,thsteacher11,2-C,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-GK",Tender Hearts School,Mahanagar
+12,Neha.Tiwari@abc.com,Neha.Tiwari,Neha,Tiwari,thsteacher12,4-B,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-GK",Tender Hearts School,Mahanagar
+13,Priyanka.Singh@abc.com,Priyanka.Singh,Priyanka,Singh,thsteacher13,3-B,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-GK",Tender Hearts School,Mahanagar
+14,Ritika.Srivastava@abc.com,Ritika.Srivastava,Ritika,Srivastava,thsteacher14,1-C,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-GK",Tender Hearts School,Mahanagar
+15,Shipra.Rastogi@abc.com,Shipra.Rastogi,Shipra,Rastogi,thsteacher15,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-GK",Tender Hearts School,Mahanagar
+16,Roma.Mishra@abc.com,Roma.Mishra,Roma,Mishra,thsteacher18,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-GK",Tender Hearts School,Mahanagar
+17,Rupika.Chopra@abc.com,Rupika.Chopra,Rupika,Chopra,thsteacher19,6-B,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-GK",Tender Hearts School,Mahanagar
+18,Shazia.Alam@abc.com,Shazia.Alam,Shazia,Alam,thsteacher20,3-A,"Class 3-English,Class 3-Maths,Class 3-Science,Class 3-SST,Class 3-GK",Tender Hearts School,Kursi Road
+19,Shubhangi.Gazwani@abc.com,Shubhangi.Gazwani,Shubhangi,Gazwani,thsteacher21,4-A,"Class 4-English,Class 4-Maths,Class 4-Science,Class 4-SST,Class 4-GK",Tender Hearts School,Kursi Road
+20,Srishti.Sengar@abc.com,Srishti.Sengar,Srishti,Sengar,thsteacher22,6-A,"Class 6-English,Class 6-Maths,Class 6-Science,Class 6-SST,Class 6-GK",Tender Hearts School,Kursi Road
+21,Syed.Ghazala@abc.com,Syed.Ghazala,Syed,Ghazala,thsteacher23,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-GK",Tender Hearts School,Kursi Road
+22,Swati.Mishra@abc.com,Swati.Mishra,Swati,Mishra,thsteacher16,2-A,"Class 2-English,Class 2-Maths,Class 2-Science,Class 2-SST,Class 2-GK",Tender Hearts School,Kursi Road
+23,Namrata.X@abc.com,Namrata.X,Namrata,X,thsteacher17,5-A,"Class 5-English,Class 5-Maths,Class 5-Science,Class 5-SST,Class 5-GK",Tender Hearts School,Kursi Road
+24,Pallavi.Upadhyay@abc.com,Pallavi.Upadhyay,Pallavi,Upadhyay,thsteacher24,1-A,"Class 1-English,Class 1-Maths,Class 1-Science,Class 1-SST,Class 1-GK",Tender Hearts School,Mahanagar
+25,Marytrial.McMohan@abc.com,Marytrial.McMohan,Marytrial,McMohan,misctchr01,"1-A,2-B,3-C,4-D,5-E,6-F,7-G,8-H","Class 1-English,Class 2-English,Class 3-English,Class 4-English,Class 5-English,Class 6-English,Class 7-English,Class 8-English",Misctrial School,Mahipalpur
+26,Stacytrial.Kiebler@abc.com,Stacytrial.Kiebler,Stacytrial,Kiebler,misctchr02,"1-A,2-B,3-C,4-D,5-E,6-F,7-G,8-H","Class 1-Maths,Class 2-Maths,Class 3-Maths,Class 4-Maths,Class 5-Maths,Class 6-Maths,Class 7-Maths,Class 8-Maths",Misctrial School,Mahipalpur
+27,Lindatrial.Goodman@abc.com,Lindatrial.Goodman,Lindatrial,Goodman,misctchr03,"1-A,2-B,3-C,4-D,5-E,6-F,7-G,8-H","Class 1-Science,Class 2-Science,Class 3-Science,Class 4-Science,Class 5-Science,Class 6-Science,Class 7-Science,Class 8-Science",Misctrial School,Mahipalpur
+28,Rosylyntrial.Philip@abc.com,Rosylyntrial.Philip,Rosylyntrial,Philip,misctchr04,"1-A,2-B,3-C,4-D,5-E,6-F,7-G,8-H","Class 1-SST,Class 2-SST,Class 3-SST,Class 4-SST,Class 5-SST,Class 6-SST,Class 7-SST,Class 8-SST",Misctrial School,Mahipalpur
+29,Mingtrial.Liu@abc.com,Mingtrial.Liu,Mingtrial,Liu,misctchr05,"1-A,2-B,3-C,4-D,5-E,6-F,7-G,8-H","Class 1-GK,Class 2-GK,Class 3-GK,Class 4-GK,Class 5-GK,Class 6-GK,Class 7-GK,Class 8-GK",Misctrial School,Mahipalpur
+30,Tiatrial.Carpenter@abc.com,Tiatrial.Carpenter,Tiatrial,Carpenter,misctchr06,"1-A,2-B,3-C,4-D,5-E,6-F,7-G,8-H","Class 1-English,Class 2-English,Class 3-English,Class 4-English,Class 5-English,Class 6-English,Class 7-English,Class 8-English,Class 1-Maths,Class 2-Maths,Class 3-Maths,Class 4-Maths,Class 5-Maths,Class 6-Maths,Class 7-Maths,Class 8-Maths,Class 1-Science,Class 2-Science,Class 3-Science,Class 4-Science,Class 5-Science,Class 6-Science,Class 7-Science,Class 8-Science,Class 1-SST,Class 2-SST,Class 3-SST,Class 4-SST,Class 5-SST,Class 6-SST,Class 7-SST,Class 8-SST,Class 1-GK,Class 2-GK,Class 3-GK,Class 4-GK,Class 5-GK,Class 6-GK,Class 7-GK,Class 8-GK",Misctrial School,Mahipalpur

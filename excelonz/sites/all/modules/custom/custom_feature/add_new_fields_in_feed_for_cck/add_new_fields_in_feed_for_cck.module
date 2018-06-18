@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Add new fields in feed for cck feature.
+ */
+
+include_once 'add_new_fields_in_feed_for_cck.features.inc';

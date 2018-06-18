@@ -1,0 +1,13 @@
+name = All Views for Home page
+core = 7.x
+package = Features
+dependencies[] = views
+dependencies[] = views_slideshow
+dependencies[] = views_ticker
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = _home_slideshow_field_collection
+features[views_view][] = all_page_offer_code_ticker
+features[views_view][] = inner_page_class
+features[views_view][] = tsq_fib_list
+features_exclude[dependencies][ctools] = ctools

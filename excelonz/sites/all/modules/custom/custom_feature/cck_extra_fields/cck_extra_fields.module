@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the cck-extra-fields feature.
+ */
+
+include_once 'cck_extra_fields.features.inc';

@@ -1,0 +1,2061 @@
+<?php
+function coupon_code_form($form, $form_state) {
+  global $user;
+  $uid = $user->uid;
+  $form = array();
+  //prefilled or refresh scenario
+  $order = commerce_cart_order_load($user->uid);
+  $order_no = $order->order_number;
+
+
+    $line_itm_query = db_select('commerce_line_item', 'li');
+    $line_itm_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $line_itm_query->fields('li');
+    $line_itm_query->fields('es');
+    $line_itm_query->condition("es.uid", $uid);
+    $line_itm_query->condition("es.offercodeid", 0, '!=');
+    $line_itm_query->condition("es.order_id", $order_no);
+    $line_itm_query->range(0,1);
+    $line_itm_res = $line_itm_query->execute()->fetchAssoc();
+
+    if(array_key_exists('offercodeid', $line_itm_res)) {
+        //load offercode detail
+        $offer_id  = $line_itm_res['offercodeid'];
+        $offercode_result = db_select("eck_offer_code", "oc")
+          ->fields("oc")
+          ->condition("id", $offer_id)
+          ->range(0,  1)
+          ->execute()->fetchAssoc();
+
+          $content = coupon_update_lineitem_add($offercode_result);
+          $coupon_def = $offercode_result['offer_code'];
+    }
+    else {
+      $markup = "display:none;";
+    }
+
+  $form['coupon']['coupon1'] = array(
+    '#type' => 'textfield',
+    '#coupon1' => t('Coupon'),
+    '#size' => 22,
+    '#maxlength' => 20,
+    '#default_value' => $coupon_def,
+    '#title' => t('Offer Code '),
+    '#attributes' =>array('placeholder' => t('Enter Code')),
+  );
+   $form['coupon']['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Apply'),
+      '#ajax' => array(
+        'callback' => 'coupon_ajax_apply1',
+        'wrapper' => 'form-coupon-msg'
+      ),
+      '#submit' => array('coupon_ajax_apply1'),
+    );
+
+
+    $form['coupon']['coupn-msg'] = array(
+      '#prefix' => '<div id="form-coupon-msg" style = '.$markup.'>',
+
+      '#type' => 'markup',
+      '#markup' => $content[0],
+    );
+  $form['coupon']['remove'] = array(
+      '#type' => 'submit',
+      '#value' => t('x'),
+      '#submit' => array('coupon_ajax_remove1'),
+    );
+  //show the discount text to user
+     $form['coupn-msg1'] = array(
+      '#prefix' => '<div id="form-coupon-msg1">',
+      '#suffix' => '</div></div>',
+      '#type' => 'markup',
+      '#markup' => $content[1],
+    );
+  return $form;
+}
+
+/**
+ * ajax function for subscription page for logged in user.
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function coupon_ajax_apply1($form, &$form_state) {
+
+/*Code for "Sun Life" coupon fixed amount ends*/
+/**
+* @todo -Amit Kumar-  Check When Offer code sold value equal to zero give message 
+* code is not valid
+**/
+
+  unset($_SESSION['coupon']);
+  //@todo : fetch data for coupon
+    $coupon_info = get_coupon_info(check_plain($_POST['coupon1']));
+    if($coupon_info == false) {
+       $total_price = coupon_remove_lineitem_remove();
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Not a valid offer Code</div><style><style>",
+      );
+        //show the discount text to user
+      $form1['coupn-msg1'] = array(
+        '#prefix' => '<div id="form-coupon-msg1">',
+        '#suffix' => '</div></div>',
+        '#type' => 'markup',
+        '#markup' => $total_price,
+      );
+
+      return $form1;
+    }else if($coupon_info['sold'] == 1) {
+       $total_price = coupon_remove_lineitem_remove();
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Not a valid offer Code</div><style><style>",
+      );
+        //show the discount text to user
+      $form1['coupn-msg1'] = array(
+        '#prefix' => '<div id="form-coupon-msg1">',
+        '#suffix' => '</div></div>',
+        '#type' => 'markup',
+        '#markup' => $total_price,
+      );
+
+      return $form1;
+    }
+    $content = coupon_update_lineitem_add($coupon_info);
+
+    $form1['coupn-msg'] = array(
+      '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+
+      '#type' => 'markup',
+      '#markup' => $content[0],
+    );
+    $form1['remove'] = array(
+      '#type' => 'submit',
+      '#value' => t('x'),
+      '#ajax' => array(
+        'callback' => 'coupon_ajax_remove1',
+        'wrapper' => 'form-coupon-msg'
+      ),
+      '#submit' => array('coupon_ajax_remove1'),
+    );
+//show the discount text to user
+     $form1['coupn-msg1'] = array(
+      '#prefix' => '<div id="form-coupon-msg1">',
+      '#suffix' => '</div></div>',
+      '#type' => 'markup',
+      '#markup' => $content[1],
+    );
+  return $form1;
+
+}
+
+function coupon_ajax_remove1($form, &$form_state) {
+  coupon_remove_lineitem_remove();
+          //show the discount text to user
+      $form1['coupn-msg1'] = array(
+        '#prefix' => '<div id="form-coupon-msg" style="display:inlinem;"><div id="form-coupon-msg1">',
+        '#suffix' => '</div></div>',
+        '#type' => 'markup',
+        '#markup' => $content[1],
+      );
+
+
+  unset($_SESSION['coupon']);
+}
+
+function coupon_update_lineitem_add($offercode_arr) {
+  coupon_remove_lineitem_remove();
+  global $user;
+  $uid = $user->uid;
+  $order = commerce_cart_order_load($user->uid);
+  $order_no = $order->order_number;
+
+
+  if($offercode_arr['offer_code_apply_to'] == "All") {
+      $month = array(3,6,12);
+    }
+  else {
+      $month = array($offercode_arr['offer_code_apply_to']);
+  }
+
+  $months = array();
+  $months[12] = array(800, 1500, 2000, 2400);
+
+//fetch lineitemid with month filter from eck_subscription
+   $line_itm_query = db_select('commerce_line_item', 'li');
+   $line_itm_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $line_itm_query->fields('li');
+    $line_itm_query->fields('es');
+    $line_itm_query->condition("es.uid", $uid);
+    $line_itm_query->condition("es.qty", $month, "IN");
+    $line_itm_query->condition("es.order_id", $order_no);
+    $line_itm_query->condition("es.worksheet_tid", '0');
+    $line_itm_res = $line_itm_query->execute()->fetchAll();
+    $subject_count = count($line_itm_res);
+    $subject_single_price = round($line_itm_res[0]->quantity);
+    $total_subject_price = $subject_count * $subject_single_price;
+
+
+
+    $line_itm_work_query = db_select('commerce_line_item', 'li');
+    $line_itm_work_query->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $line_itm_work_query->fields('li');
+    $line_itm_work_query->fields('es');
+    $line_itm_work_query->condition("es.uid", $uid);
+    $line_itm_work_query->condition("es.qty", $month, "IN");
+    $line_itm_work_query->condition("es.order_id", $order_no);
+    $line_itm_work_query->condition("es.worksheet_tid", '0','<>');
+    $line_itm_work_res = $line_itm_work_query->execute()->fetchAll();
+    $worksheet_count = count($line_itm_work_res);
+    $worksheet_single_price = round($line_itm_work_res[0]->quantity);
+    $total_worksheet_price = $worksheet_count * $worksheet_single_price;
+    $total_price = $total_worksheet_price + $total_subject_price;
+
+    $total_count = $worksheet_count + $subject_count;
+  if($offercode_arr['offer_code_type'] == "%") {
+        $discount_per = $offercode_arr['offer_code_value'];
+        $total_dis = (($total_price * $discount_per ) / 100);
+        $single_discount = round($total_dis / $total_count);
+        //print $total_price;die();
+      if(isset($subject_single_price) && $subject_single_price !=0){
+        $single_subject_price_new = round($subject_single_price - $single_discount);
+      }
+
+      if(isset($worksheet_single_price) && $worksheet_single_price != 0){
+        $single_worksheet_price_new = round($worksheet_single_price  - $single_discount);
+      }
+      if(is_numeric($discount_per)) {
+          $discount_text = 'Offer Applied - '.$discount_per . '% Discount';
+      }
+
+  }
+
+  elseif($offercode_arr['offer_code_type'] == "Rs") {
+        $discount_val = $offercode_arr['offer_code_value'];
+        $total_dis = $discount_val;
+        $single_subject_price = $subject_single_price;
+        $single_worksheet_price = $worksheet_single_price;
+        $single_discount = round($discount_val / $total_count);
+      if(isset($subject_single_price) && $subject_single_price !=0){
+        $single_subject_price_new = round($single_subject_price - $single_discount);
+      }
+      if(isset($worksheet_single_price) && $worksheet_single_price != 0){
+        $single_worksheet_price_new = round($single_worksheet_price - $single_discount);
+      }
+    $discount_text = "Offer Applied - <span class='rpsymbol'>&#8377;</span> " . $total_dis . ' Discount';
+  }
+  
+  elseif($offercode_arr['offer_code_type'] == "month") {
+        $total_dis =  0;
+        $single_subject_price = $subject_single_price;
+        $single_worksheet_price = $worksheet_single_price;
+        if(isset($subject_single_price) && $subject_single_price !=0){
+           $single_subject_price_new = round($single_subject_price);
+        }
+        if(isset($worksheet_single_price) && $worksheet_single_price != 0){
+          $single_worksheet_price_new = round($single_worksheet_price);
+        }
+        $discount_text = "month";
+  }
+      
+  elseif($offercode_arr['offer_code_type'] == "fixdate") {
+     $total_dis =  0;
+      $single_subject_price = $subject_single_price;
+        $single_worksheet_price = $worksheet_single_price;
+      if(isset($subject_single_price) && $subject_single_price !=0){
+         $single_subject_price_new = round($single_subject_price);
+      }
+      if(isset($worksheet_single_price) && $worksheet_single_price != 0){
+       $single_worksheet_price_new = round($single_worksheet_price);
+      }
+       $discount_text = "fixdate";
+  }
+  else {
+      $total_dis =  0;
+      $single_price = round($total_price / $subject_count);;
+        //$single_subject_price_new = $single_price;
+        //$single_worksheet_price_new = $single_price;
+  }
+
+      $prod = array();
+      $line_itms = array();
+      $prod_work = array();
+      $line_itms_work = array();
+      foreach ($line_itm_res as $value) {
+          $prod[$value->child_uid][$value->qty]++;
+          $line_itms[$value->child_uid][$value->qty][] = $value->line_item_id;
+      }
+      foreach ($line_itm_work_res as $value) {
+          $prod_work[$value->child_uid][$value->qty]++;
+          $line_itms_work[$value->child_uid][$value->qty][] = $value->line_item_id;
+      }
+
+  /*Fetch child id because ajax dont take child id from URL arguments -code start */
+      $child_id_obj = db_select('eck_subscription', 'es')
+          ->fields('es',array('child_uid'))
+          ->condition("order_id", $order_no)
+          ->condition("uid", $uid)
+          ->execute()
+          ->fetchAssoc();
+      $childid = $child_id_obj['child_uid'];
+    /*Fetch child id because ajax dont take child id from URL arguments -code ends */
+      $mnt = 12;
+
+      if(isset($single_subject_price_new))  {
+          $line_value = '';
+
+          foreach ($line_itms[$childid][$mnt] as $key => $line_value) {
+              db_update('commerce_line_item')
+                ->fields(array(
+                'quantity' => $single_subject_price_new,
+              ))
+              ->condition('line_item_id', $line_value)
+              ->execute();
+          }
+          
+          //echo $line_value;die('123');
+      }
+  
+
+  foreach ($line_itms_work[$childid][$mnt] as $key => $value) {
+          db_update('commerce_line_item')
+            ->fields(array(
+          'quantity' => $single_worksheet_price_new,
+          ))
+          ->condition('line_item_id', $value)
+          ->execute();
+      }
+     
+    if(isset($line_itms[$childid][$mnt])){
+      db_update('eck_subscription')
+        ->fields(array(
+        'offercodeid' => $offercode_arr['id'],
+      ))
+      ->condition('line_item_id', $line_itms[$childid][$mnt], "IN")
+      ->execute();
+    }
+    if(isset($line_itms_work[$childid][$mnt])){
+      db_update('eck_subscription')
+        ->fields(array(
+        'offercodeid' => $offercode_arr['id'],
+      ))
+      ->condition('line_item_id', $line_itms_work[$childid][$mnt], "IN")
+      ->execute();
+      }
+      db_update('eck_subscription')
+        ->fields(array(
+        'offercodeid' => $offercode_arr['id'],
+      ))
+      ->condition('order_id',$order_no)
+      ->condition('line_item_id',0)
+      ->execute();
+//prod for each end
+
+  //To find the new total price
+    $line_itm_total = db_select('commerce_line_item', 'li');
+    $line_itm_total->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+    $line_itm_total->addExpression('sum(quantity)', 'total');
+    $line_itm_total->condition("es.uid", $uid);
+    $line_itm_total->condition("es.order_id", $order_no);
+    $line_total = $line_itm_total->execute()->fetchAssoc();
+
+    if(is_array($month)) {
+      $month = implode(",", $month);
+    }
+
+    //echo $discount_text;die();
+      if(is_numeric($discount_text)) {
+        $discount_text = "This offercode is only valid for " . $month . " Months Subscription"
+        ;
+        $content .= '<div id="form-coupon-msg">';
+        $content .= $discount_text;
+        $content1 .= "<div id='price-coupon'>Coupon Discount <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> -".$total_dis . "</span></div>";
+
+        $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+        $content1 .= "<div class='cost-after-dis'>Total Cost : <span class='rupee-span'><span class='rpsymbol'>&#8377;</span>".$line_total['total'] ."</span></div>";
+      }
+      elseif($discount_text == "month") {
+        $content .= '<div id="form-coupon-msg">';
+        $content .= 'Offer Applied +'.$offercode_arr['offer_code_value'].' months free subscription';
+        $content1 .= "<div id='price-coupon'>Free subscription of22 <span class='rupee-span'>+  ".$offercode_arr['offer_code_value'] . " month</span></div>";
+
+        $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+        $content1 .= "<div class='cost-after-dis'>Total Cost : <span class='rupee-span'><span>&#8377;</span>".$line_total['total'] ."</span></div>";
+      }
+      elseif($discount_text == "fixdate") {
+        $content .= '<div id="form-coupon-msg">';
+        $content .= 'Offer Applied - Subscription till date :'.date("d-m-Y", $offercode_arr['offer_code_fix_date']);
+        //$content1 .= "<div id='price-coupon'>Free subscription of <span class='rupee-span'>+  ".$offercode_arr['offer_code_value'] . " month</span></div>";
+
+        $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+        $content1 .= "<div class='cost-after-dis-fix'>Total Cost : <span class='rupee-span'><span class='rpsymbol'>&#8377;</span>".$line_total['total'] ."</span></div>";
+      }
+      else {
+        $content .= '<div id="form-coupon-msg">';
+        $content .= $discount_text;
+        $content1 .= "<div id='price-coupon'>Coupon Discount <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> -".$total_dis . "</span></div>";
+
+        $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+        $content1 .= "<div class='cost-after-dis'>Total Cost : <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> ".$line_total['total'] ."</span></div>";
+/**
+* @param - Offer code id and subject and child detail send in url
+* @todo -Amit Kumar - check total value is equal to zero and offer code use one time
+* Create Active link when click on active link subject assign to child and offer code are deactivate. 
+* @todo - When Offer code value less or more than selected subject value- dispaly one message
+* please select offer code equal values.
+**/
+
+//print_r($offercode_arr['offer_code']);
+$offer_code = str_split($offercode_arr['offer_code']);
+$child_offercode_classvalue = $offer_code[7];
+if($offer_code[2] == 'M'){
+  $val[] .= 'Maths';
+
+} 
+if($offer_code[3] == 'S' ){
+ $val[] .= 'Science';
+}
+ if($offer_code[4] == 'E'){
+ $val[] .= 'English';
+}
+ if($offer_code[5] == 'O'){
+ $val[] .= 'SST';
+}
+ if($offer_code[6] == 'G'){
+ //$val[] .= 'General Knowledge';
+}
+foreach ($line_itm_res as $value) {
+ // print_r($value);
+$line_item_label = str_split($value->line_item_label);
+$tid = $value->subject_tid;
+$term = taxonomy_term_load($tid);
+$name[] = $term->name;
+    }
+ $child_class = $line_item_label[5];
+ $val_count = count($val);
+ $name_count = count($name);
+if($val_count > $name_count){
+$result = array_diff($val, $name);
+}else{
+$result = array_diff($name, $val);
+}
+
+$coupon_code_subject  =  implode(" ",$val);
+$line_itms =  urlencode(http_build_query($line_itm_res));
+//echo $worksheet_count;
+if(($child_class != $child_offercode_classvalue && $offercode_arr['use_one_time'] == 1) && $child_offercode_classvalue != 0){
+
+ $content1 .= "<br/><br/><div style='color:red;font-size: 16px;' class='activate-coupon-code-link'>Offer code valid only for class ".$child_offercode_classvalue." Practice Online</div>"; 
+}else if($offercode_arr['use_one_time'] == 1){
+if($result){
+ $content1 .= "<br/><br/><div style='color:red;font-size: 14px;' class='activate-coupon-code-link'>Please choose Practice Online subjects based on your purchased package.</div>";
+}else if($worksheet_count != 0){
+ $content1 .= "<br/><br/><div style='color:red;font-size: 14px;' class='activate-coupon-code-link'>Offer Code is not valid for Worksheets for any subject.</div>";
+}else{
+$content1 .= "<br/><br/><div class='activate-coupon-code-link'>".l('Activate', 'activate-coupon-code', array('query' => array('offercodeid' => $offercode_arr['id'],'orderno'=>$order_no,
+        'line'=>$line_itms))). "</div><script>jQuery('.activate-coupon-code-link a').parents('#coupon-code-form').siblings('.links.inline').hide();</script>";
+
+}
+}
+
+
+      }
+      $finalcontent = array();
+      $finalcontent[] = $content;
+      $finalcontent[] = $content1;
+      return $finalcontent;
+
+}
+
+function coupon_remove_lineitem_remove(){
+  //no coupon code applied
+  //fetch all lineitem ID from lineitem and eck_subscriptin table -- JOIN
+  //check for price with $month variable
+  //update the lineitem table.
+  global $user;
+  $uid = $user->uid;
+  $order = commerce_cart_order_load($user->uid);
+  $order_no = $order->order_number;
+  //$month = 3;
+
+  $months = array();
+  //$months[3] = array(1250, 1750, 2500, 3250, 4000);
+  //$months[6] = array(2000, 2750, 3750, 4750, 5250);
+  $months[12] = array(800, 1500, 2000, 2400);
+
+//fetch lineitemid with month filter from eck_subscription
+
+    $line_itm_query = db_select('eck_subscription', 'es');
+    $line_itm_query->fields('es');
+    $line_itm_query->condition("es.uid", $uid);
+    $line_itm_query->condition("es.order_id", $order_no);
+    $line_itm_query->condition("es.line_item_id", 0, '!=');
+    $line_itm_query->condition("es.worksheet_tid", '0');
+    $line_itm_res = $line_itm_query->execute()->fetchAll();
+    //for more then one child scenario group qty as a group of child.
+    $prod = array();
+    $count = 0;
+    foreach ($line_itm_res as $value) {
+      $prod[$value->child_uid][$value->qty][] = $value->line_item_id;
+    }
+//query row count
+  foreach ($prod as $childid => $itm) {
+
+    foreach ($itm as $month => $lineitm) {
+
+      $itms = count($lineitm) - 1;
+      $total_price = $months[$month][$itms];
+      $single_price = round($total_price/ ($itms+1));
+
+      $totalnew = 0;
+      $single_prices = array();
+      for($i =0; $i<= $itms; $i++) {
+        $totalnew += $single_price;
+        $single_price_new1[$i] = $single_price;
+
+      }
+      //echo $total_price . "--" . $totalnew;
+      if($total_price > $totalnew ) {
+          $single_price_new1[$i-1] = $single_price_new1[$i-1] + ($total_price- $totalnew);
+      }
+      elseif($total_price < $totalnew) {
+        $single_price_new1[$i-1] = $single_price_new1[$i-1] - ($totalnew- $total_price);
+      }
+      $j = 0;
+      //echo "<pre>";print_r($lineitm);die();
+      foreach($lineitm as $lineit) {
+        db_update('commerce_line_item')
+          ->fields(array(
+            'quantity' => $single_price_new1[$j],
+          ))
+          ->condition('line_item_id', $lineit )
+          ->execute();
+
+        $j++;
+      }
+
+
+
+      db_update('eck_subscription')
+      ->fields(array(
+        'offercodeid' => 0,
+      ))
+      ->condition('line_item_id', $lineitm, "IN")
+      ->execute();
+     db_update('eck_subscription')
+        ->fields(array(
+        'offercodeid' => 0,
+      ))
+      ->condition('order_id',$order_no)
+      ->condition('line_item_id',0)
+      ->execute();
+
+    }
+  }
+// for free worksheet
+    $wmonths = array();
+    $wmonths[12] = array(199, 398, 597, 796);
+    $line_itm_work_query = db_select('eck_subscription', 'es');
+    $line_itm_work_query->fields('es');
+    $line_itm_work_query->condition("es.uid", $uid);
+    $line_itm_work_query->condition("es.order_id", $order_no);
+    $line_itm_work_query->condition("es.line_item_id", 0, '!=');
+    $line_itm_work_query->condition("es.worksheet_tid", '0','<>');
+    $line_itm_work_res = $line_itm_work_query->execute()->fetchAll();
+    //for more then one child scenario group qty as a group of child.
+    $prod = array();
+    $count = 0;
+
+
+    foreach ($line_itm_work_res as $value) {
+      $prod_work[$value->child_uid][$value->qty][] = $value->line_item_id;
+    }
+   // echo '<pre>'; print_r($line_itm_res);
+
+//query row count
+  foreach ($prod_work as $childid => $itm) {
+     foreach ($itm as $month => $wlineitm) {
+      $itms = count($wlineitm) - 1;
+      $total_price = $wmonths[$month][$itms];
+      $single_price = round($total_price/ ($itms+1));
+
+      $totalnew = 0;
+      $single_prices = array();
+      for($i =0; $i<= $itms; $i++) {
+        $totalnew += $single_price;
+        $single_price_new1[$i] = $single_price;
+
+      }
+      //echo $total_price . "--" . $totalnew;
+      if($total_price > $totalnew ) {
+          $single_price_new1[$i-1] = $single_price_new1[$i-1] + ($total_price- $totalnew);
+      }
+      elseif($total_price < $totalnew) {
+        $single_price_new1[$i-1] = $single_price_new1[$i-1] - ($totalnew- $total_price);
+      }
+      $j = 0;
+      //echo "<pre>";print_r($lineitm);die();
+      foreach($wlineitm as $lineit) {
+        db_update('commerce_line_item')
+          ->fields(array(
+            'quantity' => $single_price_new1[$j],
+          ))
+          ->condition('line_item_id', $lineit )
+          ->execute();
+
+        $j++;
+      }
+
+
+
+      db_update('eck_subscription')
+      ->fields(array(
+        'offercodeid' => 0,
+      ))
+      ->condition('line_item_id', $wlineitm, "IN")
+      ->execute();
+     db_update('eck_subscription')
+        ->fields(array(
+        'offercodeid' => 0,
+      ))
+      ->condition('order_id',$order_no)
+      ->condition('line_item_id',0)
+      ->execute();
+
+    }
+  }
+
+
+
+
+  //To find the new total price
+  $line_itm_total = db_select('commerce_line_item', 'li');
+  $line_itm_total->join('eck_subscription', 'es', 'es.order_id = li.order_id and es.line_item_id = li.line_item_id');
+  $line_itm_total->addExpression('sum(quantity)', 'total');
+    $line_itm_total->condition("es.uid", $uid);
+    $line_itm_total->condition("es.order_id", $order_no);
+    $line_total = $line_itm_total->execute()->fetchAssoc();
+    $content = "<div class='cost-after-dis'>Total Cost : <span class='rpsymbol'>&#8377;</span> ".$line_total['total'] ."</div>";
+    return $content;
+
+
+
+}
+
+
+
+
+/**
+ *  Code for static page
+ */
+function coupon_code_form_cust() {
+  $form = array();
+  //prefilled or refresh scenario
+  if(array_key_exists('coupon_txt', $_SESSION['coupon'])) {
+      $coupon_info = array();
+      $coupon_info['offer_code_type'] = $_SESSION['coupon']['type'];
+
+      $coupon_info['offer_code_apply_to'] = $_SESSION['coupon']['month'];
+      $coupon_info['offer_code_value'] = $_SESSION['coupon']['perce'];
+      $coupon_info['id'] = $_SESSION['coupon']['id'];
+
+      $content = static_page_process_coupon($coupon_info);
+      $coupon_def = $_SESSION['coupon']['coupon_txt'];
+      $markup = "display:inline;";
+  }
+  else {
+    $markup = "display:none;";
+  }
+
+  $form['coupon1'] = array(
+    '#type' => 'textfield',
+    '#coupon1' => t('Coupon'),
+    '#size' => 10,
+    '#maxlength' => 20,
+    '#default_value' => $coupon_def,
+    '#title' => t('Offer Code '),
+    '#attributes' =>array('placeholder' => t('Enter Code')),
+  );
+   $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Apply'),
+      '#ajax' => array(
+        'callback' => 'coupon_ajax_apply',
+        'wrapper' => 'form-coupon-msg'
+      ),
+      '#submit' => array('coupon_ajax_apply'),
+    );
+
+
+    $form['coupn-msg'] = array(
+
+      '#prefix' => '<div id="form-coupon-msg" style = '.$markup.'><div></div>',
+      '#type' => 'markup',
+      '#markup' => $content[0],
+    );
+  $form['remove'] = array(
+
+      '#type' => 'submit',
+      '#value' => t('x'),
+      '#submit' => array('coupon_ajax_remove'),
+    );
+  //show the discount text to user
+     $form['coupn-msg1'] = array(
+      '#prefix' => '<div id="form-coupon-msg1">',
+      '#suffix' => '</div></div>',
+      '#type' => 'markup',
+      '#markup' => $content[1],
+    );
+  return $form;
+}
+
+/**
+ * [coupon_ajax_apply description]
+ * call for static page apply button for anonymous user.
+ */
+function coupon_ajax_apply($form, &$form_state) {
+global $base_path;
+/*Code for "Sun Life" coupon fixed amount start*/
+       /*$total_price = $_SESSION['totalcost'][12];
+       $total_subjects = $_SESSION['cart'][7];
+       $coupon_name = $_SESSION['coupon']['coupon_txt'];
+       $coupon_name = strtolower($coupon_name);
+       $sun_life = strtolower('Sun Life');
+          if(($coupon_name == $sun_life) && ($total_price != 2400 || $total_subjects != 4 ) ) {
+  
+           $form1['coupn-msg-1'] = array(
+           '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+           '#suffix' => '</div>',
+           '#type' => 'markup',
+           '#markup' => "<div class='coupon-not-valid'>Not a valid offer Code</div>",
+        );
+              unset($_SESSION['coupon']);
+              return $form1;
+  
+          }*/
+/*Code for "Sun Life" coupon fixed amount end*/
+
+  unset($_SESSION['coupon']);
+  //@todo : fetch data for coupon
+    $_SESSION['coupon']['coupon_txt'] = check_plain($_POST['coupon']['coupon1']);
+  //coupon code validate and check for values
+   // $coupon_info = get_coupon_info(check_plain($_POST['coupon1']));
+    $coupon_info = get_coupon_info(check_plain($_POST['coupon1']));
+    //print_r($coupon_info);
+    if($coupon_info == false) {
+       $total_price = coupon_remove_lineitem_remove();
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Not a valid offer Code</div><style><style>",
+      );
+        //show the discount text to user
+      $form1['coupn-msg1'] = array(
+        '#prefix' => '<div id="form-coupon-msg1">',
+        '#suffix' => '</div></div>',
+        '#type' => 'markup',
+        '#markup' => $total_price,
+      );
+
+      return $form1;
+    }
+    if($coupon_info['use_one_time'] == 1) {
+       $total_price = coupon_remove_lineitem_remove();
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Non-members can activate their coupon code <div class='non-member-activate-link'><a href='".$base_path."coupon-code/activate'>here</a></div></div><style><style>",
+      );
+        //show the discount text to user
+      $form1['coupn-msg1'] = array(
+        '#prefix' => '<div id="form-coupon-msg1">',
+        '#suffix' => '</div></div>',
+        '#type' => 'markup',
+        '#markup' => $total_price,
+      );
+
+      return $form1;
+    }
+  $content = static_page_process_coupon($coupon_info);
+
+    $form1['coupn-msg'] = array(
+
+      '#prefix' => '<div id="form-coupon-msg" style="display:inline;">',
+      '#type' => 'markup',
+      '#markup' => $content[0],
+    );
+
+      $form1['remove'] = array(
+
+      '#type' => 'submit',
+      '#value' => t('x'),
+      '#ajax' => array(
+        'callback' => 'coupon_ajax_remove',
+        'wrapper' => 'form-coupon-msg'
+      ),
+      '#submit' => array('coupon_ajax_remove'),
+    );
+    $form1['coupn-msg1'] = array(
+      '#prefix' => '<div id="form-coupon-msg1">',
+      '#suffix' => '</div></div>',
+      '#type' => 'markup',
+      '#markup' => $content[1],
+    );
+  return $form1;
+
+}
+
+function coupon_ajax_remove($form, &$form_state) {
+  unset($_SESSION['coupon']);
+   $form1['coupn-msg'] = array(
+      '#prefix' => '<div id="form-coupon-msg" style="display:none;">',
+      '#type' => 'markup',
+      '#markup' => 'No Offer Applied',
+      '#suffix' => '</div>',
+    );
+  return $form1;
+}
+
+/**
+ * [static_page_process_coupon description]
+ * Coupon discount for
+ */
+function static_page_process_coupon($coupon_info) {
+
+    if(!is_array($coupon_info['offer_code_apply_to'])) {
+      if($coupon_info['offer_code_apply_to'] == "All") {
+        $month = array(3 =>3,6=>6,12=>12);
+      }
+      else {
+        $txt = $coupon_info['offer_code_apply_to'];
+        $month = array($coupon_info['offer_code_apply_to'] => $coupon_info['offer_code_apply_to']);
+      }
+    }
+    else {
+      $month = $coupon_info['offer_code_apply_to'];
+      $coupon_info['offer_code_apply_to'] = implode(",", $coupon_info['offer_code_apply_to']);
+    }
+
+  if($coupon_info['offer_code_type'] == "%") {
+
+    $_SESSION['coupon']['month'] = $month;
+    $_SESSION['coupon']['perce'] = $coupon_info['offer_code_value'];
+    $_SESSION['coupon']['type'] = "%";
+    $_SESSION['coupon']['discount'] = 0;
+    foreach ($month as $k1 => $m1) {
+      $subject += (($_SESSION['totalcost'][$m1] * $coupon_info['offer_code_value'])/ 100);
+    }
+//for worksheet
+    foreach ($month as $k1 => $m1) {
+      $worksheet += (($_SESSION['wtotalcost'][$m1] * $coupon_info['offer_code_value'])/ 100);
+    }
+    $totalDiscunt = $subject+ $worksheet;
+    $_SESSION['coupon']['id'] = $coupon_info['id'];
+
+
+      $Subjecttotal = array_sum($_SESSION['totalcost']) - $subject;
+      $Worksheettotal = array_sum($_SESSION['wtotalcost']) - $worksheet;
+      $total = $Worksheettotal + $Subjecttotal;
+
+      $content .= '<div id="form-coupon-msg">';
+      $content .= '<span class="coupon-applied-txt">Offer Applied - '.$_SESSION['coupon']['perce'].'% Discount </span>';
+      $content1 = "<div id='price-coupon'>Coupon Discount <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> -".$totalDiscunt . "</span></div>";
+
+      $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+
+      $content1 .= "<div class='cost-after-dis'>Total Cost : <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> $total</span></div>";
+      $finalcontent = array();
+      $finalcontent[] = $content;
+      $finalcontent[] = $content1;
+      return $finalcontent;
+  }
+  elseif($coupon_info['offer_code_type'] == "Rs") {
+
+
+    $_SESSION['coupon']['month'] = $month;
+
+    $_SESSION['coupon']['perce'] = $coupon_info['offer_code_value'];
+    $_SESSION['coupon']['type'] = "Rs";
+    $_SESSION['coupon']['discount'] = 0;
+
+    $arr_inter = array_intersect_key($_SESSION['totalcost'],$month);
+    $arr_worksheet_inter = array_intersect_key($_SESSION['wtotalcost'],$month);
+
+// print_r($arr_inter);echo '<br/>';
+// print_r($arr_worksheet_inter);
+ //  die();
+    if(empty($arr_inter)) {
+      $_SESSION['coupon']['discount'] = 0;
+    }
+    else {
+      $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+    }
+   if(empty($arr_worksheet_inter) && !empty($arr_inter)) {
+    $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+     
+    }elseif(empty($arr_worksheet_inter)) {
+       $_SESSION['coupon']['discount'] = 0;
+    }
+    else {
+      $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+    }
+
+// print_r($_SESSION['coupon']['discount']);
+// die();
+    $_SESSION['coupon']['id'] = $coupon_info['id'];
+    $total_count = array_sum($_SESSION['totalcost']) + array_sum($_SESSION['wtotalcost']);
+      $total = $total_count - $_SESSION['coupon']['discount'];
+      $content .= '<div id="form-coupon-msg">';
+      if(is_numeric($txt)) {
+        $content .= '<span class="coupon-applied-txt">Offer Applied - <span class="rpsymbol">&#8377;</span> '.$_SESSION['coupon']['perce'].' Discount on '.$txt.'month</span>';
+      }
+      else {
+        $content .= '<span class="coupon-applied-txt">Offer Applied - <span>&#8377;</span> '.$_SESSION['coupon']['perce'].' Discount</span>';
+      }
+
+      $content1 = "<div id='price-coupon'>Coupon Discount <span class='rupee-span'><span>&#8377;</span> -".$_SESSION['coupon']['discount'] . "</span></div>";
+
+      $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+
+      $content1 .= "<div class='cost-after-dis'>Total Cost : <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> $total</span></div>";
+      $finalcontent = array();
+      $finalcontent[] = $content;
+      $finalcontent[] = $content1;
+      return $finalcontent;
+  }
+  elseif ($coupon_info['offer_code_type'] == "month") {
+    $_SESSION['coupon']['month'] = $month;
+
+    $_SESSION['coupon']['perce'] = $coupon_info['offer_code_value'];
+    $_SESSION['coupon']['type'] = "month";
+    $_SESSION['coupon']['discount'] = 0;
+
+    $arr_inter = array_intersect_key($_SESSION['totalcost'],$month);
+    $arr_worksheet_inter = array_intersect_key($_SESSION['wtotalcost'],$month);
+    if(empty($arr_inter)) {
+      $_SESSION['coupon']['discount'] = 0;
+    }
+    else {
+      $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+    }
+   if(empty($arr_worksheet_inter)) {
+      $_SESSION['coupon']['discount'] = 0;
+    }
+    else {
+      $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+    }
+
+
+    $_SESSION['coupon']['id'] = $coupon_info['id'];
+      $total = array_sum($_SESSION['totalcost'])+array_sum($_SESSION['wtotalcost']);
+      $content .= '<div id="form-coupon-msg">';
+      if(is_numeric($txt)) {
+        $content .= '<span class="coupon-applied-txt">Offer Applied + '.$_SESSION['coupon']['perce'].' months free subscription on '.$txt.'month</span>';
+      }
+      else {
+         $content .= '<span class="coupon-applied-txt">Offer Applied +'.$_SESSION['coupon']['perce'].' months free subscription</span>';
+      }
+
+      $content1 = "<div id='price-coupon'>Free subscription of  <span class='rupee-span'>+".$_SESSION['coupon']['discount'] . " month</span></div>";
+
+      $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+
+      $content1 .= "<div class='cost-after-dis'>Total Cost : <span class='rupee-span'><span>&#8377;</span> $total</span></div>";
+      $finalcontent = array();
+      $finalcontent[] = $content;
+      $finalcontent[] = $content1;
+      return $finalcontent;
+  }
+  elseif ($coupon_info['offer_code_type'] == "fixdate") {
+    $_SESSION['coupon']['month'] = $month;
+
+    $_SESSION['coupon']['perce'] = date("d-m-Y", $coupon_info['offer_code_fix_date']);
+    $_SESSION['coupon']['type'] = "month";
+    $_SESSION['coupon']['discount'] = 0;
+
+   $arr_inter = array_intersect_key($_SESSION['totalcost'],$month);
+    $arr_worksheet_inter = array_intersect_key($_SESSION['wtotalcost'],$month);
+    if(empty($arr_inter)) {
+      $_SESSION['coupon']['discount'] = 0;
+    }
+    else {
+      $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+    }
+   if(empty($arr_worksheet_inter)) {
+      $_SESSION['coupon']['discount'] = 0;
+    }
+    else {
+      $_SESSION['coupon']['discount'] = $coupon_info['offer_code_value'];
+    }
+
+
+    $_SESSION['coupon']['id'] = $coupon_info['id'];
+      $total = array_sum($_SESSION['totalcost'])+array_sum($_SESSION['wtotalcost']);
+      $content .= '<div id="form-coupon-msg">';
+      if(is_numeric($txt)) {
+        $content .= '<span class="coupon-applied-txt">Offer Applied - Subscription till date : '.$_SESSION['coupon']['perce'].' on '.$txt.'months subscription</span>';
+      }
+      else {
+         $content .= '<span class="coupon-applied-txt">Offer Applied - Subscription till date : '.$_SESSION['coupon']['perce'].'</span>';
+      }
+
+      //$content1 = "<div id='price-coupon'>Fix date subscription  <span class='rupee-span'></span></div>";
+
+      $content .= "</div><style>#form-coupon-msg {display:inline;}</style>";
+
+      $content1 .= "<div class='cost-after-dis-fix'>Total Cost : <span class='rupee-span'><span class='rpsymbol'>&#8377;</span> $total</span></div>";
+      $finalcontent = array();
+      $finalcontent[] = $content;
+      $finalcontent[] = $content1;
+      return $finalcontent;
+  }
+}
+
+function get_coupon_info($coupon_name) {
+  $result = db_select('eck_offer_code', 'oc')
+    ->fields("oc")
+    ->condition("status", 1)
+    ->condition("offer_code", $coupon_name)
+    ->range(0, 1)->execute()->fetchAssoc();
+    if(!array_key_exists('id', $result)) {
+      unset($_SESSION['coupon']);
+      return false;
+    }
+
+    return $result;
+}
+
+
+/*
+------------------------------------------------------------------------------------------
+
+  Code related to form entry for offer code
+
+------------------------------------------------------------------------------------------
+
+*/
+function lw_coupon_menu($form, $form_state) {
+
+  $items['admin/commerce/coupon/form'] = array(
+    'title' => 'Coupon Form',
+    'description'=>'Coupon code valid from date to end date',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('generate_coupon_code_form'),
+    'access callback' => TRUE,
+  );
+  $items['coupon/form/%'] = array(
+    'title' => 'Coupon Form',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('generate_coupon_code_form'),
+    'access callback' => TRUE,
+  );
+  $items['agent/form'] = array(
+    'title' => 'Agent Form',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('agent_create_edit_form'),
+    'access callback' => TRUE,
+  );
+  $items['agent/form/%'] = array(
+    'title' => 'Agent Form',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('agent_create_edit_form'),
+    'access callback' => TRUE,
+  );
+  $items['agent/auto'] = array(
+    'title' => 'Agent auto',
+    'page callback' => 'offercode_agent_auto',
+    'access callback' => TRUE,
+  );
+
+  $items['admin/commerce/retail/offercode'] = array(
+    'title' => 'Genrate Offer Code',
+    'description'=>'Offer code use in one time by user',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('genrate_offer_code_form'),
+    'access callback' => TRUE,
+  );
+  $items['activate-coupon-code'] = array(
+    'title' => 'Activate Coupon Code',
+    'page callback' => 'activate_one_time_coupon_code',
+    'access callback' => TRUE,
+  );
+  $items['coupon-code/activate'] = array(
+    'title' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('apply_anonymous_code_form'),
+    'access callback' => TRUE,
+  );
+  return $items;
+
+}
+function offercode_agent_auto($str) {
+  $matches = array();
+  $result = db_select('eck_agent', 'ea')
+    -> fields('ea', array('id', 'full_name'))
+    -> condition('full_name', '%' . db_like($str).'%', 'LIKE')
+    -> range(0, 10)
+    -> execute();
+  foreach ($result as $row) {
+    $full_name = $row->full_name . '-' .$row->id;
+    $matches[$full_name] = check_plain($full_name);
+  }
+  drupal_json_output($matches);
+}
+function generate_coupon_code_form() {
+  global $user;
+  if((!array_key_exists(3, $user->roles)) &&  (!array_key_exists(4, $user->roles))) {
+    $form = array();
+    $form['noaccess'] = array(
+      '#type' => 'markup',
+      '#markup' => "<h1>You are not authorised to access this page</h1>",
+    );
+    return $form;
+  }
+  $arg = arg(2);
+  $r = db_query("SELECT * FROM {eck_offer_code} WHERE id = :id", array(':id' => $arg));
+
+  foreach($r as $result) {
+
+    $title = $result->title;
+    $offer_code = $result->offer_code;
+    $offer_code_apply_to = $result->offer_code_apply_to;
+    $offer_code_type = $result->offer_code_type;
+    $offer_code_value = $result->offer_code_value;
+    $offer_code_from_date1 = $result->offer_code_from_date;
+    $offer_code_end_date1 = $result->offer_code_end_date;
+    $offer_code_fix_date1 = $result->offer_code_fix_date;
+
+    $offer_code_fix_date =  date("Y-m-d", $offer_code_fix_date1);
+   // 2013-10-29
+    $offer_code_from_date =  date("Y-m-d", $offer_code_from_date1);
+    $offer_code_end_date =  date("Y-m-d", $offer_code_end_date1);
+
+    $check = $result->status;
+
+    //agent reference fetch
+    $agent_id = $result->agent_id;
+    if($agent_id > 0 && is_numeric($agent_id)) {
+      $agent_result = db_select('eck_agent', 'ea')
+        -> fields('ea', array('id', 'full_name'))
+        -> condition('id', $agent_id)
+        -> range(0, 1)
+        -> execute()
+        ->fetchAssoc();
+      $agent_fullname = $agent_result['full_name'] . '-' . $agent_id;
+    }
+
+ }
+  $form['offer_title'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Offer Title',
+    '#maxlength' => 127,
+    '#type' => 'textfield',
+    '#default_value' => !empty($title) ? $title : '',
+    '#required' => TRUE,
+  );
+     $form['offer_code'] = array(
+     '#type' => 'textfield',
+     '#title' => 'Offer Code',
+     '#maxlength' => 127,
+     '#default_value' => !empty($offer_code) ? $offer_code : '',
+     '#required' => TRUE,
+     );
+
+    $form['offer_code_apply_to'] = array(
+       '#type' => 'select',
+       '#title' => 'Offer Code Apply To',
+       '#default_value' => $offer_code_apply_to,
+       //'#options' => array('All' => 'All','3' => '3 Month','6' => '6 Month','12' => '12 Month'),
+       '#options' => array('All' => 'All'),
+       '#description' => t('Choose an option.'),
+       '#required' => TRUE,
+    );
+    $form['offer_code_type'] = array(
+       '#type' => 'select',
+       '#title' => 'Offer Code Type',
+        '#default_value' => $offer_code_type,
+       '#options' => array('%' => '% Type','Rs' => 'Rs Type', 'month' => 'month free',
+                          'fixdate' => 'fixdate'),
+       '#description' => t('Choose an option.'),
+       '#required' => TRUE,
+    );
+    $form['offer_code_value'] = array(
+       '#type' => 'textfield',
+       '#title' => 'Offer Code Value',
+       '#default_value' => !empty($offer_code_value) ? $offer_code_value : '',
+       '#maxlength' => 127,
+       '#required' => TRUE,
+     );
+
+     $form['offer_code_fix_date'] = array(
+       '#type' => 'date_popup',
+      '#date_format' => 'j F Y',
+       '#date_year_range' => '0:+3',
+       '#default_value' => !empty($offer_code_fix_date) ? $offer_code_fix_date : '',
+       '#title' => 'Offer Code fix Date',
+       '#description' => 'use only for fix date offercode',
+       '#required' => FALSE,
+
+     );
+
+   $form['offer_code_start_date'] = array(
+       '#type' => 'date_popup',
+      '#date_format' => 'j F Y',
+       '#date_year_range' => '0:+2',
+       '#default_value' => !empty($offer_code_from_date) ? $offer_code_from_date : '',
+       '#title' => 'Offer Code Start Date',
+       '#required' => TRUE,
+
+     );
+    $form['offer_code_end_date'] = array(
+      '#type' => 'date_popup',
+       '#date_format' => 'j F Y',
+       '#date_year_range' => '0:+2',
+       '#default_value' => !empty($offer_code_end_date  ) ? $offer_code_end_date : '',
+       '#title' => 'Offer Code End Date',
+       '#required' => TRUE,
+
+    );
+
+    //agent autocomplete
+    $form['offercode_agent_auto'] = array(
+       '#type' => 'textfield',
+       '#title' => 'Agent full name',
+       '#autocomplete_path' => 'agent/auto',
+       '#default_value' => !empty($agent_fullname) ? $agent_fullname : '',
+
+    );
+
+    $form['status'] = array(
+     '#type' =>'checkbox',
+     '#title' => t('Active'),
+//            '#attributes' => array('checked' => ''),
+      '#default_value' => $check,
+    );
+    $form['Submit'] = array(
+       '#type' => 'submit',
+       '#value' => t('Submit'),
+
+       //'#submit' => array('subscription_form_add_cart'),
+     );
+
+
+     return $form;
+ }
+
+ function generate_coupon_code_form_submit($form, $form_state) {
+
+    $edit_id = arg(2);//print $edit_id;die();
+    $offer_title = $form_state['values']['offer_title'];
+    $offer_code = $form_state['values']['offer_code'];
+    $offer_code_apply_to = $form_state['values']['offer_code_apply_to'];
+    $offer_code_type = $form_state['values']['offer_code_type'];
+    $offer_code_value = $form_state['values']['offer_code_value'];
+    $offer_code_fix_date = strtotime($form_state['values']['offer_code_fix_date']);
+    $offer_code_start_date = strtotime($form_state['values']['offer_code_start_date']);
+    $offer_code_end_date = strtotime($form_state['values']['offer_code_end_date']);
+    $status = $form_state['values']['status'];
+
+
+    $agent_id = substr($form_state['values']['offercode_agent_auto'],(strpos($form_state['values']['offercode_agent_auto'], '-')+1));
+    if(!is_numeric($agent_id)) {
+      $agent_id = 0;
+    }
+
+    $entity = entity_create("offer_code",    //adds the entity
+         array(
+           'title' => $offer_title,
+           'uid' => $uid,
+           'type' => 'offer_code',
+           'offer_code' => $offer_code,
+           'offer_code_apply_to' => $offer_code_apply_to,
+           'offer_code_type' => $offer_code_type,
+           'offer_code_value' => $offer_code_value,
+           'offer_code_from_date' => $offer_code_start_date,
+           'offer_code_end_date' => $offer_code_end_date,
+           'offer_code_fix_date' => $offer_code_fix_date,
+           'status' => $status,
+           'agent_id' => $agent_id,
+           'sold'=>'0',
+
+         )
+       );
+
+     $result = db_select('eck_offer_code', 'e')
+     ->fields('e',array('id'))
+     ->condition('id', $edit_id,'=')
+     ->execute()
+     ->fetchAll();
+     $id = $result[0]->id;
+     if($edit_id == $id) {//die('inside update');
+      $updated = db_update('eck_offer_code') // Table name no longer needs {}
+        ->fields(array(
+            'title' => $offer_title,
+            //'uid' => $uid,
+            'type' => 'offer_code',
+            'offer_code' => $offer_code,
+            'offer_code_apply_to' => $offer_code_apply_to,
+            'offer_code_type' => $offer_code_type,
+            'offer_code_value' => $offer_code_value,
+            'offer_code_from_date' => $offer_code_start_date,
+            'offer_code_end_date' => $offer_code_end_date,
+            'offer_code_fix_date' => $offer_code_fix_date,
+            'status' => $status,
+            'agent_id' => $agent_id,
+       ))
+        ->condition('id', $edit_id, '=')
+         ->execute();
+
+     }
+
+      if(!is_numeric($edit_id)){
+         $msg = 'true';
+         $en = entity_save('offer_code', $entity);
+      }
+
+      if($msg == 'true' ){
+       drupal_set_message('Thanks for your submission.');
+      }
+
+      else {
+       drupal_set_message('Your submission has been updated successfully.');
+      }
+ }
+
+
+function agent_create_edit_form() {
+  global $user;
+  if((!array_key_exists(3, $user->roles)) && (!array_key_exists(4, $user->roles))) {
+    $form = array();
+    $form['noaccess'] = array(
+      '#type' => 'markup',
+      '#markup' => "<h1>You are not authorised to access this page</h1>",
+    );
+    return $form;
+  }
+
+  $arg = arg(2);
+  $author_def_query = db_select('eck_agent', 'ea')
+    ->fields('ea')
+    ->condition('id', $arg)
+    ->range(0, 1)
+    ->execute()
+    ->fetchAssoc();
+
+  $agent_fields =array(
+    "full_name" => "Full Name",
+    "email"=>"email",
+    "dob"=>"DOB",
+    "mobile_no"=>"Mobile No",
+    "landline_no"=>"Landline No",
+    "mailing_address"=>"Mailing Address",
+    "location_city"=>"Location City",
+    "partner_organisation"=>"Partner Organisation",
+    "pan_no"=>"Pan No",
+    "payout_"=>"Payout %",
+    "bank_name"=>"Bank Name",
+    "bank_branch"=>"Bank Branch",
+    "bank_city"=>"Bank City",
+    "bank_acct_number"=>"Bank Acct number",
+    "bank_account_type_savings_current_nre_nro_" => "Bank Account Type",
+    "bank_ifsc_code"=>"bank IFSC Code",
+  );
+
+  foreach ($agent_fields as $field_key => $field_name) {
+    $def_val = $author_def_query[$field_key];
+    $form[$field_key] = array(
+      '#type' => 'textfield',
+      '#title' => $field_name,
+      '#maxlength' => 127,
+      '#type' => 'textfield',
+      '#default_value' => !empty($def_val) ? $def_val : '',
+    );
+  }
+  $form['Submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+     //'#submit' => array('subscription_form_add_cart'),
+  );
+
+
+     return $form;
+ }
+
+function agent_create_edit_form_submit($form, $form_state) {
+
+  $agent_submissions = $form_state['input'];
+
+  $edit_id = arg(2);
+  if(is_numeric($edit_id)) {
+
+    $remove_keys = array('op', 'form_build_id', 'form_token', 'form_id');
+    foreach($remove_keys as $key) {
+      unset($agent_submissions[$key]);
+    }
+
+    $updated = db_update('eck_agent') // Table name no longer needs {}
+      ->fields(
+        $agent_submissions
+      )
+      ->condition('id', $edit_id, '=')
+      ->execute();
+    drupal_set_message('Your submission has been updated successfully.');
+  }
+  else {
+    $agent_submissions['type'] = 'agent';
+    $entity = entity_create("agent",    //adds the entity
+      $agent_submissions
+    );
+    $en = entity_save('agent', $entity);
+    $msg = FALSE;
+    drupal_set_message('Thanks for your submission.');
+  }
+}
+/*
+*Implement By amit -- this code implement for sale filpcart and snapdeal coupon code
+*/
+
+/**
+* @todo - Create form for genrate offer code
+* @return - select offer code type and no of offer code with amount and genrate offer code
+*/
+function genrate_offer_code_form($form, $form_state){
+$form['offer_code_type'] = array(
+       '#type' => 'select',
+       '#title' => 'Select Channel Partner',
+       '#default_value' => $offer_code_type,
+       '#options' => array('FK' => 'Flipkart','DL' => 'SnapDeal', 'AZ' => 'Amazon','ML' => 'PnbMetlife'),
+       '#description' => t('Choose an option.'),
+       '#required' => TRUE,
+    );
+
+$form['offer_code_class'] = array(
+       '#type' => 'select',
+       '#title' => 'Class',
+       '#options' => array('1' => '1','2' => '2', '3' => '3', '4' => '4','5' => '5', '6' => '6','7' => '7', '8' => '8','0' => 'open'),
+       '#description' => t('Choose an option.'),
+       '#required' => TRUE,
+    );
+
+$form['offer_code_subject'] = array(
+      '#type' =>'checkboxes',
+      '#title' => t('Subject'),
+      '#options' => drupal_map_assoc(array(t('Maths'), t('Science'), t('English'), t('Social Studies'), t('General Knowledge'))),
+      //'#attributes' => array('checked' => '0'),
+      //'#default_value' => 1,
+      '#required' => TRUE,
+     );
+
+$form['offer_code_discount'] = array(
+       '#type' => 'textfield',
+       '#title' => 'Offer Code Discount in %',
+       '#required' => TRUE,
+     );
+
+$form['offer_code_value'] = array(
+       '#type' => 'textfield',
+       '#title' => 'Offer Code Value(Rs)',
+     //  '#default_value' => !empty($offer_code_value) ? $offer_code_value : '',
+       '#maxlength' => 127,
+       '#required' => TRUE,
+     );
+
+    $form['total_offer_code'] = array(
+       '#type' => 'textfield',
+       '#title' => 'Number of Coupons to be generated',
+     //  '#default_value' => !empty($offer_code_value) ? $offer_code_value : '',
+       '#maxlength' => 127,
+       '#required' => TRUE,
+     );
+    $form['html'] = array(
+        '#type' => 'markup',
+        '#markup' => '<span>'.l('Go to Coupon Code List', 'coupon-detail-list').'</span><br/><br/>',
+    );
+    $form['html1'] = array(
+        '#type' => 'markup',
+        '#markup' => '<span>'.l('Download Coupon Code in csv', 'coupon-code.csv').'</span><br/><br/>',
+    );
+    $form['Submit'] = array(
+       '#type' => 'submit',
+       '#value' => t('Submit'),
+);
+    return $form;
+}
+/**
+* @todo - validate Genrate Coupon Code .
+* @return - offer_code_value and no of offer code not equal and less than zero
+*/
+function genrate_offer_code_form_validate($form,&$form_state) {
+$offer_code_type = $form_state['values']['offer_code_type'];
+$total_offer_code = $form_state['values']['total_offer_code'];
+$offer_code_value = $form_state['values']['offer_code_value'];
+if($offer_code_value <= 0){
+     form_set_error('offer_code_value', t('Please Fill Offer Code Value grater than Zero.'));
+ }
+ if($total_offer_code <= 0){
+     form_set_error('total_offer_code', t('Please Fill Value grater than Zero.'));
+ }
+}
+
+/**
+* @todo - Genrate Retail Offer Code or coupon code form submit function
+* Thsi Coupon Code Use only one time.
+* use_one_time = 1 => Genrated Coupon Code Use Only One Time
+* sold = 0 => This Coupon Code is not sold when Coupon Code Is Use update sold = 1;
+* @return - Create coupon code and save in offer_code list.
+*/
+function genrate_offer_code_form_submit($form, $form_state){
+global $user;
+$userID = $user->uid;
+//echo'<pre>';print_r($form_state);die();
+$offer_code_type = $form_state['values']['offer_code_type'];
+$offer_code_class= $form_state['values']['offer_code_class'];
+$offer_code_subject = $form_state['values']['offer_code_subject'];
+$subject_code = "";
+  if ($offer_code_subject['Maths']){ //die();
+    $subject_code .= "M";
+    $subject .= "Maths".',';
+  }
+  else{
+    $subject_code .= 0;
+  }
+  if ($offer_code_subject['Science']){
+    $subject_code .= "S";
+    $subject .= "Science".',';
+  }
+  else{
+    $subject_code .= 0;
+  }
+  if ($offer_code_subject['English']){
+      $subject_code .= "E";
+       $subject .= "English".',';
+    }
+    else{
+    $subject_code .= 0;
+  }
+  if ($offer_code_subject['Social Studies']) {
+      $subject_code .= "O";
+      $subject .= "Social Studies".',';
+    }
+    else{
+    $subject_code .= 0;
+  }
+  if ($offer_code_subject['General Knowledge']){
+      $subject_code .= "G";
+      $subject .= "General Knowledge".',';
+    }
+  else{
+    $subject_code .= 0;
+  }
+ $string = substr($subject,0,-1);
+$offer_code_discount = $form_state['values']['offer_code_discount'];
+if (strlen($offer_code_discount) == 1) { // Prefix with 0 in case discount is one digit
+  $offer_code_discount = "0" . $offer_code_discount;
+}
+$total_offer_code = $form_state['values']['total_offer_code'];
+ $_SESSION['total_offer_code'] = $total_offer_code;
+$offer_code_value = $form_state['values']['offer_code_value'];
+if (strlen($offer_code_value) == 4) {
+  $offer_code_value_coupon = substr($offer_code_value, 0, -2);
+}
+else if (strlen($offer_code_value) == 3) {
+  $offer_code_value_coupon = substr($offer_code_value, 0, -2);
+  $offer_code_value_coupon = "0" . $offer_code_value_coupon;
+}
+//print(strlen($offer_code_value));die();
+$date = date("ymd");
+$offer_code_start_date = strtotime($date);
+$status = 1;
+$currentTime = strtotime("now");
+
+$prefix = $offer_code_type.$subject_code.$offer_code_class.$offer_code_value_coupon.$offer_code_discount;
+//print $prefix;die();
+for ($i = 0; $i < $total_offer_code; $i++) {
+    $coupon_code_random_string = random_coupon_code_string();
+    $coupon_code_random_string = substr($coupon_code_random_string, 0, 4); // Limit to 5 characters
+    $coupon_code = $prefix.$coupon_code_random_string;
+    $entity = entity_create("offer_code",    //adds the entity
+         array(
+           'type' => 'offer_code',
+           'title' => $offer_code_type,
+           'offer_code' => $coupon_code,
+           'offer_code_apply_to' => 'All',
+           'offer_code_type' => 'Rs',
+           'offer_code_value' => $offer_code_value,
+           'offer_code_from_date' => $offer_code_start_date,
+           'offer_code_end_date' => '',
+           'status' => $status,
+           'offer_code_fix_date' => '',
+           'agent_id' => '',
+           'sold'=>'0',
+           'use_one_time'=>'1',
+           'offer_code_class'=>$offer_code_class,
+           'offer_code_subject'=>$string,
+           'uid'=>$user->uid,
+           'created'=>$currentTime,
+         )
+       );
+ $en = entity_save('offer_code', $entity);
+}
+if($en){
+       drupal_set_message('Successfully Created '.$total_offer_code.' Coupon Codes');
+      }
+
+  //$offer_code_value_coupon = substr($offer_code_value, 0, -2);
+}
+/**
+* @return - Rendom Genrate coupon code in array
+* mix of Number and characters
+*/
+
+function random_coupon_code_string()
+  {
+    $character_set_array = array();
+    $character_set_array[] = array('count' => 3, 'characters' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+    $character_set_array[] = array('count' => 3, 'characters' => '0123456789');
+    $temp_array = array();
+    foreach ($character_set_array as $character_set) {
+        for ($i = 0; $i < $character_set['count']; $i++) {
+            $temp_array[] = $character_set['characters'][rand(0, strlen($character_set['characters']) - 1)];
+        }
+    }
+    shuffle($temp_array);
+    return implode('', $temp_array);
+}
+/**
+* @todo- : Function use when Offer code apply and Total value is 0.
+*than Activate Button Is Appear .when click on Active Button
+*This Function is Called
+*sold = 1,status = 0  => when Coupon Code Are Use than update(eck_offer_code) Table  
+*This Coupon Code Are Sold and Not Active
+* @fetch - Fetch Coupan code id and child and subject detail
+* @return - Update eck_expiry table and eck_offer_code table and return Success message for Use Offer Code
+*/
+
+function activate_one_time_coupon_code(){
+  global $user;$base_url;
+  $uid = $user->uid;
+  $offercodeid = $_GET['offercodeid'];
+  $orderno = $_GET['orderno'];
+  $line_item =  urldecode($_GET['line']);
+  parse_str($line_item, $output);  
+  $child_id = $output[0]['child_uid'];
+
+// Fetch Class name for current 
+  $line_item_label = str_split($output[0]['line_item_label']);
+  $child_class = $line_item_label[5];
+//Fetch all subject related to current child class
+  $Class = 'Class '. $child_class;
+  $class_query =  db_query("SELECT td.tid,name from `taxonomy_term_data` td 
+                              where td.tid in (select th.tid from taxonomy_term_hierarchy th JOIN taxonomy_term_data td1 ON td1.tid= th.parent AND td1.name = '".$Class."')and td.name = 'General Knowledge'");
+
+//Current child Subject - GK 
+foreach($class_query as $class_row) {
+     $class_in[] = $class_row->tid;
+}
+ 
+  //Count after one Year date
+  $today = date("y.m.d");
+  $time_final = strtotime($today);
+  $days = 365;
+    $time_final1 = strtotime('+'.$days.' days',$time_final);
+//Fetch all subject in subscription
+    $line_itm_query = db_select('eck_subscription', 's');
+    $line_itm_query->fields('s',array('subject_tid'));
+    $line_itm_query->condition("uid", $user->uid);
+    $line_itm_query->condition("child_uid", $child_id);
+     $line_itm_query->condition("worksheet_tid ",'0');
+    $line_itm_res = $line_itm_query->execute()->fetchAll();
+foreach($line_itm_res as $val){
+     $subject_id[] .=  $val->subject_tid;
+}
+//Fetch All Paid subject in expiry table without GK
+    $expiry_itm_query = db_select('eck_expiry', 'ee');
+    $expiry_itm_query->fields('ee',array('subject_tid'));
+    $expiry_itm_query->condition("uid", $user->uid);
+    $expiry_itm_query->condition("child_id", $child_id);
+    $expiry_itm_query->condition("status", 1);
+    $expiry_itm_query->condition("purchase_type", 'paid');
+    $expiry_itm_query->condition("subject_tid",array($subject_id),'IN');
+    $expiry_itm_res = $expiry_itm_query->execute()->fetchAll();
+
+//Fetch All Paid subject in expiry table With GK
+    $expiry_paid_itm_query = db_select('eck_expiry', 'ee');
+    $expiry_paid_itm_query->fields('ee',array('subject_tid'));
+    $expiry_paid_itm_query->condition("uid", $user->uid);
+    $expiry_paid_itm_query->condition("child_id", $child_id);
+    $expiry_paid_itm_query->condition("status", 1);
+    $expiry_paid_itm_query->condition("purchase_type", 'paid');
+    $expiry_paid_itm_res = $expiry_paid_itm_query->execute()->fetchAll();
+
+//Count Free Subscription 
+    $free_itm_query = db_select('eck_expiry', 'ee');
+    $free_itm_query->fields('ee',array('subject_tid'));
+    $free_itm_query->condition("uid", $user->uid);
+    $free_itm_query->condition("child_id", $child_id);
+    $free_itm_query->condition("status", 1);
+    $free_itm_query->condition("purchase_type", 'free');
+    $free_itm_res = $free_itm_query->execute()->rowCount();
+    $prof_load = profile2_load_by_user($child_id);      
+
+/*Start Subject Allocation code for student*/
+/*******/
+$already_paid_with_GK = array();
+foreach ($expiry_paid_itm_res as $key => $value) {
+  foreach ($value as $k => $v) {
+    $already_paid_with_GK[] = $v;
+  }
+}
+$already_paid_with_GK_count = count($already_paid_with_GK);
+
+$already_paid = array();
+foreach ($expiry_itm_res as $key => $value) {
+  foreach ($value as $k => $v) {
+    $already_paid[] = $v;
+  }
+}
+if(count($already_paid) != 0) {
+  if(count($subject_id) > count($already_paid)) {
+    $free_paid_diff = array_diff($subject_id,$already_paid);
+  }
+  else {
+    $free_paid_diff = array_diff($already_paid,$subject_id); 
+  }
+}
+else {
+  $free_paid_diff = $subject_id;
+}
+$free_paid_diff = array_merge($class_in,$free_paid_diff);
+
+if (in_array($class_in[0], $already_paid_with_GK)) {
+    $key = array_search($class_in[0], $free_paid_diff);
+    if (false !== $key) {
+        unset($free_paid_diff[$key]);
+    }
+}
+/*******/
+if (in_array($class_in[0], $subject_id)) {
+  $assign_subject = $subject_id;
+}else{
+  $assign_subject = array_merge($class_in,$subject_id);
+}
+     if($free_itm_res == 0) {
+      if($already_paid_with_GK_count == 0){
+         foreach ($assign_subject as $key => $value) {
+         $prof_load['student']->field_subjects['und'][]['tid'] = $value;
+         }
+     }else{
+        foreach ($free_paid_diff as $key => $value) { 
+        $prof_load['student']->field_subjects['und'][]['tid'] = $value;
+        }
+     }
+  }
+ /*End Subject Allocation code for student*/  
+
+/**
+*paid Subject List
+*  
+*/
+$already_paid = array();
+foreach ($expiry_itm_res as $key => $value) {
+  foreach ($value as $k => $v) {
+    $already_paid[] = $v;
+  }
+}
+if(count($already_paid) != 0) {
+  if(count($subject_id) > count($already_paid)) {
+    $free_paid_diff = array_diff($subject_id,$already_paid);
+  }
+  else {
+    $free_paid_diff = array_diff($already_paid,$subject_id); 
+  }
+}
+else {
+  $free_paid_diff = $subject_id;
+}
+$free_paid_diff = array_merge($class_in,$free_paid_diff);
+
+foreach ($free_paid_diff as $key => $value) {
+      db_update('eck_expiry') 
+        ->fields(array(
+            'status' => '0',
+            'purchase_type' => 'exp',
+       ))
+        ->condition('child_id', $child_id)
+        ->condition('subject_tid',$value)
+        ->execute();
+
+ // $prof_load['student']->field_subjects['und'][]['tid'] = $value;
+  $entity = entity_create("expiry",    //adds the entity
+          array(
+            'uid' => $uid,
+            'type' => 'user',
+            'child_id' => $child_id,
+            'expiry_date' => $time_final1,
+            'subject_tid' => $value,
+            'status'=> 1,
+            'purchase_type' => 'paid',
+          )
+        );
+        $en = entity_save('expiry', $entity);
+
+
+}
+
+profile2_save($prof_load['student']);
+//Update Offer Code when use first time
+   $updated = db_update('eck_offer_code') 
+        ->fields(array(
+            'sold' => '1',
+            'status' => '0',
+       ))
+        ->condition('id', $offercodeid, '=')
+         ->execute();
+if($updated){
+   drupal_set_message('Congratulations Your subscription is activated');
+          unset($_SESSION['add_cart'][$child_id]);
+          unset($_SESSION['sub_count'][$child_id]);
+          unset($_SESSION['subject'][$child_id]);
+          unset($_SESSION['duration'][$child_id]);
+          unset($_SESSION['gk_tid']);
+          commerce_checkout_complete($orderno);
+}
+
+    drupal_goto($base_url.'dashboard/parent');
+}
+
+function apply_anonymous_code_form(){
+unset($_SESSION['add_cart_anonymous']);
+unset($_SESSION['anonymous_cart']);
+unset($_SESSION['anonymous_wcart']);
+unset($_SESSION['wtotalcost']);
+unset($_SESSION['totalcost']);
+unset($_SESSION['duration_free']);
+
+$form['description'] = array('#markup' => '<div class="coupon-active-text-step1-wrapper">');
+$form['description1'] = array('#markup' => '<div class="coupon-active-congratulations">' . t('Congratulations!!!').'</div>');
+$form['description2'] = array('#markup' => '<div class="coupon-active-text-step1">' . t('For purchasing an Excelonz subscription from one of our partners.').'</div>');
+$form['description3'] = array('#markup' => '<div class="coupon-active-text-step1">' . t('Please complete the 3 steps to activate your subscription.').'</div>');
+$form['description4'] = array('#markup' => '<div class="coupon-active-text-stepp1">' . t('If you are already an Excelonz member, you may activate your offer code by logging into your My Account page and Adding your child or Buying / Renewing for an existing child.').'</div></div>');
+
+  
+
+$form['descriptionstepwraper'] = array('#markup' => '<div class="coupon-active-text-step1-box2-wrapper">');
+$form['description2steptext'] = array('#markup' => '<div class="coupon-active-text-step1-box-steptext">' . t('Step 1').'</div>');
+$form['description3stepnexttext'] = array('#markup' => '<div class="coupon-active-text-step1-box-nexttext">' . t('Enter the one time unique code provided to you to activate your subscription').'</div>');
+
+  $form['coupon']['apply_coupon1'] = array(
+    '#type' => 'textfield',
+  //  '#attributes' =>array('placeholder' => t('Enter Code')),
+  );
+   $form['coupon']['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Proceed'),
+      '#ajax' => array(
+        'callback' => 'one_time_coupon_ajax_apply1',
+        'wrapper' => 'form-one-time-coupon-msg',
+        'progress' => array(
+                    'message' => '',
+         ),
+      ),
+      '#submit' => array('one_time_coupon_ajax_apply1'),
+      '#suffix' => '</div>',
+    );
+
+
+    $form['coupon']['coupn-msg'] = array(
+      '#prefix' => '<div id="form-one-time-coupon-msg" style = '.$markup.'>',
+
+      '#type' => 'markup',
+      '#markup' => $content[0],
+    );
+  //show the discount text to user
+     $form['coupn-msg1'] = array(
+      '#prefix' => '<div id="form-one-time-coupon-msg">',
+      '#suffix' => '</div></div>',
+      '#type' => 'markup',
+      '#markup' => $content[1],
+    );
+  return $form;
+}
+
+function one_time_coupon_ajax_apply1($form, &$form_state) {
+//echo '<pre>';print_r($_SESSION);
+ //unset($_SESSION['coupon']);
+  $_SESSION['anonymous_coupon_code_one_time'] = $_POST['apply_coupon1'];
+  $coupon_info = get_coupon_info(check_plain($_POST['apply_coupon1']));
+  $offer_code_subject = $coupon_info['offer_code_subject'];
+  $offer_code_subject_arr = explode(",", $offer_code_subject);
+  $offer_code_class = $coupon_info['offer_code_class'];
+  $output = '';
+  $output .= '<div class="main-wrapper-ot-conform">
+              <div class="coupon-active-text-step2-box-wrapper">
+              <div class="coupon-active-text-step1-box-steptext">' . t('Step 2').'</div>
+              <div class="coupon-active-text-step1-box-nexttext">' . t('Kindly reconfirm your order to enable us to activate your subscription').'</div>
+              </div>
+            <table><tr><th> Class</th><th> Subject </th><th> Subscription</th></tr>';
+ 
+foreach ($offer_code_subject_arr as $key => $value) {
+  if($offer_code_class == 0){
+    $offer_code_class = 'Open';
+       $output .= '<tr><td>'.$offer_code_class.' </td><td> '.$value.' </td><td> Annual </td></tr>';
+   }else{
+       $output .= '<tr><td>'.$offer_code_class.' </td><td> '.$value.' </td><td> Annual </td></tr>';
+  }
+
+}
+  $output .= '</table></div>';
+    if($coupon_info == false) {
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-one-time-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Not a valid Offer Code</div><style><style>",
+      );
+         return $form1;
+    }else if($coupon_info['sold'] == 1) {
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-one-time-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Not a valid Offer Code</div><style><style>",
+      );
+        return $form1;
+   }else if($coupon_info['use_one_time'] == 0) {
+       $form1['coupn-msg'] = array(
+        '#prefix' => '<div id="form-one-time-coupon-msg" style="display:inline;">',
+        '#type' => 'markup',
+        '#markup' => "<div class='coupon-not-valid'>Not a valid Offer Code</div><style><style>",
+      );
+        return $form1;
+    }
+
+  $form1['coupn-msg'] = array(
+      '#prefix' => '<div id="form-one-time-coupon-msg" style="display:inline;">',
+      '#type' => 'markup',
+      '#markup' => $output,
+    );
+  $form1['my_field'] = array(
+      '#prefix' => '<div class="coupon-code-step2-conform-link">',
+      '#markup' => l('Confirm', 'user/register'),
+      '#suffix' => '</div>',
+  );
+  
+  return $form1;
+
+}
+
+function lw_coupon_init() {   
+global $base_url; 
+$coupon_code_apply_form_path = $base_url.'/coupon-code/activate'; 
+$pricing_plan_path = $base_url.'/pricingplans';
+if($_SERVER['HTTP_REFERER'] == $coupon_code_apply_form_path){
+       $_SESSION['anonymous_coupon_code_one_time_conform'] = $_SESSION['anonymous_coupon_code_one_time']; 
+}elseif($_SERVER['HTTP_REFERER'] == $pricing_plan_path){
+      unset($_SESSION['anonymous_coupon_code_one_time_conform']);
+  }
+}
+
+
+function activate_one_time_coupon_code_for_anonymous(){
+global $user;$base_url;
+  $uid = $user->uid;
+  $child_id = arg(2);
+  //$_SESSION['anonymous_coupon_code_one_time_conform'] = $_SESSION['anonymous_coupon_code_one_time'];
+  $anonymous_coupon_code_one_time = $_SESSION['anonymous_coupon_code_one_time_conform'];
+  $coupon_info = get_coupon_info(check_plain($anonymous_coupon_code_one_time));
+  $sql = db_query("SELECT field_child_id_uid FROM field_data_field_child_id WHERE entity_id =".$user->uid);
+ foreach($sql as $row){
+      $child_id = $row->field_child_id_uid;
+ }
+//  print_r($coupon_info);
+ $offercodeid = $coupon_info['id'];
+  //die();
+  $offer_code = str_split($anonymous_coupon_code_one_time);
+if($offer_code[2] == 'M'){
+  $val[] .= 'Maths';
+
+} 
+if($offer_code[3] == 'S' ){
+ $val[] .= 'Science';
+}
+ if($offer_code[4] == 'E'){
+ $val[] .= 'English';
+}
+ if($offer_code[5] == 'O'){
+ $val[] .= 'SST';
+}
+ if($offer_code[6] == 'G'){
+ //$val[] .= 'General Knowledge';
+}
+
+
+//Count after one Year date
+  $today = date("y.m.d");
+  $time_final = strtotime($today);
+  $days = 365;
+  $time_final1 = strtotime('+'.$days.' days',$time_final);
+// Fetch Class name for current 
+$profile_id =  profile2_load_by_user($child_id, 'student');
+
+    $child_class = $profile_id->field_class_user['und'][0]['tid'];
+    $child_class_term = taxonomy_term_load($child_class);
+    $child_class_term_name = $child_class_term->name;
+ //Fetch all subject related to current child class
+  $Class = 'Class '. $child_class_term_name;
+  $class_query =  db_query("SELECT td.tid,name from `taxonomy_term_data` td 
+                              where td.tid in (select th.tid from taxonomy_term_hierarchy th JOIN taxonomy_term_data td1 ON td1.tid= th.parent AND td1.name = '".$Class."')");
+
+//Current child Subject - GK 
+foreach($class_query as $class_row) {
+     $class_in[$class_row->tid] = $class_row->name;
+     if($class_row->name == 'General Knowledge'){
+      $child_gk_id[] = $class_row->tid;
+     }
+}
+$apply_subject_tid_array = array_intersect($class_in,$val);
+//print_r($apply_subject_tid_array);
+$main_subject_arr = array();
+foreach ($apply_subject_tid_array as $key => $value) {
+    $main_subject_arr_with_out_gk[] = $key;
+}
+$select_subject_with_gk = array_merge ($main_subject_arr_with_out_gk, $child_gk_id);
+// print_r($main_subject_arr_with_out_gk);
+// print_r($select_subject_with_gk);
+// die('A');
+
+foreach ($select_subject_with_gk as $key => $value) {
+  $profile_id->field_subjects['und'][]['tid'] = $value;
+  $entity = entity_create("expiry",    //adds the entity
+          array(
+            'uid' => $uid,
+            'type' => 'user',
+            'child_id' => $child_id,
+            'expiry_date' => $time_final1,
+            'subject_tid' => $value,
+            'status'=> 1,
+            'purchase_type' => 'paid',
+          )
+        );
+        $en = entity_save('expiry', $entity);
+}
+ profile2_save($profile_id);
+//Update Offer Code when use first time
+   $updated = db_update('eck_offer_code') 
+        ->fields(array(
+            'sold' => '1',
+            'status' => '0',
+       ))
+        ->condition('id', $offercodeid, '=')
+         ->execute();
+if($updated){
+   drupal_set_message("Congratulations Your subscription is activated. We have sent a confirmation mail to your registered email id giving your details of subscription along with user id's and passwords. Kindly logout and get your child to sign in using his/her user id & password, and start experiencing what Excelonz has to offer - right away");
+    unset($_SESSION['anonymous_coupon_code_one_time_conform']);
+    unset($_SESSION['anonymous_coupon_code_one_time']);
+        
+}
+ // drupal_goto($base_url.'student/dashboard');
+}
+

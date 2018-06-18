@@ -1,0 +1,1153 @@
+<?php
+/**
+ * @file
+ * Enables Try some question.
+ */
+/**
+ *  Implementation of hook_menu()
+ */
+function lw_tryquestion_menu() {
+  // Submit a form without a page reload.
+  $items['tryquestion/take'] = array(
+    'title' => 'Assessment',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tryquestion_form'),
+    'access callback' => TRUE,
+  );
+  $items['tryquestion/topic'] = array(
+    'title' => 'Assessment',
+    'page callback' => 'assessment_get_topic',
+    'access callback' => TRUE,
+  );
+  $items['tryquestion-report'] = array(
+    'title' => 'Try Question Report',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tryquestion_report_form'),
+    'access callback' => TRUE,
+  );
+
+  $items['choose/topic/tryquestion'] = array(
+    'title' => 'Select Practice',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('tryquestion_topic_form'),
+    'access callback' => TRUE,
+    'file path' => drupal_get_path('module', 'lw_worksheet'),
+  );
+
+  return $items;
+}
+
+/**
+ * Function to add class subject and topic list field for TSQ.
+ *
+* @see try_question_class_ajax_callback()
+* @see try_question_subject_ajax_callback()
+* @see try_question_subject_second_dropdown_options()
+* @see try_question_topic_third_dropdown_options()
+* @see class_subject_topic_form_validate()
+* @see class_subject_topic_form_submit()
+ */
+
+function tryquestion_topic_form($form, &$form_state) {
+  $home_page_subject = $_GET['subject'];
+  $options_second = try_question_topic_third_dropdown_options();
+ $vid = 7;
+ $terms = taxonomy_get_tree($vid, $parent = 0, $max_depth = 1, $load_entities = FALSE);
+    foreach($terms as $term) {  
+            $options_class1[$term->tid] = $term->name;
+     }
+    asort($options_class1);
+    $options_worksheet_class=array('-Select Class-')+$options_class1; 
+  $cl_id = taxonomy_get_parents($selected_subject_id);
+  $clas_id = key($cl_id);
+  $cl_tid = taxonomy_get_parents($selected_topic_id);
+  $clas_tid = key($cl_tid);//die();
+  $value_dropdown_first = isset($form_state['values']['select_class']) ? $form_state['values']['select_class'] : (isset($clas_id)?$clas_id:key($options_class1));
+  $value_dropdown_second = isset($form_state['values']['select_subject']) ? $form_state['values']['select_subject'] :key($options_second);
+$form['#prefix'] = '<div id="tryquestion-ajax">';
+$form['#suffix'] = '</div>';
+$form['description'] = array('#markup' => '<div class="geniusee">' . t('genuius').'</div>');
+$form['description1'] = array('#markup' => '<div class="font28 fontgotham aligncenter">' . t('Hello and Welcome').'</div>');
+$form['description2'] = array('#markup' => '<div class="font28 fontgotham aligncenter">' . t('to the FREE Excelonz Genius Practice Session').'</div>');
+$form['description3'] = array('#markup' => '<div class="font20 fontgotham aligncenter">' . t('To begin, choose the following').'</div>');
+
+
+$form['select_class'] = array(
+        '#type' => 'select',
+        '#title' => 'Select Class',
+        '#maxlength' => 127,
+        '#options' => $options_worksheet_class,
+        '#ajax' => array(
+            'event'=>'change',
+            'callback' =>'try_question_class_ajax_callback',
+            'wrapper' => 'topic_wrapper',
+            'progress' => array(
+                    'message' => '',
+          ),
+        ),
+      );
+
+if(isset($form_state['values']['select_class'])){
+    $option = try_question_subject_second_dropdown_options($value_dropdown_first);
+} else if($home_page_subject){
+    $option = array($home_page_subject   ); // 0 is default value
+}else {
+    $option = array('-Select Subject-'); // 0 is default value
+}
+$form['select_subject'] = array(
+        '#type' => 'select',
+        '#title' => 'Select subject',
+        '#options' => $option,
+        '#prefix' => '<div class="form-item" id="topic_wrapper">',
+        '#suffix' => '</div>',
+        //'#default_value' => $selected_subject_id,
+        '#ajax' => array(
+             'event'=>'change',
+             'callback' => 'try_question_subject_ajax_callback',
+             'wrapper' => 'dropdown_third_replace',
+             'progress' => array(
+                      'message' => '',
+             
+   ),
+)
+);
+
+if(isset($form_state['values']['select_class'])){
+    $option = try_question_topic_third_dropdown_options($value_dropdown_second);
+} else {
+    $option = array('-Select Topic-'); // 0 is default value
+}
+
+$form['select_topic'] = array(
+    '#type' => 'select',
+    '#title' => 'Select Topic',
+    '#options' => $option,
+    '#prefix' => '<div id="dropdown_third_replace">',
+    '#suffix' => '</div>',
+  );
+
+$form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Start Practice'),
+    '#ajax' => array(
+    'callback' => 'tryquestion_form_ajax_submit',
+    'wrapper' => 'tryquestion-ajax',
+    'method' => 'replace',
+    'effect' => 'fade',
+    'progress' => array(
+               'message' => '',
+     ),
+    ),
+  );
+  return $form;
+}
+/*
+*Class subject topic dropdown #ajax code
+*/
+/**
+ * Selects just the Class Dropdown  to be returned for re-rendering subject.
+ */
+
+function try_question_class_ajax_callback($form, &$form_state) {
+     $commands = array();
+    $commands[] = ajax_command_replace("#topic_wrapper", render($form['select_subject']));
+    $commands[] = ajax_command_replace("#dropdown_third_replace", render($form['select_topic']));
+    return array('#type' => 'ajax', '#commands' => $commands);
+  //return $form['state_of_residence'];
+}
+
+
+/**
+ * Selects just the Subject Dropdown  to be returned for re-rendering Topic.
+ */
+
+function try_question_subject_ajax_callback($form, &$form_state) {
+  return $form['select_topic'];
+}
+
+/**
+ * Fetch subjectdropdown option.
+ */
+
+function try_question_subject_second_dropdown_options($key = '') {
+  $second_dropdown =  taxonomy_get_children($key, $vid = 7);
+   foreach($second_dropdown as $termss) {  
+       $options_Class[$termss->tid] = $termss->name;
+        $topic_list = array('-Select Subject-')+$options_Class;
+   }
+  if(isset($topic_list)){
+     return $topic_list;
+    }else{
+      return $option = array('-Select subject-');
+    }
+}
+
+/**
+ * Fetch Topic dropdown option.
+ */
+
+function try_question_topic_third_dropdown_options($key = '') {
+  $option = array();
+  $third_dropdown =  taxonomy_get_children($key, $vid = 7);
+   foreach($third_dropdown as $termss) {  
+       $options_class_third[$termss->tid] = $termss->name;
+        $topic_list = array(0=>'-Select Topic-')+$options_class_third;
+   }
+  
+  if(isset($topic_list)){
+     return $topic_list;
+    }else{
+      return $option = array('-Select Topic-');
+    }
+}
+/**
+ * Valedation when select class subject and topic.
+ */
+
+function tryquestion_topic_form_validate($form, &$form_state) {
+  $select_class = $form_state['values']['select_class'];
+    $select_subject = $form_state['values']['select_subject'];
+    $select_topic = $form_state['values']['select_topic'];
+    if($select_class == 0){
+        form_set_error('select_class', t('First select class'));
+    }else if($select_subject == 0){
+        form_set_error('select_subject', t('First select subject'));
+    }else if($select_topic == 0){
+        form_set_error('select_topic', t('First select topic'));
+    }
+}
+
+/**
+ * Submit callback form TSQ form step 1.
+ *@return when submit form success than call tryquestion_form() otherwise same form come
+ */
+
+
+function tryquestion_form_ajax_submit($form, $form_state) {
+    $select_class = $form_state['values']['select_class'];
+    $select_subject = $form_state['values']['select_subject'];
+    $select_topic = $form_state['values']['select_topic'];
+    $_SESSION['try_question_class_id'] =  $select_class; 
+    $_SESSION['try_question_subject_id'] =  $select_subject; 
+    $_SESSION['try_question_topic_id'] =  $select_topic; 
+
+ if ($form_state['input']['select_topic'] && $select_class && $select_subject) {
+      return  "<div id='tryquestion-ajax'>".drupal_render(drupal_get_form('tryquestion_form'))."</div>";
+  }
+  else {
+    return $form;
+  } 
+}
+
+/**
+ *  Function to generate the form.
+ *  This function will call for the first time when TSQ is started.
+ *  Steps
+ *    - Generate random question Id.
+ *    - Generate form structure.
+ */
+function tryquestion_form($form, &$form_state) {
+  unset($_SESSION['user_orig_exc']);
+   $curr_time = 0;
+ 
+  drupal_add_js(array(
+    'timer_settings' => array(
+      'curr_time' => $curr_time ,
+    ),
+  ),
+  'setting');
+
+  //@todo : move js to the type where it is required.
+  drupal_add_js( drupal_get_path('module', 'lw_tryquestion') . '/tryquestion.js');
+  drupal_add_js( drupal_get_path('module', 'lw_tryquestion') . '/timer2.js');
+  drupal_add_css( drupal_get_path('module', 'lw_tryquestion') . '/tryquestion.css');
+
+  //Check for form submit and redirect user.
+  if (array_key_exists('values', $form_state)) {
+
+    if ($_POST['opt'] == "Correct") {
+      $_SESSION['correct_ans']++;
+      $_SESSION['level_correct_ans']++;
+      $_SESSION['level_wrong_ans'] = 0;
+      $_SESSION['user_orig_exc']++;
+      $_SESSION['user_session_exc']++;
+    }
+    elseif ($_POST['opt'] == "Wrong") {
+      $_SESSION['wrong_ans']++;
+      $_SESSION['level_wrong_ans']--;
+    }
+    $_SESSION['timer_value'] = $_POST['timer_value'];
+  }
+  else {
+    //for refresh scenario
+    if($_SESSION['topic_tid'] != $_GET['tid']) {
+      unset($_SESSION['report_id']);
+      $_SESSION['correct_ans'] = 0;
+      $_SESSION['wrong_ans'] = 0;
+    }
+ if($_SESSION['correct_ans'] != ''){
+        unset($_SESSION['correct_ans']);
+      }
+  if($_SESSION['wrong_ans'] != ''){
+        unset($_SESSION['wrong_ans']);
+    }
+  }
+  //@todo : remove below unset variable.
+  $_SESSION['user_current_level'] = '1';
+  $_SESSION['next_qid'] = 0;
+  $next_qid = $_SESSION['next_qid'];
+  unset($_SESSION['try_qid']);
+  if (array_key_exists('try_qid', $_SESSION)) {
+     $try_qid = $_SESSION['try_qid'];
+   }
+  else {
+     $try_qid = tryquestion_random_question();
+  // echo "<pre>";print_r($try_qid);//die();
+    $_SESSION['try_qid'] = $try_qid;
+  }
+  $session_array = $try_qid[$next_qid];
+
+$form = tryquestion_generate_form($session_array);
+  global $base_url;
+  $node = node_load($try_qid);
+  $n_type = $node->type;
+  $form['#prefix'] = '<div id="worksheet-ajax_try">';
+  $form['#suffix'] = '</div>';
+  $form['timer_value'] = array(
+    '#type' => 'textfield',
+    '#title' => t('timer_value'),
+    '#attributes' => array(
+      'class' => array(
+        'tsq-timer-value-callback',  
+      ), 
+      ),
+    '#size' => 10,
+    '#maxlength' => 128,
+  );
+  $form['timer'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="timer"><span class="startstoptime">0:00</span><p>mins spent</p></div>',
+    '#weight' => -102,
+  );
+  $form['sure'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="btn-wrap '.$n_type.'"><div class="btn-wrap-inner"><p class="sure">Are You Sure ?</p>',
+  );
+  $form['sub'] = array(
+    '#type' => 'markup',
+    '#markup' => '<button id="submit-button" type="button">Yes</button>',
+  );
+  $form['reset'] = array(
+    '#type' => 'markup',
+    '#markup' => '<button id="reset" type="button">No</button></div></div>',
+  );
+  $form['action']['tsq-next'] = array(
+    '#prefix' => '<div class="'.$n_type.'">',
+    '#type' => 'submit',
+     '#attributes' => array(
+      'class' => array(
+        'tsq-next-callback',  
+      ), 
+      ),
+    '#ajax' => array(
+      'callback' => 'tryquestion_next',
+      'wrapper' => array('option-list'),
+      'name' => 'next'.$_SESSION['level_correct_ans'],
+    ),
+    '#value' => t('Next'),
+    '#suffix' => '<script>remove_div();resetTimer();</script></div>',
+    //'#weight' =>  100,
+  );
+  $form['finish'] = array(
+    '#type' => 'button',
+    '#value' => 'Finish',
+    '#ajax' => array(
+        'callback' => 'report_submit',
+        'wrapper' => 'worksheet-ajax_try',
+        'method' => 'replace',
+        'effect' => 'fade',
+         ),
+
+   // '#suffix' => '<script>deletechecked();</script>',
+    // '#weight' => -109,
+  );
+
+   $topic = taxonomy_term_load($_SESSION['topic_tid']);
+   $parents = taxonomy_term_load($_SESSION['subject_tid']);
+  $topic_name = $topic->name;
+  $subject_name = $parents->name;
+  $form['head'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class= "assessment-header-top"><h3 class= "assessment-header">'.$subject_name." : ".$topic_name.'</h3></div><div class="assessment_wrap">',
+    '#weight' => -109,
+  );
+
+  return $form;
+}
+/*
+* TSQ form submit callback when finish buttan is click
+* @return TSQ report form is return .. 
+*/
+
+function report_submit($form, $form_state) {
+  $form_test  = "<div id='test-ajax' class='class-ajax'>".drupal_render(drupal_get_form('tryquestion_report_form'))."</div>";
+  $commands = array();
+  $commands[] = ajax_command_replace('#worksheet-ajax_try',render($form_test));
+  $commands[] = array (
+    'command' => 'afterAjaxCallbackExample',
+    'selectedValue' => $form_state['values']['actual'],
+  );
+return array('#type' => 'ajax', '#commands' => $commands);
+ 
+}
+
+/**
+ * This function will call when next button will be clicked.
+ */
+function tryquestion_next($form, $form_state) {
+  $nid = $_SESSION['qid'];
+  //It will fetch ans from hidden textbox.
+  if ($_POST['opt'] == "Correct") {
+    $_SESSION['correct_ans']++;
+    $_SESSION['level_correct_ans']++;
+    //$_SESSION['level_wrong_ans'] = 0;
+   // tryquestion_update_lod_down_session();
+    $_SESSION['user_orig_exc']++;
+    $_SESSION['user_session_exc']++;
+}
+  else {
+    $_SESSION['wrong_ans']++;
+    $_SESSION['level_wrong_ans']--;
+  }
+  $count = ++$_SESSION['next_qid'];
+  $tryquestion = $_SESSION['try_qid'][$count];
+  if (!is_numeric($tryquestion))  {
+   $_SESSION['timer_value'] = $form_state['values']['timer_value'];
+     $form1  = "<div id='test-ajax' class='test-aj'>".drupal_render(drupal_get_form('tryquestion_report_form'))."</div>";
+  }else {
+    $form1 = tryquestion_generate_form($tryquestion);
+  }
+  return $form1;
+}
+
+/**
+ * function to select random question related with class topic and subject value.
+ */
+
+function tryquestion_random_question() {
+$subject_tid = $_SESSION['try_question_subject_id'];
+$topic_id = $_SESSION['try_question_topic_id'];
+     
+  $easy_nid = db_select('node', 'n');
+    $easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+     $easy_nid->rightJoin('field_data_field_mcq_for_anonymous', 'mcq', 'mcq.entity_id = n.nid');
+    $easy_nids = $easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->orderRandom()
+        ->range(0, 5)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for easy level ends*/
+    /*fecth all nids for very easy level starts*/
+    $v_easy_nid = db_select('node', 'n');
+    $v_easy_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $v_easy_nid->rightJoin('field_data_field_fib_for_anonymous', 'fib', 'fib.entity_id = n.nid');
+    $v_easy_nids = $v_easy_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->orderRandom()
+        ->range(0, 5)
+        ->execute()
+        ->fetchAll();
+
+    /*fecth all nids for very easy level ends*/
+   /*fecth all nids for difficult level starts*/
+    $d_nid = db_select('node', 'n');
+    $d_nid->leftJoin('field_data_field_subjects', 'fs', 'fs.entity_id = n.nid');
+    $d_nid->rightJoin('field_data_field_true_and_false_for_anonymo', 'taf', 'taf.entity_id = n.nid');
+    $d_nids = $d_nid->fields('n', array('nid'))
+        ->condition('field_subjects_tid', $topic_id)
+        ->orderRandom()
+        ->range(0, 5)
+        ->execute()
+        ->fetchAll();
+   
+  /*fecth all nids for very difficult level ends*/
+    $result1 = array_merge($easy_nids,$v_easy_nids);
+    $result2  = $d_nids;
+    $result = array_merge($result1,$result2);
+ foreach($result as $values) {
+       $nids[] = $values->nid;
+  }
+    $final_nids = serialize($nids);
+    return $nids;
+  
+}
+
+
+/**
+ * This function will generate form and return it.
+ */
+function tryquestion_generate_form($qid) {
+  global $base_url;
+  global $user;
+  $node = node_load($qid);
+  $n_type = $node->type;
+// if(array_key_exists('user_orig_exc', $_SESSION)) {
+//   $_SESSION['user_orig_exc'] = 0;
+// }
+// if(array_key_exists('correct_ans', $_SESSION)) {
+//   $_SESSION['correct_ans'] = 0;
+// }
+// if(array_key_exists('wrong_ans', $_SESSION)) {
+//   $_SESSION['wrong_ans'] = 0;
+// }
+  $name = 'User';
+  if (array_key_exists('und', $node->field_question_image)) {
+    $quest = '';
+    $img_path = '';
+    $size = '';
+    $img_width = '';
+    $img_with_txt = '';
+    $img = $node->field_question_image['und'][0]['uri'];
+    $style = 'question_large_688_image';
+    $img_path = image_style_url($style, $img);
+    $size = getimagesize($img_path);
+    $img_width =  $size[0];
+    //echo '<pre>';print_r($size);die();
+    //$quest =  "<img src='" . $base_url . "/sites/default/files/" . $img . "' />";
+    $quest =  "<img src='".$img_path."' />";
+    if ($img_width < 450){
+      $img_with_txt = '<div class="queston_img" style="float:left;width:'.$img_width.'">'.$quest.'</div>';
+    }
+    else {
+      $img_with_txt = '<div class="queston_img" style="float:left;width:100%">'.$quest.'</div>';
+    }
+
+  }
+  // for displaying answer description
+  $ans_desc_link = '';
+  if (array_key_exists('und', $node->field_question_description)) {
+    $ans_desc = $node->field_question_description['und'][0]['value'];
+      if ($ans_desc) {
+    //$ans_expl_img = $img = $node->field_question_image['und'][0]['uri'];
+    $style = 'question_large_688_image';
+    $ans_desc_link = "<div class='descs'>
+                        <p class='shwtxt'>More About This</p>
+                        <div class='ans_desc'>
+                          <span class='cl'>X</span>
+                          <div class='ans_shw' style='min-height:200px;'>" . $ans_desc . "</div>
+                        </div>
+                      </div>";
+     }
+  }
+  if (array_key_exists('und', $node->field_answer_explanation_img)) {
+    $ans_exp_uri = $node->field_answer_explanation_img['und'][0]['uri'];
+    if($ans_exp_uri != '') {
+
+        $style = 'ans_exp_img';
+        $img_path = image_style_url($style, $ans_exp_uri);
+        $quest =  "<img src='".$img_path."' />";
+        $ans_desc_link = "<div class='descs'>
+                        <p class='shwtxt'>More About This</p>
+                        <div class='ans_desc'>
+                          <span class='cl'>X</span>
+                          <div class='ans_shw'>" . $ans_desc . "</div>
+                          <div class='ans_shw_img'>" . $quest . "</div>
+                        </div>
+                      </div>";
+    }
+  }
+
+  $level_msg = $_SESSION['level_up'];
+
+
+  $opt1 = '<div class="answer-option opt">';//prateek added 'answer-option' class in opt div also added <ul> just after opt div
+  $opt = '';
+  if ($n_type == 'mcq') {
+    foreach ($node->field_question_options['und'] as $option) {
+      //@todo : use entity_load_single then will change $option[value] after 4 line.
+      $options = entity_load("field_collection_item", array($option['value'], ));
+      //echo '<pre>';print_r($options);die();
+      $val = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+      $ans_img = $options[$option['value']]->field_image_option['und'][0]['filename'];
+      //check if user class is less then 3 then add code for drag and drop.
+      //print $options[$option['value']]->field_option_1['und'][0]['value']; die();
+      /*if (array_key_exists('und', $options[$option['value']]->field_option_1)) {
+        if ($_SESSION['user_class_value'] > 3) {
+          $opt .= "<div class='button-option ".$n_type."'><button id=" . $val . " class='input_class " . $val . "' name='" . $val ."' size ='500' type='button'>" . $options[$option['value']]->field_option_1['und'][0]['value'] . "</button></div>";
+        }
+        else {
+          $opt .= "<div class='button-option ".$n_type."'><button id=" . $val . " class='input_class " . $val . "' name='" . $val ."' size ='500' type='button'>" . $options[$option['value']]->field_option_1['und'][0]['value'] . "</button></div>";
+        }
+      }*/
+      if (array_key_exists('und', $options[$option['value']]->field_image_option)) {
+         $img_path_mcq = '';
+         $img_mcq = '';
+         $img_path_mcq = '';
+         $opt_img = '';
+         $img_txt_label = '';
+         $img_mcq = $options[$option['value']]->field_image_option['und'][0]['uri'];
+
+         $style_mcq = 'answer_img_mcq';
+         if($options[$option['value']]->field_option_1['und'][0]['value']){
+          $img_txt_label = '<div class=ans-bt-img>'.$options[$option['value']]->field_option_1['und'][0]['value'] .'</div>';
+         }
+
+
+         $img_path_mcq = image_style_url($style_mcq, $img_mcq);
+        if ($_SESSION['user_class_value'] > 3) {
+          $opt .= "
+          <div class='button-option withimg ".$n_type."'>
+            <button id=" . $val . " class='input_class " . $val . "' name='" . $val ."' size ='500' type='button'>
+              <img src='".$img_path_mcq."' />
+              ".$img_txt_label."
+            </button>
+          </div>";
+        }
+        else {
+          $opt .= "
+          <div class='button-option withimg ".$n_type."'>
+            <button id=" . $val . " class='input_class " . $val . "' name='" . $val ."' size ='500' type='button'>
+              <img src='".$img_path_mcq."' />
+              ".$img_txt_label."
+            </button>
+          </div>";
+        }
+      }
+      else {
+         if ($_SESSION['user_class_value'] > 3) {
+          $opt .= "
+          <div class='button-option noimg ".$n_type."'>
+            <button id=" . $val . " class='input_class " . $val . "' name='" . $val ."' size ='500' type='button'>
+              <div class='ans-bt'>" .$options[$option['value']]->field_option_1['und'][0]['value'] . "</div>
+            </button>
+          </div>";
+        }
+        else {
+          $opt .= "
+          <div class='button-option noimg ".$n_type."'>
+            <button id=" . $val . " class='input_class " . $val . "' name='" . $val ."' size ='500' type='button'>
+              <div class='ans-bt'>" . $options[$option['value']]->field_option_1['und'][0]['value'] . "</div>
+            </button>
+          </div>";
+        }
+      }
+    }
+  $opt .= "<div class='clicker ".$n_type." '><textarea name= 'opt' class='give_val' style='display:none' ></textarea></div>";
+  }
+
+  //start of true and false
+  if ($n_type == 'true_and_false') { // moved the true and false out of MCQ
+    foreach ($node->field_answer_choices['und'] as $option) { // change in the field collection name
+      $options = entity_load("field_collection_item", array($option['value'], ));
+
+    //echo "<pre>";print_r($options);die();
+    $val1 = $options[$option['value']]->field_option_1['und'][0]['value'];
+    if($val1 == "") {
+      $img_tf = $options[$option['value']]->field_image_option['und'][0]['uri'];
+     // echo $img_tf;
+      $img_tf_path = image_style_url("truandfalse", $img_tf);
+        $val1 =  "<img src='".$img_tf_path."' />";
+    }
+    //echo $val1;die();
+
+
+      $val = $options[$option['value']]->field_correct_answer['und'][0]['value'];
+      $opt .= "<div class='button-option ".$n_type."'><button id=" . $val . " class='input_class " . $val . "' type='button' name=" . $val . "><div class='ans-bt'>" . $val1 ."</div></button></div>";
+    }
+    $opt = $opt1 . $opt . "</div><div class='clicker ".$n_type." '>
+      <textarea name= 'opt' class='give_val' style='display:none' ></textarea></div>";
+  }
+
+  // Fill in the blank question type
+  if ($n_type == 'fib') {
+    $ans_desc = '';
+    $question_title = '';
+    $pos = '';
+    $strlength = '';
+    $strlength1 = '';
+    $strlength2 = '';
+    $strlength3 = '';
+    $chars = '';
+    $ch1 = '';
+    $ch2 = '';
+    $ch3 = '';
+    //echo '<pre>';print_r($node);die();
+    // Code for fetch word starting with special character from question text.
+    $question_title = $node->field_question_text['und'][0]['value'];
+    //print $question_title;die();
+    $pattern = '#@([^~]+)@#'; // If '~' character found in fib question then fib will not work
+    preg_match($pattern, $question_title, $matches);
+    //echo '<pre>';print_r($matches);die();
+    $chars = preg_split('/ /', $matches[1], -1, PREG_SPLIT_OFFSET_CAPTURE);
+    $ch1 = $chars[0][0];
+    $ch2 = $chars[1][0];
+    $ch3 = $chars[2][0];
+    $strlength = array();
+    $j = 0;
+    $blank_str2 = '<span class="fib_area">';
+    $blank_input2 = '';
+    foreach ($chars as $key => $value) {
+      $blank_str2 .= "<span class='fib_word'>";
+      for($i = 0 ; $i < strlen($value[0]) ; $i ++) {
+        $blank_str2 .= '_ ';
+        $blank_input2 .= '<input class="userenter one in-'.$i.'" type="text" maxlength="1" autofocus="autofocus" />';
+      }
+      $blank_str2 .= "</span>";
+      $blank_input2 .= "&nbsp;&nbsp;&nbsp;&nbsp;";
+    }
+    $blank_str2 .= "</span>";
+
+    //Code for remove word starting with special character from question text and insert blank spaces
+    $question_title_val =  preg_replace("#@([^~]+)@#",$blank_str2, $question_title);
+    $opt = '<div class="keyarea"><div id="fib_expected">'.$blank_input2.'<p class="mergeval"></p><div class="clrtxt">Clear Text</div></div><textarea id="fib_correct"  style="display:none;" >' . $matches[1] . '</textarea><textarea id="fib" name= "opt" class="give_val" style="display:none;" ></textarea></div>';
+  }
+
+  // For Jumbled/Unjumbled question type
+  if ($n_type == 'jumble') {
+    $jumble_wrap = '';
+    $jumb_def_ques = '';
+    $val_jumb = '';
+    $random1 = array();
+    $j = 0;
+    foreach ($node->field_correct_word['und'] as $option) {
+      if(strlen($option['value']) > 1) {
+        $val_jumb .= $option['value'] . ' ';
+      }
+      else {
+        $val_jumb .= $option['value'];
+      }
+      $random1[] = $option['value'];
+
+      $default_text = $val_jumb ;
+    }
+
+    shuffle($random1);
+   //echo '<pre>';print_r($random1);die();
+    foreach ($random1 as $options) {
+      $val .= '<li class="ui-draggable j_word"><div class="extra"><span> '.$random1[$j].' </span></div></li>';
+      $jumble_wrap = '<div class="answer-option"><ul>'.$val.'</ul></div>';
+      $j++;
+   }
+  }
+
+  // For Match the following content type
+  if ($n_type == 'match_the_following') {
+    $match_question = '';
+    $match_question_wrap = '';
+    $match_ans_wrap = '';
+    $correct_match = '';
+    $img1 = '';
+    $img2 = '';
+    $img3 = '';
+    $img_path_m1 = '';
+    $img_path_m2 = '';
+    $img_path_m3 = '';
+    $img_name = '';
+    $random = array();
+    foreach ($node->field_correct_match_word['und'] as $option) {
+      $random[] = $option['value'];
+    }
+
+    shuffle($random);
+    $i = 0;
+    foreach ($node->field_correct_match_word['und'] as $option) {
+      $options = entity_load("field_collection_item", array($option['value'], ));
+      $options1 = entity_load("field_collection_item", array($random[$i], ));
+      $img_match = $options[$option['value']]->field_image_option['und'][0]['uri'];
+      $img_match_correct = $options[$option['value']]->field_correct_image['und'][0]['uri'];
+      $img_match_random = $options1[$random[$i]]->field_correct_image['und'][0]['uri'];
+      $style_match = 'match_120x112';
+      $img_path_m1 = image_style_url($style_match, $img_match);
+      $img_path_m2 = image_style_url($style_match, $img_match_correct);
+      $img_path_m3 = image_style_url($style_match, $img_match_random);
+      if ($img_match) {
+        $img1 = '<img src="'.$img_path_m1.'" />';
+      }
+      if ($img_match_correct) {
+        $img2 = '<img src="'.$img_path_m2.'" />';
+      }
+      if ($img_match_random) {
+        $img3 = '<img src="'.$img_path_m3.'" />';
+      }
+      if($options1[$random[$i]]->field_correct_image['und'][0]['filename']){
+        $img_name = $options1[$random[$i]]->field_correct_image['und'][0]['filename'];
+      }
+      if($options[$option['value']]->field_correct_image['und'][0]['filename']){
+        $img_name2 = $options[$option['value']]->field_correct_image['und'][0]['filename'];
+      }
+      $match_question_wrap .= '
+      <ul><li>
+        <div class="col1">
+          <div class="col1-box">
+              '.$img1 .$options[$option['value']]->field_given_word['und'][0]['value'].'
+              <div class="col1-arrow"></div>
+          </div>
+        </div>
+        <div class="drag-area col2">
+          <ol class="box-area placeholder"></ol>
+          <p class="correct_match">
+            '.$img2 .$options[$option['value']]->field_correct_match['und'][0]['value'].'
+          </p>
+        </div>
+      </li></ul>';
+      $val .= '
+      <div class="match_drag_box">
+        <ul>
+          <li class="ui-draggable match">
+            '.$img3.'<b style ="display:none">'
+            . $img_name.'</b>'.
+            $options1[$random[$i]]->field_correct_match['und'][0]['value'].'
+          </li>
+        </ul>
+      </div>';
+      $correct_match .= '
+        <ul>
+          <li>'.
+            $img_name2.$options[$option['value']]->field_correct_match['und'][0]['value'].'
+          </li>
+        </ul>';
+      if ($img_match) {
+        $match_question_wrap = '<div class="img-match">'.$match_question_wrap.'</div>';
+      }
+      $match_ans_wrap = '<div class="answer-option">'. $val.'</div>';
+      if ($img_match_correct) {
+        $match_ans_wrap = '<div class="answer-option img_match_correct">'. $val.'</div>';
+      }
+      $i++;
+    //  echo "--" . $option['value'];
+    }
+    //die();
+    //print ($match_ans_wrap);die();
+    drupal_add_js( drupal_get_path('module', 'lw_tryquestion') . '/tryquestion.js');
+  }
+  $question_lod_print = "Question lod " . $_SESSION['question_lod'] . '<br/>';
+  //$question_level_print = 'Question Level = ' . $_SESSION['level_name'] . "<br/>";
+
+  //adding radio button to markup as it will be replaced by div for 1-3
+  //and ajax is not fetching radion button in ajax callback
+  //print ($_SESSION['correct_ans']);die();
+    $level_markup = '<div class="label-bg"><ul class="label">' ;
+    for ($i = 1 ; $i<6 ; $i++) {
+      if($i <= $_SESSION['user_current_level']) {
+        $class_text = 'label-over-'.$i;
+      }
+      else {
+        $class_text = 'label-'.$i;
+      }
+      $level_markup .=  '<li class="'.$class_text.'"><span>'.$i.'</span></li>';
+    }
+    $level_markup .= "</ul>";
+    $level_markup .= '<div class="label-text">levels';
+    $level_markup .= "</div></div>";
+
+    if($_SESSION['revision']['time'] == "unlimited") {
+      $revision_markup = '<div class="rev_markup"><p>Revise all you want!</p></div>';
+    }
+    else {
+      $revision_markup = '<div class="rev_markup"><p>Timed Test</p></div>';
+    }
+  $form['option'] = array(
+    '#type' => 'markup',
+    '#prefix' => '<div id="option-list">',
+    '#markup' =>  //$question_level_print .
+
+
+    '<div class="right_exl_block mcqndtf '.$arg_value.'"><div class="session_ex2"><h2>'.$name.'<span>Earned</span></h2></div>'.
+    '<div class="exc-box"><div class="wrap_bt"><span class="num">'. $_SESSION['user_orig_exc'] .'</span><br /><span>Excelonz</span></div></div>'.
+    //'<br/>Session Excellonz : ' . $_SESSION['user_session_exc'] .
+    '<div class="play-label-title" style="display:none">
+      <h2 class="left"><a href="#">Play Off Started</a></h2>
+    </div>'.
+    $level_markup .$revision_markup.
+    '<div class="correct-ans">' . $_SESSION['correct_ans'] .'</div>'.
+    '<div class="wrong-ans">' . $_SESSION['wrong_ans'] .'</div>'.
+    //'<br/>' . $_SESSION['level_wrong_ans'] .
+
+    '</div>'.
+      '<div class="left_ex_block">
+        <div id="question_area">
+          <div class="question-div-blk">'.$img_with_txt.
+            '<div class="question-text">
+              <div class="question_div">
+                <h3>' . $node->field_question_text['und'][0]['value'] . '</h3>
+              </div>
+            </div>
+          </div>
+        </div>' .
+        '<div class="hlptxt">Choose an answer below :</div>'.
+      '<div class="mcq_ext_blk">
+        <div class="question_wrap">'.$opt.'</div>
+        <div class="answer_link '.$n_type.'">'.$ans_desc_link.'</div>
+      </div>
+      <div class="desc_wrap mcqndtf '.$n_type.'">'.$ans_desc_link.'</div></div>',
+    '#suffix' =>  '</div><script>level_change_txt("'.$level_msg.'")</script></div>',
+  );
+
+  //@todo : prateek code cleanup.
+  if ($n_type == 'fib') {
+    $form['option'] = array(
+      '#type' => 'markup',
+      '#prefix' => '<div id="option-list" class="fib_quest '.$arg_value.'">',
+      '#markup' =>  $question_level_print .
+     '<div class="right_exl_block '.$n_type.'">
+        <div class="session_ex2">
+          <h2>'.$name.'<span>Earned</span></h2>
+        </div>'.
+        '<div class="exc-box">
+          <div class="wrap_bt">
+            <span class="num">'. $_SESSION['user_orig_exc'] .'</span><br />
+            <span>Excelonz</span>
+          </div>
+        </div>'.
+    '<div class="play-label-title" style="display:none">
+      <h2 class="left"><a href="#">Play Off Started</a></h2>
+        </div>'.
+        $level_markup .$revision_markup.
+        '<div class="correct-ans">' . $_SESSION['correct_ans'] .'</div>'.
+        '<div class="wrong-ans">' . $_SESSION['wrong_ans'] .'</div>'.
+      '</div>'.
+      '<div class="left_ex_block">
+        <div id="question_area">
+          <div class="question-div-blk">'.$img_with_txt.
+            '<div class="question-text">
+              <div class="question_div">
+                <h3>' . $question_title_val . '</h3>
+              </div>
+            </div>
+          </div>
+        </div>' .
+        '<div class="hlptxt">Fill in the blanks :</div>'.
+        '<div class="fib_ext_blk">
+          <div class="question_wrap">'.$opt.'</div>
+          <div class="answer_link fib">'.$ans_desc_link.'</div>
+        </div>
+        <div class="fib_wrap">
+          <div class="desc_wrap fib"></div>
+        </div>
+      </div>',
+    '#suffix' => '<script>level_change_txt("'.$level_msg.'")</script></div>',
+  );
+  }
+  // For Jumble and unjumbled question type
+  if ($n_type == 'jumble') {
+    $question_title_val = $node->field_question_text['und'][0]['value'];
+    $form['option'] = array(
+      '#type' => 'markup',
+      '#prefix' => '<div id="option-list" class="jumble_div">',
+      '#markup' =>  //$question_level_print .
+      '<div class="right_exl_block '.$n_type.'">
+        <div class="session_ex2">
+          <h2>'.$name.'<span>Earned</span></h2>
+        </div>
+        <div class="exc-box">
+          <div class="wrap_bt">
+            <span class="num">'. $_SESSION['user_orig_exc'] .'</span><br />
+            <span>Excelonz</span>
+          </div>
+        </div>
+    <div class="play-label-title" style="display:none">
+      <h2 class="left"><a href="#">Play Off Started</a></h2>
+        </div>'.
+        $level_markup .'
+        <div class="correct-ans">' . $_SESSION['correct_ans'] .'</div>
+        <div class="wrong-ans">' . $_SESSION['wrong_ans'] .'</div>
+      </div>
+      <div class="left_ex_block">
+        <div class="jumble_question_wrap">
+          <div class="question-div-blk jumble">'.$img_with_txt.
+            '<div class="question-text">
+              <div class="question_div">
+                <h3>' . $question_title_val . '</h3>
+              </div>
+            </div>
+          </div>' .
+          $jumble_wrap .'
+        </div>
+        <div class="jques">
+          <h2><span>Drag your answer here</span></h2>
+        </div>
+        <div class="drag-area jumbd">
+          <div class="extra-area">
+            <ol class="box-area placeholder"></ol>
+            <div class="jumbtxt">Clear Text</div>
+          </div>
+          <textarea class="drag" style="display:none" >'.$default_text.'</textarea>
+          <div class="current current_entry">User Input</div>
+          <div class="answer_link jumble">'.$ans_desc_link.'</div>
+        </div>
+        <div class="desc_wrap jumb"></div>
+        <div class="jumble_answer_input">
+          <div class="default_box">
+            <textarea id ="dragtxt" name= "opt" class="give_val" style="display:none" ></textarea>
+          </div>
+        </div>
+      </div>',
+      '#suffix' => '<script>level_change_txt("'.$level_msg.'")</script></div><div class="scr"><script>drag_drop();</script></div>',
+    );
+  }
+
+  // For Match the Following question type
+  if ($n_type == 'match_the_following') {
+    $question_title_val = $node->field_question_text['und'][0]['value'];
+    $form['option'] = array(
+      '#type' => 'markup',
+      '#prefix' => '<div id="option-list" class="opt" ><div id="option-list-match">',
+      '#markup' =>  //$question_level_print .
+      '<div class="right_exl_block '.$n_type.'"><div class="session_ex2"><h2>'.$name.'<span>Earned</span></h2></div>'.
+     '<div class="exc-box"><div class="wrap_bt"><span class="num">'. $_SESSION['user_orig_exc'] .'</span><br /><span>Excelonz</span></div></div>'.
+    '<div class="play-label-title" style="display:none">
+      <h2 class="left"><a href="#">Play Off Started</a></h2>
+    </div>'.
+    $level_markup .
+    '<div class="correct-ans">' . $_SESSION['correct_ans'] .'</div>'.
+    '<div class="wrong-ans">' . $_SESSION['wrong_ans'] .'</div>'.
+    '</div>'.
+      '<div class="left_ex_block">
+        <div class="main_qs_area">
+          <div class="jques">
+              <h2><span>Drag your answer here</span></h2>
+            </div>
+          </div>
+          <div class="question-text">
+              <div class="question_div">
+                <h3 style="display: block;float:left;width:100%;">' . $question_title_val . '</h3>
+              </div>
+            </div>
+          <div class="match_blk">
+            <div class="match_question_wrap">' . $match_question_wrap . '</div>
+            <div class="match_ans_wrap">'. $match_ans_wrap .'</div>
+            <div class="answer_link match">'.$ans_desc_link.'</div>
+            <div class="mtfclear">Clear</div>
+          </div>
+          <div class="desc_wrap jumb match"></div>
+          <div class="default_box">
+            <div class="actual_word" style="display:none">'.$correct_match.'</div>
+            <textarea id ="dragtxt" name= "opt" class="give_val" style="display:none" ></textarea>
+          </div>
+      </div>',
+      '#suffix' => '<script>level_change_txt("'.$level_msg.'")</script></div></div><div class="scr" style="display:none"><script>drag_drop();</script></div></div>',
+    );
+  }
+
+
+  return $form;
+}
+
+/*
+* Try Question Report Form
+*/
+function tryquestion_report_form($form, $form_state) {
+
+  $form['#prefix'] = '<div id="try-other-topic-ajax-tsq">';
+  $form['#suffix'] = '</div>';
+  $class_id = $_SESSION['try_question_class_id'];
+  $subject_id = $_SESSION['try_question_subject_id'];
+  $topic_id =  $_SESSION['try_question_topic_id'];
+  $term_id = $_SESSION['topic_tid'];
+
+    $duration = $_SESSION['timer_value'];
+    $final_duration = elapsed_time($duration, 6) . '<br/>';
+
+    $total = $_SESSION['correct_ans'] + $_SESSION['wrong_ans'];
+    $accuracy = round(($_SESSION['correct_ans'] *100) / $total, 2);
+    $correcta = $_SESSION['correct_ans'];
+    $wronga = $_SESSION['wrong_ans'];
+
+    $class = taxonomy_term_load($class_id);
+    $topic = taxonomy_term_load($topic_id);
+    $parents = taxonomy_get_parents($topic_id);
+
+    $class_name = $class->name;
+    $topic_name = $topic->name;
+    foreach ($parents as $parent) {
+      $subject = $parent->name;
+    }
+    $excellone = $_SESSION['user_session_exc'];
+
+   
+    $_SESSION['report_id'] = $entity->id;
+
+      $total1 = $_SESSION['correct_ans'] + $_SESSION['wrong_ans'];
+      $total_c1 = $_SESSION['correct_ans'];
+
+      $total = $total1 - $_SESSION['prev_total'];
+      $total_c = $total_c1 - $_SESSION['prev_total_c'];
+   assessment_report_unset();
+
+    $_SESSION['correct_ans'] = 0;
+    $_SESSION['wrong_ans'] = 0;
+    $total = $total1;
+   $name = 'User';
+
+  $result = '<div class="font30 blank_space"> Assessment Report </div>';
+  $result .= '<div class="ass_report"><h2>Dear ' . $name . ',</h2>';
+  $result .= '<h5> Session Performance summary </h5>';
+  $result .= '<table><tr><td rowspan="2" class="val_top">';
+  $result .= '<div class="ass_left_box"><table>';
+  $result .= '<tr><td><span class="blue-dark">Subject</span></td><td class="dark-green"> ' . $subject . '</td></tr>';
+  $result .= '<tr><td><span class="blue-dark">Topic</span></td><td class="dark-green"> ' . $topic_name . '</td></tr>';
+  $result .= '<tr><td><span class="blue-dark">Questions attempted</span></td><td class="dark-green"> ' . $total . '</td></tr>';
+  $result .= '<tr><td><span class="blue-dark">Time spent</span></td><td class="dark-green"> ' . $final_duration . '</td></tr></table></div></td>';
+
+  $result .= '<td class="val_top table_assemennt"><div class="ass_rigth_box"><div class="ass_rigth_top_box"><div class="ass_accuracy session_accu"><span class="session_sum"> Session accuracy</span><h1> ' . $accuracy . '%</h1></div>';
+$result .= '<div class="ass_reached"><span>Current Level</span><div class="levels-change levels-1">levels</div> <b>level ' . 1 . '</b> </div></div>';
+  $result .= '</td></tr><tr><td class="val_bot">';
+  $result .= '<div class="ass_rigth_box"><div class="ass_rigth_bot_box"><div class="ass_correct"><h3>Total Correct Answers</h3><span> ' . $correcta . '</span></div>';
+  $result .= '<div class="ass_wrong"><h3>Total Wrong Answers</h3><span> ' . $wronga . '</span></div></div></div>';
+  $result .= '</td></tr></table>';
+  $result .= '<div class="report-main-wraper">
+              <div class="report-main-wraper assignment_repo ">Brilliant! This was a great practice session</div>
+              <div class="report-main-wraper button_repo">'.l('Sign Up Now', 'pricingplans');
+  $form['result'] = array(
+    '#type' => 'markup',
+    '#markup' => $result,
+  );
+  $form['submit_button_tsq'] = array(
+    '#type' => 'submit',
+    '#value' => t('Start Another Free Practice'),
+    '#ajax' => array(
+          'callback' => 'try_some_other_topic_tsq',
+          'wrapper' => 'try-other-topic-ajax-tsq',
+          'method' => 'replace',
+          'effect' => 'fade',
+          'progress' => array(
+                  'message' => '',
+           
+        ),
+      ),
+  ); 
+$result .= '</div></div>';
+  return $form;
+}
+
+/*
+ * @todo : Tryquestion call back for ctool popup window
+ */
+
+
+function lw_tryquestion_callback($ajax) {
+  if ($ajax) {
+    ctools_include('ajax');
+    ctools_include('modal');
+ 
+    $form_state = array(
+      'ajax' => TRUE,
+      'title' => t('Try Some Question Form'),
+    );
+     $output = ctools_modal_form_wrapper('tryquestion_topic_form', $form_state);
+    print ajax_render($output);
+  drupal_exit();
+  }
+}
+
+function try_some_other_topic_tsq($form, &$form_state){
+$form_action = $form_state['rebuild_info']['copy']['#action'];
+ if($form_action == 1);
+  $form_test  = "<div id='test-ajax'>".drupal_render(drupal_get_form('tryquestion_topic_form'))."</div>";
+  $commands = array();
+  $commands[] = ajax_command_replace('#try-other-topic-ajax-tsq',render($form_test));
+ return array('#type' => 'ajax', '#commands' => $commands);
+
+}

@@ -1,0 +1,409 @@
+<?php
+
+/**
+ * Single Login is a session management system for Drupal.
+ * 
+ * It allows the site administrator to create a policy to detect, and prevent, 
+ * duplicate logins on the same account. This is obviously handy for a site 
+ * that requires paid subscriptions. Once a duplicate login is detected from 
+ * a different system, the first login gets logged out. The admin can set a 
+ * policy that determines how often and within what time period a session can 
+ * "ping pong" between machines. Should the policy conditions be met, the admin
+ * can specify an action,typically to block the offending account.
+ * 
+ * The module also keeps a history of duplicate logins, and if you use the 
+ * Google Analytics/urchin module, it will insert the session ID into the 
+ * urchin system.
+ * 
+ * @file
+ * Allows users to be logged on only on a single browser in one time.
+ * 
+ * @author
+ * Martijn Dekkers
+ * Stefan Auditor <stefan.auditor@erdfisch.de> 
+ */
+
+define('SINGLE_LOGIN_CHECK_ROLES', 'single_login_check_roles');
+define('SINGLE_LOGIN_TREAT_ONLINE', 'single_login_treat_online');
+define('SINGLE_LOGIN_STORE_HISTORY', 'single_login_store_history');
+define('SINGLE_LOGIN_MAX_RECONNECTIONS', 'single_login_max_reconnections');
+define('SINGLE_LOGIN_MSG_RELOGGED', 'single_login_msg_relogged');
+define('SINGLE_LOGIN_MSG_BLOCKED', 'single_login_msg_blocked');
+
+define('SINGLE_LOGIN_DEF_TREAT_ONLINE', 900);
+define('SINGLE_LOGIN_DEF_MAX_RECONNECTIONS', 3);
+define('SINGLE_LOGIN_DEF_STORE_HISTORY', 7);
+define('SINGLE_LOGIN_DEF_RELOGGED', 'You were relogged. Number of relogins left: ');
+define('SINGLE_LOGIN_DEF_BLOCKED', 'You reached maximal relogin count. Your account was blocked. Please contact site administrator.');
+
+define('SINGLE_LOGIN_HISTORY_UID', 'single_login_history_uid__');
+define('SINGLE_LOGIN_HISTORY_UNAME', 'single_login_history_uname__');
+
+/**
+ * Implements hook_init().
+ */
+function single_login_init() {
+  global $user;
+  
+  if( $user->uid ) {
+    $time = time();
+
+    if (_single_login_is_user_single(array_keys($user->roles))) {
+      $sql = "INSERT INTO {single_login_history} 
+                SET uid = :uid, session_id = :session_id, date = :date, ip = :ip, browser = :browser, type = 'cookie' 
+                ON DUPLICATE KEY UPDATE date = :time";
+      db_query($sql, array(
+        ':uid' => $user->uid, 
+        ':session_id' => session_id(), 
+        ':date' => $time, 
+        ':ip' => ip_address(), 
+        ':browser' => $_SERVER['HTTP_USER_AGENT'], 
+        ':time' => $time,
+      ));
+      
+      $sql = "SELECT count(1) AS c FROM {sessions} WHERE uid = :uid AND :now - timestamp < :time";
+      $result = db_query($sql, array(
+        ':uid' => $user->uid, 
+        ':now' => $time, 
+        ':time' => variable_get(SINGLE_LOGIN_TREAT_ONLINE, SINGLE_LOGIN_DEF_TREAT_ONLINE)
+      ))->fetchAllAssoc('c', PDO::FETCH_ASSOC);
+		  $row = array_pop($result);
+		  
+      if ( $row['c'] ) {
+        // if the current user is not the only logged with this account
+        $sql = "INSERT INTO {single_login} (uid, counter) VALUES (:uid, :counter) ON DUPLICATE KEY UPDATE counter = counter + 1";
+        db_query($sql, array(':uid' => $user->uid, ':counter' => 1));
+        
+        $sql = "DELETE FROM {sessions} WHERE uid = :uid AND sid != :sid";
+        db_query($sql, array(':uid' => $user->uid, ':sid' => session_id()));
+      } else {
+        // if current user is the only who logged in with current account
+        db_query("DELETE FROM {single_login} WHERE uid = :uid", array(':uid' => $account->uid));
+      }
+    }
+    _single_login_update_sess_field($user->uid);
+  }
+}
+
+/**
+ * Implementation of hook_menu()
+ *
+ * @return array of menu items
+ */
+function single_login_menu() {
+  $items = array();
+  $items['admin/config/people/single_login'] = array(
+    'title' => t('Single login settings'),
+    'description' => 'Configure the settings for single login.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('single_login_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/reports/single_login_history'] = array(
+    'title' => t('Single login session history'),
+    'description' => 'Browse single login session history.',
+    'page callback' => 'single_login_history',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['single_login/blocked'] = array(
+    'title' => t('Account was blocked'),
+    'page callback' => 'single_login_static_page',
+    'page arguments' => array('blocked'),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Admin settings
+ *
+ */
+function single_login_settings() {
+  $form = array();
+  $form['sub_main'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Main settings'),
+    '#collapsible'   => true,
+    '#collapsed'     => false,
+  );
+  $form['sub_main'][SINGLE_LOGIN_CHECK_ROLES] = array(
+    '#title'         => t('Check login for roles'),
+    '#type'      => 'select',
+    '#multiple'    => true,
+    '#options'    => user_roles(),
+    '#default_value'=> variable_get(SINGLE_LOGIN_CHECK_ROLES, array()),
+    '#size'      => 10,
+  );
+  $form['sub_main'][SINGLE_LOGIN_TREAT_ONLINE] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Treat user online for seconds'),
+    '#default_value' => variable_get(SINGLE_LOGIN_TREAT_ONLINE, SINGLE_LOGIN_DEF_TREAT_ONLINE),
+  );
+  $form['sub_main'][SINGLE_LOGIN_MAX_RECONNECTIONS] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Max login ping-pong values'),
+    '#default_value' => variable_get(SINGLE_LOGIN_MAX_RECONNECTIONS, SINGLE_LOGIN_DEF_MAX_RECONNECTIONS),
+  );
+  $form['sub_main'][SINGLE_LOGIN_STORE_HISTORY] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Store sessions history for days (0 - infinite)'),
+    '#default_value' => variable_get(SINGLE_LOGIN_STORE_HISTORY, SINGLE_LOGIN_DEF_STORE_HISTORY),
+  );
+  $form['sub_msg'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('Messages settings'),
+    '#collapsible'   => true,
+    '#collapsed'     => false,
+  );
+  $form['sub_msg'][SINGLE_LOGIN_MSG_RELOGGED] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Relogin message'),
+    '#maxlength'     => 500,
+    '#default_value' => variable_get(SINGLE_LOGIN_MSG_RELOGGED, SINGLE_LOGIN_DEF_RELOGGED),
+  );
+  $form['sub_msg'][SINGLE_LOGIN_MSG_BLOCKED] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Account blocked message'),
+    '#maxlength'     => 500,
+    '#default_value' => variable_get(SINGLE_LOGIN_MSG_BLOCKED, SINGLE_LOGIN_DEF_BLOCKED),
+  );
+  if (module_exists('googleanalytics')) {
+    $form['sub_google'] = array(
+      '#type' => 'item',
+      '#title' => t('Google Analytics user sessionID tracking'),
+      '#description' => t("Goto !page and select 'Current Session ID' in 'Track' setting", array('!page' => l(t('Google Analytics setting'), 'admin/settings/googleanalytics'))),
+    );
+  }
+
+  return system_settings_form($form);
+}
+
+function single_login_history() {
+  $uid = variable_get(SINGLE_LOGIN_HISTORY_UID, 0);
+  $uname = variable_get(SINGLE_LOGIN_HISTORY_UNAME, '');
+  
+  $build = array();
+  $build['form_uid'] = drupal_get_form('single_login_history_form_uid', array('uid' => $uid, 'uname' => $uname));
+  $build['form_list'] = drupal_get_form('single_login_history_form_list', $uid);
+
+  return $build;
+}
+
+function single_login_history_form_uid($form, &$form_state) {
+	
+  if( isset( $form_state['build_info']['args']['0']['uid'] )) {
+    $uid = $form_state['build_info']['args']['0']['uid'];
+  } else {
+    $uid = 0;
+  }
+  
+  if( isset( $form_state['build_info']['args']['0']['uname'] )) {
+    $uname = $form_state['build_info']['args']['0']['uname'];
+  } else {
+    $uname = '';
+  }
+  
+  $form['uid_fieldset'] = array(
+    '#type'          => 'fieldset',
+    '#title'         => t('User history preferences'),
+    '#collapsible'   => true,
+    '#collapsed'     => false,
+  );
+  $form['uid_fieldset']['history_for_uid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('User ID'),
+    '#default_value' => $uid,
+  );
+  $form['uid_fieldset']['history_for_uname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('User name'),
+    '#default_value' => $uname,
+    '#description' => t('If name is set ID is selected automatically by name'),
+  );
+  $form['uid_fieldset']['submit_btn'] = array(
+    '#type' => 'submit',
+    '#value' => t('Show'),
+  );
+
+  return $form;
+}
+
+function single_login_history_form_uid_submit($form, &$form_state) {
+  $values = $form_state['values'];
+  
+  if (strlen($values['history_for_uname']) && $values['history_for_uid'] == variable_get(SINGLE_LOGIN_HISTORY_UID, 0)) {
+    $name = $values['history_for_uname'];
+    $id = 0;
+
+    $result = db_query("SELECT uid FROM {users} WHERE name = :name", array(':name' => $name))->fetchAllAssoc('uid', PDO::FETCH_ASSOC);
+    if( count($result) ) {
+    	$row = array_pop($result);
+    	$id = $row['uid'];
+    }
+    
+  } else {
+    $id = intval($values['history_for_uid']);
+    $name = '';
+    $result = db_query("SELECT name FROM {users} WHERE uid = :uid", array(':uid' => $id))->fetchAllAssoc('name', PDO::FETCH_ASSOC);
+    if( count($result) ) {
+      $row = array_pop($result);
+      $name = $row['name'];
+    }
+  }
+
+  variable_set(SINGLE_LOGIN_HISTORY_UID, $id);
+  variable_set(SINGLE_LOGIN_HISTORY_UNAME, $name);
+}
+
+function single_login_history_form_list($form, &$form_state) {
+	if( isset( $form_state['build_info']['args']['0'] )) {
+		$uid = $form_state['build_info']['args']['0'];
+	} else {
+		$uid = 0;
+	}
+	
+  $result = db_query("SELECT * FROM {single_login_history} WHERE uid = :uid", array(':uid' => $uid))->fetchAllAssoc('history_id');
+
+  $form = array();
+  $form['head'] = array(
+    '#type' => 'item',
+    '#title' => t('Result'),
+  );
+
+  if (!count($result)) {
+    $form['head']['#description'] = t('History for this user is empty');
+  } else {
+    $rows = array();
+    foreach ($result as $row) {
+      $rows[] = array($row->history_id, date("d.m.Y G:i", $row->date), $row->ip, $row->browser);
+    }
+    $form['body'] = array(
+      '#prefix' => '<div>',
+      '#markup' => theme('table', array(
+        'header' => array(t('ID'), t('Date'), t('IP'), t('Browser')), 
+        'rows' => $rows,
+      )),
+      '#suffix' => '</div>',
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_user_login()
+ */
+function single_login_user(&$edit, $account) {
+  global $user;
+
+  if (_single_login_is_user_single(array_keys($user->roles))) {
+    $time = time();
+
+    $sql = "INSERT INTO {single_login_history} 
+              SET uid = :uid, session_id = :sid, date = :now, ip = :ip, browser = :browser
+            ON DUPLICATE KEY UPDATE date = :time, type = 'login'";
+    db_query($sql, array(
+      ':uid' => $account->uid, 
+      ':sid' => session_id(), 
+      ':now' => $time, 
+      ':ip' => ip_address(), 
+      ':browser' => $_SERVER['HTTP_USER_AGENT'], 
+      ':time' => $time,
+    ));
+
+    $sql = "SELECT count(1) AS c FROM {sessions} WHERE uid = :uid AND :now - timestamp < :timestamp";
+    $result = db_query($sql, array(
+      ':uid' => $account->uid, 
+      ':now' => $time, 
+      ':timestamp' => variable_get(SINGLE_LOGIN_TREAT_ONLINE, SINGLE_LOGIN_DEF_TREAT_ONLINE)
+     ))->fetchAllAssoc('c');
+     $row = array_pop($result);
+         
+    if ($row['c']) {
+      // if the current user is not the only logged with this account
+      $sql = "INSERT INTO {single_login} (uid, counter) VALUES (:uid, :counter) ON DUPLICATE KEY UPDATE counter = counter + 1";
+      db_query($sql, array(':uid' => $account->uid, ':counter' => 1));
+          
+      $sql = "DELETE FROM {sessions} WHERE uid = :uid AND sid != :sid";
+      db_query($sql, array(':uid' => $account->uid, ':sid' => session_id()));
+    } else {
+      // if current user is the only who logged in with current account
+      $sql = "DELETE FROM {single_login} WHERE uid = :uid";
+      db_query($sql, array(':uid' => $account->uid));
+    }
+
+    $sql = "SELECT counter FROM {single_login} WHERE uid = :uid";
+    $result = db_query($sql, array(':uid' => $account->uid))->fetchAllAssoc('counter', PDO::FETCH_ASSOC);
+    if( count($result) ) {
+    	$row = array_pop($result);
+    	$ping_pong_val = $row['counter'];
+    } else {
+    	$ping_pong_val = 0;
+    }
+    if ($ping_pong_val >= variable_get(SINGLE_LOGIN_MAX_RECONNECTIONS, SINGLE_LOGIN_DEF_MAX_RECONNECTIONS)) {
+      $sql = "UPDATE {users} SET status = 0 WHERE uid = :uid";
+      db_query($sql, array(':uid' => $account->uid));
+
+      $_REQUEST['destination'] = 'single_login/blocked';
+
+      user_logout();
+    } else if($ping_pong_val) {
+      //TODO: Clean that up and make it readable
+      $relogins_left = variable_get(SINGLE_LOGIN_MAX_RECONNECTIONS, SINGLE_LOGIN_DEF_MAX_RECONNECTIONS) - $ping_pong_val;
+      drupal_set_message(variable_get(SINGLE_LOGIN_MSG_RELOGGED, SINGLE_LOGIN_DEF_RELOGGED) . $relogins_left);
+    }
+  }
+
+  _single_login_update_sess_field($account->uid);
+
+}
+
+function single_login_static_page($op) {
+  switch ($op) {
+    case 'blocked':
+      return variable_get(SINGLE_LOGIN_MSG_BLOCKED, SINGLE_LOGIN_DEF_BLOCKED);
+    default:
+      drupal_goto();
+  }
+}
+
+/**
+ * Implementation of hook_cron().
+ */
+function single_login_cron() {
+  $clear_older_than_days = intval(variable_get(SINGLE_LOGIN_STORE_HISTORY, SINGLE_LOGIN_DEF_STORE_HISTORY));
+  if ($clear_older_than_days > 0) {
+    $clear_older_than_secs = $clear_older_than_days * 24 * 60 * 60;
+    $sql = "DELETE FROM {single_login_history} WHERE :now - date > :limit";
+    db_query($sql, array(':now' => time(), ':limit' => $clear_older_than_secs));
+  }
+}
+
+function _single_login_is_user_single($user_roles) {
+  $roles_single_login = variable_get(SINGLE_LOGIN_CHECK_ROLES, array());
+
+  foreach ($user_roles as $role_id) {
+    if (in_array($role_id, $roles_single_login)) return true;
+  }
+
+  return false;
+}
+
+function _single_login_update_sess_field($uid) {
+  $sql = "DELETE FROM {single_login_current_session} WHERE uid = :uid";
+  db_query($sql, array(':uid' => $uid));
+  $sql = "INSERT INTO {single_login_current_session} SET uid = :uid, session_id = :sid";
+  db_query($sql, array(':uid' => $uid, ':sid' => session_id()));
+}
+
+
+
+
+
+
+
+

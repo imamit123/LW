@@ -1,0 +1,3 @@
+name = Single Login
+description = Allows users to be logged on only on a single browser in one time.
+core = 7.x

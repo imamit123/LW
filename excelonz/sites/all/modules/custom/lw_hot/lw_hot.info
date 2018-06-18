@@ -1,0 +1,3 @@
+name = lw_hot
+description = "Contain all the logic and code related to lw_hot. and skillmap"
+core = 7.x

@@ -1,0 +1,483 @@
+<?php
+/**
+ * @file
+ * Provide a assessments to attract user.
+ */
+
+/**
+ *  Implementation of hook_menu()
+ */
+function lw_hot_menu() {
+  // Submit a form without a page reload.
+  $items['hot/take'] = array(
+    'title' => 'Brain teasers',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hot_form'),
+    'access callback' => TRUE,
+  );
+
+  $items['skillmap/%'] = array(
+    'title' => '',
+    'page callback' => 'skillmap_page',
+    'access callback' => TRUE,
+  );
+  return $items;
+}
+
+
+
+/**
+ * URL : skillmap/uid/subject-tid
+ *
+ *  list all subject
+ *  if arg(2)
+ *    fetch all topic tid and name
+ *    make array
+ *    query in eck_skillmap
+ *    display in loop
+ *  endif
+ *
+ * return output;
+ */
+function skillmap_page($uid = 0, $subject_tid = 0) {
+  get_subject_list();
+  if($subject_tid == 0 ) {
+    $uid = arg(1);
+  }
+
+  if(arg(0) == "skillmap") {
+    $child_name = get_name($uid, "first");
+    $output = '<header id="main-content-header" class="clearfix">
+          <h1 id="page-title">
+            Skillmap for '.$child_name.'</h1>
+        </header>';
+  }
+
+  if($subject_tid == 0 ) {
+    $uid = arg(1);
+
+    if(is_numeric(arg(2))) {
+      $subject_tid = arg(2);
+    }
+    else {
+      $subject_tid = $_SESSION['skillmap']['tid'];
+    }
+    $output .= get_subject_list($subject_tid);
+  }
+
+
+  if(is_numeric($subject_tid)) {
+
+    $skillmap_query = db_select('eck_skillmap', 's')
+      ->fields('s')
+      ->condition('subject_tid', $subject_tid)
+      ->condition('uid', $uid)
+      ->execute()
+      ->fetchAll();
+
+    $skill = array();
+    $skill_rows = array();
+    foreach ($skillmap_query as $value) {
+      $tid = $value->tid;
+      $skill_rows[$tid]['correct'] = $value->correct;
+      $skill_rows[$tid]['wrong'] = $value->wrong;
+
+      $skill[] = $tid;
+    }
+
+
+    if(!array_key_exists(0, $skill)) {
+      return $output . "<div class='no_skill'>No skills found for this topic</div>";
+    }
+
+    $skill_detail_query =db_select('taxonomy_term_data', 'td')
+      ->fields('td')
+      ->condition('tid', $skill, "IN")
+      ->execute()
+      ->fetchAll();
+
+    foreach ($skill_detail_query as $skill_info) {
+      $tid = $skill_info->tid;
+      $skill_rows[$tid]['name'] = $skill_info->name;
+      $skill_rows[$tid]['desc'] = $skill_info->description;
+    }
+
+//echo "<pre>";print_r($skill_rows);
+//die();
+    $skill_rows1 = array();
+    foreach($skill_rows as $skill_row) {
+      $name = trim($skill_row['name']);
+      if(!empty($name)) {
+        $skill_rows1[$name]['correct'] += $skill_row['correct'];
+        $skill_rows1[$name]['wrong'] += $skill_row['wrong'];
+        $skill_rows1[$name]['name'] = $name;
+        if(empty($skill_rows1[$name]['desc']))
+          $skill_rows1[$name]['desc'] = $skill_row['desc'];
+      }
+    }
+//echo "<pre>";print_r($skill_rows1);
+//die();
+
+
+    $table_head = "<div class='cl'></div><table class='list_Skills'><tr><th>List of Skills</th><th>Skill Progress</th><th>Score</th></tr>";
+    $table_row = '';
+    $table_footer = "</table>";
+
+    $desc_opt = '';
+    foreach ($skill_rows1 as $key => $value) {
+      $total = $value['correct'] + $value['wrong'];
+      $accuracy = round((100*$value['correct'])/$total, 2);
+
+      $progressbar = "<div class='result_second'> <span style='width:".$accuracy."%;'>&nbsp;</span></div>";
+
+      $table_row .= "<tr><td>" . $value['name'] ."</td>";
+      $table_row .= "<td>" . $progressbar ."</td>";
+      $table_row .= "<td>" . $accuracy ."%</td></tr>";
+    }
+    $output .= $table_head . $table_row . $table_footer;
+    $description = '<div class="description"><div class="head">View Definitions of Skills</div>';
+    $output .= $description;
+
+    $output .= "<div class='skill_desc'>";
+    foreach ($skill_rows1 as $key => $value) {
+
+      $desc_opt .= "<div class='skill_desc_row'><span class='desc_title' style='font-weight:bold;text-decoration: underline;'>" . $value['name'] . " </span>";
+      $desc_opt .= "<span class='desc_desc'>" . $value['desc'] . "</span></div>";
+    }
+    $output .= $desc_opt . "</div></div>";
+
+  }
+
+  return $output;
+}
+
+function get_subject_list($subject_tid = 0){
+
+  $uid = arg(1);
+
+  //fetch users subject
+  $subject_list = db_select("field_data_field_subjects", "fs");
+  $subject_list->join("profile", "p", "fs.entity_id=p.pid");
+  $subject_list->condition("p.uid", $uid);
+  $subject_list->condition("fs.bundle", "student");
+  $subject_list_result = $subject_list->fields("fs", array("field_subjects_tid"))->execute()->fetchall();
+
+  $courses = array();
+  foreach ($subject_list_result as $row) {
+    $courses[] = $row->field_subjects_tid;
+  }
+
+  $vid = 7;
+  $lang = 'und';
+  $output = "<table class='skill_sub'><tr>";
+  $counter = 1;
+
+  foreach ($courses as $ctid) {
+      $course_term = taxonomy_term_load($ctid);
+      //echo '<pre>';print_r($course_term);
+
+      if($counter == 1) {
+        $_SESSION['skillmap']['tid'] =$ctid;
+      }
+      if($ctid == $subject_tid) {
+        $subject_class = "active_subject";
+        $_SESSION['skillmap']['tid'] =$ctid;
+
+      }
+      else {
+        $subject_class = "other_subject";
+      }
+      $output .= "<td class='".$subject_class."'>";
+
+
+      if (($subject_class == 'active_subject') && (array_key_exists('und', $course_term->field_active_image))) {
+        $image =  $course_term->field_active_image['und']['0']['filename'];
+        $output .= "<span>" . l(theme_image_style(array('style_name' => 'course_thumb', 'path' => $image, 'width' => '', 'height' => '')), "skillmap/$uid/".$ctid, array('html' => TRUE, )) . "</span>";
+      }
+      else {
+        if (array_key_exists('und', $course_term->field_image)) {
+        $image =  $course_term->field_image['und']['0']['filename'];
+        $output .= "<span>" . l(theme_image_style(array('style_name' => 'course_thumb', 'path' => $image, 'width' => '', 'height' => '')), "skillmap/$uid/".$ctid, array('html' => TRUE, )) . "</span>";
+      }
+      }
+
+      $output .= "<span>" . l($course_term->name, "skillmap/$uid/".$ctid ) . "</span></td>";
+      if ($counter%5 == 0) {
+        $output .= "</tr><tr>";
+      }
+      $counter++;
+  }
+  $output .= "</tr></table>";
+
+  return $output;
+
+}
+
+/**
+ * form will be called for hot question
+ *
+ * fetch current users class
+ *
+ */
+function hot_form($form, &$form_state) {
+
+  global $base_url;
+
+  if($form_state['input']['op'] == 'Finish') {
+    drupal_goto($base_url . "/dashboard/student");
+  }
+
+  drupal_add_js( drupal_get_path('module', 'lw_hot') . '/lw_hot.js');
+  drupal_add_js('http://code.jquery.com/jquery-1.4.4.min.js'); // prateek
+  drupal_add_css( drupal_get_path('module', 'lw_hot') . '/hots.css');
+  drupal_add_css( drupal_get_path('module', 'assessments') . '/assessments.css');
+
+  unset($_SESSION['question_asked']);
+  unset($_SESSION['class']);
+  $qid = hot_random_question();
+ if ($qid == '') {
+    $form1['option'] = array(
+      '#type' => 'markup',
+      '#prefix' => '<div id="option-list" class="hot-no-question">',
+      '#markup' => '<div class="no_more_ques"><img src="'.$base_url.'/sites/all/modules/custom/lw_hot/hot.jpg"/></div>',
+      '#suffix' => '</div>',
+      );
+    return $form1;
+  }
+  $form = hot_generate_form($qid);
+
+  $form['timer'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="timer"><span id="hot_timer" class="startstoptime">0:00</span><p>sec.</p></div>',
+    '#weight' => -102,
+  );
+
+  $form['sure'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="btn-wrap"><div class="btn-wrap-inner"><p class="sure">Show Answer</p>',
+  );
+  $form['sub'] = array(
+    '#type' => 'markup',
+    '#markup' => '<button id="submit-button" type="button">Yes</button>',
+  );
+  $form['reset'] = array(
+    '#type' => 'markup',
+    '#markup' => '<button id="reset" type="button">No</button></div></div>',
+  );
+  $form['action']['next'] = array(
+    '#prefix' => '<div>',
+    '#type' => 'submit',
+    '#ajax' => array(
+      'callback' => 'hot_next',
+      'wrapper' => array('option-list'),
+      'name' => 'next',
+    ),
+    '#value' => t('Next'),
+    '#suffix' => '</div>',
+  );
+  $form['finish'] = array(
+    '#type' => 'button',
+    '#value' => 'Finish',
+  );
+
+  $form['head'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div id="assessments-form"><div class= "assessment-header-top"><h3 class= "assessment-header">Brain teasers</h3></div><div class="assessment_wrap">',
+    '#weight' => -109,
+  );
+
+
+  return $form;
+}
+
+
+
+/**
+ * called with ajax call on clicking on next button.
+ */
+function hot_next() {
+  global $base_url;
+  $qid = hot_random_question();
+  $form = hot_generate_form($qid);
+  if ($qid == '') {
+    $form1['option'] = array(
+      '#type' => 'markup',
+      '#prefix' => '<div id="option-list">',
+      '#markup' => '<div class="no_more_ques"><img src="'.$base_url.'/sites/all/modules/custom/lw_hot/hot.jpg"/></div>',
+      '#suffix' => '</div>',
+    );
+  }
+  else {
+    $form1 = hot_generate_form($qid);
+  }
+  //return "<script>startinitial();</script>" . $form1;
+  return $form1;
+}
+
+
+/**
+ * function to fetch random question id
+ */
+function hot_random_question() {
+  global $user;
+  $uid = $user->uid;
+
+  //unset($_SESSION['class']);
+
+  //call this function for the fist time only.
+  if (!array_key_exists('class', $_SESSION)) {  //fetch users class term id
+    unset($_SESSION['question_asked']);
+//echo "in if <br/>";
+
+    //fetch users profile ID.
+    $pid_query = db_select('profile', 'p')
+    ->fields('p',array('pid'))
+    ->condition('uid',$uid)
+    ->condition('type','student')
+    ->range(0, 1)
+    ->execute()
+    ->fetchAll();
+    $pid = $pid_query[0]->pid;
+
+//echo $pid . "pid <br/>";
+
+
+    //fetch user class name.
+    $query = db_select('field_data_field_class_user', 'c');
+    $query->join("taxonomy_term_data", "uc", "c.field_class_user_tid=uc.tid");
+    $query->fields('uc')
+      ->condition('c.entity_id', $pid)
+      ->condition('c.delta', 0);
+    $result = $query->execute()
+      ->fetchAssoc();
+
+    $_SESSION['class'] = $result['tid'];
+
+//echo $_SESSION['class'] . "class <br/>";
+
+  //Query to fetch random question according to class and level.
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', array('brain_teasers'))
+      ->propertyCondition('status', 1)
+      ->fieldCondition('field_class_user', 'tid', $_SESSION['class'], '=')
+      ->addTag('random')
+      ->range(0, 1);
+    $result = $query->execute();
+    $news_items_nids = array_keys($result['node']);
+    $nid = $news_items_nids[0];
+//echo $nid . "class <br/>";
+
+    $_SESSION['question_asked'][] = $nid;
+
+    return $nid;
+  }
+  else {
+
+//echo "in else <br/>";
+//echo "<br/>class " .$_SESSION['class'];
+//echo "<pre>";print_r($_SESSION['question_asked']);
+    //Query to fetch random question according to class and level.
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', array('brain_teasers'))
+      ->propertyCondition('status', 1)
+      ->propertyCondition('nid', $_SESSION['question_asked'], 'NOT IN')
+      ->fieldCondition('field_class_user', 'tid', $_SESSION['class'], '=')
+      ->addTag('random')
+      ->range(0, 1);
+    $result = $query->execute();
+    $news_items_nids = array_keys($result['node']);
+    $nid = $news_items_nids[0];
+
+    $_SESSION['question_asked'][] = $nid;
+
+//echo "<br/>class " .$nid;
+
+    return $nid;
+  }
+}
+
+
+/**
+ * This function will generate form and return it.
+ */
+function hot_generate_form($qid) {
+  global $base_url;
+  global $user;
+  $node = node_load($qid);
+  //echo "<pre>";print_r($node);
+  //die();
+
+  if (array_key_exists('und', $node->field_hot_question_image)) {
+    $img = $node->field_hot_question_image['und'][0]['filename'];
+    $style = 'question_large_688_image';
+    $img_path = image_style_url($style, $img);
+    $size = getimagesize($img_path);
+    $img_width =  $size[0];
+    $quest =  "<img src='".$img_path."' />";
+    if ($img_width < 450){
+      $question_img = '<div class="queston_img" style="float:left;width:'.$img_width.'">'.$quest.'</div>';
+    }
+    else {
+      $question_img = '<div class="queston_img" style="float:left;width:100%">'.$quest.'</div>';
+    }
+  }
+  if (array_key_exists('und', $node->field_answer_image)) {
+    $img = $node->field_answer_image['und'][0]['filename'];
+    $style = 'question_large_688_image';
+    $img_path = image_style_url($style, $img);
+    $size = getimagesize($img_path);
+    $img_width =  $size[0];
+    $quest =  "<img src='".$img_path."' />";
+    if ($img_width < 450){
+      $ans_image = '<div class="queston_img" style="float:left;width:'.$img_width.'">'.$quest.'</div>';
+    }
+    else {
+      $ans_image = '<div class="queston_img" style="float:left;width:100%">'.$quest.'</div>';
+    }
+
+  }
+//$question_img
+  $question_text = $node->field_hot_question['und'][0]['value'];
+  $answer_text = $node->field_answers['und'][0]['value'];
+
+  //$output = "<div class='hot_question'>" . $question_img . $question_text .
+    "</div><div class='hot_answer' style='display:none;'>" .
+   $answer_text . $ans_image . "</div>";
+  $form['option'] = array(
+      '#type' => 'markup',
+      '#prefix' => '<div id="option-list">',
+      '#markup' =>   //$output,
+
+
+    '<div class="right_exl_block '.$n_type.'">
+      <div class="hot_right_txt"><h2>COUNTDOWN</h2></div>
+      <div class="hot_right_pic">&nbsp;</div>
+    </div>
+    <div class="left_ex_block">
+      <div id="question_area">
+        <div class="question-div-blk">
+          <div class="question-text">
+            <div class="question_div">
+              <h3>' . $question_img . $question_text  . '</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hot_answer_area">
+        <div class="hot_area">
+          <div class="hot_answer" style="display:none;"">' .
+            $ans_image . $answer_text .'
+          </div>
+        </div>
+      </div>
+      <div class="fib_wrap">
+        <div class="desc_wrap hot"></div>
+      </div>
+    </div>',
+    '#suffix' => '<script>startinitial();</script>' . '</div></div>',
+  );
+
+  return $form;
+}
